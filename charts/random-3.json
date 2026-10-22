@@ -1,0 +1,133 @@
+{
+ "name": "random-3",
+ "bpm": null,
+ "notes": [
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 2.5
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 3.875
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 4.155
+  },
+  {
+   "kind": "tap",
+   "lane": 4,
+   "time": 4.155
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 4.437
+  },
+  {
+   "kind": "slide",
+   "lane": 2.0,
+   "time": 4.76,
+   "duration": 0.756,
+   "waypoints": [
+    [
+     0.0,
+     2.0
+    ],
+    [
+     0.756,
+     3.0
+    ]
+   ]
+  },
+  {
+   "kind": "tap",
+   "lane": 5,
+   "time": 5.795
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 6.354
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 6.714
+  },
+  {
+   "kind": "tap",
+   "lane": 3,
+   "time": 6.714
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 8.062
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 9.975
+  },
+  {
+   "kind": "hold",
+   "lane": 1,
+   "time": 10.255,
+   "duration": 0.619
+  },
+  {
+   "kind": "hold",
+   "lane": 4,
+   "time": 11.721,
+   "duration": 1.083
+  },
+  {
+   "kind": "tap",
+   "lane": 5,
+   "time": 13.91
+  },
+  {
+   "kind": "slide",
+   "lane": 4.0,
+   "time": 14.19,
+   "duration": 0.855,
+   "waypoints": [
+    [
+     0.0,
+     4.0
+    ],
+    [
+     0.285,
+     3.0
+    ],
+    [
+     0.57,
+     2.0
+    ],
+    [
+     0.855,
+     0.0
+    ]
+   ]
+  },
+  {
+   "kind": "tap",
+   "lane": 3,
+   "time": 17.0
+  },
+  {
+   "kind": "tap",
+   "lane": 5,
+   "time": 18.573
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 18.853
+  }
+ ]
+}

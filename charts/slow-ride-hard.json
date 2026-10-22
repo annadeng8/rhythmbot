@@ -1,0 +1,175 @@
+{
+ "name": "slow-ride-hard",
+ "bpm": null,
+ "notes": [
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 4.31
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 4.31
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 4.51
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 4.51
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 5.11
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 5.11
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 5.59
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 5.59
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 6.11
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 6.11
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 6.63
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 6.63
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 7.21
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 7.21
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 7.48
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 7.69
+  },
+  {
+   "kind": "hold",
+   "lane": 1,
+   "time": 7.99,
+   "duration": 0.25
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 8.46
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 8.46
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 8.71
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 8.71
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 9.24
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 9.24
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 9.51
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 9.76
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 9.76
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 10.2
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 10.2
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 10.4
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 10.7
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 10.7
+  },
+  {
+   "kind": "hold",
+   "lane": 1,
+   "time": 10.9,
+   "duration": 1.0
+  },
+  {
+   "kind": "hold",
+   "lane": 4,
+   "time": 12.4,
+   "duration": 6.95
+  }
+ ],
+ "source": "GuitarHeroBot notebook (Foghat, Slow Ride)"
+}

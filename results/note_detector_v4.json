@@ -1,0 +1,33 @@
+{
+ "n_lanes": 6,
+ "k_slots": 3,
+ "approach_time": 1.6,
+ "max_duration": 8.0,
+ "duration_norm": "log1p",
+ "downsample": 2,
+ "path_fractions": [
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "kinds": [
+  "tap",
+  "hold",
+  "slide"
+ ],
+ "frame_size": [
+  256,
+  384
+ ],
+ "val": {
+  "precision": 0.9997424671645635,
+  "recall": 0.9997424671645635,
+  "kind_accuracy": 0.9969088098918083,
+  "time_to_hit_mae_ms": 14.876356348395348,
+  "time_to_hit_p95_ms": 53.849197924137115,
+  "duration_mae_ms": 399.79806542396545,
+  "path_lane_mae": 0.16718363761901855,
+  "n_true_notes": 3883
+ }
+}

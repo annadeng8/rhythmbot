@@ -1,0 +1,102 @@
+{
+ "name": "slow-ride-medium",
+ "bpm": null,
+ "notes": [
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 4.44
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 4.68
+  },
+  {
+   "kind": "hold",
+   "lane": 0,
+   "time": 5.24,
+   "duration": 0.25
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 5.73
+  },
+  {
+   "kind": "hold",
+   "lane": 0,
+   "time": 6.23,
+   "duration": 0.25
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 6.78
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 7.29
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 7.56
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 7.81
+  },
+  {
+   "kind": "hold",
+   "lane": 1,
+   "time": 8.08,
+   "duration": 0.25
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 8.59
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 8.83
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 9.31
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 9.89
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 10.4
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 10.8
+  },
+  {
+   "kind": "hold",
+   "lane": 1,
+   "time": 11.1,
+   "duration": 1.0
+  },
+  {
+   "kind": "hold",
+   "lane": 3,
+   "time": 12.5,
+   "duration": 6.95
+  }
+ ],
+ "source": "GuitarHeroBot notebook (Foghat, Slow Ride)"
+}

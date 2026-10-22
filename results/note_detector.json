@@ -1,0 +1,42 @@
+{
+ "n_lanes": 6,
+ "k_slots": 3,
+ "approach_time": 1.6,
+ "max_duration": 8.0,
+ "duration_norm": "log1p",
+ "downsample": 2,
+ "path_fractions": [
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "kinds": [
+  "tap",
+  "hold",
+  "slide"
+ ],
+ "active_slot": true,
+ "active_kinds": [
+  "hold",
+  "slide"
+ ],
+ "frame_size": [
+  256,
+  384
+ ],
+ "val": {
+  "active_precision": 0.9976931949250288,
+  "active_recall": 0.9965437788018433,
+  "active_end_mae_ms": 14.734230004251003,
+  "active_offscreen_ok": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "kind_accuracy": 0.9971671388101983,
+  "time_to_hit_mae_ms": 19.52473074197769,
+  "time_to_hit_p95_ms": 71.19069993495941,
+  "duration_mae_ms": 394.41049098968506,
+  "path_lane_mae": 0.17854811251163483,
+  "n_true_notes": 3883
+ }
+}

@@ -1,0 +1,9 @@
+__pycache__/
+.DS_Store
+# Regenerable with `python -m rhythmbot.dataset` (about 90 MB of frames).
+data/
+# osu! beatmaps and their song audio are copyrighted: download your own copy
+# (see README, "Playing a real osu!mania beatmap").
+songs/
+# Synthesized soundtracks, rewritten on every `play --audio` run.
+results/*.wav
