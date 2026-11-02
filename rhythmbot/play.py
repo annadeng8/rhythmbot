@@ -7,6 +7,7 @@
     HEADLESS=1 python -m rhythmbot.play --demo            # no browser, fast
     python -m rhythmbot.play --chart charts/random-1.json --detector color
     python -m rhythmbot.play --random 7 --noise 0.03 --latency 0.1
+    python -m rhythmbot.play --demo --policy bc:results/bc_policy.pt   # another policy
 
 Diagram:
 
@@ -40,12 +41,13 @@ from .config import DEFAULT, Config, Perception
 from .game import HighwayVisualizer
 from .judge import Judge
 from .perception import make_detector
-from .planner import ClassicalPlanner
+from .planner import ClassicalPlanner, Policy
+from .policies import make_policy
 from .robot import Robot, TouchSensor
 from .viz import HEADLESS, get_meshcat, keep_meshcat_open, publish_recording, start_recording
 
 
-def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None, meshcat):
+def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None, meshcat, policy: Policy | None = None):
     builder = DiagramBuilder()
     robot = Robot(builder, cfg, meshcat)
 
@@ -57,7 +59,8 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     X_WG0_actual = robot.gripper_pose_at(q0)
 
     detector = make_detector(detector_name, chart, cfg, model_path)
-    policy = ClassicalPlanner(cfg)
+    if policy is None:
+        policy = ClassicalPlanner(cfg)
     screen = builder.AddSystem(GameScreen(chart, cfg))
     brain = builder.AddSystem(RhythmBrain(detector, policy, cfg, X_WG0_actual))
     brain.set_name("brain")
@@ -91,13 +94,15 @@ def run(
     song: str | Path | None = None,
     song_offset: float = 0.0,
     song_rate: float = 1.0,
+    policy: Policy | None = None,
+    policy_name: str = "classical",
 ) -> dict:
     meshcat = get_meshcat()
     if meshcat is not None:
         # Look at the screen from the robot's front-left, slightly above.
         c = cfg.layout.screen_center()
         meshcat.SetCameraPose(c + np.array([0.9, -1.1, 0.8]), c + np.array([0.0, 0.15, 0.0]))
-    diagram, robot, brain, judge = build(chart, cfg, detector, model_path, meshcat)
+    diagram, robot, brain, judge = build(chart, cfg, detector, model_path, meshcat, policy)
     simulator = Simulator(diagram)
     context = simulator.get_mutable_context()
     robot.initialize(context)
@@ -132,6 +137,7 @@ def run(
     rep = judge.report(
         extra={
             "detector": detector,
+            "policy": policy_name,
             "skipped_by_planner": sorted(brain.last_state.skipped_note_ids),
             "n_detections": brain.last_state.n_detections,
             "sim_seconds": t_end,
@@ -143,7 +149,8 @@ def run(
         Judge.print_report(rep)
         print(f"(simulated {t_end:.1f} s in {wall:.1f} s wall)")
     if out_path is None:
-        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}.json"
+        tag = "" if policy_name == "classical" else f"-{policy_name.split(':')[0]}"
+        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}{tag}.json"
     Judge.save_report(rep, out_path)
     if not quiet:
         print(f"report -> {out_path}")
@@ -158,6 +165,10 @@ def main(argv=None):
     src.add_argument("--demo", action="store_true", help="the built-in demo chart (default)")
     ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch"])
     ap.add_argument("--model", help="TorchScript model for --detector torch")
+    ap.add_argument(
+        "--policy", default="classical",
+        help="classical, bc:<model.pt> (behavior cloning) or cap:<policy.py> (generated program)",
+    )
     ap.add_argument("--noise", type=float, default=0.0, help="oracle hit-time noise std (s)")
     ap.add_argument("--latency", type=float, default=0.0, help="oracle detection latency (s)")
     ap.add_argument("--duration", type=float, help="simulate this long instead of the whole chart")
@@ -210,6 +221,8 @@ def main(argv=None):
         song=song,
         song_offset=song_offset,
         song_rate=args.tempo,
+        policy=make_policy(args.policy, cfg),
+        policy_name=args.policy,
     )
     if args.hold and not HEADLESS:
         print("Holding Meshcat open; Ctrl-C to quit.")
