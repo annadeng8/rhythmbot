@@ -184,6 +184,12 @@ class Perception:
     # phantom (or a duplicate from a detector flipping its kind) and is
     # dropped.
     stale_after: float = 0.2
+    # An image detection and a tracked note of the same kind and lane are
+    # the same note if their hit times are this close.
+    match_window: float = 0.15
+    # Same-lane heads closer than this would merge on screen (heads are drawn
+    # 0.055 s thick), so an unmatched detection this close is a double report.
+    min_note_gap: float = 0.07
 
 
 @dataclass(frozen=True)

@@ -11,9 +11,9 @@
  },
  "score": 54,
  "max_score": 54,
- "timing_error_mean_s": -0.00611111111111103,
- "timing_error_abs_mean_s": 0.009999999999999835,
- "timing_error_std_s": 0.015860113804022285,
+ "timing_error_mean_s": -0.0016666666666665325,
+ "timing_error_abs_mean_s": 0.008888888888888898,
+ "timing_error_std_s": 0.014433756729740623,
  "by_kind": {
   "tap": {
    "n": 14,
@@ -30,8 +30,8 @@
    "n": 2,
    "hit": 2,
    "completed": 2,
-   "mean_maintenance": 0.9174454828660437,
-   "mean_slide_rms_m": 0.006247869567626619
+   "mean_maintenance": 0.9109375,
+   "mean_slide_rms_m": 0.006963453691537711
   }
  },
  "notes": [
@@ -72,7 +72,7 @@
    "time": 4.2,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": 0.0,
+   "timing_error": 0.004999999999999893,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -102,10 +102,10 @@
    "time": 5.6,
    "duration": 0.9,
    "status": "hit",
-   "timing_error": 8.881784197001252e-16,
+   "timing_error": 0.005000000000000782,
    "judgment": "perfect",
-   "active_ticks": 181,
-   "contact_ticks": 181,
+   "active_ticks": 180,
+   "contact_ticks": 180,
    "completed": true,
    "maintenance": 1.0,
    "slide_rms_m": null
@@ -132,7 +132,7 @@
    "time": 7.6,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": 8.881784197001252e-16,
+   "timing_error": 0.005000000000000782,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -147,13 +147,13 @@
    "time": 8.4,
    "duration": 1.0,
    "status": "hit",
-   "timing_error": 0.004999999999999005,
+   "timing_error": 0.0,
    "judgment": "perfect",
-   "active_ticks": 200,
-   "contact_ticks": 200,
+   "active_ticks": 201,
+   "contact_ticks": 201,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.006187365612286327
+   "slide_rms_m": 0.007057206349370187
   },
   {
    "id": 8,
@@ -162,7 +162,7 @@
    "time": 10.0,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": -0.004999999999999005,
+   "timing_error": 0.005000000000000782,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -177,7 +177,7 @@
    "time": 10.0,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": -0.004999999999999005,
+   "timing_error": 0.005000000000000782,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -237,13 +237,13 @@
    "time": 12.8,
    "duration": 1.6,
    "status": "hit",
-   "timing_error": -0.005000000000000782,
+   "timing_error": 0.004999999999999005,
    "judgment": "perfect",
-   "active_ticks": 321,
-   "contact_ticks": 268,
+   "active_ticks": 320,
+   "contact_ticks": 263,
    "completed": true,
-   "maintenance": 0.8348909657320872,
-   "slide_rms_m": 0.006308373522966912
+   "maintenance": 0.821875,
+   "slide_rms_m": 0.006869701033705235
   },
   {
    "id": 14,
@@ -252,7 +252,7 @@
    "time": 15.0,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": -0.009999999999999787,
+   "timing_error": 0.005000000000000782,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -267,7 +267,7 @@
    "time": 15.5,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": -0.03999999999999915,
+   "timing_error": -0.04499999999999993,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -282,7 +282,7 @@
    "time": 16.0,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": -0.04499999999999993,
+   "timing_error": -0.014999999999998792,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -310,7 +310,7 @@
  "skipped_by_planner": [],
  "n_detections": 988,
  "sim_seconds": 17.5,
- "wall_seconds": 2.2237751483917236,
+ "wall_seconds": 5.996927976608276,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -345,7 +345,12 @@
    "chord_window": 0.06,
    "travel_speed": 0.9,
    "min_travel_time": 0.12,
-   "command_lead": 0.0
+   "command_lead": 0.0,
+   "roll_raise": 0.01,
+   "roll_dip_time": 0.08,
+   "roll_lift_time": 0.08,
+   "pivot_width_speed": 1.0,
+   "lane_slack": 0.012
   },
   "perception": {
    "tick_hz": 30.0,
@@ -356,7 +361,9 @@
    "timing_noise_std": 0.0,
    "latency": 0.0,
    "min_observations": 2,
-   "stale_after": 0.2
+   "stale_after": 0.2,
+   "match_window": 0.15,
+   "min_note_gap": 0.07
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,

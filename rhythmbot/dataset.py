@@ -1,7 +1,12 @@
 """Render labelled game frames for training the vision model.
 
-    python -m rhythmbot.dataset --out data/train --charts 40 --fps 12
-    python -m rhythmbot.dataset --out data/val --charts 8 --seed 1000 --fps 12
+    python -m rhythmbot.dataset --out data/train --charts 80 --dense 80 --fps 10
+    python -m rhythmbot.dataset --out data/val --charts 12 --dense 12 --seed 1000 --fps 10
+
+`--charts` charts come from `chart.varied_random_chart` (one hand's worth of
+notes, with slides) and `--dense` more from `chart.dense_random_chart`
+(osu!mania-like streams, chords and short holds, up to 8 notes queued per
+lane).
 
 Writes `frames/<chart>_<idx>.png` and one `labels.jsonl` line per frame:
 
@@ -27,7 +32,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from .chart import random_chart, varied_random_chart
+from .chart import dense_random_chart, random_chart, varied_random_chart
 from .config import DEFAULT
 from .game import FrameRenderer
 
@@ -59,7 +64,8 @@ def contact_sheet(renderer: FrameRenderer, chart, times, path: Path):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--charts", type=int, default=20)
+    ap.add_argument("--charts", type=int, default=20, help="varied (playable) random charts")
+    ap.add_argument("--dense", type=int, default=0, help="dense osu!mania-style random charts")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--fps", type=float, default=10.0)
     ap.add_argument("--duration", type=float, default=20.0, help="seconds per chart")
@@ -76,14 +82,19 @@ def main(argv=None):
         print(f"preview -> {out / 'preview.png'}")
         return
     total = 0
+    n_lanes = DEFAULT.layout.n_lanes
+    charts = [
+        varied_random_chart(args.seed + k, n_lanes=n_lanes, duration=args.duration)
+        for k in range(args.charts)
+    ] + [
+        dense_random_chart(args.seed + k, n_lanes=n_lanes, duration=args.duration)
+        for k in range(args.dense)
+    ]
     with open(out / "labels.jsonl", "w") as labels:
-        for k in range(args.charts):
-            chart = varied_random_chart(
-                args.seed + k, n_lanes=DEFAULT.layout.n_lanes, duration=args.duration
-            )
+        for chart in charts:
             chart.save(out / f"{chart.name}.json")
             total += render_chart(renderer, chart, args.fps, out, labels)
-    print(f"{total} frames from {args.charts} charts -> {out}")
+    print(f"{total} frames from {len(charts)} charts -> {out}")
 
 
 if __name__ == "__main__":

@@ -6,8 +6,9 @@
 Model
 -----
 A small CNN whose feature map is resampled into one column per lane,
-followed by an MLP shared across lanes.  For every lane it predicts `K` slots, ordered by time to hit, each
-holding the nearest not-yet-active note heads in that lane:
+followed by an MLP shared across lanes.  For every lane it predicts `K` slots
+(K_SLOTS = 8, enough for the densest real charts), ordered by time to hit,
+each holding one of the nearest not-yet-active note heads in that lane:
 
     [presence_logit, kind_logits(3), time_to_hit, duration, lane@25%, lane@50%, lane@75%, lane@100%]
 
@@ -52,7 +53,8 @@ from .config import DEFAULT
 from .game import PATH_FRACTIONS
 
 KINDS = [TAP, HOLD, SLIDE]
-K_SLOTS = 3
+K_SLOTS = 8  # dense osu!mania maps queue up to 8 notes in one lane on screen
+ROWS = 24  # feature rows per lane column (1/16 of the frame height each)
 MAX_DURATION = 8.0  # durations are log1p-scaled: d_n = log1p(d) / log1p(MAX)
 DOWNSAMPLE = 2
 N_PATH = len(PATH_FRACTIONS)
@@ -73,20 +75,22 @@ def denorm_duration(x) -> float:
     return float(np.expm1(np.clip(x, 0.0, 1.0) * np.log1p(MAX_DURATION)))
 
 
-def build_targets(notes: list[dict], n_lanes: int, approach: float) -> np.ndarray:
-    """(n_lanes, K_SLOTS + 1, T_COLS).
+def build_targets(
+    notes: list[dict], n_lanes: int, approach: float, k_slots: int = K_SLOTS
+) -> np.ndarray:
+    """(n_lanes, k_slots + 1, T_COLS).
 
     Slots 0..K-1 (upcoming): presence, kind_idx, tth_n, dur_n, path lanes_n.
     Slot K (active): presence, active kind_idx, time_to_end_n, zeros.
     """
-    tgt = np.zeros((n_lanes, K_SLOTS + 1, T_COLS), dtype=np.float32)
+    tgt = np.zeros((n_lanes, k_slots + 1, T_COLS), dtype=np.float32)
     per_lane: dict[int, list[dict]] = {}
     for n in notes:
         if n.get("active") or n["time_to_hit"] <= 0.0:
             if n["kind"] in ACTIVE_KINDS and n.get("time_to_end", 0.0) > 0.0:
                 lane_now = int(round(n.get("lane_now", n["lane"])))
                 if 0 <= lane_now < n_lanes:
-                    tgt[lane_now, K_SLOTS, :3] = [
+                    tgt[lane_now, k_slots, :3] = [
                         1.0,
                         ACTIVE_KINDS.index(n["kind"]),
                         norm_duration(n["time_to_end"]),
@@ -98,7 +102,7 @@ def build_targets(notes: list[dict], n_lanes: int, approach: float) -> np.ndarra
     lane_scale = max(n_lanes - 1, 1)
     for lane, ns in per_lane.items():
         ns.sort(key=lambda n: n["time_to_hit"])
-        for k, n in enumerate(ns[:K_SLOTS]):
+        for k, n in enumerate(ns[:k_slots]):
             path = n.get("path_lanes") or [n.get("end_lane", n["lane"])] * N_PATH
             tgt[lane, k, :4] = [
                 1.0,
@@ -110,7 +114,9 @@ def build_targets(notes: list[dict], n_lanes: int, approach: float) -> np.ndarra
     return tgt
 
 
-def load_split(root: Path, n_lanes: int, approach: float, limit: int | None = None):
+def load_split(
+    root: Path, n_lanes: int, approach: float, limit: int | None = None, k_slots: int = K_SLOTS
+):
     """Frames as uint8 (N, 3, H/DS, W/DS) and targets (N, n_lanes, K+1, T_COLS)."""
     lines = (root / "labels.jsonl").read_text().splitlines()
     if limit:
@@ -122,16 +128,16 @@ def load_split(root: Path, n_lanes: int, approach: float, limit: int | None = No
         x = torch.from_numpy(img).permute(2, 0, 1).float().unsqueeze(0)
         x = F.avg_pool2d(x, DOWNSAMPLE)
         frames.append(x.round().to(torch.uint8).squeeze(0))
-        targets.append(torch.from_numpy(build_targets(rec["notes"], n_lanes, approach)))
+        targets.append(torch.from_numpy(build_targets(rec["notes"], n_lanes, approach, k_slots)))
     return torch.stack(frames), torch.stack(targets)
 
 
 # ---------------------------------------------------------------------------
 # Model
 # ---------------------------------------------------------------------------
-def conv_block(cin: int, cout: int) -> nn.Sequential:
+def conv_block(cin: int, cout: int, stride=2) -> nn.Sequential:
     return nn.Sequential(
-        nn.Conv2d(cin, cout, 3, stride=2, padding=1),
+        nn.Conv2d(cin, cout, 3, stride=stride, padding=1),
         nn.BatchNorm2d(cout),
         nn.ReLU(inplace=True),
         nn.Conv2d(cout, cout, 3, padding=1),
@@ -141,22 +147,25 @@ def conv_block(cin: int, cout: int) -> nn.Sequential:
 
 
 class NoteNet(nn.Module):
-    def __init__(self, n_lanes: int, rows: int = 12, k_slots: int = K_SLOTS):
+    def __init__(self, n_lanes: int, rows: int = ROWS, k_slots: int = K_SLOTS, hidden: int = 384):
         super().__init__()
         self.n_lanes = n_lanes
         self.k_slots = k_slots
         self.downsample = DOWNSAMPLE
         self.n_out = N_OUT
+        # The last stage halves only the width, so the feature map keeps
+        # 1/16 of the frame height per row (24 rows, ~0.08 s of scroll each):
+        # dense lanes put a note head every 0.08 s.
         self.backbone = nn.Sequential(
-            conv_block(3, 24), conv_block(24, 48), conv_block(48, 96), conv_block(96, 128)
+            conv_block(3, 24), conv_block(24, 48), conv_block(48, 96), conv_block(96, 128, (1, 2))
         )
         self.rows = rows
         self.head = nn.Sequential(
-            nn.Linear(128 * rows, 256),
+            nn.Linear(128 * rows, hidden),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 256),
+            nn.Linear(hidden, hidden),
             nn.ReLU(inplace=True),
-            nn.Linear(256, (k_slots + 1) * N_OUT),
+            nn.Linear(hidden, (k_slots + 1) * N_OUT),
         )
 
     @torch.jit.export
@@ -209,6 +218,7 @@ def loss_fn(pred: torch.Tensor, tgt: torch.Tensor) -> tuple[torch.Tensor, dict]:
 @torch.no_grad()
 def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batch=256):
     model.eval()
+    K = int(model.k_slots)  # older exported models have fewer slots
     tp = fp = fn = 0
     kind_ok = kind_n = 0
     tth_err, dur_err, path_err = [], [], []
@@ -219,7 +229,7 @@ def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batc
         t_all = targets[i : i + batch].to(device)
         p_all = model.head_forward(x)
         # Active slot.
-        ap_, at_ = p_all[:, :, K_SLOTS], t_all[:, :, K_SLOTS]
+        ap_, at_ = p_all[:, :, K], t_all[:, :, K]
         a_pres, a_true = torch.sigmoid(ap_[..., 0]) > 0.5, at_[..., 0] > 0.5
         a_tp += (a_pres & a_true).sum().item()
         a_fp += (a_pres & ~a_true).sum().item()
@@ -234,7 +244,7 @@ def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batc
             # Off-screen ends only need to be reported as off-screen.
             offscreen_ok.append((tte_p[~visible] >= 0.9 * approach).float().cpu())
         # Upcoming slots.
-        p, t = p_all[:, :, :K_SLOTS], t_all[:, :, :K_SLOTS]
+        p, t = p_all[:, :, :K], t_all[:, :, :K]
         present = torch.sigmoid(p[..., 0]) > 0.5
         truth = t[..., 0] > 0.5
         tp += (present & truth).sum().item()
@@ -310,12 +320,15 @@ def main(argv=None):
     device = pick_device()
     print(f"device {device}")
 
+    model = torch.jit.load(args.model, map_location="cpu").to(device) if args.eval_only else None
+    k_slots = int(model.k_slots) if model is not None else K_SLOTS
     t0 = time.time()
-    val_x, val_y = load_split(Path(args.val), n_lanes, approach, args.limit)
+    val_x, val_y = load_split(Path(args.val), n_lanes, approach, args.limit, k_slots)
     print(f"val   {tuple(val_x.shape)} in {time.time() - t0:.0f}s")
     meta = {
         "n_lanes": n_lanes,
         "k_slots": K_SLOTS,
+        "rows": ROWS,
         "approach_time": approach,
         "max_duration": MAX_DURATION,
         "duration_norm": "log1p",
@@ -328,7 +341,6 @@ def main(argv=None):
     }
 
     if args.eval_only:
-        model = torch.jit.load(args.model, map_location="cpu").to(device)
         print(json.dumps(evaluate(model, val_x, val_y, device, approach, n_lanes), indent=1))
         return
 

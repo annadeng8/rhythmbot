@@ -61,9 +61,9 @@ so the recording can be scrubbed (`Open Controls → Animations`).
 | `python -m rhythmbot.play --random 7 --noise 0.03 --latency 0.15` | random chart, oracle detector with timing jitter and detection delay |
 | `python -m rhythmbot.play --demo --audio --hold` | with a soundtrack synthesized from the chart (needs `afplay`, i.e. macOS, or `aplay`/`ffplay`) |
 | `python -m rhythmbot.play --detector torch --model results/note_detector.pt` | play from the trained vision model |
-| `python -m rhythmbot.dataset --out data/train --charts 60 --fps 10` | render labelled game frames for training |
+| `python -m rhythmbot.dataset --out data/train --charts 80 --dense 80 --fps 10` | render labelled game frames for training (80 varied + 80 dense random charts) |
 | `python -m rhythmbot.dataset --out data/preview --preview` | one contact sheet of frames to eyeball the rendering |
-| `python -m rhythmbot.train --epochs 24` | train the note detector on `data/train`, validate on `data/val`, export `results/note_detector.pt` |
+| `python -m rhythmbot.train --epochs 30` | train the note detector on `data/train`, validate on `data/val`, export `results/note_detector.pt` |
 | `python -m rhythmbot.train --eval-only --model results/note_detector.pt` | detector metrics on the validation frames |
 | `python -m rhythmbot.importers song.osu --out charts/` | import a real chart (osu!mania `.osu`, StepMania `.sm`/`.ssc`, Clone Hero `.chart`) |
 | `python -m rhythmbot.importers --guitarherobot --out charts/` | GuitarHeroBot's hand-transcribed *Slow Ride* charts (easy/medium/hard) |
@@ -81,26 +81,25 @@ every chart below with every note judged "perfect" (timing error within
 
 | chart | notes | vision model: completion | judgments (perfect/great/good/miss) | timing error mean ± std |
 |---|---|---|---|---|
-| demo | 18 | 100% | 18/0/0/0 | −6 ± 16 ms |
-| random-1 | 15 | 100% | 15/0/0/0 | +3 ± 5 ms |
-| random-2 | 21 | 100% | 21/0/0/0 | +2 ± 9 ms |
-| random-3 | 19 | 100% | 19/0/0/0 | +6 ± 10 ms |
-| slow-ride-easy (Guitar Hero III) | 14 | 100% | 13/1/0/0 | +9 ± 27 ms |
-| slow-ride-medium | 18 | 100% | 15/3/0/0 | +14 ± 26 ms |
-| slow-ride-hard | 33 | 100% | 26/5/2/0 | +12 ± 35 ms |
-| **all** | **138** | **100%** | **127/9/2/0** | |
+| demo | 18 | 100% | 18/0/0/0 | −2 ± 14 ms |
+| random-1 | 15 | 100% | 15/0/0/0 | +7 ± 5 ms |
+| random-2 | 21 | 100% | 21/0/0/0 | +6 ± 4 ms |
+| random-3 | 19 | 100% | 19/0/0/0 | +8 ± 6 ms |
+| slow-ride-easy (Guitar Hero III) | 14 | 100% | 14/0/0/0 | +4 ± 5 ms |
+| slow-ride-medium | 18 | 100% | 18/0/0/0 | +7 ± 6 ms |
+| slow-ride-hard | 33 | 100% | 33/0/0/0 | +14 ± 7 ms |
+| **all** | **138** | **100%** | **138/0/0/0** | |
 
 Holds keep contact for their whole length, including the 7 s sustain that
 ends every Slow Ride chart; slides keep contact for 92–100 % of their
 length with 6–11 mm RMS lateral error (lane width 50 mm).
 
-What still separates the vision model from the oracle is timing spread on
-the real song: its timing error std is 26–35 ms on Slow Ride against
-5–16 ms on the other charts, so 11 Slow Ride notes are judged "great" or
-"good" rather than "perfect". Slow Ride repeats notes in one lane every
-0.2–0.3 s, where several heads crowd the bottom of the frame at once.
-These seven charts are also a small test set; more imported songs would
-make the comparison firmer.
+Every note is now judged "perfect". The previous model's timing error std
+was 26–35 ms on Slow Ride, which repeats notes in one lane every 0.2–0.3 s
+so several heads crowd the bottom of the frame at once; 11 Slow Ride notes
+were "great" or "good", and with the gripper-roll planner it lost one
+0.25 s hold on Slow Ride Medium (hit 50 ms early, contact for 73 %). The
+dense training charts (last row below) brought that std down to 5–7 ms.
 
 **How it got here.** The first model, with two slots per lane and trained
 on narrower random charts, completed 15 of 18 notes on Slow Ride Medium.
@@ -113,6 +112,7 @@ above it.
 | planner re-decides skipped notes on every replan | 134 |
 | active slot (note being played, time to its end) | 135 |
 | tracker drops upcoming notes unreported for 0.2 s | **138** |
+| dense osu!mania-style training charts, 8 slots, 24 feature rows, 30 epochs | **138**, all perfect |
 
 The last three rows are fixes found by running the model in the loop. A
 note skipped early on a wrong belief (say, a previous hold's duration
@@ -120,14 +120,21 @@ briefly overestimated) used to stay skipped for good. The active slot fixed
 the long holds. And on Slow Ride's runs of same-lane notes the model
 sometimes flips a note between tap and hold from frame to frame, which left
 a phantom duplicate that held the finger down through the next real note.
-The previous model is kept as `results/note_detector_v4.pt`.
+The last row is what closed the gap on the dense osu!mania difficulties
+(see *Harder difficulties of the same song*). The previous models are kept
+as `results/note_detector_v5.pt` (3 slots) and `results/note_detector_v4.pt`.
 
-Vision model on 2431 held-out validation frames (`train.py --eval-only`):
-upcoming notes precision 1.000 / recall 1.000, kind accuracy 0.997,
-time-to-hit MAE 20 ms, path-lane MAE 0.18 lanes, duration MAE 0.39 s
-(guessed before the hit, often with the tail off-screen); notes being
-played precision 0.998 / recall 0.997, end-time MAE 15 ms once the end is
-in view, and every off-screen end correctly reported as off-screen.
+Vision model on the 2431 held-out validation frames of the earlier,
+varied-only charts (`dataset.py --out data/val_v5 --charts 12 --seed 1000`,
+then `train.py --eval-only --val data/val_v5`): upcoming notes
+precision 1.000 / recall 1.000, kind accuracy 1.000, time-to-hit MAE 10 ms
+(20 ms for the previous model), path-lane MAE 0.18 lanes, duration MAE
+0.38 s (guessed before the hit, often with the tail off-screen); notes being
+played precision 1.000 / recall 1.000, end-time MAE 9 ms once the end is in
+view, and every off-screen end correctly reported as off-screen. On the
+current 4962 validation frames, half of them from dense charts: precision
+1.000 / recall 1.000, kind accuracy 0.996, time-to-hit MAE 15 ms (p95
+45 ms), active end-time MAE 7 ms.
 
 Noisy-oracle check: with 30 ms hit-time jitter and 150 ms detection
 latency the oracle still completes 18/18 on the demo.
@@ -190,7 +197,7 @@ with 20 two-note chords and notes never closer than 0.29 s.
 |---|---|---|---|
 | oracle | 243 / 244 (99.6 %) | 243/0/0/1 | +8 ± 3 ms |
 | color segmentation | 243 / 244 (99.6 %) | 243/0/0/1 | +7 ± 3 ms |
-| vision model | 240 / 244 (98.4 %) | 239/0/1/4 | +5 ± 10 ms |
+| vision model | 243 / 244 (99.6 %) | 243/0/0/1 | +7 ± 4 ms |
 
 osu!mania assumes independent fingers: hold one key, tap others. The
 WSG's two fingertips move up and down together, so at first, while one
@@ -229,9 +236,9 @@ jitter, 150 ms latency) also completes 243 / 244 here.
 
 The one note the oracle run misses, #125, is a lane-4 tap at the moment a
 lane-1 hold ends and a lane-3 hold starts: three lanes at once. The color
-detector run keeps that tap and drops the hold instead. Against the
-color detector, the vision model also loses two taps (#151, #154) and the
-hold #136.
+detector run keeps that tap and drops the hold instead. The vision model
+misses the same note as the oracle and nothing else (the previous,
+3-slot model also lost two taps, #151 and #154, and the hold #136).
 
 ### Harder difficulties of the same song
 
@@ -240,16 +247,18 @@ gitignored) has four harder 4K difficulties of the same song, imported the
 same way with the same 80 ms song offset. Results with the gripper-roll
 planner:
 
-| difficulty | stars | notes | notes/s | oracle completion | vision model completion |
-|---|---|---|---|---|---|
-| Easy Neko | 1.10 | 244 | 2.5 | 99.6 % | 98.4 % |
-| Normal Neko | 1.64 | 446 | 4.7 | 80.9 % | 66.6 % |
-| Advanced Neko | 2.49 | 759 | 7.9 | 64.7 % | 50.1 % |
-| Llee's Hard Neko | 2.88 | 907 | 9.5 | 56.8 % | 53.4 % |
-| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 44.1 % | 42.1 % |
+| difficulty | stars | notes | notes/s | oracle completion | vision model completion | previous vision model (3 slots) | mean \|timing error\|, oracle / vision |
+|---|---|---|---|---|---|---|---|
+| Easy Neko | 1.10 | 244 | 2.5 | 99.6 % | 99.6 % | 98.4 % | 8 / 7 ms |
+| Normal Neko | 1.64 | 446 | 4.7 | 80.9 % | 80.9 % | 66.6 % | 24 / 24 ms |
+| Advanced Neko | 2.49 | 759 | 7.9 | 64.7 % | 63.9 % | 50.1 % | 30 / 31 ms |
+| Llee's Hard Neko | 2.88 | 907 | 9.5 | 58.2 % | 58.3 % | 53.4 % | 37 / 37 ms |
+| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 44.3 % | 49.3 % | 42.1 % | 43 / 45 ms |
 
 With perfect perception, almost every miss is a physical limit of one arm
-with a two-finger gripper:
+with a two-finger gripper (this breakdown is from the oracle runs before the
+tracker's matching fix below, which added 13 notes on Hard and 2 on
+Nyanyannyanyan):
 
 | why the oracle run missed a note | Normal | Advanced | Hard | Nyan |
 |---|---|---|---|---|
@@ -259,18 +268,54 @@ with a two-finger gripper:
 | hit, but hold let go early | 3 | 21 | 32 | 53 |
 | same-lane repeat or other timing | 7 | 10 | 24 | 11 |
 
-The vision model's extra losses on these maps are a perception limit on top
-of that: up to 8 notes queue in one lane on screen at once against the
-model's 3 slots per lane, and its training charts never put notes closer
-than 0.18 s, while these go down to 0.04 s, less than the drawn thickness
-of one note. Reports are in `results/neko-<difficulty>-<detector>.json`.
+The vision model now plays these maps as well as the oracle. The previous
+model trailed by up to 15 points because these maps were outside its
+training data: up to 8 notes queue in one lane on screen against its 3
+slots per lane, most notes are 0.05–0.3 s holds, and its training charts
+never put notes closer than 0.18 s. On rendered frames of Normal Neko it
+found only 58 % of the upcoming notes (29 % on Nyanyannyanyan) and misread
+short holds' hit times by up to 0.1 s. The current model, trained with
+`chart.dense_random_chart` charts in the mix and 8 slots per lane, finds
+99.7 % (95.6 %) within 60 ms, with 9–16 ms time-to-hit error and 15–26 ms
+hold-duration error.
+
+On Normal Neko vision and oracle complete almost the same notes (three
+differ each way). The oracle is not a true ceiling on the harder maps, which
+ask for far more than one hand can play: there the planner has to choose,
+and it chooses differently depending on the detector. On Nyanyannyanyan the
+image detectors complete more than the oracle (color segmentation 50.2 %,
+vision 49.3 %, oracle 44.3 %) by favouring taps over holds: taps completed
+489 / 434 / 338, holds 116 / 161 / 196, and in three-note chords 135 / 127 /
+87 notes. Why the oracle's exact times and durations lead the planner to
+those choices has not been isolated.
+
+**Close notes in the tracker.** The tracker used to match each detection to
+the nearest tracked note of the same kind and lane within 0.15 s, and several
+detections could match one note. A same-lane note under 0.15 s after another
+could therefore merge into it, with the hit time averaged between the two.
+The oracle had the same problem, because a note id not tracked yet fell
+through to that same match. Now a frame's detections are assigned one to one,
+closest pairs first (`RhythmBrain._assign`), and ids match only ids. A
+leftover detection within 0.07 s of a tracked note counts as a double report
+(`Perception.min_note_gap`), since heads that close would merge on screen.
+
+Replaying the vision model through the tracker without the arm, every note
+of Hard and Nyanyannyanyan now ends up tracked (24 and 8 were lost before).
+In the full runs, completed notes among those in such close pairs rose from
+68 to 78 of 102 on Hard and from 84 to 99 of 144 on Nyanyannyanyan with
+vision, and from 57 to 82 and from 38 to 62 with the oracle. Overall
+completion rose less, from 57.8 to 58.3 % and from 48.2 to 49.3 % with
+vision and from 56.8 to 58.2 % and from 44.1 to 44.3 % with the oracle,
+because the arm's time is limited and playing these notes displaces others.
+Easy, Normal and Advanced did not change. Reports are in
+`results/neko-<difficulty>-<detector>.json`.
 
 ## Modules
 
 | file | role |
 |---|---|
 | `rhythmbot/config.py` | every tunable: lane geometry and frame conventions, judgment windows, gripper offsets, planner shape, perception rate |
-| `rhythmbot/chart.py` | `Note`/`Chart`, JSON load/save, `random_chart` generator, built-in demo |
+| `rhythmbot/chart.py` | `Note`/`Chart`, JSON load/save, `random_chart` / `varied_random_chart` / `dense_random_chart` generators, built-in demo |
 | `rhythmbot/game.py` | `FrameRenderer` (2D game screen → `uint8` image + pixel labels) and `HighwayVisualizer` (same notes as moving Meshcat geometry) |
 | `rhythmbot/perception.py` | `NoteDetector` interface; `OracleDetector`, `ColorSegmentationDetector`, `TorchDetector` |
 | `rhythmbot/planner.py` | `Policy` interface and `ClassicalPlanner` (keyframes → fingertip pose, rolled about a holding fingertip when needed, + gripper width) |
@@ -308,9 +353,9 @@ is reported with `active=True`, so the tracker refines only its end time.
 
 **Vision model (`train.py`).** `NoteNet` is a four-stage CNN whose feature
 map is resampled to one column per lane and read by an MLP shared across
-lanes. For each lane it predicts four slots:
+lanes. For each lane it predicts nine slots:
 
-* three **upcoming** slots, the three nearest note heads in that lane that
+* eight **upcoming** slots, the eight nearest note heads in that lane that
   have not reached the judgment line, each with a presence logit, a kind
   (tap/hold/slide), time to hit, duration, and the note's lane at
   25/50/75/100 % of its duration, which is the slide path;
@@ -328,12 +373,27 @@ overestimates as well as underestimates. Slides get their predicted path
 stretched to the corrected duration.
 
 Input is the full 256×384 frame; the module downsamples by two inside
-`forward`, so `TorchDetector` only normalises pixels to [0, 1]. Durations
-are log-scaled so 0.15 s sustains and 7 s holds are both learnable.
-Training data is `dataset.py` output from `chart.varied_random_chart`
-(80 charts whose density, hold lengths, gaps and lane repetition are
-themselves randomised to span real charts; 10 fps, ~16k frames; validation
-on 12 unseen charts), 24 epochs, about 25 minutes on Apple MPS. The export
+`forward`, so `TorchDetector` only normalises pixels to [0, 1]. The last
+CNN stage halves only the width, so each lane column is read from 24 rows
+of features, one per ~0.08 s of scroll, about the closest two heads in a
+dense lane get. Durations are log-scaled so 0.05 s holds and 7 s holds are
+both learnable. Training data is `dataset.py` output at 10 fps from 160
+charts, ~33k frames: 80 from `chart.varied_random_chart` (playable charts
+whose density, hold lengths, gaps and lane repetition are themselves
+randomised; these have the slides) and 80 from `chart.dense_random_chart`
+(osu!mania-like: notes on a beat grid down to 0.045 s, up to ~13 notes/s,
+two- to four-note chords, short holds down to 0.05 s, same-lane runs,
+four, five or six lanes in use, up to 8 heads queued per lane).
+Validation uses 12 unseen charts of each kind. Training takes 30 epochs,
+about 22 minutes on Apple MPS.
+
+Note heads stay `game.HEAD_TIME` = 0.055 s thick. Dense charts keep a
+lane's next head at least 0.08 s after the previous head and 0.05 s after
+the previous note's end, and the real maps are sparser per lane than that
+(same-lane heads at least 0.097 s apart, a hold's end at least 0.073 s
+before the next head). So heads never merge on screen, and thinner heads
+would only have meant re-rendering everything and re-checking the color
+detector. The export
 is TorchScript plus a JSON sidecar with the normalisation constants and
 slot layout, which `TorchDetector` reads, so older models still load.
 

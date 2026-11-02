@@ -252,7 +252,7 @@ class TorchDetector(NoteDetector):
     def detect(self, frame, t):
         x = self.torch.from_numpy(np.array(frame, copy=True)).permute(2, 0, 1).float().div(255.0)[None]
         with self.torch.no_grad():
-            pred = self.model(x.to(self.device))[0].cpu().numpy()  # (n_lanes, K, 7)
+            pred = self.model(x.to(self.device))[0].cpu().numpy()  # (n_lanes, slots, 10)
         return self.decode(pred, t)
 
     def _duration(self, x: float) -> float:

@@ -243,7 +243,7 @@
  "skipped_by_planner": [],
  "n_detections": 959,
  "sim_seconds": 20.95,
- "wall_seconds": 1.6236369609832764,
+ "wall_seconds": 3.36358380317688,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -278,7 +278,12 @@
    "chord_window": 0.06,
    "travel_speed": 0.9,
    "min_travel_time": 0.12,
-   "command_lead": 0.0
+   "command_lead": 0.0,
+   "roll_raise": 0.01,
+   "roll_dip_time": 0.08,
+   "roll_lift_time": 0.08,
+   "pivot_width_speed": 1.0,
+   "lane_slack": 0.012
   },
   "perception": {
    "tick_hz": 30.0,
@@ -289,7 +294,9 @@
    "timing_noise_std": 0.0,
    "latency": 0.0,
    "min_observations": 2,
-   "stale_after": 0.2
+   "stale_after": 0.2,
+   "match_window": 0.15,
+   "min_note_gap": 0.07
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,

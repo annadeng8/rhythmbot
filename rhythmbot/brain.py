@@ -118,11 +118,14 @@ class RhythmBrain(LeafSystem):
         self.last_state = s
 
     def _merge(self, s: BrainState, detections: list[DetectedNote], t: float) -> None:
-        for d in detections:
-            match = self._match(s, d)
+        assigned = self._assign(s, detections)
+        for i, d in enumerate(detections):
+            match = assigned.get(i) if self._by_proximity(d) else self._match(s, d)
             if match is None and d.active:
                 # First seen only once it is already being played: its hit
                 # is lost, and chasing it would only spoil the next note.
+                continue
+            if match is None and self._by_proximity(d) and self._duplicate(s, d):
                 continue
             if match is None:
                 s.tracked[s.next_key] = TrackedNote(
@@ -184,11 +187,50 @@ class RhythmBrain(LeafSystem):
             n.waypoints = [(off * ratio, lane) for off, lane in n.waypoints]
 
     @staticmethod
+    def _by_proximity(d: DetectedNote) -> bool:
+        """An upcoming note from an image detector: no chart id to go by."""
+        return not d.active and d.note_id < 0
+
+    def _assign(self, s: BrainState, detections: list[DetectedNote]) -> dict[int, TrackedNote]:
+        """Match a frame's upcoming detections to tracked notes one to one,
+        closest pairs first, so that two notes close together in a lane stay
+        two notes.  Returns {index into detections: tracked note}."""
+        window = self.cfg.perception.match_window
+        pairs = []
+        for i, d in enumerate(detections):
+            if not self._by_proximity(d):
+                continue
+            for n in s.tracked.values():
+                dt = abs(n.hit_time - d.hit_time)
+                if n.kind == d.kind and abs(n.lane - d.lane) <= 0.6 and dt < window:
+                    pairs.append((dt, i, n.key))
+        assigned: dict[int, TrackedNote] = {}
+        taken: set[int] = set()
+        for _, i, key in sorted(pairs):
+            if i not in assigned and key not in taken:
+                assigned[i] = s.tracked[key]
+                taken.add(key)
+        return assigned
+
+    def _duplicate(self, s: BrainState, d: DetectedNote) -> bool:
+        """An unmatched detection this close to a tracked note of the same
+        kind and lane is that note reported twice: heads this close would
+        have merged on screen."""
+        gap = self.cfg.perception.min_note_gap
+        return any(
+            n.kind == d.kind and abs(n.lane - d.lane) <= 0.6 and abs(n.hit_time - d.hit_time) < gap
+            for n in s.tracked.values()
+        )
+
+    @staticmethod
     def _match(s: BrainState, d: DetectedNote) -> TrackedNote | None:
+        """The tracked note for a detection that has a chart id or is being
+        played; `_assign` handles the rest."""
         if d.note_id >= 0:
             for n in s.tracked.values():
                 if n.note_id == d.note_id:
                     return n
+            return None
         if d.active:
             # Its head is on the line: match the note of this kind that is
             # being played now (slides have moved lanes, so lane is ignored).
@@ -196,15 +238,7 @@ class RhythmBrain(LeafSystem):
                 if n.kind == d.kind and n.hit_time <= d.hit_time + 0.1 and n.end_time >= d.hit_time - 0.1:
                     if n.kind == SLIDE or abs(n.lane - d.lane) <= 0.6:
                         return n
-            return None
-        best, best_dt = None, 0.15
-        for n in s.tracked.values():
-            if n.kind != d.kind or abs(n.lane - d.lane) > 0.6:
-                continue
-            dt = abs(n.hit_time - d.hit_time)
-            if dt < best_dt:
-                best, best_dt = n, dt
-        return best
+        return None
 
     def _prune(self, s: BrainState, t: float) -> None:
         post = self.cfg.motion.post_time

@@ -1,6 +1,7 @@
 {
  "n_lanes": 6,
- "k_slots": 3,
+ "k_slots": 8,
+ "rows": 24,
  "approach_time": 1.6,
  "max_duration": 8.0,
  "duration_norm": "log1p",
@@ -26,17 +27,17 @@
   384
  ],
  "val": {
-  "active_precision": 0.9976931949250288,
-  "active_recall": 0.9965437788018433,
-  "active_end_mae_ms": 14.734230004251003,
+  "active_precision": 0.998181450798141,
+  "active_recall": 0.9995953055443141,
+  "active_end_mae_ms": 6.8121543154120445,
   "active_offscreen_ok": 1.0,
-  "precision": 1.0,
-  "recall": 1.0,
-  "kind_accuracy": 0.9971671388101983,
-  "time_to_hit_mae_ms": 19.52473074197769,
-  "time_to_hit_p95_ms": 71.19069993495941,
-  "duration_mae_ms": 394.41049098968506,
-  "path_lane_mae": 0.17854811251163483,
-  "n_true_notes": 3883
+  "precision": 0.999832242912263,
+  "recall": 0.9996645420999665,
+  "kind_accuracy": 0.996006711409396,
+  "time_to_hit_mae_ms": 15.202845446765423,
+  "time_to_hit_p95_ms": 45.41706666350365,
+  "duration_mae_ms": 132.6359361410141,
+  "path_lane_mae": 0.03160377964377403,
+  "n_true_notes": 29810
  }
 }

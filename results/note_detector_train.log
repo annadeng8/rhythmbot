@@ -1,0 +1,52 @@
+device mps
+/Users/annadeng/mit/64210/project/rhythmbot/train.py:128: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  x = torch.from_numpy(img).permute(2, 0, 1).float().unsqueeze(0)
+val   (4962, 3, 192, 128) in 3s
+train (33067, 3, 192, 128) in 17s
+epoch  1  loss 1.7277  P 0.827 R 0.489 kind 0.656  tth MAE  168 ms  dur MAE  273 ms  path-lane MAE 0.15  | active P 0.975 R 0.924 end MAE   91 ms  (66s)
+epoch  2  loss 0.7344  P 0.981 R 0.882 kind 0.836  tth MAE  108 ms  dur MAE  245 ms  path-lane MAE 0.13  | active P 0.990 R 0.997 end MAE  125 ms  (45s)
+epoch  3  loss 0.4688  P 0.979 R 0.962 kind 0.893  tth MAE  118 ms  dur MAE  242 ms  path-lane MAE 0.13  | active P 0.991 R 0.999 end MAE   66 ms  (42s)
+epoch  4  loss 0.3800  P 0.991 R 0.982 kind 0.930  tth MAE   84 ms  dur MAE  214 ms  path-lane MAE 0.14  | active P 0.994 R 0.998 end MAE   65 ms  (41s)
+epoch  5  loss 0.3048  P 0.999 R 0.978 kind 0.951  tth MAE   72 ms  dur MAE  206 ms  path-lane MAE 0.13  | active P 0.994 R 0.999 end MAE   35 ms  (43s)
+epoch  6  loss 0.2736  P 0.994 R 0.992 kind 0.966  tth MAE   66 ms  dur MAE  215 ms  path-lane MAE 0.17  | active P 0.995 R 0.997 end MAE   35 ms  (42s)
+epoch  7  loss 0.2301  P 0.999 R 0.993 kind 0.977  tth MAE   67 ms  dur MAE  205 ms  path-lane MAE 0.13  | active P 0.995 R 0.998 end MAE   28 ms  (41s)
+epoch  8  loss 0.1997  P 1.000 R 0.994 kind 0.982  tth MAE   59 ms  dur MAE  177 ms  path-lane MAE 0.12  | active P 0.994 R 0.998 end MAE   26 ms  (39s)
+epoch  9  loss 0.1687  P 1.000 R 0.993 kind 0.983  tth MAE   58 ms  dur MAE  177 ms  path-lane MAE 0.09  | active P 0.994 R 0.998 end MAE   44 ms  (39s)
+epoch 10  loss 0.1465  P 0.999 R 0.996 kind 0.990  tth MAE   47 ms  dur MAE  172 ms  path-lane MAE 0.11  | active P 0.994 R 0.999 end MAE   20 ms  (40s)
+epoch 11  loss 0.1275  P 1.000 R 0.998 kind 0.991  tth MAE   40 ms  dur MAE  173 ms  path-lane MAE 0.09  | active P 0.995 R 1.000 end MAE   22 ms  (41s)
+epoch 12  loss 0.1146  P 1.000 R 0.996 kind 0.992  tth MAE   40 ms  dur MAE  164 ms  path-lane MAE 0.07  | active P 0.994 R 0.999 end MAE   16 ms  (41s)
+epoch 13  loss 0.1028  P 1.000 R 0.998 kind 0.993  tth MAE   35 ms  dur MAE  161 ms  path-lane MAE 0.06  | active P 0.998 R 0.999 end MAE   16 ms  (42s)
+epoch 14  loss 0.0909  P 1.000 R 0.999 kind 0.994  tth MAE   33 ms  dur MAE  156 ms  path-lane MAE 0.06  | active P 0.998 R 0.997 end MAE   17 ms  (43s)
+epoch 15  loss 0.0843  P 1.000 R 0.999 kind 0.995  tth MAE   38 ms  dur MAE  151 ms  path-lane MAE 0.07  | active P 0.998 R 1.000 end MAE   24 ms  (42s)
+epoch 16  loss 0.0759  P 1.000 R 0.999 kind 0.994  tth MAE   32 ms  dur MAE  152 ms  path-lane MAE 0.09  | active P 0.998 R 1.000 end MAE   20 ms  (41s)
+epoch 17  loss 0.0716  P 1.000 R 0.999 kind 0.996  tth MAE   30 ms  dur MAE  147 ms  path-lane MAE 0.07  | active P 0.997 R 0.999 end MAE   12 ms  (40s)
+epoch 18  loss 0.0674  P 1.000 R 0.999 kind 0.995  tth MAE   30 ms  dur MAE  147 ms  path-lane MAE 0.05  | active P 0.998 R 1.000 end MAE   16 ms  (42s)
+epoch 19  loss 0.0617  P 1.000 R 0.999 kind 0.995  tth MAE   27 ms  dur MAE  143 ms  path-lane MAE 0.05  | active P 0.998 R 0.999 end MAE   14 ms  (42s)
+epoch 20  loss 0.0563  P 1.000 R 0.999 kind 0.996  tth MAE   26 ms  dur MAE  146 ms  path-lane MAE 0.05  | active P 0.998 R 0.999 end MAE   20 ms  (45s)
+epoch 21  loss 0.0524  P 1.000 R 1.000 kind 0.996  tth MAE   24 ms  dur MAE  140 ms  path-lane MAE 0.04  | active P 0.998 R 0.999 end MAE   13 ms  (47s)
+epoch 22  loss 0.0493  P 1.000 R 0.999 kind 0.996  tth MAE   21 ms  dur MAE  137 ms  path-lane MAE 0.04  | active P 0.998 R 1.000 end MAE   14 ms  (43s)
+epoch 23  loss 0.0457  P 1.000 R 0.999 kind 0.995  tth MAE   21 ms  dur MAE  135 ms  path-lane MAE 0.04  | active P 0.998 R 0.998 end MAE    9 ms  (39s)
+epoch 24  loss 0.0429  P 1.000 R 1.000 kind 0.996  tth MAE   18 ms  dur MAE  135 ms  path-lane MAE 0.04  | active P 0.998 R 0.999 end MAE   12 ms  (39s)
+epoch 25  loss 0.0407  P 1.000 R 0.999 kind 0.996  tth MAE   19 ms  dur MAE  134 ms  path-lane MAE 0.04  | active P 0.998 R 1.000 end MAE   13 ms  (39s)
+epoch 26  loss 0.0383  P 1.000 R 1.000 kind 0.996  tth MAE   17 ms  dur MAE  134 ms  path-lane MAE 0.03  | active P 0.998 R 0.999 end MAE    8 ms  (40s)
+epoch 27  loss 0.0365  P 1.000 R 1.000 kind 0.996  tth MAE   16 ms  dur MAE  133 ms  path-lane MAE 0.03  | active P 0.998 R 1.000 end MAE    8 ms  (39s)
+epoch 28  loss 0.0352  P 1.000 R 1.000 kind 0.996  tth MAE   15 ms  dur MAE  133 ms  path-lane MAE 0.03  | active P 0.998 R 1.000 end MAE    7 ms  (40s)
+epoch 29  loss 0.0343  P 1.000 R 1.000 kind 0.996  tth MAE   15 ms  dur MAE  132 ms  path-lane MAE 0.03  | active P 0.998 R 1.000 end MAE    7 ms  (39s)
+epoch 30  loss 0.0340  P 1.000 R 1.000 kind 0.996  tth MAE   15 ms  dur MAE  133 ms  path-lane MAE 0.03  | active P 0.998 R 1.000 end MAE    7 ms  (39s)
+/Users/annadeng/mit/64210/.venv/lib/python3.13/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+model -> results/note_detector_dense.pt
+{
+ "active_precision": 0.998181450798141,
+ "active_recall": 0.9995953055443141,
+ "active_end_mae_ms": 6.8121543154120445,
+ "active_offscreen_ok": 1.0,
+ "precision": 0.999832242912263,
+ "recall": 0.9996645420999665,
+ "kind_accuracy": 0.996006711409396,
+ "time_to_hit_mae_ms": 15.202845446765423,
+ "time_to_hit_p95_ms": 45.41706666350365,
+ "duration_mae_ms": 132.6359361410141,
+ "path_lane_mae": 0.03160377964377403,
+ "n_true_notes": 29810
+}

@@ -11,9 +11,9 @@
  },
  "score": 45,
  "max_score": 45,
- "timing_error_mean_s": 0.0025333333333334095,
- "timing_error_abs_mean_s": 0.004533333333333249,
- "timing_error_std_s": 0.005239168721170219,
+ "timing_error_mean_s": 0.006533333333333206,
+ "timing_error_abs_mean_s": 0.007066666666666718,
+ "timing_error_std_s": 0.0047450559064736286,
  "by_kind": {
   "tap": {
    "n": 9,
@@ -30,8 +30,8 @@
    "n": 3,
    "hit": 3,
    "completed": 3,
-   "mean_maintenance": 1.0,
-   "mean_slide_rms_m": 0.011213058263882554
+   "mean_maintenance": 0.9600550964187328,
+   "mean_slide_rms_m": 0.012151174267948461
   }
  },
  "notes": [
@@ -132,7 +132,7 @@
    "time": 8.319,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": 0.0009999999999994458,
+   "timing_error": 0.005999999999998451,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -147,7 +147,7 @@
    "time": 9.015,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": 0.0,
+   "timing_error": 0.004999999999999005,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -162,10 +162,10 @@
    "time": 10.285,
    "duration": 0.677,
    "status": "hit",
-   "timing_error": 0.0,
+   "timing_error": 0.005000000000000782,
    "judgment": "perfect",
-   "active_ticks": 136,
-   "contact_ticks": 136,
+   "active_ticks": 135,
+   "contact_ticks": 135,
    "completed": true,
    "maintenance": 1.0,
    "slide_rms_m": null
@@ -177,13 +177,13 @@
    "time": 11.242,
    "duration": 0.964,
    "status": "hit",
-   "timing_error": 0.0129999999999999,
+   "timing_error": 0.007999999999999119,
    "judgment": "perfect",
-   "active_ticks": 191,
-   "contact_ticks": 191,
+   "active_ticks": 192,
+   "contact_ticks": 192,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.008108618755886953
+   "slide_rms_m": 0.007657501281987266
   },
   {
    "id": 10,
@@ -192,10 +192,10 @@
    "time": 13.755,
    "duration": 1.317,
    "status": "hit",
-   "timing_error": 0.0,
+   "timing_error": 0.004999999999999005,
    "judgment": "perfect",
-   "active_ticks": 264,
-   "contact_ticks": 264,
+   "active_ticks": 263,
+   "contact_ticks": 263,
    "completed": true,
    "maintenance": 1.0,
    "slide_rms_m": null
@@ -207,7 +207,7 @@
    "time": 15.352,
    "duration": 0.0,
    "status": "hit",
-   "timing_error": -0.002000000000000668,
+   "timing_error": 0.0129999999999999,
    "judgment": "perfect",
    "active_ticks": 0,
    "contact_ticks": 0,
@@ -222,10 +222,10 @@
    "time": 15.632,
    "duration": 0.993,
    "status": "hit",
-   "timing_error": 0.008000000000000895,
+   "timing_error": 0.018000000000000682,
    "judgment": "perfect",
-   "active_ticks": 198,
-   "contact_ticks": 198,
+   "active_ticks": 196,
+   "contact_ticks": 196,
    "completed": true,
    "maintenance": 1.0,
    "slide_rms_m": null
@@ -237,13 +237,13 @@
    "time": 16.979,
    "duration": 0.959,
    "status": "hit",
-   "timing_error": -0.003999999999997783,
+   "timing_error": 0.011000000000002785,
    "judgment": "perfect",
-   "active_ticks": 192,
-   "contact_ticks": 192,
+   "active_ticks": 190,
+   "contact_ticks": 190,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011207864912242745
+   "slide_rms_m": 0.011465554365230989
   },
   {
    "id": 14,
@@ -252,20 +252,20 @@
    "time": 18.579,
    "duration": 1.208,
    "status": "hit",
-   "timing_error": -0.009000000000000341,
+   "timing_error": -0.004000000000001336,
    "judgment": "perfect",
    "active_ticks": 242,
-   "contact_ticks": 242,
+   "contact_ticks": 213,
    "completed": true,
-   "maintenance": 1.0,
-   "slide_rms_m": 0.014322691123517965
+   "maintenance": 0.8801652892561983,
+   "slide_rms_m": 0.01733046715662713
   }
  ],
  "detector": "torch",
  "skipped_by_planner": [],
  "n_detections": 904,
  "sim_seconds": 20.787,
- "wall_seconds": 2.568044662475586,
+ "wall_seconds": 7.167723178863525,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -300,7 +300,12 @@
    "chord_window": 0.06,
    "travel_speed": 0.9,
    "min_travel_time": 0.12,
-   "command_lead": 0.0
+   "command_lead": 0.0,
+   "roll_raise": 0.01,
+   "roll_dip_time": 0.08,
+   "roll_lift_time": 0.08,
+   "pivot_width_speed": 1.0,
+   "lane_slack": 0.012
   },
   "perception": {
    "tick_hz": 30.0,
@@ -311,7 +316,9 @@
    "timing_noise_std": 0.0,
    "latency": 0.0,
    "min_observations": 2,
-   "stale_after": 0.2
+   "stale_after": 0.2,
+   "match_window": 0.15,
+   "min_note_gap": 0.07
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,

@@ -254,6 +254,103 @@ def varied_random_chart(seed: int, n_lanes: int = 6, duration: float = 20.0) -> 
     )
 
 
+def dense_random_chart(seed: int, n_lanes: int = 6, duration: float = 20.0, lead_in: float = 2.5) -> Chart:
+    """A dense random chart in the style of real osu!mania maps: notes on a
+    beat grid as fine as 0.045 s, up to ~13 notes/s, two- to four-note
+    chords, many short holds (down to 0.05 s), and runs of notes in one lane,
+    so up to eight notes queue in a lane on screen.  Unlike `random_chart`
+    these are not meant to be playable by one hand; they are training data
+    for the vision model, whose job is only to report what is on screen.
+
+    Same-lane notes never overlap: a lane takes its next head at least 0.08 s
+    after the previous head and 0.05 s after the previous note's end, so
+    every head stays separable on screen (heads are `game.HEAD_TIME` thick).
+    The style (density, grid, chords, holds, repeats, which lanes are used)
+    is drawn per chart."""
+    rng = np.random.default_rng(20_000 + seed)
+    # Imported 4K/5K maps use a centred block of lanes; native charts use all.
+    n_used = int(rng.choice([n_lanes, 4, 5], p=[0.45, 0.4, 0.15])) if n_lanes > 4 else n_lanes
+    first = (n_lanes - n_used) // 2
+    lanes = list(range(first, first + n_used))
+    grid = float(rng.uniform(0.045, 0.16))
+    density = float(rng.uniform(3.0, 16.0))  # notes per second, before lane limits
+    chord_p = np.array([1.0, rng.uniform(0, 0.6), rng.uniform(0, 0.3), rng.uniform(0, 0.12)])
+    chord_p = chord_p[: min(4, n_used)]
+    chord_p /= chord_p.sum()
+    mean_chord = float((np.arange(1, len(chord_p) + 1) * chord_p).sum())
+    p_row = min(1.0, density * grid / mean_chord)
+    p_hold = float(rng.uniform(0.1, 0.75))
+    p_long_hold = float(rng.uniform(0.0, 0.12))
+    p_slide = float(rng.uniform(0.0, 0.08)) if n_used == n_lanes else 0.0
+    p_repeat = float(rng.uniform(0.0, 0.7))  # next row starts in the previous row's lane
+    max_queue = int(rng.integers(5, 10))  # heads per lane within one approach time
+    approach = 1.6
+
+    free_at = {lane: -np.inf for lane in range(n_lanes)}  # earliest next head
+    heads: dict[int, list[float]] = {lane: [] for lane in range(n_lanes)}
+    notes: list[Note] = []
+    prev_lane = int(rng.choice(lanes))
+    t = lead_in
+    while t < duration:
+        if rng.random() >= p_row:
+            t += grid
+            continue
+        size = int(rng.choice(np.arange(1, len(chord_p) + 1), p=chord_p))
+        avail = [
+            lane for lane in lanes
+            if free_at[lane] <= t + 1e-6
+            and sum(1 for h in heads[lane] if h > t - approach) < max_queue
+        ]
+        if not avail:
+            t += grid
+            continue
+        if prev_lane in avail and rng.random() < p_repeat:
+            row = [prev_lane]
+        elif rng.random() < 0.5:
+            # Rolls and trills: a lane next to the previous one.
+            near = [lane for lane in avail if abs(lane - prev_lane) == 1]
+            row = [int(rng.choice(near or avail))]
+        else:
+            row = [int(rng.choice(avail))]
+        rest = [lane for lane in avail if lane not in row]
+        rng.shuffle(rest)
+        row += rest[: size - 1]
+        prev_lane = row[0]
+        for lane in row:
+            u = rng.random()
+            if u < p_slide and size == 1:
+                dur = float(rng.uniform(0.2, 1.0))
+                n_seg = int(rng.integers(1, 3))
+                cur, wps = lane, [(0.0, float(lane))]
+                for k in range(1, n_seg + 1):
+                    cur = int(np.clip(cur + rng.choice([-2, -1, 1, 2]), 0, n_lanes - 1))
+                    wps.append((round(dur * k / n_seg, 3), float(cur)))
+                # A slide crosses lanes: every lane it passes through must be
+                # clear now and stays clear until it ends.
+                crossed = range(int(min(w[1] for w in wps)), int(max(w[1] for w in wps)) + 1)
+                if all(free_at[other] <= t + 1e-6 for other in crossed):
+                    notes.append(Note(SLIDE, lane, round(t, 3), waypoints=wps))
+                    for other in crossed:
+                        free_at[other] = t + dur + 0.05
+                        heads[other].append(t)
+                    continue
+                u = 1.0  # fall back to a tap
+            if u < p_slide + p_hold:
+                if rng.random() < p_long_hold:
+                    dur = float(rng.uniform(0.5, 3.0))
+                else:
+                    # Short holds, a few grid steps long, as real maps have.
+                    dur = max(0.05, grid * int(rng.integers(1, 7)) * float(rng.uniform(0.9, 1.1)))
+                notes.append(Note(HOLD, lane, round(t, 3), round(dur, 3)))
+                free_at[lane] = t + max(dur + 0.05, 0.08)
+            else:
+                notes.append(Note(TAP, lane, round(t, 3)))
+                free_at[lane] = t + 0.08
+            heads[lane].append(t)
+        t += grid
+    return Chart(notes, name=f"dense-{seed}")
+
+
 def demo_chart() -> Chart:
     """A short hand-written chart that exercises every note type."""
     notes = [

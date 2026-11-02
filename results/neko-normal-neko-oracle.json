@@ -6806,7 +6806,7 @@
  ],
  "n_detections": 23350,
  "sim_seconds": 99.353,
- "wall_seconds": 16.01372480392456,
+ "wall_seconds": 15.342406272888184,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -6857,7 +6857,9 @@
    "timing_noise_std": 0.0,
    "latency": 0.0,
    "min_observations": 2,
-   "stale_after": 0.2
+   "stale_after": 0.2,
+   "match_window": 0.15,
+   "min_note_gap": 0.07
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,
