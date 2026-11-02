@@ -153,7 +153,7 @@
    "contact_ticks": 184,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011335719972365738
+   "slide_rms_m": 0.011335719972365736
   },
   {
    "id": 8,
@@ -183,7 +183,7 @@
    "contact_ticks": 173,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.010396961135548886
+   "slide_rms_m": 0.010396961135548888
   },
   {
    "id": 10,
@@ -355,7 +355,7 @@
  "skipped_by_planner": [],
  "n_detections": 1163,
  "sim_seconds": 20.64,
- "wall_seconds": 7.131277084350586,
+ "wall_seconds": 6.485461950302124,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -394,6 +394,7 @@
    "roll_raise": 0.01,
    "roll_dip_time": 0.08,
    "roll_lift_time": 0.08,
+   "roll_min_dip_time": 0.03,
    "pivot_width_speed": 1.0,
    "lane_slack": 0.012
   },

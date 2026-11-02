@@ -160,6 +160,10 @@ class Motion:
     roll_raise: float = 0.010
     roll_dip_time: float = 0.08
     roll_lift_time: float = 0.08
+    # When notes come too fast for that, the dip may shrink to this, and the
+    # free fingertip may still be moving sideways during it (it stays above
+    # the contact height until the hit).
+    roll_min_dip_time: float = 0.03
     # How fast the opening may change while a fingertip is held down: the
     # arm has to swing the gripper sideways by half the change, and faster
     # than this the holding fingertip slides in its lane as the arm lags.

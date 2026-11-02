@@ -210,6 +210,8 @@ class _Hold:
     width: float
     rise: float
     free_at: float  # when the other fingertip is raised and ready
+    # When that fingertip, if it is lifting off the screen, is clear of it.
+    clear_at: float | None = None
 
 
 @dataclass
@@ -313,7 +315,7 @@ class ClassicalPlanner(Policy):
             if b.t_hit >= a.t_end + M.post_time * 0.5:
                 break
             fit = self._free_fit(a.x_start, b, can_shift=True)
-            if fit is not None and b.t_hit - M.roll_dip_time >= t_ready + 0.01:
+            if fit is not None and b.t_hit - M.roll_min_dip_time >= t_ready:
                 return fit
         return None
 
@@ -353,11 +355,21 @@ class ClassicalPlanner(Policy):
                     w = self.G.width_for_tip_gap(abs(a.x_start + nxt[2] - hold.x), M.lane_slack)
         x_free = hold.x - s * tip_gap(self.G, w)
         # Reopening about a holding fingertip swings the whole gripper
-        # sideways by half the change, so it is given time.
-        t_dip = a.t_hit - M.roll_dip_time
+        # sideways by half the change, so it is given time.  It may start as
+        # soon as a lifting fingertip is clear of the screen and run on
+        # through the dip, but must be over by the hit.
         t_ready = max(hold.free_at, kfs[-1].t)
-        if t_dip < t_ready + max(0.01, abs(w - hold.width) / M.pivot_width_speed):
+        lifting = hold.clear_at is not None and kfs[-1].t == hold.free_at
+        t_start = hold.clear_at if lifting else t_ready
+        t_open = t_ready + max(0.01, abs(w - hold.width) / M.pivot_width_speed)
+        if t_start + abs(w - hold.width) / M.pivot_width_speed > a.t_hit:
             return None
+        if t_ready > a.t_hit - M.roll_min_dip_time:
+            return None
+        if t_open > a.t_hit:
+            # Too tight to wait for the end of the lift: be partly open by then.
+            kfs[-1].width = hold.width + (w - hold.width) * (t_ready - t_start) / (a.t_hit - t_start)
+        t_dip = max(a.t_hit - M.roll_dip_time, t_open)
         up = self._rise(s, M.roll_raise)
 
         def k(t, rise, ref=s, x=hold.x):
@@ -365,7 +377,8 @@ class ClassicalPlanner(Policy):
 
         # Free fingertip: raised over a's lane, crossing the contact height
         # at the hit, pressed in level with the holding one.
-        kfs.append(k(t_dip, up))
+        if t_dip <= a.t_hit - M.roll_min_dip_time:
+            kfs.append(k(t_dip, up))
         kfs.append(k(a.t_hit, self._rise(s, M.contact_tolerance + M.touch_depth)))
         if a.kind == HOLD and a.t_end > hold.t_end + 1e-3:
             # a outlasts the hold: once both are down and the hold is over,
@@ -376,10 +389,12 @@ class ClassicalPlanner(Policy):
             kfs.append(k(t_switch, 0.0, -s, x_free))
             t_up = t_switch + M.roll_lift_time
             new_up = self._rise(-s, M.roll_raise)
+            t_clear = t_switch + M.roll_lift_time * (M.contact_tolerance + M.touch_depth) / M.roll_raise
+            kfs.append(k(t_clear, self._rise(-s, M.contact_tolerance + M.touch_depth), -s, x_free))
             kfs.append(k(t_up, new_up, -s, x_free))
             if a.notes[0].held is None:
                 a.notes[0].planned_hold = (-s, x_free, w)
-            return _Hold(a.t_end, x_free, -s, w, new_up, t_up)
+            return _Hold(a.t_end, x_free, -s, w, new_up, t_up, t_clear)
         t_done = max(a.t_end if a.kind == HOLD else a.t_hit + M.tap_dwell, t_press)
         kfs.append(k(t_press, 0.0))
         if t_done > t_press + 1e-3:
@@ -388,8 +403,10 @@ class ClassicalPlanner(Policy):
             # The hold ended while a was down: lift both from here.
             return _Release(t_done, hold.x, w, a.kind, s)
         t_up = t_done + M.roll_lift_time
+        t_clear = t_done + M.roll_lift_time * (M.contact_tolerance + M.touch_depth) / M.roll_raise
+        kfs.append(k(t_clear, self._rise(s, M.contact_tolerance + M.touch_depth)))
         kfs.append(k(t_up, up))
-        return _Hold(hold.t_end, hold.x, s, w, up, t_up)
+        return _Hold(hold.t_end, hold.x, s, w, up, t_up, t_clear)
 
     def _release(self, hold: _Hold, kfs: list[Keyframe]) -> _Release:
         t_end = max(hold.t_end, kfs[-1].t)

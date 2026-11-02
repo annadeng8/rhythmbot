@@ -325,7 +325,7 @@
  "skipped_by_planner": [],
  "n_detections": 1015,
  "sim_seconds": 19.853,
- "wall_seconds": 3.0191407203674316,
+ "wall_seconds": 2.8339242935180664,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -364,6 +364,7 @@
    "roll_raise": 0.01,
    "roll_dip_time": 0.08,
    "roll_lift_time": 0.08,
+   "roll_min_dip_time": 0.03,
    "pivot_width_speed": 1.0,
    "lane_slack": 0.012
   },

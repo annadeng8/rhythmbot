@@ -250,15 +250,15 @@ planner:
 | difficulty | stars | notes | notes/s | oracle completion | vision model completion | previous vision model (3 slots) | mean \|timing error\|, oracle / vision |
 |---|---|---|---|---|---|---|---|
 | Easy Neko | 1.10 | 244 | 2.5 | 99.6 % | 99.6 % | 98.4 % | 8 / 7 ms |
-| Normal Neko | 1.64 | 446 | 4.7 | 80.9 % | 80.9 % | 66.6 % | 24 / 24 ms |
-| Advanced Neko | 2.49 | 759 | 7.9 | 64.7 % | 63.9 % | 50.1 % | 30 / 31 ms |
-| Llee's Hard Neko | 2.88 | 907 | 9.5 | 58.2 % | 58.3 % | 53.4 % | 37 / 37 ms |
-| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 44.3 % | 49.3 % | 42.1 % | 43 / 45 ms |
+| Normal Neko | 1.64 | 446 | 4.7 | 84.1 % | 83.6 % | 66.6 % | 31 / 30 ms |
+| Advanced Neko | 2.49 | 759 | 7.9 | 69.7 % | 68.8 % | 50.1 % | 33 / 34 ms |
+| Llee's Hard Neko | 2.88 | 907 | 9.5 | 59.8 % | 58.9 % | 53.4 % | 37 / 36 ms |
+| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 46.8 % | 51.8 % | 42.1 % | 40 / 44 ms |
 
-With perfect perception, almost every miss is a physical limit of one arm
-with a two-finger gripper (this breakdown is from the oracle runs before the
-tracker's matching fix below, which added 13 notes on Hard and 2 on
-Nyanyannyanyan):
+Where the oracle's misses came from before the two fixes below (tracker
+matching and chains of short holds), which between them added 14, 38, 27 and
+32 notes. The first row was not all physics: some of it turned out to be the
+planner's own timing.
 
 | why the oracle run missed a note | Normal | Advanced | Hard | Nyan |
 |---|---|---|---|---|
@@ -279,15 +279,15 @@ short holds' hit times by up to 0.1 s. The current model, trained with
 99.7 % (95.6 %) within 60 ms, with 9–16 ms time-to-hit error and 15–26 ms
 hold-duration error.
 
-On Normal Neko vision and oracle complete almost the same notes (three
-differ each way). The oracle is not a true ceiling on the harder maps, which
-ask for far more than one hand can play: there the planner has to choose,
-and it chooses differently depending on the detector. On Nyanyannyanyan the
-image detectors complete more than the oracle (color segmentation 50.2 %,
-vision 49.3 %, oracle 44.3 %) by favouring taps over holds: taps completed
-489 / 434 / 338, holds 116 / 161 / 196, and in three-note chords 135 / 127 /
-87 notes. Why the oracle's exact times and durations lead the planner to
-those choices has not been isolated.
+On Normal Neko vision and oracle complete nearly the same notes (356 in
+common, 19 only by the oracle, 17 only by vision). The oracle is not a true
+ceiling on the harder maps, which ask for far more than one hand can play:
+there the planner has to choose, and it chooses differently depending on the
+detector. On Nyanyannyanyan the image detectors complete more than the oracle
+(vision 51.8 %, color segmentation 50.6 %, oracle 46.8 %) by favouring taps
+over holds: taps completed 448 / 486 / 355, holds 177 / 124 / 209, and in
+three-note chords 129 / 129 / 96 notes. Why the oracle's exact times and
+durations lead the planner to those choices has not been isolated.
 
 **Close notes in the tracker.** The tracker used to match each detection to
 the nearest tracked note of the same kind and lane within 0.15 s, and several
@@ -307,8 +307,34 @@ vision, and from 57 to 82 and from 38 to 62 with the oracle. Overall
 completion rose less, from 57.8 to 58.3 % and from 48.2 to 49.3 % with
 vision and from 56.8 to 58.2 % and from 44.1 to 44.3 % with the oracle,
 because the arm's time is limited and playing these notes displaces others.
-Easy, Normal and Advanced did not change. Reports are in
-`results/neko-<difficulty>-<detector>.json`.
+Easy, Normal and Advanced did not change.
+
+**Chains of short holds.** Most of Normal Neko's misses were notes due just
+as a 0.146 s hold in another lane ends. The planner ran the free fingertip's
+lift (80 ms), the reopening (up to 90 ms) and the dip (80 ms) strictly one
+after another, which does not fit. Reopening now starts once the lifting
+fingertip is clear of the screen and may run on through a dip as short as
+30 ms (`Motion.roll_min_dip_time`). Vision completion rose from 80.9 to
+83.6 %, 63.9 to 68.8 %, 58.3 to 58.9 % and 49.3 to 51.8 %, and the oracle's
+from 80.9 to 84.1 %, 64.7 to 69.7 %, 58.2 to 59.8 % and 44.3 to 46.8 %.
+
+This has costs. These notes land later and the arm is working harder: on
+Normal, with the oracle, mean |timing error| went from 24 to 31 ms, notes
+judged "perfect" from 313 to 306 and "great" from 28 to 45, holds losing
+contact from 3 to 9, and 90th-percentile holding-fingertip slide from 14.5
+to 19.4 mm. Easy Neko and the regression charts did not change.
+
+The planner still skips 59 notes on Normal. For 39 the free fingertip is on
+the wrong side, typically in chains running one way across lanes (1→2→3):
+with one fingertip holding lane 2, the other cannot reach lane 3, and no roll
+can fix that. 19 need the gripper to reopen
+by 90 mm, which does not fit the time even overlapped. Two things were tried
+and left out. Hopping the hand across by letting go of the hold early and
+landing late, within the judge's slack, added only 0–3 notes per map with
+vision. A 60 ms lift added 4, 7, 18 and 8 notes with vision but raised the
+worst holding-fingertip slide on Easy Neko from 10.3 to 17.9 mm.
+
+Reports are in `results/neko-<difficulty>-<detector>.json`.
 
 ## Modules
 

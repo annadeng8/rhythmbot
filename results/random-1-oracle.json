@@ -31,7 +31,7 @@
    "hit": 3,
    "completed": 3,
    "mean_maintenance": 1.0,
-   "mean_slide_rms_m": 0.010854267705644129
+   "mean_slide_rms_m": 0.010854267704516243
   }
  },
  "notes": [
@@ -183,7 +183,7 @@
    "contact_ticks": 192,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.010866034374658232
+   "slide_rms_m": 0.01086603437127509
   },
   {
    "id": 10,
@@ -258,14 +258,14 @@
    "contact_ticks": 241,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.010229347015231703
+   "slide_rms_m": 0.010229347015231184
   }
  ],
  "detector": "oracle",
  "skipped_by_planner": [],
  "n_detections": 905,
  "sim_seconds": 20.787,
- "wall_seconds": 3.240440607070923,
+ "wall_seconds": 2.9965929985046387,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -304,6 +304,7 @@
    "roll_raise": 0.01,
    "roll_dip_time": 0.08,
    "roll_lift_time": 0.08,
+   "roll_min_dip_time": 0.03,
    "pivot_width_speed": 1.0,
    "lane_slack": 0.012
   },
