@@ -620,10 +620,25 @@ The training score is flat from v1 while the held-out score keeps rising
 (91.5 → 96.3 %): the agent fixed the few remaining training misses by
 general changes, not chart-specific ones. Its programs were developed only
 against oracle notes; v0 completed only 23 % of slides on the vision model's
-notes (it trusted the slide waypoints exactly), v7 is much more robust. The
-self-test run's v0 already scored 97.6 % held-out (95.2 % with the vision
-model), after the agent had run the simulator itself many times; its later
-revisions and the pixels run below are in progress.
+notes (it trusted the slide waypoints exactly), v7 is much more robust.
+
+`fable-selftest` (5 revisions; the agent may also run `./evaluate.sh`, and
+did so many times within each revision):
+
+| revision | train | held-out, oracle notes | held-out, vision-model notes |
+|---|---|---|---|
+| v0 | 100 % | **97.6 %** | **95.2 %** |
+| v1 | 100 | **98.0** | **96.1** |
+| v2 | 100 | 93.7 | 92.0 |
+| v3 | 100 | 96.1 | 93.7 |
+| v4 | 100 | 96.3 | 94.1 |
+
+Testing its own program got the agent to 100 % on the training charts in
+its first revision. With nothing left to fix there, later revisions were
+judged only by the training charts, and v2 lost 4 held-out points that v3–v4
+won back only partly: the feedback signal saturated, so further revisions
+are a random walk on unseen charts. Its best revision (v1, 98.0 %) is the
+strongest learned or generated policy on exact notes.
 
 **Pixels only (`--pixels`).** The program gets no tracked notes and no
 vision model, only the 384 × 256 RGB frame, and has to write its own
@@ -639,6 +654,57 @@ with its ground-truth notes. The policy spec is `cappx:<policy.py>`.
 ```bash
 python -m rhythmbot.cap.loop run --name fable-pixels --iterations 5 --self-test --pixels
 ```
+
+The agent calibrated the screen through the probe (6 lanes of 42.67 px,
+notes scroll at 206.26 px/s, judgment line at row 329.5, each kind's colour
+and shape), wrote colour segmentation with `scipy.ndimage`, a frame-to-frame
+tracker and a DP scheduler (920 lines), and completed every training note
+from v0:
+
+| revision | train | held-out | iid | dense | real |
+|---|---|---|---|---|---|
+| v0 | 100 % | 86.3 % | 88.6 | 77.7 | 95.1 |
+| v1 | 100 | 86.5 | | | |
+| v2 | 100 | 87.2 | | | |
+| v3 | 100 | **89.6** | | | |
+| v4 | 100 | 88.9 | 92.5 | 80.3 | 95.1 |
+
+It is the largest train/held-out gap of any approach: perception written
+against the training charts holds up (hits land 2–3 ms from the note time,
+against 11–13 ms for every other policy, because it reads time straight off
+pixel rows), but the play does not, especially on the denser held-out charts
+(80 %).
+
+## Comparison
+
+Held-out completion over all 20 charts (460 notes), best revision or final
+model of each:
+
+| approach | input | held-out | with vision-model notes |
+|---|---|---|---|
+| classical planner | tracked notes | 100 % | 98.0 % |
+| code-as-policy, self-test (v1) | tracked notes | 98.0 | 96.1 |
+| code-as-policy, harness feedback only (v7) | tracked notes | 96.3 | 92.0 |
+| code-as-policy, pixels only (v3) | **frame**, own perception code | 89.6 | – |
+| BC diffusion, from classical | **frame** | **98.7** | – |
+| BC diffusion, state teacher | tracked notes | 95.2 | 88.5 |
+| BC diffusion, trained on vision notes | tracked notes | – | 95.0 |
+| BC, pixel student of MLP teacher | **frame** | 91.1 | – |
+| BC MLP, state teacher | tracked notes | 89.6 | 80.7 |
+
+* On tracked notes, a generated program that could test itself (98.0 %)
+  beats every cloned policy (≤ 95.2 %), at about $13 of agent time and no
+  demonstrations; from pixels it is the other way round: pixel BC from the
+  planner (98.7 %) beats the agent's own perception + control (89.6 %).
+* Letting the agent run the simulator itself is worth more than feedback
+  rounds: one self-tested revision (97.6 %) beats eight feedback-only
+  revisions (96.3 %).
+* Agent costs are the conversation's running total as reported by Claude
+  Code: $18 for 8 feedback revisions, $29 for 5 self-test revisions, $24
+  for 5 pixels revisions (Fable).
+* Agents probe their sandbox: in every run they tried to find the project
+  source, write Claude's auto-memory, or run commands with the sandbox off;
+  all denied (see *Isolation*).
 
 ## Known limits / next steps
 

@@ -273,7 +273,9 @@ def heldout(ws: Path, workers: int, detector: str = "oracle") -> None:
     # Outside the workspace, so a resumed agent never sees held-out charts.
     out = ws.parent / f"{ws.name}_heldout"
     kind = "cappx" if history.get("pixels") else "cap"
-    specs = [f"{kind}:{p}" for p in sorted((ws / "history").glob("policy_v*.py"), key=lambda p: int(p.stem[8:]))]
+    # Only the harness's snapshots: the agent may leave its own files here.
+    snaps = [p for p in (ws / "history").glob("policy_v*.py") if p.stem[8:].isdigit()]
+    specs = [f"{kind}:{p}" for p in sorted(snaps, key=lambda p: int(p.stem[8:]))]
     evaluate(specs, "heldout", out, (detector,), workers=workers)
     summary = summarize(out)
     for rev in history["revisions"]:
