@@ -15,8 +15,12 @@ whenever it happens, which is what lets the policy carry over to charts it
 was not trained on.
 
 Action: the hand state (x, height, opening, rise) at the next `HORIZON`
-ticks, x and height as offsets from now.  The policy plays the first ticks of
-that chunk and replans at the next tick, as the classical planner does.
+ticks (x as an offset from now), an action chunk.  The MLP policy plays the
+first tick of its chunk and replans every tick, as the classical planner
+does; the diffusion policy plays the first few before sampling again.
+
+For the pixel policy the note features are replaced by the rendered game
+frame (`frame_input`); the hand state stays a vector.
 """
 
 from __future__ import annotations
@@ -31,7 +35,7 @@ N_NOTES = 8
 NOTE_DIM = 13
 HAND_DIM = 4
 OBS_DIM = HAND_DIM + N_NOTES * NOTE_DIM
-HORIZON = 10
+HORIZON = 16
 ACT_DIM = 4
 # Times are clipped to this many seconds ahead.
 T_CLIP = 2.0
@@ -78,9 +82,9 @@ def encode_obs(cfg: Config, notes: list[TrackedNote], t_now: float, hand: np.nda
 
 
 def encode_action(cfg: Config, hands: np.ndarray, hand_now: np.ndarray) -> np.ndarray:
-    """(HORIZON, 4) future hand states -> normalized action chunk."""
+    """(H, 4) future hand states -> action chunk in feature units."""
     L = cfg.layout
-    a = np.empty((HORIZON, ACT_DIM), dtype=np.float32)
+    a = np.empty((len(hands), ACT_DIM), dtype=np.float32)
     a[:, 0] = (hands[:, 0] - hand_now[0]) / L.lane_width
     a[:, 1] = (hands[:, 1] - L.screen_z) / CM
     a[:, 2] = hands[:, 2] / CM
@@ -90,9 +94,23 @@ def encode_action(cfg: Config, hands: np.ndarray, hand_now: np.ndarray) -> np.nd
 
 def decode_action(cfg: Config, a: np.ndarray, hand_now: np.ndarray) -> np.ndarray:
     L = cfg.layout
-    hands = np.empty((HORIZON, 4))
+    hands = np.empty((len(a), 4))
     hands[:, 0] = hand_now[0] + a[:, 0] * L.lane_width
     hands[:, 1] = L.screen_z + a[:, 1] * CM
     hands[:, 2] = np.clip(a[:, 2] * CM, 0.0, cfg.gripper.max_width)
     hands[:, 3] = a[:, 3] * CM
     return hands
+
+
+# Pixel input: the frame downsampled 2x (192 x 128), as uint8 CHW.
+FRAME_DOWN = 2
+
+
+def frame_input(frame: np.ndarray) -> np.ndarray:
+    return np.ascontiguousarray(frame[::FRAME_DOWN, ::FRAME_DOWN].transpose(2, 0, 1))
+
+
+def hand_obs(cfg: Config, hand: np.ndarray) -> np.ndarray:
+    """The hand part of the observation alone (what the pixel policy gets
+    besides the frame)."""
+    return encode_obs(cfg, [], 0.0, hand)[:HAND_DIM]

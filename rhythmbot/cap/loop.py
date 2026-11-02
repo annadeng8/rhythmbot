@@ -3,11 +3,11 @@ simulator scores it, the agent reads the feedback and revises.
 
     python -m rhythmbot.cap.loop run --name fable-1 --iterations 6
     python -m rhythmbot.cap.loop run --name fable-selftest --self-test     # agent may also run the sim itself
-    python -m rhythmbot.cap.loop heldout ../rhythmbot_cap_runs/fable-1                  # every revision on the held-out charts
-    python -m rhythmbot.cap.loop selftest ../rhythmbot_cap_runs/fable-1/policy.py   # what --self-test lets the agent run
+    python -m rhythmbot.cap.loop heldout /Users/Shared/rhythmbot_cap/fable-1                  # every revision on the held-out charts
+    python -m rhythmbot.cap.loop selftest /Users/Shared/rhythmbot_cap/fable-1/policy.py   # what --self-test lets the agent run
 
 `run` makes a workspace `<RHYTHMBOT_CAP_RUNS>/<name>/` (default
-`../rhythmbot_cap_runs`, outside the repository) holding only `TASK.md` (the
+`/Users/Shared/rhythmbot_cap`, outside the repository and home directory) holding only `TASK.md` (the
 problem statement), `api.py` (the control API's source) and, once the agent
 has written it, `policy.py`.  Each iteration is one non-interactive Claude
 Code call in that directory, continuing the same conversation: the first
@@ -37,15 +37,22 @@ from .. import PROJECT_ROOT
 from .feedback import load_reports, revision_feedback
 
 HERE = Path(__file__).resolve().parent
-# Workspaces live outside the repository by default, so nothing above the
-# agent's working directory is the project it could read.
-RUNS = Path(os.environ.get("RHYTHMBOT_CAP_RUNS", PROJECT_ROOT.parent / "rhythmbot_cap_runs"))
+# Workspaces live outside the repository and, where /Users/Shared exists,
+# outside the home directory, so the agent can be shut out of both.
+_SHARED = Path("/Users/Shared")
+RUNS = Path(
+    os.environ.get(
+        "RHYTHMBOT_CAP_RUNS",
+        _SHARED / "rhythmbot_cap" if _SHARED.is_dir() else PROJECT_ROOT.parent / "rhythmbot_cap_runs",
+    )
+)
 TRAIN_SPLIT = "cap-train"
 
 FIRST_PROMPT = (
     "Read TASK.md and api.py in this directory, then write policy.py: the control program for the "
     "rhythm-game robot described there. Aim for a program that completes as many notes as possible "
-    "on charts you have not seen. When policy.py is written and you are done, reply with a short "
+    "on charts you have not seen. If the program is long, write it in several smaller edits rather "
+    "than one huge write. When policy.py is written and you are done, reply with a short "
     "summary of its strategy."
 )
 NEXT_PROMPT = (
@@ -64,9 +71,14 @@ def _claude(prompt: str, cwd: Path, model: str, session: str | None, self_test: 
     tools = ["Read", "Write", "Edit", "Glob", "Grep"]
     denied = ["WebFetch", "WebSearch", "Task", "Agent", "NotebookEdit"]
     # Reads are allowed anywhere by default: shut out the project (the
-    # classical planner, the charts) and every other workspace (other runs,
-    # held-out reports).
-    for d in [PROJECT_ROOT] + [p for p in cwd.parent.iterdir() if p.is_dir() and p != cwd]:
+    # classical planner, the charts), the home directory (Claude's own
+    # transcripts of other runs) unless the workspace is in it, and every
+    # other workspace (other runs, held-out reports).  Create the
+    # workspaces of runs started together before starting any of them.
+    shut = [PROJECT_ROOT] + [p for p in cwd.parent.iterdir() if p.is_dir() and p != cwd]
+    if not cwd.resolve().is_relative_to(Path.home().resolve()):
+        shut.append(Path.home())
+    for d in shut:
         for tool in ("Read", "Glob", "Grep"):
             denied.append(f"{tool}(/{d.resolve()}/**)")
     if self_test:
@@ -84,7 +96,9 @@ def _claude(prompt: str, cwd: Path, model: str, session: str | None, self_test: 
     if session:
         cmd += ["--resume", session]
     t0 = time.time()
-    proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=3 * 3600)
+    # The default output cap cuts off a long policy.py written in one go.
+    env = {**os.environ, "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "64000"}
+    proc = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True, timeout=3 * 3600)
     log.write_text(proc.stdout + ("\n--- stderr ---\n" + proc.stderr if proc.stderr else ""))
     try:
         out = json.loads(proc.stdout)
