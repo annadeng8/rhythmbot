@@ -303,7 +303,7 @@
  "skipped_by_planner": [],
  "n_detections": 1127,
  "sim_seconds": 20.45,
- "wall_seconds": 6.274937152862549,
+ "wall_seconds": 6.50341796875,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -338,6 +338,9 @@
    "chord_window": 0.06,
    "travel_speed": 0.9,
    "min_travel_time": 0.12,
+   "min_lateral_gap": 0.07,
+   "beam_width": 8,
+   "pivot_lookahead": 4,
    "command_lead": 0.0,
    "roll_raise": 0.01,
    "roll_dip_time": 0.08,
@@ -358,6 +361,11 @@
    "stale_after": 0.2,
    "match_window": 0.15,
    "min_note_gap": 0.07
+  },
+  "arms": {
+   "n": 1,
+   "base_x": 0.33,
+   "middle_clearance": 0.09
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,

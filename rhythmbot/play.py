@@ -7,6 +7,7 @@
     HEADLESS=1 python -m rhythmbot.play --demo            # no browser, fast
     python -m rhythmbot.play --chart charts/random-1.json --detector color
     python -m rhythmbot.play --random 7 --noise 0.03 --latency 0.1
+    python -m rhythmbot.play --chart charts/song.json --arms 2  # two arms, wider lanes
 
 Diagram:
 
@@ -36,12 +37,12 @@ from . import PROJECT_ROOT
 from . import audio
 from .brain import GameScreen, RhythmBrain, initial_tip_pose
 from .chart import Chart, demo_chart, random_chart
-from .config import DEFAULT, Config, Perception
+from .config import DEFAULT, Config, Perception, two_arm_config
 from .game import HighwayVisualizer
 from .judge import Judge
 from .perception import make_detector
 from .planner import ClassicalPlanner
-from .robot import Robot, TouchSensor
+from .robot import WSG_NAME, Robot, TouchSensor
 from .viz import HEADLESS, get_meshcat, keep_meshcat_open, publish_recording, start_recording
 
 
@@ -49,17 +50,21 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     builder = DiagramBuilder()
     robot = Robot(builder, cfg, meshcat)
 
-    # Start hovering over the middle of the judgment line.
-    X_WT0 = initial_tip_pose(cfg)
+    # Start hovering over the judgment line: the middle of it, or with two
+    # arms, the middle of each hand's half.
     X_GT = np.array([0.0, cfg.gripper.tip_offset, 0.0])
-    X_WG0 = X_WT0 @ RigidTransform(-X_GT)
-    q0 = robot.solve_start_configuration(X_WG0)
-    X_WG0_actual = robot.gripper_pose_at(q0)
+    X_WG0s = []
+    policies = []
+    for k, arm in enumerate(robot.arms):
+        policy = ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
+        X_WT0 = initial_tip_pose(cfg, policy.rest_x())
+        q0 = arm.solve_start_configuration(X_WT0 @ RigidTransform(-X_GT))
+        X_WG0s.append(arm.gripper_pose_at(q0))
+        policies.append(policy)
 
     detector = make_detector(detector_name, chart, cfg, model_path)
-    policy = ClassicalPlanner(cfg)
     screen = builder.AddSystem(GameScreen(chart, cfg))
-    brain = builder.AddSystem(RhythmBrain(detector, policy, cfg, X_WG0_actual))
+    brain = builder.AddSystem(RhythmBrain(detector, policies, cfg, X_WG0s))
     brain.set_name("brain")
     touch = builder.AddSystem(TouchSensor(robot.plant, cfg, meshcat))
     touch.set_name("touch_sensor")
@@ -68,8 +73,14 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     builder.AddSystem(HighwayVisualizer(chart, cfg, meshcat)).set_name("highway")
 
     builder.Connect(screen.get_output_port(), brain.GetInputPort("frame"))
-    builder.Connect(brain.GetOutputPort("X_WG_desired"), robot.diffik.GetInputPort("X_AE_desired"))
-    builder.Connect(brain.GetOutputPort("wsg_position"), robot.station.GetInputPort("wsg.position"))
+    for arm in robot.arms:
+        builder.Connect(
+            brain.GetOutputPort(f"X_WG_desired{arm.suffix}"), arm.diffik.GetInputPort("X_AE_desired")
+        )
+        builder.Connect(
+            brain.GetOutputPort(f"wsg_position{arm.suffix}"),
+            robot.station.GetInputPort(f"{WSG_NAME}{arm.suffix}.position"),
+        )
     builder.Connect(robot.station.GetOutputPort("body_poses"), touch.GetInputPort("body_poses"))
     builder.Connect(touch.get_output_port(), judge.GetInputPort("touch"))
 
@@ -143,7 +154,8 @@ def run(
         Judge.print_report(rep)
         print(f"(simulated {t_end:.1f} s in {wall:.1f} s wall)")
     if out_path is None:
-        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}.json"
+        arms = "-2arm" if cfg.arms.n == 2 else ""
+        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}{arms}.json"
     Judge.save_report(rep, out_path)
     if not quiet:
         print(f"report -> {out_path}")
@@ -158,6 +170,7 @@ def main(argv=None):
     src.add_argument("--demo", action="store_true", help="the built-in demo chart (default)")
     ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch"])
     ap.add_argument("--model", help="TorchScript model for --detector torch")
+    ap.add_argument("--arms", type=int, default=1, choices=[1, 2], help="how many arms play")
     ap.add_argument("--noise", type=float, default=0.0, help="oracle hit-time noise std (s)")
     ap.add_argument("--latency", type=float, default=0.0, help="oracle detection latency (s)")
     ap.add_argument("--duration", type=float, help="simulate this long instead of the whole chart")
@@ -191,10 +204,11 @@ def main(argv=None):
         song = None
     song_offset = args.song_offset if args.song_offset is not None else chart.audio_offset
 
+    base = two_arm_config() if args.arms == 2 else DEFAULT
     cfg = dataclasses.replace(
-        DEFAULT,
+        base,
         perception=dataclasses.replace(
-            DEFAULT.perception, timing_noise_std=args.noise, latency=args.latency
+            base.perception, timing_noise_std=args.noise, latency=args.latency
         ),
     )
     print(f"chart {chart.name}: {chart.counts()}  ends at {chart.end_time:.1f} s")

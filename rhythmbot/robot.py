@@ -1,8 +1,8 @@
 """The Drake side: scene, hardware station, DiffIK controller, touch sensing.
 
-Scene: the course's iiwa + WSG (`iiwa_and_wsg.dmd.yaml`), a floor, and a
-touch screen slab in front of the arm (see `config.Layout` for the frame
-conventions).  The screen carries *visual geometry only*: a position-
+Scene: the course's iiwa + WSG (`iiwa_and_wsg.dmd.yaml`), or two of them side
+by side, a floor, and a touch screen slab in front (see `config.Layout` for
+the frame conventions).  The screen carries *visual geometry only*: a position-
 controlled arm pressing into a rigid welded box would just fight the
 contact solver, and a touchscreen does not push back anyway.  Touch is
 therefore sensed geometrically: a fingertip is "down" when it is within a
@@ -100,12 +100,55 @@ def write_screen_sdf(cfg: Config) -> str:
     return path
 
 
+def arm_directives(suffix: str, base_x: float) -> str:
+    """One iiwa + WSG, as in the course's `iiwa_and_wsg.dmd.yaml`, at base_x."""
+    iiwa, wsg = IIWA_NAME + suffix, WSG_NAME + suffix
+    return f"""
+- add_model:
+    name: {iiwa}
+    file: package://drake_models/iiwa_description/sdf/iiwa7_no_collision.sdf
+    default_joint_positions:
+        iiwa_joint_1: [-1.57]
+        iiwa_joint_2: [0.1]
+        iiwa_joint_3: [0]
+        iiwa_joint_4: [-1.2]
+        iiwa_joint_5: [0]
+        iiwa_joint_6: [1.6]
+        iiwa_joint_7: [0]
+- add_weld:
+    parent: world
+    child: {iiwa}::iiwa_link_0
+    X_PC:
+        translation: [{base_x:.4f}, 0, 0]
+- add_model:
+    name: {wsg}
+    file: package://manipulation/hydro/schunk_wsg_50_with_tip.sdf
+- add_weld:
+    parent: {iiwa}::iiwa_link_7
+    child: {wsg}::body
+    X_PC:
+        translation: [0, 0, 0.09]
+        rotation: !Rpy {{ deg: [90, 0, 90]}}"""
+
+
 def make_scenario_yaml(cfg: Config, screen_sdf_path: str) -> str:
     c = cfg.layout.screen_center()
-    return f"""
-directives:
+    A = cfg.arms
+    if A.n == 1:
+        arms = """
 - add_directives:
-    file: package://manipulation/iiwa_and_wsg.dmd.yaml
+    file: package://manipulation/iiwa_and_wsg.dmd.yaml"""
+    else:
+        arms = arm_directives(A.suffixes[0], -A.base_x) + arm_directives(A.suffixes[1], A.base_x)
+    drivers = "".join(
+        f"""
+    {IIWA_NAME}{sx}: !IiwaDriver
+        hand_model_name: {WSG_NAME}{sx}
+    {WSG_NAME}{sx}: !SchunkWsgDriver {{}}"""
+        for sx in A.suffixes
+    )
+    return f"""
+directives:{arms}
 - add_model:
     name: floor
     file: package://manipulation/floor.sdf
@@ -124,33 +167,26 @@ directives:
         translation: [{c[0]:.4f}, {c[1]:.4f}, {c[2]:.4f}]
 plant_config:
     time_step: {cfg.plant_time_step}
-model_drivers:
-    {IIWA_NAME}: !IiwaDriver
-        hand_model_name: {WSG_NAME}
-    {WSG_NAME}: !SchunkWsgDriver {{}}
+model_drivers:{drivers}
 """
 
 
 # ---------------------------------------------------------------------------
 # Station and controller
 # ---------------------------------------------------------------------------
-class Robot:
-    """Everything built onto the DiagramBuilder for the arm."""
+class Arm:
+    """One arm's controller: a plant with only that arm, and DiffIK on it."""
 
-    def __init__(self, builder: DiagramBuilder, cfg: Config, meshcat: Meshcat | None):
-        self.cfg = cfg
-        screen_sdf = write_screen_sdf(cfg)
-        self.scenario = LoadScenario(data=make_scenario_yaml(cfg, screen_sdf))
-        self.station = builder.AddSystem(MakeHardwareStation(self.scenario, meshcat=meshcat))
-        self.station.set_name("station")
-        self.plant = self.station.GetSubsystemByName("plant")
-        self.iiwa = self.plant.GetModelInstanceByName(IIWA_NAME)
-        self.wsg = self.plant.GetModelInstanceByName(WSG_NAME)
-
+    def __init__(self, builder: DiagramBuilder, robot: "Robot", suffix: str):
+        cfg = robot.cfg
+        self.suffix = suffix
+        self.name = IIWA_NAME + suffix
+        self.iiwa = robot.plant.GetModelInstanceByName(self.name)
+        self.wsg = robot.plant.GetModelInstanceByName(WSG_NAME + suffix)
         # Controller plant: the arm alone, with the hand welded on so its
         # `body` frame exists to be controlled.
         self.control_plant = MakeMultibodyPlant(
-            self.scenario, model_instance_names=[IIWA_NAME], add_frozen_child_instances=True
+            robot.scenario, model_instance_names=[self.name], add_frozen_child_instances=True
         )
         assert self.control_plant.num_positions() == 7, self.control_plant.num_positions()
         self.G_control = self.control_plant.GetFrameByName(GRIPPER_BODY)
@@ -167,11 +203,11 @@ class Robot:
                 self.control_plant, self.G_control, cfg.diffik_time_step, params
             )
         )
-        self.diffik.set_name("diffik")
+        self.diffik.set_name(f"diffik{suffix}")
         self.params = self.diffik.get_mutable_parameters()
         builder.Connect(
             self.diffik.GetOutputPort("joint_positions"),
-            self.station.GetInputPort(f"{IIWA_NAME}.position"),
+            robot.station.GetInputPort(f"{self.name}.position"),
         )
         self.q_start: np.ndarray | None = None
 
@@ -206,24 +242,39 @@ class Robot:
             ctx, self.control_plant.world_frame(), self.G_control
         )
 
+
+class Robot:
+    """Everything built onto the DiagramBuilder for the arms."""
+
+    def __init__(self, builder: DiagramBuilder, cfg: Config, meshcat: Meshcat | None):
+        self.cfg = cfg
+        screen_sdf = write_screen_sdf(cfg)
+        self.scenario = LoadScenario(data=make_scenario_yaml(cfg, screen_sdf))
+        self.station = builder.AddSystem(MakeHardwareStation(self.scenario, meshcat=meshcat))
+        self.station.set_name("station")
+        self.plant = self.station.GetSubsystemByName("plant")
+        self.arms = [Arm(builder, self, suffix) for suffix in cfg.arms.suffixes]
+
     # -- after Build() ---------------------------------------------------------
     def initialize(self, root_context) -> None:
-        """Put the simulated arm and the DiffIK integrator at q_start, and fix
-        the station inputs the brain does not drive."""
-        assert self.q_start is not None, "call solve_start_configuration first"
+        """Put the simulated arms and their DiffIK integrators at q_start, and
+        fix the station inputs the brain does not drive."""
         plant_ctx = self.plant.GetMyMutableContextFromRoot(root_context)
-        self.plant.SetPositions(plant_ctx, self.iiwa, self.q_start)
-        self.diffik.SetPositions(self.diffik.GetMyMutableContextFromRoot(root_context), self.q_start)
         station_ctx = self.station.GetMyMutableContextFromRoot(root_context)
-        self.station.GetInputPort(f"{IIWA_NAME}.torque").FixValue(station_ctx, np.zeros(7))
+        for arm in self.arms:
+            assert arm.q_start is not None, "call solve_start_configuration first"
+            self.plant.SetPositions(plant_ctx, arm.iiwa, arm.q_start)
+            arm.diffik.SetPositions(arm.diffik.GetMyMutableContextFromRoot(root_context), arm.q_start)
+            self.station.GetInputPort(f"{arm.name}.torque").FixValue(station_ctx, np.zeros(7))
 
 
 # ---------------------------------------------------------------------------
 # Touch sensing
 # ---------------------------------------------------------------------------
-# Output layout of TouchSensor: for each fingertip (left, right) a block of
-# [down, x, y, z].
-TOUCH_WIDTH = 8
+# Output layout of TouchSensor: for each fingertip (left, right, per arm) a
+# block of [down, x, y, z].
+def touch_width(cfg: Config) -> int:
+    return 8 * cfg.arms.n
 
 
 class TouchSensor(LeafSystem):
@@ -235,18 +286,20 @@ class TouchSensor(LeafSystem):
         self.cfg = cfg
         self.L = cfg.layout
         self.meshcat = meshcat
+        self.width = touch_width(cfg)
         self.finger_indices = [
-            plant.GetBodyByName("left_finger").index(),
-            plant.GetBodyByName("right_finger").index(),
+            plant.GetBodyByName(finger, plant.GetModelInstanceByName(WSG_NAME + suffix)).index()
+            for suffix in cfg.arms.suffixes
+            for finger in ("left_finger", "right_finger")
         ]
         self.p_Ftip = np.array([0.0, cfg.gripper.finger_tip_offset, 0.0])
         self.poses_port = self.DeclareAbstractInputPort(
             "body_poses", AbstractValue.Make([RigidTransform()])
         )
-        self.DeclareVectorOutputPort("touch", TOUCH_WIDTH, self._calc)
+        self.DeclareVectorOutputPort("touch", self.width, self._calc)
         if meshcat is not None:
             self.DeclarePeriodicPublishEvent(1.0 / cfg.visualizer_hz, 0.0, self._draw)
-            for i in range(2):
+            for i in range(len(self.finger_indices)):
                 meshcat.SetObject(f"/fingertips/{i}", Sphere(0.006), Rgba(0.2, 0.9, 0.2, 0.9))
         half = 0.5 * self.L.screen_size()
         c = self.L.screen_center()
@@ -258,7 +311,7 @@ class TouchSensor(LeafSystem):
         return np.array([poses[int(i)] @ self.p_Ftip for i in self.finger_indices])
 
     def _calc(self, context, output):
-        out = np.zeros(TOUCH_WIDTH)
+        out = np.zeros(self.width)
         cfg_tol = self.cfg.motion.contact_tolerance
         for k, p in enumerate(self.tips(context)):
             down = (
@@ -272,7 +325,7 @@ class TouchSensor(LeafSystem):
     def _draw(self, context):
         vals = self._calc_values(context)
         t = context.get_time()
-        for k in range(2):
+        for k in range(len(self.finger_indices)):
             down, x, y, z = vals[4 * k : 4 * k + 4]
             self.meshcat.SetTransform(f"/fingertips/{k}", RigidTransform([x, y, z]), t)
             self.meshcat.SetProperty(
@@ -284,5 +337,5 @@ class TouchSensor(LeafSystem):
 
 
 def unpack_touch(vals: np.ndarray) -> list[tuple[bool, np.ndarray]]:
-    """[(down, p_Wtip), (down, p_Wtip)] from a TouchSensor output vector."""
-    return [(bool(vals[4 * k] > 0.5), vals[4 * k + 1 : 4 * k + 4]) for k in range(2)]
+    """[(down, p_Wtip), ...] from a TouchSensor output vector."""
+    return [(bool(vals[4 * k] > 0.5), vals[4 * k + 1 : 4 * k + 4]) for k in range(len(vals) // 4)]
