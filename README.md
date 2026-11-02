@@ -699,6 +699,10 @@ model of each:
 * Letting the agent run the simulator itself is worth more than feedback
   rounds: one self-tested revision (97.6 %) beats eight feedback-only
   revisions (96.3 %).
+* Every revision's program and `history.json` (scores, agent replies, cost)
+  are in `results/cap/<run>/`; e.g. `python -m rhythmbot.play --demo --policy
+  cap:results/cap/fable-selftest/policy_v1.py` or `--policy
+  cappx:results/cap/fable-pixels/policy_v3.py`.
 * Agent costs are the conversation's running total as reported by Claude
   Code: $18 for 8 feedback revisions, $29 for 5 self-test revisions, $24
   for 5 pixels revisions (Fable).
