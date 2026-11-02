@@ -36,7 +36,7 @@ def policy_tag(spec: str) -> str:
     if not arg:
         return kind
     stem = Path(arg).stem
-    if kind == "cap" and stem == "policy":
+    if kind in ("cap", "cappx") and stem == "policy":
         stem = Path(arg).parent.name
     return f"{kind}-{re.sub(r'[^A-Za-z0-9_.-]', '_', stem)}"
 

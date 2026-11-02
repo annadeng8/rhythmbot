@@ -25,7 +25,7 @@ from ..planner import Plan, Policy
 from .api import RobotAPI
 
 ALLOWED_IMPORTS = {
-    "numpy", "math", "dataclasses", "typing", "functools", "itertools", "collections",
+    "numpy", "scipy", "math", "dataclasses", "typing", "functools", "itertools", "collections",
     "heapq", "bisect", "enum", "copy", "__future__", "rhythmbot.cap.api",
 }
 FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "breakpoint", "input"}
@@ -60,12 +60,18 @@ def check_source(src: str) -> None:
 
 
 class GuardedPolicy(Policy):
-    """Runs a generated policy; on any error, lifts the hand in place."""
+    """Runs a generated policy; on any error, lifts the hand in place.
 
-    def __init__(self, inner, api: RobotAPI, path: str):
+    A pixels-only program (`pixels=True`) is called with the rendered game
+    frame in place of the tracked notes: it does its own perception."""
+
+    def __init__(self, inner, api: RobotAPI, path: str, pixels: bool = False):
         self.inner = inner
         self.api = api
         self.path = path
+        self.pixels = pixels
+        self.wants_frames = pixels
+        self.frame = None
         self.n_calls = 0
         self.n_errors = 0
         self.errors: Counter[str] = Counter()
@@ -83,10 +89,14 @@ class GuardedPolicy(Policy):
         self.first_traceback.setdefault(key, tb)
 
     def plan(self, notes, t_now, X_WT_cmd, width_cmd) -> Plan:
+        if self.pixels and self.frame is None:
+            # The brain's very first plan is made before any frame exists.
+            return self._fallback(t_now, X_WT_cmd, width_cmd)
         self.n_calls += 1
         t0 = time.perf_counter()
         try:
-            plan = self.inner.plan(notes, t_now, X_WT_cmd, width_cmd)
+            seen = self.frame.copy() if self.pixels else notes
+            plan = self.inner.plan(seen, t_now, X_WT_cmd, width_cmd)
             if not isinstance(plan, Plan):
                 raise TypeError(f"plan() returned {type(plan).__name__}, expected api.Plan")
             for dt in (0.0, 1.0 / 30, 0.1):
@@ -114,17 +124,22 @@ class GuardedPolicy(Policy):
         }
 
 
-def load_policy(path: str | Path, cfg: Config) -> GuardedPolicy:
+def load_module(path: str | Path):
+    """Check and import a generated file."""
     path = Path(path)
-    src = path.read_text()
-    check_source(src)
-    spec = importlib.util.spec_from_file_location(f"generated_policy_{abs(hash(str(path.resolve())))}", path)
+    check_source(path.read_text())
+    spec = importlib.util.spec_from_file_location(f"generated_{abs(hash(str(path.resolve())))}", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    return module
+
+
+def load_policy(path: str | Path, cfg: Config, pixels: bool = False) -> GuardedPolicy:
+    module = load_module(path)
     if not hasattr(module, "make_policy"):
         raise PolicyRejected("the file must define make_policy(api)")
     api = RobotAPI(cfg)
     inner = module.make_policy(api)
     if not callable(getattr(inner, "plan", None)):
         raise PolicyRejected("make_policy(api) must return an object with a plan(...) method")
-    return GuardedPolicy(inner, api, str(path))
+    return GuardedPolicy(inner, api, str(path), pixels)

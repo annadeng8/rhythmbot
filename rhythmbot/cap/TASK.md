@@ -99,7 +99,7 @@ exact here, but plan as if information can be refined tick to tick.
   above. `api` is a `RobotAPI`; `api.py` here is a copy of its source, and
   of the types it re-exports you only need `Keyframe`, `Plan`, `TAP`,
   `HOLD`, `SLIDE`.
-* It may import only `numpy`, `math`, `dataclasses`, `typing`,
+* It may import only `numpy`, `scipy`, `math`, `dataclasses`, `typing`,
   `functools`, `itertools`, `collections`, `heapq`, `bisect`, `enum`, `copy`
   and `rhythmbot.cap.api`. No file or network access, no `eval`/`exec`.
   Anything else is rejected before it runs.
