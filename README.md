@@ -327,6 +327,11 @@ Easy, Normal and Advanced did not change. Reports are in
 | `rhythmbot/train.py` | the vision model (`NoteNet`), its training loop, validation metrics and TorchScript export |
 | `rhythmbot/audio.py` | soundtrack synthesized from the chart, or a song file, played in sync with a live run |
 | `rhythmbot/importers.py` | osu!mania, StepMania and Clone Hero chart importers; GuitarHeroBot's Slow Ride |
+| `rhythmbot/policies.py` | every policy by name: `classical`, `cap:<policy.py>`, `bc:<model.pt>` (`play --policy`) |
+| `rhythmbot/splits.py` | chart splits: `cap-train`, `bc-train`, and the held-out `heldout-iid` / `heldout-dense` / `heldout-real` |
+| `rhythmbot/evaluate.py` | runs policies × detectors × a split headless in parallel; `summary.md` with completion, timing, contact, slide error |
+| `rhythmbot/cap/` | code-as-policy: `TASK.md` (the agent's problem statement), `api.py` (the control API generated programs use), `sandbox.py` (import check + guarded execution), `feedback.py`, `loop.py` (the agent ↔ simulator refinement loop) |
+| `rhythmbot/bc/` | behavior cloning: `features.py` (observation / action-chunk encoding), `train.py` (demos from the classical planner + DAgger), `policy.py` (`BCPolicy`) |
 | `charts/` | demo and three random charts |
 
 ## How the pieces work
@@ -445,18 +450,120 @@ belief): taps need a *fresh* touch-down in the lane within ±140 ms (perfect
 RMS lateral error is recorded. Both fingertips are eligible, which is what
 lets chords score.
 
-## Plugging in the other approaches from the proposal
+## Code-as-policy and behavior cloning
 
-* **Vision model** → `train.py` is the baseline; a different architecture
-  only has to keep `TorchDetector.decode`'s output contract, or override
-  `decode`. Harder perception (a real Drake camera looking at the Meshcat
-  highway, visual clutter, a different game skin) means regenerating
-  `dataset.py` frames from that source and retraining.
-* **LLM direct control / code-as-policy, behavior cloning** → implement
-  `Policy.plan(tracked_notes, t, X_WT_cmd, width_cmd) -> Plan` (or, for a
-  lower-level policy, replace `RhythmBrain`'s output with your own pose
-  stream). `ClassicalPlanner` doubles as the demonstration generator for
-  behavior cloning; `judge.Judge` scores every approach identically.
+Both approaches implement the same `Policy.plan(tracked_notes, t, X_WT_cmd,
+width_cmd) -> Plan` as `ClassicalPlanner`, see the same tracked notes, and
+are scored by the same judge (`play --policy ...`). Each is developed on its
+own training charts and judged on held-out charts it never saw
+(`rhythmbot/splits.py`):
+
+| split | charts | what varies |
+|---|---|---|
+| `heldout-iid` | 10 `varied_random_chart` seeds 5000–5009 | nothing: same generator as training |
+| `heldout-dense` | 5 random charts, 3.2 notes/s, 0.18 s gaps, 25 % chords | density, chords |
+| `heldout-real` | demo, random-3, Slow Ride easy/medium/hard (+ NekoTeto Easy if `songs/` has it) | hand-made / real charts |
+
+```bash
+python -m rhythmbot.evaluate --policy classical bc:results/bc/bc_dagger.pt cap:<policy.py> \
+    --split heldout --detector oracle torch --out results/compare
+```
+
+### Behavior cloning (`rhythmbot/bc`)
+
+**Observation:** the commanded hand state (x, height, opening, rise) and
+the next 8 tracked notes, each with its kind, time to hit and to end, and its
+lane at the hit and at 25/50/75/100 % of its length, *relative to the hand*
+(positions in lanes, times in seconds). **Action:** the hand state at the
+next 10 ticks (0.33 s), played as a short plan and replaced every tick,
+like the classical planner. **Network:** 3×512 MLP (LayerNorm, GELU), MSE
+with the near-term steps weighted ×2.
+
+Demonstrations need no physics: the brain only ever reads its own commanded
+pose, so the brain + oracle detector alone are simulated, 0.3 s per 20 s
+chart. The classical planner labels every tick on the 200 `bc-train` charts
+(127k samples; oracle timing noise and latency randomized per chart).
+**DAgger:** then the learned policy drives (80 % of ticks) on 100 of those
+charts, the classical planner labels the states it reaches, and the network
+is retrained on everything; two rounds, 254k samples, 3.5 min on the Mac
+mini's CPU.
+
+```bash
+python -m rhythmbot.bc.train --out results/bc/bc_dagger.pt                      # BC + 2 DAgger rounds
+python -m rhythmbot.bc.train --out results/bc/bc_plain.pt --dagger-rounds 0      # plain BC
+```
+
+Held-out completion (full Drake simulation, `results/compare/summary.md`):
+
+| policy | detector | iid | dense | real | all held-out | tap / hold / slide (all) |
+|---|---|---|---|---|---|---|
+| classical | oracle | 100 % | 100 % | 100 % | **100 %** | 100 / 100 / 100 % |
+| BC + DAgger | oracle | 95.0 % | 89.2 % | 80.4 % | **89.8 %** | 86.1 / 96.3 / 96.5 % |
+| plain BC | oracle | 91.0 % | 84.7 % | 77.5 % | 85.9 % | 80.3 / 96.3 / 94.7 % |
+| classical | vision model | 96.0 % | 99.4 % | 100 % | 98.0 % | 100 / 100 / 84.2 % |
+| BC + DAgger | vision model | 80.6 % | 84.1 % | 78.4 % | 81.3 % | 81.3 / 83.5 / 77.2 % |
+| plain BC | vision model | 74.6 % | 82.2 % | 75.5 % | 77.4 % | 76.5 / 84.4 / 68.4 % |
+
+* DAgger is worth +4 points over plain BC (+6 on taps), but more rounds do
+  not help: 4 rounds on all 200 charts gave 91.5 % overall.
+* Holds and slides clone well (contact kept 99 %, slide error 8 mm against
+  the planner's 10 mm). **Taps are what BC loses:** in runs of taps 0.18–
+  0.3 s apart it falls behind and then misses the whole run, and it
+  sometimes misses both notes of a chord. A tap needs a fresh touch, so the
+  hand must lift ≥ 4 mm between taps, and a regressed trajectory that is
+  smoothed by a couple of millimetres no longer counts.
+* Generalization drops on the real charts (80 %), whose Slow Ride same-lane
+  repeats and long sustains are rare in the varied random charts.
+* With the vision model BC loses another 8 points while the classical
+  planner loses 2: BC was trained only on oracle-tracked notes (with timing
+  noise), not on the vision model's tracking errors.
+
+### Agentic code-as-policy (`rhythmbot/cap`)
+
+A coding agent (Claude Code, non-interactive, default model
+`claude-fable-5-1`) writes the policy as a Python program against a small
+control API, `rhythmbot/cap/api.py`: screen and hand geometry, judge
+windows, comfortable arm speeds, and `Keyframe` / `Plan` builders. The
+problem statement it gets is `rhythmbot/cap/TASK.md`. It does *not* get
+the classical planner: the program may import only numpy, math, some
+standard-library modules and `rhythmbot.cap.api` (checked on its syntax
+tree before it runs), and the agent's tools are confined to its workspace.
+
+```bash
+python -m rhythmbot.cap.loop run --name fable-feedback --iterations 8               # harness feedback each round
+python -m rhythmbot.cap.loop run --name fable-selftest --iterations 5 --self-test   # agent may also run the sim itself
+python -m rhythmbot.cap.loop heldout /Users/Shared/rhythmbot_cap/fable-feedback      # every revision on held-out charts
+```
+
+Each iteration is one `claude -p` call continuing the same conversation.
+After it, the program is snapshotted (`history/policy_v<i>.py`), run on the
+6 `cap-train` charts (113 notes) with the oracle, and `feedback.md` is
+written: per-chart scores, then every note not completed (missed, or hit
+but contact lost, with its timing error and the notes around it), the
+program's exceptions with tracebacks, and its planning time.
+`GuardedPolicy` catches exceptions and malformed plans at run time and lifts
+the hand in place, so a buggy revision still gets a score and its errors are
+reported. With `--self-test` the agent may also run `./evaluate.sh` (the
+same feedback, printed) as often as it wants. `history.json` records per
+revision the training score, the agent's cost and turns, and after
+`heldout`, the held-out completion, which measures improvement across
+revisions and on unseen charts.
+
+**Isolation.** Claude Code lets the Read/Glob/Grep tools read anywhere by
+default, and in a first run both agents went looking for the project
+source (`Glob **/rhythmbot/planner.py` over the home directory). The loop
+therefore puts workspaces in `/Users/Shared/rhythmbot_cap/` and denies
+Read/Glob/Grep on the repository, the home directory (which also holds
+Claude's transcripts of other runs) and every sibling workspace. Bash is
+denied, except `./evaluate.sh` with `--self-test`. Probed: reads of the
+repository, `~/.claude` and a sibling workspace are refused, reads and
+writes in the workspace work. Workspaces of runs started together must
+exist before either run starts. Long programs written in one go hit Claude
+Code's default output cap, so the loop raises `CLAUDE_CODE_MAX_OUTPUT_TOKENS`
+to 64k.
+
+*Results: runs in progress.*
+
 * **Harder charts** → `random_chart` has density / hold / slide / chord
   probabilities; `Layout` has lane count and scroll speed.
 
