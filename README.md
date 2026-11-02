@@ -465,58 +465,98 @@ own training charts and judged on held-out charts it never saw
 | `heldout-real` | demo, random-3, Slow Ride easy/medium/hard (+ NekoTeto Easy if `songs/` has it) | hand-made / real charts |
 
 ```bash
-python -m rhythmbot.evaluate --policy classical bc:results/bc/bc_dagger.pt cap:<policy.py> \
+python -m rhythmbot.evaluate --policy classical bc:results/bc/teacher_diffusion.pt cap:<policy.py> \
     --split heldout --detector oracle torch --out results/compare
 ```
 
 ### Behavior cloning (`rhythmbot/bc`)
 
-**Observation:** the commanded hand state (x, height, opening, rise) and
-the next 8 tracked notes, each with its kind, time to hit and to end, and its
-lane at the hit and at 25/50/75/100 % of its length, *relative to the hand*
-(positions in lanes, times in seconds). **Action:** the hand state at the
-next 10 ticks (0.33 s), played as a short plan and replaced every tick,
-like the classical planner. **Network:** 3×512 MLP (LayerNorm, GELU), MSE
-with the near-term steps weighted ×2.
+The classical planner is the demonstrator. Two observation encoders and two
+action heads (`rhythmbot/bc/models.py`):
+
+* **state**: the commanded hand state (x, height, opening, rise) and the
+  next 8 tracked notes, each with its kind, time to hit and to end, and its
+  lane at the hit and at 25/50/75/100 % of its length, *relative to the
+  hand*; an MLP encodes it;
+* **pixels**: the game frame itself (downsampled to 192 × 128) plus the hand
+  state; a CNN (four stride-2 stages, flattened 12 × 8 map, so position on
+  screen is kept) encodes it. No detector, no tracker: perception is learned;
+* **mlp head**: regresses the hand state at the next 16 ticks (0.53 s),
+  replanned every tick;
+* **diffusion head** (a diffusion policy, Chi et al. 2023): DDPM over the
+  normalized 16-tick action chunk, 100 noise levels, residual MLP denoiser
+  conditioned on the observation and noise level (FiLM), 10 DDIM steps at
+  run time; plays 4 ticks of each sampled chunk before sampling again.
 
 Demonstrations need no physics: the brain only ever reads its own commanded
-pose, so the brain + oracle detector alone are simulated, 0.3 s per 20 s
-chart. The classical planner labels every tick on the 200 `bc-train` charts
-(127k samples; oracle timing noise and latency randomized per chart).
-**DAgger:** then the learned policy drives (80 % of ticks) on 100 of those
-charts, the classical planner labels the states it reaches, and the network
-is retrained on everything; two rounds, 254k samples, 3.5 min on the Mac
-mini's CPU.
+pose, so the brain + detector alone are simulated (0.3 s per 20 s chart
+with the oracle). 200 `bc-train` charts give 127k labelled ticks; two DAgger
+rounds (the learner drives 80 % of ticks on 100 charts each, the
+demonstrator labels what it reaches) bring that to 254k. Pixel samples
+store only (chart, time) and frames are re-rendered while training. Trained
+on gpu156 (L40S): state models in 1–8 min, pixel models in 55–80 min
+including DAgger rollouts.
+
+**State → vision distillation** (`--teacher`): a state policy trained on
+exact (oracle) notes is the teacher, and a pixel student is trained on its
+labels: the teacher, which sees the oracle notes, labels every state, first
+while it drives, then (DAgger) while the student drives.
 
 ```bash
-python -m rhythmbot.bc.train --out results/bc/bc_dagger.pt                      # BC + 2 DAgger rounds
-python -m rhythmbot.bc.train --out results/bc/bc_plain.pt --dagger-rounds 0      # plain BC
+python -m rhythmbot.bc.train --encoder state --head diffusion --epochs 80 --out results/bc/teacher_diffusion.pt
+python -m rhythmbot.bc.train --encoder pixels --head diffusion --batch 256 --lr 3e-4 \
+    --teacher results/bc/teacher_diffusion.pt --out results/bc/student_diffusion.pt          # distilled
+python -m rhythmbot.bc.train --encoder pixels --head diffusion --batch 256 --lr 3e-4 \
+    --out results/bc/pixels_diffusion_from_classical.pt                                    # from the planner directly
+python -m rhythmbot.bc.train --encoder state --head diffusion --epochs 80 --detector torch \
+    --out results/bc/state_vision_diffusion.pt                                             # on the vision model's notes
 ```
 
-Held-out completion (full Drake simulation, `results/compare/summary.md`):
+Held-out completion, full Drake simulation (`results/compare_bc/summary.md`).
+"Notes from" is what the state policies' tracker is fed; pixel policies
+read the frame and ignore it.
 
-| policy | detector | iid | dense | real | all held-out | tap / hold / slide (all) |
-|---|---|---|---|---|---|---|
-| classical | oracle | 100 % | 100 % | 100 % | **100 %** | 100 / 100 / 100 % |
-| BC + DAgger | oracle | 95.0 % | 89.2 % | 80.4 % | **89.8 %** | 86.1 / 96.3 / 96.5 % |
-| plain BC | oracle | 91.0 % | 84.7 % | 77.5 % | 85.9 % | 80.3 / 96.3 / 94.7 % |
-| classical | vision model | 96.0 % | 99.4 % | 100 % | 98.0 % | 100 / 100 / 84.2 % |
-| BC + DAgger | vision model | 80.6 % | 84.1 % | 78.4 % | 81.3 % | 81.3 / 83.5 / 77.2 % |
-| plain BC | vision model | 74.6 % | 82.2 % | 75.5 % | 77.4 % | 76.5 / 84.4 / 68.4 % |
+| policy | input | notes from | iid | dense | real | **all** | tap / hold / slide |
+|---|---|---|---|---|---|---|---|
+| classical | state | oracle | 100 % | 100 % | 100 % | **100 %** | 100 / 100 / 100 |
+| classical | state | vision model | 96.0 | 99.4 | 100 | **98.0** | 100 / 100 / 84.2 |
+| teacher, MLP | state | oracle | 94.0 | 87.9 | 83.3 | **89.6** | 86.1 / 96.3 / 94.7 |
+| teacher, diffusion | state | oracle | 99.0 | 94.9 | 88.2 | **95.2** | 93.2 / 98.2 / 100 |
+| teacher, MLP | state | vision model | 77.1 | 86.0 | 79.4 | **80.7** | 79.6 / 87.2 / 73.7 |
+| teacher, diffusion | state | vision model | 88.1 | 92.4 | 83.3 | **88.5** | 90.8 / 85.3 / 82.5 |
+| trained on vision notes, diffusion | state | vision model | 95.0 | 96.2 | 93.1 | **95.0** | 95.2 / 100 / 84.2 |
+| student of MLP teacher | **pixels** | – | 94.5 | 90.4 | 85.3 | **91.1** | 86.4 / 100 / 98.2 |
+| student of diffusion teacher | **pixels** | – | 94.5 | 85.4 | 86.3 | **89.6** | 88.4 / 92.7 / 89.5 |
+| from classical, diffusion | **pixels** | – | 99.5 | 97.5 | 99.0 | **98.7** | 98.3 / 99.1 / 100 |
 
-* DAgger is worth +4 points over plain BC (+6 on taps), but more rounds do
-  not help: 4 rounds on all 200 charts gave 91.5 % overall.
-* Holds and slides clone well (contact kept 99 %, slide error 8 mm against
-  the planner's 10 mm). **Taps are what BC loses:** in runs of taps 0.18–
-  0.3 s apart it falls behind and then misses the whole run, and it
-  sometimes misses both notes of a chord. A tap needs a fresh touch, so the
-  hand must lift ≥ 4 mm between taps, and a regressed trajectory that is
-  smoothed by a couple of millimetres no longer counts.
-* Generalization drops on the real charts (80 %), whose Slow Ride same-lane
-  repeats and long sustains are rare in the varied random charts.
-* With the vision model BC loses another 8 points while the classical
-  planner loses 2: BC was trained only on oracle-tracked notes (with timing
-  noise), not on the vision model's tracking errors.
+* **The diffusion head beats regression**: 95.2 vs 89.6 % for the state
+  teacher, almost all of it on taps (93.2 vs 86.1 %). Regression averages
+  "lift for the next tap" with "stay low", and a tap needs a fresh touch
+  (≥ 4 mm lift); the regressed hand ran together runs of taps 0.18–0.3 s
+  apart and missed both notes of chords.
+* **Distillation inherits the teacher's mistakes.** The pixel students
+  (89.6–91.1 %) end up at or just below their teachers; they learn to see
+  well enough (they play as well as the teacher does with exact notes, and
+  far better than the teacher does with the vision model's notes), but no
+  better than the teacher plays.
+* **The best vision-based policy is a pixel diffusion policy trained from
+  the classical planner directly** (98.7 %, within 1.3 points of the
+  planner with exact notes and above the planner with the vision model,
+  98.0 %). That is also state → vision distillation, with the classical
+  planner (which plans from the exact notes) as the privileged teacher: a
+  strong teacher matters more than a learned one. Its hits are as precise
+  (13 ms mean |error|) and slides as accurate (9.6 mm RMS).
+* A state policy trained on the vision model's tracked notes (95.0 %)
+  beats the oracle-trained teacher run with them (88.5 %): train on the
+  observations you deploy with. Its weak spot is the vision model's slide
+  paths (slides 84 %, as for the classical planner).
+* The real charts (Slow Ride's same-lane runs and long sustains) are the
+  hardest generalization for the state policies (83–93 %); the pixel
+  policy from the planner gets 99 % there.
+
+Checkpoints are not in git (diffusion models are 74–100 MB); they are on
+gpu156 under `/data/YifanKang/rhythmbot/results/bc/`, with the training
+logs (`*.json`, also in `results/bc/`) next to them.
 
 ### Agentic code-as-policy (`rhythmbot/cap`)
 
@@ -562,10 +602,43 @@ exist before either run starts. Long programs written in one go hit Claude
 Code's default output cap, so the loop raises `CLAUDE_CODE_MAX_OUTPUT_TOKENS`
 to 64k.
 
-*Results: runs in progress.*
+**Results so far.** `fable-feedback` (8 revisions, harness feedback only,
+the agent cannot run anything):
 
-* **Harder charts** → `random_chart` has density / hold / slide / chord
-  probabilities; `Layout` has lane count and scroll speed.
+| revision | train (113 notes) | held-out, oracle notes | held-out, vision-model notes |
+|---|---|---|---|
+| v0 | 94.7 % | 87.2 % | 75.2 % |
+| v1 | 98.2 | 91.5 | 87.2 |
+| v2 | 98.2 | 91.3 | 87.4 |
+| v3 | 98.2 | 92.0 | 88.0 |
+| v4 | 97.3 | 91.7 | 88.3 |
+| v5 | 97.3 | 93.5 | 90.0 |
+| v6 | 98.2 | 96.3 | 92.0 |
+| v7 | 98.2 | **96.3** | **92.0** |
+
+The training score is flat from v1 while the held-out score keeps rising
+(91.5 → 96.3 %): the agent fixed the few remaining training misses by
+general changes, not chart-specific ones. Its programs were developed only
+against oracle notes; v0 completed only 23 % of slides on the vision model's
+notes (it trusted the slide waypoints exactly), v7 is much more robust. The
+self-test run's v0 already scored 97.6 % held-out (95.2 % with the vision
+model) after the agent ran the simulator on its own ~20 times; its later
+revisions and the pixels run below are in progress.
+
+**Pixels only (`--pixels`).** The program gets no tracked notes and no
+vision model, only the 384 × 256 RGB frame, and has to write its own
+perception too: find note heads, map pixels to lanes and seconds, track
+notes across frames. `TASK_PIXELS.md` says only what a player would know
+(notes appear 1.6 s ahead and scroll at constant speed, lanes are
+equal-width columns, kinds look different). For calibration the workspace
+has 30 example frames from the training charts as PNGs (the agent can look
+at them) with the notes visible in each, and `./probe.sh`, which runs the
+agent's `probe.py` (same import rules) on every training frame every 0.1 s
+with its ground-truth notes. The policy spec is `cappx:<policy.py>`.
+
+```bash
+python -m rhythmbot.cap.loop run --name fable-pixels --iterations 5 --self-test --pixels
+```
 
 ## Known limits / next steps
 

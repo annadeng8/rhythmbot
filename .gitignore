@@ -7,3 +7,6 @@ data/
 songs/
 # Synthesized soundtracks, rewritten on every `play --audio` run.
 results/*.wav
+
+# Diffusion checkpoints are 74-100 MB: kept on gpu156 (see README)
+results/bc/*.pt
