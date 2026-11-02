@@ -622,7 +622,7 @@ general changes, not chart-specific ones. Its programs were developed only
 against oracle notes; v0 completed only 23 % of slides on the vision model's
 notes (it trusted the slide waypoints exactly), v7 is much more robust. The
 self-test run's v0 already scored 97.6 % held-out (95.2 % with the vision
-model) after the agent ran the simulator on its own ~20 times; its later
+model), after the agent had run the simulator itself many times; its later
 revisions and the pixels run below are in progress.
 
 **Pixels only (`--pixels`).** The program gets no tracked notes and no
