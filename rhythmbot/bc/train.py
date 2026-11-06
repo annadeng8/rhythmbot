@@ -139,7 +139,7 @@ def rollout(job: dict) -> dict:
     X_WG0 = initial_tip_pose(cfg) @ RigidTransform([0.0, -cfg.gripper.tip_offset, 0.0])
     builder = DiagramBuilder()
     screen = builder.AddSystem(GameScreen(chart, cfg))
-    brain = builder.AddSystem(RhythmBrain(detector, rec, cfg, X_WG0))
+    brain = builder.AddSystem(RhythmBrain(detector, [rec], cfg, [X_WG0]))
     builder.Connect(screen.get_output_port(), brain.GetInputPort("frame"))
     sim = Simulator(builder.Build())
     sim.AdvanceTo(chart.end_time + 1.0)

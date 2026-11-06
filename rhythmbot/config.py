@@ -23,7 +23,7 @@ reach out along +y, so "pointing down" is G's +y aligned with world -z.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import numpy as np
 
@@ -151,6 +151,13 @@ class Motion:
     # when to leave the previous note's hover pose.
     travel_speed: float = 0.9
     min_travel_time: float = 0.12
+    # Least time between lifting off one note and landing on another in a
+    # different lane.  Measured: notes much closer than this mostly miss.
+    min_lateral_gap: float = 0.07
+    # Choosing what to play: candidates kept per note group, and how many
+    # later groups a hold looks at to decide its fingertip.
+    beam_width: int = 8
+    pivot_lookahead: int = 4
     # Trajectory lookahead applied to the commanded pose to compensate for the
     # DiffIK integrator's tracking lag.
     command_lead: float = 0.0
@@ -160,6 +167,10 @@ class Motion:
     roll_raise: float = 0.010
     roll_dip_time: float = 0.08
     roll_lift_time: float = 0.08
+    # When notes come too fast for that, the dip may shrink to this, and the
+    # free fingertip may still be moving sideways during it (it stays above
+    # the contact height until the hit).
+    roll_min_dip_time: float = 0.03
     # How fast the opening may change while a fingertip is held down: the
     # arm has to swing the gripper sideways by half the change, and faster
     # than this the holding fingertip slides in its lane as the arm lags.
@@ -193,12 +204,34 @@ class Perception:
 
 
 @dataclass(frozen=True)
+class Arms:
+    """How many iiwa + WSG arms play, and where they stand.
+
+    With two, each hand plays its half of the screen, with its two fingertips
+    over the two lanes next to the middle, and rolls to press one or the other.
+    """
+
+    n: int = 1
+    # Bases at x = -/+ this, on the same line as the single arm's base.
+    base_x: float = 0.33
+    # A hand's centre stays this far from the middle of the screen: half the
+    # WSG body's 146 mm width, plus room for it to swing as the hand rolls.
+    middle_clearance: float = 0.09
+
+    @property
+    def suffixes(self) -> tuple[str, ...]:
+        """Appended to model and port names, one per arm."""
+        return ("",) if self.n == 1 else ("_left", "_right")
+
+
+@dataclass(frozen=True)
 class Config:
     layout: Layout = field(default_factory=Layout)
     timing: Timing = field(default_factory=Timing)
     gripper: Gripper = field(default_factory=Gripper)
     motion: Motion = field(default_factory=Motion)
     perception: Perception = field(default_factory=Perception)
+    arms: Arms = field(default_factory=Arms)
     # Simulation
     plant_time_step: float = 0.001
     diffik_time_step: float = 0.005
@@ -206,4 +239,20 @@ class Config:
     visualizer_hz: float = 30.0
 
 
+    def hand_for_lane(self, lane: float) -> int:
+        """Which arm plays a lane."""
+        if self.arms.n == 1:
+            return 0
+        return 0 if lane < 0.5 * (self.layout.n_lanes - 1) else 1
+
+
 DEFAULT = Config()
+
+
+def two_arm_config(base: Config = DEFAULT) -> Config:
+    """Two arms need wider lanes: at 50 mm, hands over lanes 1-2 and 3-4
+    would be 100 mm apart and their 146 mm wide bodies would collide.  At
+    100 mm they still touch as they roll; at 120 mm they stay 48 mm apart on
+    the densest map.  The game frame is drawn in pixels, so the vision model
+    does not change."""
+    return replace(base, arms=Arms(n=2), layout=replace(base.layout, lane_width=0.12))

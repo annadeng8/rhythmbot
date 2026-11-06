@@ -30,7 +30,7 @@ from pydrake.all import LeafSystem
 
 from .chart import HOLD, SLIDE, TAP, Chart, Note
 from .config import Config
-from .robot import TOUCH_WIDTH, unpack_touch
+from .robot import touch_width, unpack_touch
 
 
 @dataclass
@@ -68,14 +68,15 @@ class Judge(LeafSystem):
         self.cfg = cfg
         self.L = cfg.layout
         self.T = cfg.timing
-        self.touch_port = self.DeclareVectorInputPort("touch", TOUCH_WIDTH)
+        self.touch_port = self.DeclareVectorInputPort("touch", touch_width(cfg))
         self.DeclarePeriodicPublishEvent(1.0 / cfg.judge_hz, 0.0, self._tick)
         self.results: dict[int, NoteResult] = {
             n.id: NoteResult(n.id, n.kind, n.lane, n.time, n.duration) for n in chart.notes
         }
-        self.down_since: list[float | None] = [None, None]
+        n_tips = 2 * cfg.arms.n
+        self.down_since: list[float | None] = [None] * n_tips
         # A fresh touch may be spent on one note only.
-        self.touch_used: list[float | None] = [None, None]
+        self.touch_used: list[float | None] = [None] * n_tips
         self.t_last = 0.0
 
     # -- geometry helpers -----------------------------------------------------

@@ -31,7 +31,7 @@
    "hit": 4,
    "completed": 4,
    "mean_maintenance": 1.0,
-   "mean_slide_rms_m": 0.011204268920403757
+   "mean_slide_rms_m": 0.011204268920358485
   }
  },
  "notes": [
@@ -153,7 +153,7 @@
    "contact_ticks": 184,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011465245762585223
+   "slide_rms_m": 0.011465245762586401
   },
   {
    "id": 8,
@@ -183,7 +183,7 @@
    "contact_ticks": 173,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011074773642057318
+   "slide_rms_m": 0.01107477364205625
   },
   {
    "id": 10,
@@ -198,7 +198,7 @@
    "contact_ticks": 261,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011159644456021916
+   "slide_rms_m": 0.011159644456321595
   },
   {
    "id": 11,
@@ -333,7 +333,7 @@
    "contact_ticks": 180,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011117411820950567
+   "slide_rms_m": 0.011117411820469695
   },
   {
    "id": 20,
@@ -355,7 +355,7 @@
  "skipped_by_planner": [],
  "n_detections": 1163,
  "sim_seconds": 20.64,
- "wall_seconds": 3.0698482990264893,
+ "wall_seconds": 3.021627902984619,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -390,10 +390,14 @@
    "chord_window": 0.06,
    "travel_speed": 0.9,
    "min_travel_time": 0.12,
+   "min_lateral_gap": 0.07,
+   "beam_width": 8,
+   "pivot_lookahead": 4,
    "command_lead": 0.0,
    "roll_raise": 0.01,
    "roll_dip_time": 0.08,
    "roll_lift_time": 0.08,
+   "roll_min_dip_time": 0.03,
    "pivot_width_speed": 1.0,
    "lane_slack": 0.012
   },
@@ -409,6 +413,11 @@
    "stale_after": 0.2,
    "match_window": 0.15,
    "min_note_gap": 0.07
+  },
+  "arms": {
+   "n": 1,
+   "base_x": 0.33,
+   "middle_clearance": 0.09
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,

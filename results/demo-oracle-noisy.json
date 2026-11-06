@@ -31,7 +31,7 @@
    "hit": 2,
    "completed": 2,
    "mean_maintenance": 1.0,
-   "mean_slide_rms_m": 0.010355732899768181
+   "mean_slide_rms_m": 0.01035573290033652
   }
  },
  "notes": [
@@ -153,7 +153,7 @@
    "contact_ticks": 199,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.010410503809140608
+   "slide_rms_m": 0.01041050380914015
   },
   {
    "id": 8,
@@ -243,7 +243,7 @@
    "contact_ticks": 319,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.010300961990395754
+   "slide_rms_m": 0.01030096199153289
   },
   {
    "id": 14,
@@ -310,7 +310,7 @@
  "skipped_by_planner": [],
  "n_detections": 915,
  "sim_seconds": 17.5,
- "wall_seconds": 1.5559790134429932,
+ "wall_seconds": 1.446578025817871,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -345,10 +345,14 @@
    "chord_window": 0.06,
    "travel_speed": 0.9,
    "min_travel_time": 0.12,
+   "min_lateral_gap": 0.07,
+   "beam_width": 8,
+   "pivot_lookahead": 4,
    "command_lead": 0.0,
    "roll_raise": 0.01,
    "roll_dip_time": 0.08,
    "roll_lift_time": 0.08,
+   "roll_min_dip_time": 0.03,
    "pivot_width_speed": 1.0,
    "lane_slack": 0.012
   },
@@ -364,6 +368,11 @@
    "stale_after": 0.2,
    "match_window": 0.15,
    "min_note_gap": 0.07
+  },
+  "arms": {
+   "n": 1,
+   "base_x": 0.33,
+   "middle_clearance": 0.09
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,

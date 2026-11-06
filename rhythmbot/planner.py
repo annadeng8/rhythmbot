@@ -25,7 +25,7 @@ would implement the same `plan` method.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import numpy as np
 from pydrake.all import RigidTransform, RotationMatrix
@@ -80,6 +80,9 @@ class TrackedNote:
     # it is even after the notes that decided it are gone.
     planned_hold: tuple[int, float, float] | None = None
     held: tuple[int, float, float] | None = None
+    # Whether the latest plan plays it, so later plans do not flip between
+    # equally good choices.
+    chosen: bool | None = None
 
     @property
     def end_time(self) -> float:
@@ -189,6 +192,9 @@ class _Action:
     # single notes (both fingertips straddle the lane) and chords; -1 / +1
     # for a hold kept by that fingertip while the other plays around it.
     side: int = 0
+    # A chord with a hold: both fingertips land together, the one on the
+    # other note lifts at this time, and `side` keeps the longer note.
+    partner_end: float | None = None
 
     @property
     def x_start(self) -> float:
@@ -210,6 +216,8 @@ class _Hold:
     width: float
     rise: float
     free_at: float  # when the other fingertip is raised and ready
+    # When that fingertip, if it is lifting off the screen, is clear of it.
+    clear_at: float | None = None
 
 
 @dataclass
@@ -223,53 +231,188 @@ class _Release:
     ref: int = 0
 
 
+@dataclass
+class _State:
+    """How far a plan has got: the keyframes so far and what the hand is
+    doing at the end of them."""
+
+    prev: _Release | None = None
+    hold: _Hold | None = None
+    kfs: list[Keyframe] = field(default_factory=list)
+
+    def fork(self) -> "_State":
+        """A copy for trying a choice.  `_step` only looks at the last
+        keyframe, so that is all a candidate needs."""
+        return _State(self.prev, self.hold, [replace(k) for k in self.kfs[-1:]])
+
+    def key(self) -> tuple:
+        """Candidates with the same key can do the same things from here."""
+        if self.hold is not None:
+            h = self.hold
+            return (round(h.t_end, 3), round(h.x, 3), h.side, round(h.width, 3), round(h.free_at, 3))
+        if self.prev is not None:
+            p = self.prev
+            return (round(p.t_end, 3), round(p.x_end, 3), p.ref, round(p.width, 3), p.kind)
+        return ()
+
+
 class ClassicalPlanner(Policy):
-    def __init__(self, cfg: Config):
+    """Plays the notes it is given with one hand.  `hand` (0 left, 1 right)
+    says it is one of two arms: it keeps to its half of the screen, with a
+    fingertip fixed to each lane of its pair and the hand rolling between them.
+    """
+
+    def __init__(self, cfg: Config, hand: int | None = None):
         self.cfg = cfg
+        self.hand = hand
         self.L = cfg.layout
         self.M = cfg.motion
         self.G = cfg.gripper
         self.hover_z = self.L.screen_z + self.M.hover_height
         self.touch_z = self.L.screen_z - self.M.touch_depth
+        # With two arms the fingertips stay one lane apart.
+        self.home_width = 0.0 if hand is None else self.G.width_for_tip_gap(self.L.lane_width)
+        self.inner_lane = None if hand is None else self.L.n_lanes // 2 - 1 + hand
 
-    # -- grouping ------------------------------------------------------------
-    def _actions(self, notes: list[TrackedNote]) -> list[_Action]:
+    def rest_x(self) -> float:
+        """x of the midpoint between the fingertips before the first note."""
+        if self.hand is None:
+            return 0.0
+        return self.L.lane_x(self.inner_lane) + (-0.5 if self.hand == 0 else 0.5) * self.L.lane_width
+
+    def _home(self, lane: float) -> tuple[int, float]:
+        """(fingertip side, opening) that plays a lane.  With one arm, both
+        fingertips straddle it unless a hold says otherwise."""
+        if self.hand is None:
+            return 0, 0.0
+        if self.hand == 0:
+            return (1 if lane >= self.inner_lane else -1), self.home_width
+        return (-1 if lane <= self.inner_lane else 1), self.home_width
+
+    def _reachable(self, a: _Action) -> bool:
+        """With two arms, does a keep this hand out of the other's half?"""
+        if self.hand is None:
+            return True
+        mids = [self._mid_x(x, a.side, a.width) for _, x in a.path]
+        sign = 1 if self.hand == 1 else -1
+        return all(sign * m >= self.cfg.arms.middle_clearance - 1e-6 for m in mids)
+
+    # -- what to play ---------------------------------------------------------
+    def _groups(self, notes: list[TrackedNote]) -> list[list[TrackedNote]]:
+        """Notes not given up on, grouped by what falls within a chord window."""
         notes = sorted((n for n in notes if not n.skipped), key=lambda n: n.hit_time)
-        actions: list[_Action] = []
-        i = 0
-        while i < len(notes):
-            n = notes[i]
-            group = [n]
-            j = i + 1
-            while j < len(notes) and abs(notes[j].hit_time - n.hit_time) < self.M.chord_window:
-                group.append(notes[j])
-                j += 1
-            i = j
-            if len(group) >= 2 and all(g.kind == TAP for g in group[:2]):
-                a, b = sorted(group[:2], key=lambda g: g.lane)
-                gap = abs(self.L.lane_x(b.lane) - self.L.lane_x(a.lane))
-                w = self.G.width_for_tip_gap(gap, 2 * self.M.lane_slack)
-                if w is not None:
-                    xc = 0.5 * (self.L.lane_x(a.lane) + self.L.lane_x(b.lane))
-                    t0 = 0.5 * (a.hit_time + b.hit_time)
-                    actions.append(
-                        _Action(t0, t0 + self.M.tap_dwell, TAP, w, [(0.0, xc)], [a, b])
-                    )
-                    for extra in group[2:]:
-                        extra.skipped = True
-                    continue
-            # Not a playable chord: play the first, skip the rest.
-            for extra in group[1:]:
-                extra.skipped = True
-            actions.append(self._single(n))
-        return actions
+        groups: list[list[TrackedNote]] = []
+        for n in notes:
+            if groups and abs(n.hit_time - groups[-1][0].hit_time) < self.M.chord_window:
+                groups[-1].append(n)
+            else:
+                groups.append([n])
+        return groups
+
+    def _chord(self, a: TrackedNote, b: TrackedNote) -> _Action | None:
+        """Two taps as one action, a fingertip on each, if the WSG opens that far."""
+        if a.lane == b.lane:
+            return None
+        a, b = sorted((a, b), key=lambda g: g.lane)
+        gap = abs(self.L.lane_x(b.lane) - self.L.lane_x(a.lane))
+        w = self.G.width_for_tip_gap(gap, 2 * self.M.lane_slack)
+        if w is None:
+            return None
+        xc = 0.5 * (self.L.lane_x(a.lane) + self.L.lane_x(b.lane))
+        t0 = 0.5 * (a.hit_time + b.hit_time)
+        return _Action(t0, t0 + self.M.tap_dwell, TAP, w, [(0.0, xc)], [a, b])
+
+    def _hold_chord(self, a: TrackedNote, b: TrackedNote) -> _Action | None:
+        """A hold and another note as one action, a fingertip on each.  The
+        fingertips land in lane order, so a change of mind about which note
+        is longer only changes which one the hand pivots about later."""
+        if SLIDE in (a.kind, b.kind) or a.lane == b.lane:
+            return None
+        lo, hi = sorted((a, b), key=lambda g: g.lane)
+        x_lo, x_hi = self.L.lane_x(lo.lane), self.L.lane_x(hi.lane)
+        w = self.G.width_for_tip_gap(x_hi - x_lo, 2 * self.M.lane_slack)
+        if w is None:
+            return None
+        xc, half = 0.5 * (x_lo + x_hi), 0.5 * tip_gap(self.G, w)
+        long, other = (hi, lo) if hi.end_time > lo.end_time else (lo, hi)
+        side = 1 if long is hi else -1
+        t0 = 0.5 * (a.hit_time + b.hit_time)
+        x = xc + side * half
+        path = [(0.0, x), (max(long.end_time - t0, 0.05), x)]
+        partner_end = t0 + self.M.tap_dwell if other.kind == TAP else other.end_time
+        return _Action(t0, t0 + path[-1][0], HOLD, w, path, [long, other], side, partner_end)
+
+    def _options(self, group: list[TrackedNote]) -> list[_Action]:
+        """The ways of playing a group: any note alone, any two together."""
+        options = [self._single(n) for n in group]
+        for i, a in enumerate(group):
+            for b in group[i + 1 :]:
+                chord = self._chord(a, b) if a.kind == b.kind == TAP else self._hold_chord(a, b)
+                if chord is not None:
+                    options.append(chord)
+        return [a for a in options if self._reachable(a)]
+
+    def _score(self, group: list[TrackedNote], played: list[TrackedNote], t_now: float) -> float:
+        """What a choice for one group is worth.  Notes the hand has started
+        toward are kept unless they cannot be played, so it never dives at a
+        note and then gives up on it, and a small bonus for agreeing with the
+        previous plan stops it flipping between equally good choices."""
+        score = 0.0
+        for n in group:
+            is_played = any(n is p for p in played)
+            if is_played:
+                score += 1.0
+            elif n.hit_time - self.M.pre_time <= t_now:
+                score -= 2.0
+            if n.chosen is is_played:
+                score += 0.01
+        return score
+
+    def _select(self, notes: list[TrackedNote], t_now: float) -> list[_Action]:
+        """Which notes to play: a beam search over the groups in view, where
+        each candidate is tried with the real keyframe logic (`_step`), so a
+        choice is judged by what it leaves reachable afterwards.  Notes left
+        out are marked skipped."""
+        M = self.M
+        groups = self._groups(notes)
+        defaults = [opts[-1] for opts in map(self._options, groups) if opts]
+        beam: list[tuple[float, _State, list[_Action]]] = [(0.0, _State(), [])]
+        for i, group in enumerate(groups):
+            later = [a for a in defaults if a.t_hit > group[-1].hit_time + 1e-6]
+            rest = later[: M.pivot_lookahead]
+            scored = []
+            for score, st, chosen in beam:
+                scored.append((score + self._score(group, [], t_now), st, chosen))
+                for a in self._options(group):
+                    st2 = st.fork()
+                    if self._step(a, rest, st2):
+                        played = score + self._score(group, a.notes, t_now)
+                        scored.append((played, st2, chosen + [a]))
+            scored.sort(key=lambda c: -c[0])
+            beam, seen = [], set()
+            for c in scored:
+                key = c[1].key()
+                if key not in seen:
+                    seen.add(key)
+                    beam.append(c)
+                    if len(beam) == M.beam_width:
+                        break
+        chosen = beam[0][2]
+        played = {id(n) for a in chosen for n in a.notes}
+        for group in groups:
+            for n in group:
+                n.chosen = id(n) in played
+                n.skipped = not n.chosen
+        return chosen
 
     def _single(self, n: TrackedNote) -> _Action:
         if n.kind == TAP:
             path = [(0.0, self.L.lane_x(n.lane))]
-            return _Action(n.hit_time, n.hit_time + self.M.tap_dwell, TAP, 0.0, path, [n])
+            side, w = self._home(n.lane)
+            return _Action(n.hit_time, n.hit_time + self.M.tap_dwell, TAP, w, path, [n], side)
         if n.kind == HOLD:
-            side, x, w = n.held or (0, self.L.lane_x(n.lane), 0.0)
+            side, w = self._home(n.lane)
+            side, x, w = n.held or (side, self.L.lane_x(n.lane), w)
             path = [(0.0, x), (max(n.duration, 0.05), x)]
             return _Action(n.hit_time, n.hit_time + path[-1][0], HOLD, w, path, [n], side)
         wps = n.waypoints or [(0.0, n.lane), (max(n.duration, 0.05), n.lane)]
@@ -313,7 +456,7 @@ class ClassicalPlanner(Policy):
             if b.t_hit >= a.t_end + M.post_time * 0.5:
                 break
             fit = self._free_fit(a.x_start, b, can_shift=True)
-            if fit is not None and b.t_hit - M.roll_dip_time >= t_ready + 0.01:
+            if fit is not None and b.t_hit - M.roll_min_dip_time >= t_ready:
                 return fit
         return None
 
@@ -353,11 +496,21 @@ class ClassicalPlanner(Policy):
                     w = self.G.width_for_tip_gap(abs(a.x_start + nxt[2] - hold.x), M.lane_slack)
         x_free = hold.x - s * tip_gap(self.G, w)
         # Reopening about a holding fingertip swings the whole gripper
-        # sideways by half the change, so it is given time.
-        t_dip = a.t_hit - M.roll_dip_time
+        # sideways by half the change, so it is given time.  It may start as
+        # soon as a lifting fingertip is clear of the screen and run on
+        # through the dip, but must be over by the hit.
         t_ready = max(hold.free_at, kfs[-1].t)
-        if t_dip < t_ready + max(0.01, abs(w - hold.width) / M.pivot_width_speed):
+        lifting = hold.clear_at is not None and kfs[-1].t == hold.free_at
+        t_start = hold.clear_at if lifting else t_ready
+        t_open = t_ready + max(0.01, abs(w - hold.width) / M.pivot_width_speed)
+        if t_start + abs(w - hold.width) / M.pivot_width_speed > a.t_hit:
             return None
+        if t_ready > a.t_hit - M.roll_min_dip_time:
+            return None
+        if t_open > a.t_hit:
+            # Too tight to wait for the end of the lift: be partly open by then.
+            kfs[-1].width = hold.width + (w - hold.width) * (t_ready - t_start) / (a.t_hit - t_start)
+        t_dip = max(a.t_hit - M.roll_dip_time, t_open)
         up = self._rise(s, M.roll_raise)
 
         def k(t, rise, ref=s, x=hold.x):
@@ -365,7 +518,8 @@ class ClassicalPlanner(Policy):
 
         # Free fingertip: raised over a's lane, crossing the contact height
         # at the hit, pressed in level with the holding one.
-        kfs.append(k(t_dip, up))
+        if t_dip <= a.t_hit - M.roll_min_dip_time:
+            kfs.append(k(t_dip, up))
         kfs.append(k(a.t_hit, self._rise(s, M.contact_tolerance + M.touch_depth)))
         if a.kind == HOLD and a.t_end > hold.t_end + 1e-3:
             # a outlasts the hold: once both are down and the hold is over,
@@ -376,10 +530,12 @@ class ClassicalPlanner(Policy):
             kfs.append(k(t_switch, 0.0, -s, x_free))
             t_up = t_switch + M.roll_lift_time
             new_up = self._rise(-s, M.roll_raise)
+            t_clear = t_switch + M.roll_lift_time * (M.contact_tolerance + M.touch_depth) / M.roll_raise
+            kfs.append(k(t_clear, self._rise(-s, M.contact_tolerance + M.touch_depth), -s, x_free))
             kfs.append(k(t_up, new_up, -s, x_free))
             if a.notes[0].held is None:
                 a.notes[0].planned_hold = (-s, x_free, w)
-            return _Hold(a.t_end, x_free, -s, w, new_up, t_up)
+            return _Hold(a.t_end, x_free, -s, w, new_up, t_up, t_clear)
         t_done = max(a.t_end if a.kind == HOLD else a.t_hit + M.tap_dwell, t_press)
         kfs.append(k(t_press, 0.0))
         if t_done > t_press + 1e-3:
@@ -388,8 +544,10 @@ class ClassicalPlanner(Policy):
             # The hold ended while a was down: lift both from here.
             return _Release(t_done, hold.x, w, a.kind, s)
         t_up = t_done + M.roll_lift_time
+        t_clear = t_done + M.roll_lift_time * (M.contact_tolerance + M.touch_depth) / M.roll_raise
+        kfs.append(k(t_clear, self._rise(s, M.contact_tolerance + M.touch_depth)))
         kfs.append(k(t_up, up))
-        return _Hold(hold.t_end, hold.x, s, w, up, t_up)
+        return _Hold(hold.t_end, hold.x, s, w, up, t_up, t_clear)
 
     def _release(self, hold: _Hold, kfs: list[Keyframe]) -> _Release:
         t_end = max(hold.t_end, kfs[-1].t)
@@ -400,88 +558,132 @@ class ClassicalPlanner(Policy):
         return _Release(t_end, hold.x, hold.width, HOLD, hold.side)
 
     # -- keyframes -----------------------------------------------------------
-    def _keyframes(self, actions: list[_Action]) -> list[Keyframe]:
+    def _step(self, a: _Action, rest: list[_Action], st: _State) -> bool:
+        """Add action a to the keyframes in st, if it can be played from there."""
         M, L = self.M, self.L
         y = L.hit_y
-        kfs: list[Keyframe] = []
-        prev: _Release | None = None
-        hold: _Hold | None = None
-        for i, a in enumerate(actions):
-            if hold is not None:
-                if a.t_hit < hold.t_end + M.post_time * 0.5:
-                    # The hold is still down when this one is due: play it
-                    # with the other fingertip, or give up.
-                    res = self._roll_in(a, actions[i + 1 :], hold, kfs)
-                    if res is None:
-                        for n in a.notes:
-                            n.skipped = True
-                    elif isinstance(res, _Hold):
-                        hold = res
-                    else:
-                        hold, prev = None, res
-                    continue
-                prev, hold = self._release(hold, kfs), None
-            if prev is not None:
-                gap = a.t_hit - prev.t_end
-                if prev.kind != TAP and gap < M.post_time * 0.5:
-                    # Previous note still down when this one is due: give up.
-                    for n in a.notes:
-                        n.skipped = True
-                    continue
-                if prev.kind == TAP and gap < 0.0:
-                    for n in a.notes:
-                        n.skipped = True
-                    continue
-            if a.kind == HOLD and len(a.notes) == 1 and a.notes[0].held is None:
-                self._choose_pivot(a, actions[i + 1 :])
-                a.notes[0].planned_hold = (a.side, a.x_start, a.width)
-            up = self._rise(a.side, M.roll_raise)
-            if prev is not None:
-                dist = abs(a.x_start - prev.x_end)
-                travel = max(M.min_travel_time, dist / M.travel_speed)
-                if gap < M.pre_time + M.post_time:
-                    # Too close for a full lift and hover: a single apex
-                    # between the two touches, lower when the gap is tight
-                    # but always high enough to register as a release.
-                    frac = max(gap, 0.02) / (M.pre_time + M.post_time)
-                    z = L.screen_z + max(0.015, M.hover_height * frac)
-                    t_apex = prev.t_end + 0.5 * max(gap, 0.02)
-                    x_apex = 0.5 * (
-                        self._mid_x(a.x_start, a.side, a.width) + self._mid_x(prev.x_end, prev.ref, prev.width)
-                    )
-                    kfs.append(Keyframe(t_apex, x_apex, z, a.width, y, False))
+        kfs = st.kfs
+        if st.hold is not None:
+            if a.t_hit < st.hold.t_end + M.post_time * 0.5:
+                # The hold is still down when this one is due: play it with
+                # the other fingertip, or give up.
+                res = self._roll_in(a, rest, st.hold, kfs)
+                if res is None:
+                    return False
+                if isinstance(res, _Hold):
+                    st.hold = res
                 else:
-                    t_lift = prev.t_end + M.post_time
-                    kfs.append(Keyframe(t_lift, prev.x_end, self.hover_z, prev.width, y, False, prev.ref))
-                    t_hover = a.t_hit - M.pre_time
-                    t_leave = t_hover - travel
-                    if t_leave > t_lift + 0.01:
-                        kfs.append(Keyframe(t_leave, prev.x_end, self.hover_z, a.width, y, False, prev.ref))
-                    kfs.append(Keyframe(t_hover, a.x_start, self.hover_z, a.width, y, False, a.side, up))
-            else:
-                kfs.append(
-                    Keyframe(a.t_hit - M.pre_time, a.x_start, self.hover_z, a.width, y, False, a.side, up)
-                )
-            # Down phase: the fingertip crosses the contact height exactly at
-            # the hit time, then presses on to touch_z.
-            kfs.append(Keyframe(a.t_hit, a.x_start, L.screen_z + M.contact_tolerance, a.width, y, True, a.side, up))
-            if a.kind == HOLD and len(a.notes) == 1:
-                t_press = a.t_hit + min(M.press_time, a.t_end - a.t_hit)
-                kfs.append(Keyframe(t_press, a.x_start, self.touch_z, a.width, y, True, a.side, up))
-                hold, prev = _Hold(a.t_end, a.x_start, a.side, a.width, up, t_press), None
-                continue
-            for off, x in a.path:
-                if off < M.press_time:
-                    continue
-                kfs.append(Keyframe(a.t_hit + off, x, self.touch_z, a.width, y, True))
-            if a.kind == TAP or a.path[-1][0] < M.press_time:
-                kfs.append(Keyframe(a.t_end, a.x_end, self.touch_z, a.width, y, True))
-            prev = _Release(a.t_end, a.x_end, a.width, a.kind)
-        if hold is not None:
-            prev = self._release(hold, kfs)
+                    st.hold, st.prev = None, res
+                return True
+            st.prev, st.hold = self._release(st.hold, kfs), None
+        prev = st.prev
         if prev is not None:
-            kfs.append(Keyframe(prev.t_end + M.post_time, prev.x_end, self.hover_z, prev.width, y, False, prev.ref))
-        return kfs
+            gap = a.t_hit - prev.t_end
+            # Previous note still down when this one is due, or no time to
+            # get to its lane: give up.
+            if prev.kind != TAP and gap < M.post_time * 0.5:
+                return False
+            if prev.kind == TAP and gap < 0.0:
+                return False
+            dist = abs(self._mid_x(a.x_start, a.side, a.width) - self._mid_x(prev.x_end, prev.ref, prev.width))
+            if gap < M.min_lateral_gap and dist > 1e-6:
+                return False
+        if a.kind == HOLD and len(a.notes) == 1 and a.notes[0].held is None:
+            if self.hand is None:
+                self._choose_pivot(a, rest)
+            a.notes[0].planned_hold = (a.side, a.x_start, a.width)
+        # A chord with a hold lands level, both fingertips together.
+        up = 0.0 if a.partner_end is not None else self._rise(a.side, M.roll_raise)
+        if prev is not None:
+            travel = max(M.min_travel_time, dist / M.travel_speed)
+            if gap < M.pre_time + M.post_time:
+                # Too close for a full lift and hover: a single apex
+                # between the two touches, lower when the gap is tight
+                # but always high enough to register as a release.
+                frac = max(gap, 0.02) / (M.pre_time + M.post_time)
+                z = L.screen_z + max(0.015, M.hover_height * frac)
+                t_apex = prev.t_end + 0.5 * max(gap, 0.02)
+                x_apex = 0.5 * (
+                    self._mid_x(a.x_start, a.side, a.width) + self._mid_x(prev.x_end, prev.ref, prev.width)
+                )
+                kfs.append(Keyframe(t_apex, x_apex, z, a.width, y, False))
+            else:
+                t_lift = prev.t_end + M.post_time
+                kfs.append(Keyframe(t_lift, prev.x_end, self.hover_z, prev.width, y, False, prev.ref))
+                t_hover = a.t_hit - M.pre_time
+                t_leave = t_hover - travel
+                if t_leave > t_lift + 0.01:
+                    kfs.append(Keyframe(t_leave, prev.x_end, self.hover_z, a.width, y, False, prev.ref))
+                kfs.append(Keyframe(t_hover, a.x_start, self.hover_z, a.width, y, False, a.side, up))
+        else:
+            kfs.append(
+                Keyframe(a.t_hit - M.pre_time, a.x_start, self.hover_z, a.width, y, False, a.side, up)
+            )
+        # Down phase: the fingertip crosses the contact height exactly at
+        # the hit time, then presses on to touch_z.
+        kfs.append(Keyframe(a.t_hit, a.x_start, L.screen_z + M.contact_tolerance, a.width, y, True, a.side, up))
+        if a.partner_end is not None:
+            self._land_hold_chord(a, st)
+            return True
+        if a.kind == HOLD and len(a.notes) == 1:
+            t_press = a.t_hit + min(M.press_time, a.t_end - a.t_hit)
+            kfs.append(Keyframe(t_press, a.x_start, self.touch_z, a.width, y, True, a.side, up))
+            st.hold, st.prev = _Hold(a.t_end, a.x_start, a.side, a.width, up, t_press), None
+            return True
+        for off, x in a.path:
+            if off < M.press_time:
+                continue
+            kfs.append(Keyframe(a.t_hit + off, x, self.touch_z, a.width, y, True))
+        if a.kind == TAP or a.path[-1][0] < M.press_time:
+            kfs.append(Keyframe(a.t_end, a.x_end, self.touch_z, a.width, y, True, a.side, up))
+        st.prev = _Release(a.t_end, a.x_end, a.width, a.kind, a.side)
+        return True
+
+    def _land_hold_chord(self, a: _Action, st: _State) -> None:
+        """Press both fingertips down, then lift the one on the shorter note."""
+        M, s, w = self.M, a.side, a.width
+        x, y, z = a.x_start, self.L.hit_y, self.touch_z
+
+        def k(t, rise):
+            return Keyframe(t, x, z, w, y, True, s, rise)
+
+        half = tip_gap(self.G, w)
+        for n in a.notes:
+            if n.kind == HOLD and n.held is None:
+                n.planned_hold = (s, x, w) if n is a.notes[0] else (-s, x - s * half, w)
+        t_press = a.t_hit + M.press_time
+        st.kfs.append(k(t_press, 0.0))
+        t_free = max(a.partner_end, t_press)
+        if t_free > t_press + 1e-3:
+            st.kfs.append(k(t_free, 0.0))
+        if a.t_end <= t_free + 1e-3:
+            # Both notes end together: lift both from here.
+            st.prev, st.hold = _Release(t_free, x, w, HOLD, s), None
+            return
+        contact = M.contact_tolerance + M.touch_depth
+        t_clear = t_free + M.roll_lift_time * contact / M.roll_raise
+        t_up = t_free + M.roll_lift_time
+        up = self._rise(s, M.roll_raise)
+        st.kfs.append(k(t_clear, self._rise(s, contact)))
+        st.kfs.append(k(t_up, up))
+        st.hold, st.prev = _Hold(a.t_end, x, s, w, up, t_up, t_clear), None
+
+    def _keyframes(self, actions: list[_Action]) -> list[Keyframe]:
+        """The chosen actions as keyframes, ending with a lift off the screen."""
+        st = _State()
+        for n in (n for a in actions for n in a.notes):
+            if n.held is None:
+                n.planned_hold = None
+        for i, a in enumerate(actions):
+            self._step(a, actions[i + 1 : i + 1 + self.M.pivot_lookahead], st)
+        if st.hold is not None:
+            st.prev = self._release(st.hold, st.kfs)
+        if st.prev is not None:
+            prev = st.prev
+            st.kfs.append(
+                Keyframe(prev.t_end + self.M.post_time, prev.x_end, self.hover_z, prev.width, self.L.hit_y, False, prev.ref)
+            )
+        return st.kfs
 
     # -- Policy --------------------------------------------------------------
     def plan(self, notes, t_now, X_WT_cmd, width_cmd) -> Plan:
@@ -493,7 +695,7 @@ class ClassicalPlanner(Policy):
         for n in notes:
             if n.hit_time - self.M.pre_time > t_now:
                 n.skipped = False
-        actions = self._actions(notes)
+        actions = self._select(notes, t_now)
         kfs = self._keyframes(actions)
         for n in notes:
             if n.held is None and n.planned_hold is not None and n.hit_time <= t_now and not n.skipped:

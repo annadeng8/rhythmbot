@@ -59,6 +59,7 @@ so the recording can be scrubbed (`Open Controls → Animations`).
 | `HEADLESS=1 python -m rhythmbot.play --demo` | no browser, fastest; prints and saves the score report |
 | `python -m rhythmbot.play --chart charts/random-1.json --detector color` | play a chart file using the image-based detector |
 | `python -m rhythmbot.play --random 7 --noise 0.03 --latency 0.15` | random chart, oracle detector with timing jitter and detection delay |
+| `python -m rhythmbot.play --chart charts/song.json --arms 2` | play with two arms on wider lanes (reports get a `-2arm` suffix) |
 | `python -m rhythmbot.play --demo --audio --hold` | with a soundtrack synthesized from the chart (needs `afplay`, i.e. macOS, or `aplay`/`ffplay`) |
 | `python -m rhythmbot.play --detector torch --model results/note_detector.pt` | play from the trained vision model |
 | `python -m rhythmbot.dataset --out data/train --charts 80 --dense 80 --fps 10` | render labelled game frames for training (80 varied + 80 dense random charts) |
@@ -195,8 +196,8 @@ with 20 two-note chords and notes never closer than 0.29 s.
 
 | detector | completed | judgments (perfect/great/good/miss) | timing error mean ± std |
 |---|---|---|---|
-| oracle | 243 / 244 (99.6 %) | 243/0/0/1 | +8 ± 3 ms |
-| color segmentation | 243 / 244 (99.6 %) | 243/0/0/1 | +7 ± 3 ms |
+| oracle | 243 / 244 (99.6 %) | 243/0/0/1 | +8 ± 4 ms |
+| color segmentation | 243 / 244 (99.6 %) | 243/0/0/1 | +7 ± 4 ms |
 | vision model | 243 / 244 (99.6 %) | 243/0/0/1 | +7 ± 4 ms |
 
 osu!mania assumes independent fingers: hold one key, tap others. The
@@ -244,21 +245,21 @@ misses the same note as the oracle and nothing else (the previous,
 
 The full beatmap download (`songs/nekoteto/`, from the official osu! page;
 gitignored) has four harder 4K difficulties of the same song, imported the
-same way with the same 80 ms song offset. Results with the gripper-roll
-planner:
+same way with the same 80 ms song offset. Results with one arm (two arms are
+below, in *Two arms*):
 
 | difficulty | stars | notes | notes/s | oracle completion | vision model completion | previous vision model (3 slots) | mean \|timing error\|, oracle / vision |
 |---|---|---|---|---|---|---|---|
 | Easy Neko | 1.10 | 244 | 2.5 | 99.6 % | 99.6 % | 98.4 % | 8 / 7 ms |
-| Normal Neko | 1.64 | 446 | 4.7 | 80.9 % | 80.9 % | 66.6 % | 24 / 24 ms |
-| Advanced Neko | 2.49 | 759 | 7.9 | 64.7 % | 63.9 % | 50.1 % | 30 / 31 ms |
-| Llee's Hard Neko | 2.88 | 907 | 9.5 | 58.2 % | 58.3 % | 53.4 % | 37 / 37 ms |
-| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 44.3 % | 49.3 % | 42.1 % | 43 / 45 ms |
+| Normal Neko | 1.64 | 446 | 4.7 | 85.2 % | 84.3 % | 66.6 % | 31 / 29 ms |
+| Advanced Neko | 2.49 | 759 | 7.9 | 73.1 % | 72.9 % | 50.1 % | 28 / 27 ms |
+| Llee's Hard Neko | 2.88 | 907 | 9.5 | 70.9 % | 69.8 % | 53.4 % | 34 / 33 ms |
+| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 61.3 % | 59.5 % | 42.1 % | 38 / 31 ms |
 
-With perfect perception, almost every miss is a physical limit of one arm
-with a two-finger gripper (this breakdown is from the oracle runs before the
-tracker's matching fix below, which added 13 notes on Hard and 2 on
-Nyanyannyanyan):
+Where the oracle's misses came from before the four planner and tracker
+fixes below, which between them added 19, 64, 128 and 207 notes. So these
+rows are not all physics: the first, especially, was partly the planner's
+own timing and choices.
 
 | why the oracle run missed a note | Normal | Advanced | Hard | Nyan |
 |---|---|---|---|---|
@@ -279,15 +280,11 @@ short holds' hit times by up to 0.1 s. The current model, trained with
 99.7 % (95.6 %) within 60 ms, with 9–16 ms time-to-hit error and 15–26 ms
 hold-duration error.
 
-On Normal Neko vision and oracle complete almost the same notes (three
-differ each way). The oracle is not a true ceiling on the harder maps, which
-ask for far more than one hand can play: there the planner has to choose,
-and it chooses differently depending on the detector. On Nyanyannyanyan the
-image detectors complete more than the oracle (color segmentation 50.2 %,
-vision 49.3 %, oracle 44.3 %) by favouring taps over holds: taps completed
-489 / 434 / 338, holds 116 / 161 / 196, and in three-note chords 135 / 127 /
-87 notes. Why the oracle's exact times and durations lead the planner to
-those choices has not been isolated.
+The oracle is a guide rather than a true ceiling on these maps, which ask for
+more than one hand can play: the planner has to choose, and small timing
+differences change its choices. On Nyanyannyanyan vision and the oracle share
+588 completed notes, with 151 only by the oracle and 130 only by vision, and
+color segmentation (61.8 %) edges past the oracle.
 
 **Close notes in the tracker.** The tracker used to match each detection to
 the nearest tracked note of the same kind and lane within 0.15 s, and several
@@ -307,8 +304,127 @@ vision, and from 57 to 82 and from 38 to 62 with the oracle. Overall
 completion rose less, from 57.8 to 58.3 % and from 48.2 to 49.3 % with
 vision and from 56.8 to 58.2 % and from 44.1 to 44.3 % with the oracle,
 because the arm's time is limited and playing these notes displaces others.
-Easy, Normal and Advanced did not change. Reports are in
-`results/neko-<difficulty>-<detector>.json`.
+Easy, Normal and Advanced did not change.
+
+**Chains of short holds.** Most of Normal Neko's misses were notes due just
+as a 0.146 s hold in another lane ends. The planner ran the free fingertip's
+lift (80 ms), the reopening (up to 90 ms) and the dip (80 ms) strictly one
+after another, which does not fit. Reopening now starts once the lifting
+fingertip is clear of the screen and may run on through a dip as short as
+30 ms (`Motion.roll_min_dip_time`). Vision completion rose from 80.9 to
+83.6 %, 63.9 to 68.8 %, 58.3 to 58.9 % and 49.3 to 51.8 %, and the oracle's
+from 80.9 to 84.1 %, 64.7 to 69.7 %, 58.2 to 59.8 % and 44.3 to 46.8 %.
+
+This has costs. These notes land later and the arm is working harder: on
+Normal, with the oracle, mean |timing error| went from 24 to 31 ms, notes
+judged "perfect" from 313 to 306 and "great" from 28 to 45, holds losing
+contact from 3 to 9, and 90th-percentile holding-fingertip slide from 14.5
+to 19.4 mm. Easy Neko and the regression charts did not change.
+
+At that stage the planner still skipped 59 notes on Normal. For 39 the free fingertip was on
+the wrong side, typically in chains running one way across lanes (1→2→3):
+with one fingertip holding lane 2, the other cannot reach lane 3, and no roll
+can fix that. 19 needed the gripper to reopen
+by 90 mm, which does not fit the time even overlapped. Two things were tried
+and left out. Hopping the hand across by letting go of the hold early and
+landing late, within the judge's slack, added only 0–3 notes per map with
+vision. A 60 ms lift added 4, 7, 18 and 8 notes with vision but raised the
+worst holding-fingertip slide on Easy Neko from 10.3 to 17.9 mm.
+
+**Choosing what to play.** The planner used to play whatever came next if it
+looked possible, which caused two problems. It attempted notes the hand could
+not reach: on Hard and Nyanyannyanyan, notes under 0.12 s after one in another
+lane succeeded only 5–38 % of the time (about 220 attempts), against about 95 %
+from there up, and each failed dash also spoiled what followed. And it never
+gave up one note to save two. Now a note needs at least 70 ms from lift-off
+when the hand has to move (`Motion.min_lateral_gap`), and `_select` runs a beam
+search over the notes in view, trying each choice with the real keyframe logic
+(`_step`) so it is judged by what it leaves reachable. In a three-note chord it
+also chooses which two to play. Notes the hand has started toward are kept
+unless impossible, and a small bonus for agreeing with the previous plan stops
+it flipping between equal choices. Completion rose, with vision, from 83.6 to
+84.3 %, 68.8 to 71.0 %, 58.9 to 68.0 % and 51.8 to 56.3 %, and with the oracle
+from 84.1 to 85.2 %, 69.7 to 73.4 %, 59.8 to 70.0 % and 46.8 to 59.0 %. The
+search is cheap: beam widths of 2 and 24 score nearly the same, and runs got
+faster because the hand stops chasing lost notes.
+
+**Chords with a hold.** A chord that included a hold used to lose all but one
+note. Now both fingertips land together, the one on the shorter note lifts when
+that note ends, and the other stays down as the pivot for rolling (`_hold_chord`).
+With one arm, completion rose from 71.0 to 72.9 %, 68.0 to 69.8 % and 56.3 to
+59.5 % with vision (Normal did not change). With two
+arms, where this was nearly the only thing left, it took Advanced from 92.4 to
+99.9 %.
+
+Reports are in `results/neko-<difficulty>-<detector>.json`.
+
+### Two arms
+
+![two arms](docs/two_arms.jpg)
+
+*`--arms 2`: two iiwa + WSG arms with their bases 66 cm apart, playing Normal
+Neko.*
+
+`--arms 2` puts a second arm beside the first. Each hand plays its half of the
+screen, with a fingertip fixed over each of the two lanes next to the middle,
+and rolls to press one or the other, so moving between its two lanes takes no
+travel. The same `ClassicalPlanner` runs per hand. The vision model needs no
+retraining, because the game frame is drawn in pixels and lane width only
+changes the world geometry.
+
+| difficulty | vision, 1 arm → 2 arms | oracle, 2 arms | color, 2 arms | judgments, vision (perfect/great/good/miss) | mean \|timing error\|, vision, 1 → 2 arms |
+|---|---|---|---|---|---|
+| Easy Neko | 99.6 → **100 %** | 100 % | 100 % | 244/0/0/0 | 7 → 5 ms |
+| Normal Neko | 84.3 → **100 %** | 100 % | 100 % | 446/0/0/0 | 29 → 10 ms |
+| Advanced Neko | 72.9 → **99.9 %** | 100 % | 100 % | 756/2/0/1 | 27 → 13 ms |
+| Llee's Hard Neko | 69.8 → **97.8 %** | 97.7 % | 97.7 % | 832/52/5/18 | 33 → 18 ms |
+| Nyanyannyanyan | 59.5 → **93.9 %** | 93.4 % | 93.7 % | 1005/126/6/69 | 31 → 24 ms |
+
+Of the oracle's remaining misses on Hard (21) and Nyanyannyanyan (80), most are
+very fast repeats in one lane, where the whole hand has to lift and come back,
+and notes due just as a hold on the same hand ends. The noisy oracle (30 ms
+jitter, 150 ms latency) also completes 100 % of Advanced Neko.
+
+**Lanes are wider.** The WSG body is 146 mm wide, so at 50 mm lanes the hands
+would collide. At 100 mm they still touched while rolling on Nyanyannyanyan. At
+the 120 mm chosen (`two_arm_config`), the closest the two hands' collision
+geometry comes is 48 mm on Nyanyannyanyan and 59 mm on Normal.
+
+**Measured motion.** On Nyanyannyanyan, rolls stay around 8° at most, the arms stay at
+least 0.41 rad from every joint limit, and a holding fingertip slides at most
+12.8 mm (6.3 mm at the 90th percentile; 6.2 and 3.3 mm on Advanced). No hold
+loses contact on Normal, Advanced or Nyanyannyanyan. Arm links stay
+at least 165 mm apart, measured between link frame origins, since the iiwa
+model has no collision geometry.
+
+**Joint speeds.** Neither setup stays inside the iiwa's joint speed limits on
+dense maps, and the simulated controller does not enforce them on the actual
+motion. Two arms are much closer. This is the main thing that would stand
+between these numbers and real hardware.
+
+| map | 1 arm: time over limit, peak | 2 arms: time over limit, peak |
+|---|---|---|
+| Normal | 25.7 %, 209 % of limit | 1.1 %, 134 % |
+| Advanced | 29.6 %, 222 % | 2.6 %, 140 % |
+| Hard | 26.6 %, 237 % | 7.1 %, 169 % |
+| Nyanyannyanyan | 22.4 %, 218 % | 11.3 %, 169 % |
+
+**What two arms lose.** Wider lanes and a fixed split cost the charts that use
+all six lanes. Slides that would bring a hand into the other's half are skipped,
+and chords two lanes apart on one hand no longer fit the WSG's 130 mm reach:
+
+| chart | notes | 2 arms (all three detectors) | why |
+|---|---|---|---|
+| demo | 18 | 16 | 2 slides |
+| random-1 | 15 | 12 | 2 slides and a tap |
+| random-2 | 21 | 19 | 2 slides |
+| random-3 | 19 | 17 | 2 slides |
+| slow-ride-easy | 14 | 14 | |
+| slow-ride-medium | 18 | 18 | |
+| slow-ride-hard | 33 | 20 | 13 chords on lanes 0 + 2 |
+
+One arm remains the default and still completes all of
+these. Two-arm reports are in `results/*-2arm.json`.
 
 ## Modules
 
@@ -318,9 +434,9 @@ Easy, Normal and Advanced did not change. Reports are in
 | `rhythmbot/chart.py` | `Note`/`Chart`, JSON load/save, `random_chart` / `varied_random_chart` / `dense_random_chart` generators, built-in demo |
 | `rhythmbot/game.py` | `FrameRenderer` (2D game screen → `uint8` image + pixel labels) and `HighwayVisualizer` (same notes as moving Meshcat geometry) |
 | `rhythmbot/perception.py` | `NoteDetector` interface; `OracleDetector`, `ColorSegmentationDetector`, `TorchDetector` |
-| `rhythmbot/planner.py` | `Policy` interface and `ClassicalPlanner` (keyframes → fingertip pose, rolled about a holding fingertip when needed, + gripper width) |
+| `rhythmbot/planner.py` | `Policy` interface and `ClassicalPlanner` (look-ahead choice of notes, keyframes → fingertip pose, rolled about a holding fingertip when needed, + gripper width; one per arm) |
 | `rhythmbot/brain.py` | `GameScreen` and `RhythmBrain` LeafSystems: perception tick, note tracking, replanning, pose output |
-| `rhythmbot/robot.py` | scene YAML/SDF, hardware station, DiffIK integrator, start-pose IK, `TouchSensor` |
+| `rhythmbot/robot.py` | scene YAML/SDF for one or two arms, hardware station, DiffIK integrator and start-pose IK per arm, `TouchSensor` |
 | `rhythmbot/judge.py` | timing/contact scoring and the JSON report |
 | `rhythmbot/play.py` | builds the diagram, runs, reports |
 | `rhythmbot/dataset.py` | labelled frame generation for the vision model |
@@ -433,8 +549,8 @@ hover. Two simultaneous taps up to three lanes apart become a chord: the WSG
 opens so that one fingertip lands in each lane (`Gripper.width_for_tip_gap`).
 A note due while a hold is still down is played by the other fingertip,
 rolling the hand about the holding one (see *Playing a real osu!mania
-beatmap*). Notes that cannot be reached are skipped explicitly and
-reported.
+beatmap*). Which notes to play is chosen by a look-ahead search (see
+*Choosing what to play*); the rest are skipped explicitly and reported.
 
 **Controller.** Drake's `DifferentialInverseKinematicsIntegrator` on an
 arm-only plant (`MakeMultibodyPlant(..., add_frozen_child_instances=True)`
@@ -712,10 +828,16 @@ model of each:
 
 ## Known limits / next steps
 
-* Two contact points that share one hand: two-finger chords, and one
-  fingertip playing while the other holds. Three-note chords, chords that
-  include a hold, and notes on the holding fingertip's own side are
-  skipped.
+* Two contact points per hand: two-finger chords, with or without a hold, and
+  one fingertip playing while the other holds. Notes on the holding fingertip's
+  own side are skipped; with one arm, so is the third note of a three-note
+  chord.
+* Joint speeds exceed the iiwa's limits on dense maps (see *Two arms*): the
+  planner checks reachability from measured success rates, not the arm's
+  dynamics.
+* With two arms the split between hands is fixed, so they cannot reach across
+  the middle even when the other hand is out of the way (see *What two arms
+  lose*).
 * Touch is geometric, not physical. Switching to a compliant (hydroelastic)
   screen and the station's `contact_results` port would let contact force
   be a metric too; `TouchSensor` is the only place to change.

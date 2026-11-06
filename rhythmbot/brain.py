@@ -47,9 +47,10 @@ class GameScreen(LeafSystem):
 @dataclass
 class BrainState:
     tracked: dict[int, TrackedNote] = field(default_factory=dict)
-    plan: Plan | None = None
-    X_WT_cmd: RigidTransform = field(default_factory=RigidTransform)
-    width_cmd: float = 0.0
+    # One each per arm.
+    plans: list[Plan] = field(default_factory=list)
+    X_WT_cmds: list[RigidTransform] = field(default_factory=list)
+    width_cmds: list[float] = field(default_factory=list)
     next_key: int = 0
     n_finished: int = 0
     skipped_note_ids: set[int] = field(default_factory=set)
@@ -60,21 +61,21 @@ class RhythmBrain(LeafSystem):
     def __init__(
         self,
         detector: NoteDetector,
-        policy: Policy,
+        policies: list[Policy],
         cfg: Config,
-        X_WG_initial: RigidTransform,
+        X_WG_initials: list[RigidTransform],
         width_initial: float = 0.0,
     ):
         super().__init__()
         self.detector = detector
-        self.policy = policy
+        self.policies = policies
         self.cfg = cfg
         self.X_GT = RigidTransform([0.0, cfg.gripper.tip_offset, 0.0])
         self.X_TG = self.X_GT.inverse()
 
-        X_WT0 = X_WG_initial @ self.X_GT
-        state0 = BrainState(X_WT_cmd=X_WT0, width_cmd=width_initial)
-        state0.plan = policy.plan([], 0.0, X_WT0, width_initial)
+        X_WT0s = [X_WG @ self.X_GT for X_WG in X_WG_initials]
+        state0 = BrainState(X_WT_cmds=X_WT0s, width_cmds=[width_initial] * len(policies))
+        state0.plans = [p.plan([], 0.0, X, width_initial) for p, X in zip(policies, X_WT0s)]
         self._state_index = self.DeclareAbstractState(AbstractValue.Make(state0))
 
         self.frame_port = self.DeclareAbstractInputPort(
@@ -83,10 +84,15 @@ class RhythmBrain(LeafSystem):
         self.DeclarePeriodicUnrestrictedUpdateEvent(
             1.0 / cfg.perception.tick_hz, 0.0, self._tick
         )
-        self.DeclareAbstractOutputPort(
-            "X_WG_desired", lambda: AbstractValue.Make(RigidTransform()), self._calc_pose
-        )
-        self.DeclareVectorOutputPort("wsg_position", 1, self._calc_width)
+        for k, suffix in enumerate(cfg.arms.suffixes):
+            self.DeclareAbstractOutputPort(
+                f"X_WG_desired{suffix}",
+                lambda: AbstractValue.Make(RigidTransform()),
+                lambda context, output, k=k: self._calc_pose(context, output, k),
+            )
+            self.DeclareVectorOutputPort(
+                f"wsg_position{suffix}", 1, lambda context, output, k=k: self._calc_width(context, output, k)
+            )
         # Mirror of the latest state for reporting after the run.
         self.last_state: BrainState = state0
 
@@ -101,25 +107,26 @@ class RhythmBrain(LeafSystem):
 
         # A policy that looks at the screen itself (pixel BC) gets the frame
         # too, through `policy.frame`, set before each `plan` call.
-        wants = getattr(self.policy, "wants_frames", False)
+        wants = [p for p in self.policies if getattr(p, "wants_frames", False)]
         frame = self.frame_port.Eval(context) if self.detector.needs_frames or wants else None
-        if wants:
-            self.policy.frame = frame
+        for p in wants:
+            p.frame = frame
         detections = self.detector.detect(frame, t)
         s.n_detections += len(detections)
         self._merge(s, detections, t)
         self._prune(s, t)
 
-        # Where the previous plan has the hand right now: the new plan starts
-        # there, so the commanded pose is continuous across replans.
-        if s.plan is not None:
-            s.X_WT_cmd = s.plan.tip_pose(t)
-            s.width_cmd = s.plan.width_at(t)
         # Only notes seen in at least two frames are planned for: a single
         # spurious detection (vision models hiccup right as a head crosses
         # the line) must not send the arm chasing a phantom.
         confirmed = [n for n in s.tracked.values() if n.n_obs >= self.cfg.perception.min_observations]
-        s.plan = self.policy.plan(confirmed, t, s.X_WT_cmd, s.width_cmd)
+        for k, policy in enumerate(self.policies):
+            # Where the previous plan has the hand right now: the new plan
+            # starts there, so the commanded pose is continuous across replans.
+            s.X_WT_cmds[k] = s.plans[k].tip_pose(t)
+            s.width_cmds[k] = s.plans[k].width_at(t)
+            mine = [n for n in confirmed if self.cfg.hand_for_lane(n.lane) == k]
+            s.plans[k] = policy.plan(mine, t, s.X_WT_cmds[k], s.width_cmds[k])
         self.last_state = s
 
     def _merge(self, s: BrainState, detections: list[DetectedNote], t: float) -> None:
@@ -262,17 +269,15 @@ class RhythmBrain(LeafSystem):
                 del s.tracked[key]
 
     # -- outputs --------------------------------------------------------------
-    def _calc_pose(self, context, output):
+    def _calc_pose(self, context, output, k: int = 0):
         s = self._get(context)
         t = context.get_time() + self.cfg.motion.command_lead
-        X_WT = s.plan.tip_pose(t) if s.plan is not None else s.X_WT_cmd
-        output.set_value(X_WT @ self.X_TG)
+        output.set_value(s.plans[k].tip_pose(t) @ self.X_TG)
 
-    def _calc_width(self, context, output):
+    def _calc_width(self, context, output, k: int = 0):
         s = self._get(context)
         t = context.get_time() + self.cfg.motion.command_lead
-        w = s.plan.width_at(t) if s.plan is not None else s.width_cmd
-        output.SetFromVector([w])
+        output.SetFromVector([s.plans[k].width_at(t)])
 
 
 def initial_tip_pose(cfg: Config, x: float = 0.0) -> RigidTransform:

@@ -11,9 +11,9 @@
  },
  "score": 729,
  "max_score": 732,
- "timing_error_mean_s": 0.007567901234568857,
- "timing_error_abs_mean_s": 0.007576131687243793,
- "timing_error_std_s": 0.0034946341169914586,
+ "timing_error_mean_s": 0.007588477366256081,
+ "timing_error_abs_mean_s": 0.007596707818931017,
+ "timing_error_std_s": 0.0035756652013575656,
  "by_kind": {
   "tap": {
    "n": 200,
@@ -2405,10 +2405,10 @@
    "time": 64.256,
    "duration": 0.292,
    "status": "hit",
-   "timing_error": 0.019000000000005457,
+   "timing_error": 0.02400000000000091,
    "judgment": "perfect",
-   "active_ticks": 55,
-   "contact_ticks": 55,
+   "active_ticks": 54,
+   "contact_ticks": 54,
    "completed": true,
    "maintenance": 1.0,
    "slide_rms_m": null
@@ -3695,7 +3695,7 @@
  ],
  "n_detections": 12335,
  "sim_seconds": 99.426,
- "wall_seconds": 11.815353155136108,
+ "wall_seconds": 11.598686933517456,
  "config": {
   "layout": {
    "n_lanes": 6,
@@ -3730,10 +3730,14 @@
    "chord_window": 0.06,
    "travel_speed": 0.9,
    "min_travel_time": 0.12,
+   "min_lateral_gap": 0.07,
+   "beam_width": 8,
+   "pivot_lookahead": 4,
    "command_lead": 0.0,
    "roll_raise": 0.01,
    "roll_dip_time": 0.08,
    "roll_lift_time": 0.08,
+   "roll_min_dip_time": 0.03,
    "pivot_width_speed": 1.0,
    "lane_slack": 0.012
   },
@@ -3749,6 +3753,11 @@
    "stale_after": 0.2,
    "match_window": 0.15,
    "min_note_gap": 0.07
+  },
+  "arms": {
+   "n": 1,
+   "base_x": 0.33,
+   "middle_clearance": 0.09
   },
   "plant_time_step": 0.001,
   "diffik_time_step": 0.005,
