@@ -4,6 +4,7 @@ simulator scores it, the agent reads the feedback and revises.
     python -m rhythmbot.cap.loop run --name fable-1 --iterations 6
     python -m rhythmbot.cap.loop run --name fable-selftest --self-test     # agent may also run the sim itself
     python -m rhythmbot.cap.loop run --name fable-pixels --self-test --pixels  # program gets only the frame
+    python -m rhythmbot.cap.loop run --name fable-camera --self-test --view camera  # only a camera image
     python -m rhythmbot.cap.loop heldout /Users/Shared/rhythmbot_cap/fable-1                  # every revision on the held-out charts
     python -m rhythmbot.cap.loop selftest /Users/Shared/rhythmbot_cap/fable-1/policy.py   # what --self-test lets the agent run
 
@@ -22,7 +23,10 @@ With `--pixels` the program gets only the rendered game frame, no tracked
 notes, and must do its own perception.  The workspace then also has example
 frames from the training charts and `./probe.sh`, which runs the agent's
 `probe.py` on every training frame with the notes visible in it (ground
-truth for calibrating its perception code).
+truth for calibrating its perception code).  With `--view camera` the frame
+is an external camera's view of the screen instead (`rhythmbot.camera`:
+perspective, the arm in front of the notes), and the example frames are
+recorded while the classical planner plays the training charts.
 
 The agent works only in the workspace: it is allowed Read/Write/Edit/Glob/Grep
 there (and, with --self-test, `./evaluate.sh`), nothing else; the
@@ -122,12 +126,13 @@ def _claude(prompt: str, cwd: Path, model: str, session: str | None, self_test: 
     return out
 
 
-def _evaluate(policy: Path, out: Path, workers: int, split: str = TRAIN_SPLIT, pixels: bool = False) -> list[dict]:
+def _evaluate(policy: Path, out: Path, workers: int, split: str = TRAIN_SPLIT, pixels: bool = False,
+              view: str = "screen") -> list[dict]:
     from ..evaluate import evaluate
 
     if out.exists():
         shutil.rmtree(out)
-    evaluate([f"{'cappx' if pixels else 'cap'}:{policy}"], split, out, ("oracle",), workers=workers)
+    evaluate([f"{'cappx' if pixels else 'cap'}:{policy}"], split, out, ("oracle",), workers=workers, view=view)
     return load_reports(next(out.glob("*/oracle")))
 
 
@@ -137,33 +142,68 @@ def _score(reports: list[dict]) -> tuple[int, int]:
     return done, n
 
 
-def _examples(step: float) -> list[dict]:
+def _visible(chart, t: float) -> list[dict]:
+    from ..config import DEFAULT
+
+    return [
+        {"kind": n.kind, "lane": n.lane, "time": n.time, "time_to_hit": round(float(n.time - t), 4),
+         "duration": n.duration, "waypoints": [list(w) for w in n.waypoints]}
+        for n in chart.visible(t, DEFAULT.layout.approach_time)
+    ]
+
+
+def _camera_examples(job: tuple[str, float]) -> list[dict]:
+    """Camera frames of one chart every `step` seconds while the classical
+    planner plays it (the arm is in the picture)."""
+    from pydrake.all import Simulator
+
+    from ..config import DEFAULT
+    from ..play import build
+    from ..splits import load
+
+    name, step = job
+    chart = load(name)
+    diagram, robot, _, _ = build(chart, DEFAULT, "oracle", None, None, None, view="camera")
+    sim = Simulator(diagram)
+    ctx = sim.get_mutable_context()
+    robot.initialize(ctx)
+    screen = diagram.GetSubsystemByName("screen")
+    out = []
+    for t in np.arange(step, chart.end_time + 0.5, step):
+        sim.AdvanceTo(float(t))
+        frame = screen.get_output_port().Eval(screen.GetMyContextFromRoot(ctx))
+        out.append({"chart": chart.name, "t": round(float(t), 4), "frame": frame, "notes": _visible(chart, float(t))})
+    return out
+
+
+def _examples(step: float, view: str = "screen") -> list[dict]:
     """Every `step` seconds of every training chart: the frame and the notes
     visible in it."""
     from ..config import DEFAULT
     from ..game import FrameRenderer
-    from ..splits import charts
+    from ..splits import SPLITS, charts
 
+    if view == "camera":
+        from concurrent.futures import ProcessPoolExecutor
+
+        with ProcessPoolExecutor(max_workers=6) as ex:
+            return [e for part in ex.map(_camera_examples, [(n, step) for n in SPLITS[TRAIN_SPLIT]]) for e in part]
     renderer = FrameRenderer(DEFAULT)
     out = []
     for chart in charts(TRAIN_SPLIT):
         for t in np.arange(0.0, chart.end_time + 0.5, step):
-            notes = [
-                {"kind": n.kind, "lane": n.lane, "time": n.time, "time_to_hit": round(float(n.time - t), 4),
-                 "duration": n.duration, "waypoints": [list(w) for w in n.waypoints]}
-                for n in chart.visible(t, DEFAULT.layout.approach_time)
-            ]
-            out.append({"chart": chart.name, "t": round(float(t), 4), "frame": renderer.render(chart, float(t)), "notes": notes})
+            out.append({"chart": chart.name, "t": round(float(t), 4), "frame": renderer.render(chart, float(t)),
+                        "notes": _visible(chart, float(t))})
     return out
 
 
-def _write_examples(ws: Path) -> None:
+def _write_examples(ws: Path, view: str = "screen") -> None:
     """A few dozen PNG frames with many notes on screen, and their index."""
     from PIL import Image
 
     d = ws / "examples"
     d.mkdir(exist_ok=True)
-    ex = _examples(0.5)
+    ex = _examples(0.5, view)
     rng = np.random.default_rng(0)
     busy = [e for e in ex if len(e["notes"]) >= 3]
     pick = sorted(rng.choice(len(busy), size=min(30, len(busy)), replace=False))
@@ -184,7 +224,7 @@ def _write_examples(ws: Path) -> None:
     (d / "index.md").write_text("\n".join(lines))
 
 
-def setup_workspace(ws: Path, self_test: bool, pixels: bool = False) -> None:
+def setup_workspace(ws: Path, self_test: bool, pixels: bool = False, view: str = "screen") -> None:
     ws.mkdir(parents=True, exist_ok=True)
     (ws / "history").mkdir(exist_ok=True)
     (ws / "agent_log").mkdir(exist_ok=True)
@@ -192,9 +232,10 @@ def setup_workspace(ws: Path, self_test: bool, pixels: bool = False) -> None:
     if pixels:
         # Swap the tracked-notes interface for the frame-only one.
         start, end = task.index("## What your program sees"), task.index("## The hand")
-        task = task[:start] + (HERE / "TASK_PIXELS.md").read_text() + "\n" + task[end:]
+        sees = "TASK_CAMERA.md" if view == "camera" else "TASK_PIXELS.md"
+        task = task[:start] + (HERE / sees).read_text() + "\n" + task[end:]
         task = task.replace("def plan(self, notes, t_now", "def plan(self, frame, t_now")
-        _write_examples(ws)
+        _write_examples(ws, view)
     if self_test:
         task += "\n## Testing it yourself\n\n`./evaluate.sh` runs `policy.py` on the training charts and prints that feedback.\n"
     (ws / "TASK.md").write_text(task)
@@ -202,25 +243,29 @@ def setup_workspace(ws: Path, self_test: bool, pixels: bool = False) -> None:
     py = f'cd "{PROJECT_ROOT}" && HEADLESS=1 "{sys.executable}" -m rhythmbot.cap.loop'
     if self_test:
         sh = ws / "evaluate.sh"
-        sh.write_text(f'#!/bin/sh\n{py} selftest "{ws / "policy.py"}"{" --pixels" if pixels else ""}\n')
+        flags = (" --pixels" if pixels else "") + (f" --view {view}" if view != "screen" else "")
+        sh.write_text(f'#!/bin/sh\n{py} selftest "{ws / "policy.py"}"{flags}\n')
         sh.chmod(0o755)
     if pixels:
         sh = ws / "probe.sh"
-        sh.write_text(f'#!/bin/sh\n{py} probe "{ws / "probe.py"}"\n')
+        sh.write_text(f'#!/bin/sh\n{py} probe "{ws / "probe.py"}" --view {view}\n')
         sh.chmod(0o755)
 
 
-def run(name: str, iterations: int, model: str, self_test: bool, workers: int, pixels: bool = False) -> Path:
+def run(name: str, iterations: int, model: str, self_test: bool, workers: int, pixels: bool = False,
+        view: str = "screen") -> Path:
     ws = RUNS / name
     hist_path = ws / "history.json"
+    pixels = pixels or view == "camera"
     history = (
         json.loads(hist_path.read_text())
         if hist_path.exists()
-        else {"model": model, "self_test": self_test, "pixels": pixels, "revisions": []}
+        else {"model": model, "self_test": self_test, "pixels": pixels, "view": view, "revisions": []}
     )
     pixels = history.get("pixels", False)
+    view = history.get("view", "screen")
     if not history["revisions"]:
-        setup_workspace(ws, self_test, pixels)
+        setup_workspace(ws, self_test, pixels, view)
     session = history.get("session")
     for i in range(len(history["revisions"]), iterations):
         if i == 0:
@@ -251,7 +296,7 @@ def run(name: str, iterations: int, model: str, self_test: bool, workers: int, p
         else:
             snap = ws / "history" / f"policy_v{i}.py"
             shutil.copy(policy, snap)
-            reports = _evaluate(snap, ws / "history" / f"train_v{i}", workers, pixels=pixels)
+            reports = _evaluate(snap, ws / "history" / f"train_v{i}", workers, pixels=pixels, view=view)
             done, n = _score(reports)
             fb = revision_feedback(reports, i)
             (ws / "feedback.md").write_text(fb)
@@ -276,7 +321,7 @@ def heldout(ws: Path, workers: int, detector: str = "oracle") -> None:
     # Only the harness's snapshots: the agent may leave its own files here.
     snaps = [p for p in (ws / "history").glob("policy_v*.py") if p.stem[8:].isdigit()]
     specs = [f"{kind}:{p}" for p in sorted(snaps, key=lambda p: int(p.stem[8:]))]
-    evaluate(specs, "heldout", out, (detector,), workers=workers)
+    evaluate(specs, "heldout", out, (detector,), workers=workers, view=history.get("view", "screen"))
     summary = summarize(out)
     for rev in history["revisions"]:
         key = f"{kind}-policy_v{rev['revision']}|{detector}|heldout (all)"
@@ -294,15 +339,15 @@ def heldout(ws: Path, workers: int, detector: str = "oracle") -> None:
         )
 
 
-def selftest(policy: Path, workers: int, pixels: bool = False) -> None:
+def selftest(policy: Path, workers: int, pixels: bool = False, view: str = "screen") -> None:
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmp:
-        reports = _evaluate(policy, Path(tmp) / "eval", workers, pixels=pixels)
+        reports = _evaluate(policy, Path(tmp) / "eval", workers, pixels=pixels or view == "camera", view=view)
     print(revision_feedback(reports))
 
 
-def probe(script: Path, limit: int = 20_000) -> None:
+def probe(script: Path, limit: int = 20_000, view: str = "screen") -> None:
     """Run the agent's probe.py `main(examples)` on the training frames, under
     the same import rules as a policy, and print what it prints."""
     import contextlib
@@ -314,7 +359,7 @@ def probe(script: Path, limit: int = 20_000) -> None:
     buf = io.StringIO()
     try:
         module = load_module(script)
-        ex = [{k: e[k] for k in ("t", "frame", "notes")} for e in _examples(0.1)]
+        ex = [{k: e[k] for k in ("t", "frame", "notes")} for e in _examples(0.1, view)]
         with contextlib.redirect_stdout(buf):
             module.main(ex)
     except Exception:  # noqa: BLE001 - report the agent's own errors to it
@@ -333,6 +378,8 @@ def main(argv=None):
     r.add_argument("--self-test", action="store_true", help="let the agent run ./evaluate.sh itself")
     r.add_argument("--pixels", action="store_true", help="the program gets only the game frame")
     r.add_argument("--workers", type=int, default=6)
+    r.add_argument("--view", default="screen", choices=["screen", "camera"],
+                   help="camera: the program gets only an external camera's image of the screen")
     h = sub.add_parser("heldout")
     h.add_argument("workspace")
     h.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch"])
@@ -341,18 +388,20 @@ def main(argv=None):
     s.add_argument("policy")
     s.add_argument("--workers", type=int, default=6)
     s.add_argument("--pixels", action="store_true")
+    s.add_argument("--view", default="screen", choices=["screen", "camera"])
     pr = sub.add_parser("probe")
     pr.add_argument("script")
+    pr.add_argument("--view", default="screen", choices=["screen", "camera"])
     args = ap.parse_args(argv)
     os.environ.setdefault("HEADLESS", "1")
     if args.cmd == "run":
-        run(args.name, args.iterations, args.model, args.self_test, args.workers, args.pixels)
+        run(args.name, args.iterations, args.model, args.self_test, args.workers, args.pixels, args.view)
     elif args.cmd == "heldout":
         heldout(Path(args.workspace), args.workers, args.detector)
     elif args.cmd == "probe":
-        probe(Path(args.script))
+        probe(Path(args.script), view=args.view)
     else:
-        selftest(Path(args.policy), args.workers, args.pixels)
+        selftest(Path(args.policy), args.workers, args.pixels, args.view)
 
 
 if __name__ == "__main__":

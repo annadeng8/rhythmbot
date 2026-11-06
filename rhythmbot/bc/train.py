@@ -10,6 +10,8 @@
     python -m rhythmbot.bc.train --encoder pixels --head diffusion --teacher results/bc/teacher.pt \
         --out results/bc/student.pt
     python -m rhythmbot.bc.train ... --dagger-rounds 0           # plain BC
+    # pixel policy on an external camera's view of the screen
+    python -m rhythmbot.bc.train --encoder pixels --head diffusion --view camera --out results/bc/camera_diffusion.pt
 
 Demonstrations are collected without the arm: the brain alone runs the
 detector, the tracker and a policy, as fast as it can, and the policy's own
@@ -22,6 +24,11 @@ so the state policy is trained on the observations it will get when it is
 deployed with it, and the expert labels are what the classical planner does
 with that perception.  Pixel samples store only (chart, time): frames are
 re-rendered when training (0.04 ms each).
+
+**Camera view (`--view camera`).** The pixel policy sees an external camera
+on the screen instead (`camera.py`): perspective, the arm in front of the
+notes.  That image depends on where the arm actually is, so collection runs
+the full simulation, as `play` does, and the frames are stored.
 
 Plain BC only ever sees states the expert visits; DAgger lets the learned
 policy drive (with probability 1 - beta per tick), the expert still labels
@@ -60,15 +67,18 @@ class _Recorder:
     """Policy wrapper: labels every tick with the expert's plan, and plays
     the expert's or the learner's plan."""
 
-    def __init__(self, cfg: Config, learner=None, beta: float = 1.0, seed: int = 0, teacher=None):
+    def __init__(self, cfg: Config, learner=None, beta: float = 1.0, seed: int = 0, teacher=None,
+                 record_frames: bool = False):
         from ..planner import ClassicalPlanner
 
         self.cfg = cfg
         self.expert = teacher if teacher is not None else ClassicalPlanner(cfg)
         self.teacher = teacher
         self.learner = learner
-        self.wants_frames = bool(learner is not None and learner.wants_frames)
+        self.record_frames = record_frames
+        self.wants_frames = record_frames or bool(learner is not None and learner.wants_frames)
         self.frame = None
+        self.frames: list[np.ndarray] = []
         self.beta = beta
         self.rng = np.random.default_rng(seed)
         self.dt = 1.0 / cfg.perception.tick_hz
@@ -95,6 +105,10 @@ class _Recorder:
             self.hand.append(hand_obs(self.cfg, hand))
             self.act.append(label)
             self.t.append(t_now)
+            if self.record_frames:
+                from .features import frame_input
+
+                self.frames.append(frame_input(self.frame))
         if self.learner is not None and self.rng.random() >= self.beta:
             self.learner.frame = self.frame
             return self.learner.plan(notes, t_now, X_WT_cmd, width_cmd)
@@ -130,21 +144,33 @@ def rollout(job: dict) -> dict:
         from .policy import BCPolicy
 
         teacher = BCPolicy.load(job["teacher"], cfg)
-    rec = _Recorder(cfg, learner, job.get("beta", 1.0), job["seed"], teacher)
-    detector = make_detector(job["detector"], chart, cfg, str(VISION_MODEL))
-    if job["detector"] == "torch":
+    camera = job.get("view", "screen") == "camera"
+    rec = _Recorder(cfg, learner, job.get("beta", 1.0), job["seed"], teacher, record_frames=camera)
+    if job["detector"] == "torch" or learner is not None or teacher is not None:
         import torch
 
         torch.set_num_threads(1)
-    X_WG0 = initial_tip_pose(cfg) @ RigidTransform([0.0, -cfg.gripper.tip_offset, 0.0])
-    builder = DiagramBuilder()
-    screen = builder.AddSystem(GameScreen(chart, cfg))
-    brain = builder.AddSystem(RhythmBrain(detector, [rec], cfg, [X_WG0]))
-    builder.Connect(screen.get_output_port(), brain.GetInputPort("frame"))
-    sim = Simulator(builder.Build())
+    if camera:
+        # What the camera sees depends on where the arm really is, so this
+        # runs the full simulation (arm, physics, camera) like `play`.
+        from ..play import build
+
+        diagram, robot, _, _ = build(chart, cfg, job["detector"], str(VISION_MODEL), None, rec, view="camera")
+        sim = Simulator(diagram)
+        robot.initialize(sim.get_mutable_context())
+    else:
+        detector = make_detector(job["detector"], chart, cfg, str(VISION_MODEL))
+        X_WG0 = initial_tip_pose(cfg) @ RigidTransform([0.0, -cfg.gripper.tip_offset, 0.0])
+        builder = DiagramBuilder()
+        screen = builder.AddSystem(GameScreen(chart, cfg))
+        brain = builder.AddSystem(RhythmBrain(detector, [rec], cfg, [X_WG0]))
+        builder.Connect(screen.get_output_port(), brain.GetInputPort("frame"))
+        sim = Simulator(builder.Build())
     sim.AdvanceTo(chart.end_time + 1.0)
     n = len(rec.t)
+    extra = {"frame": np.stack(rec.frames)} if camera else {}
     return {
+        **extra,
         "obs": np.array(rec.obs, dtype=np.float32).reshape(n, -1),
         "hand": np.array(rec.hand, dtype=np.float32).reshape(n, HAND_DIM),
         "act": np.array(rec.act, dtype=np.float32).reshape(n, HORIZON, -1),
@@ -154,10 +180,10 @@ def rollout(job: dict) -> dict:
 
 
 def collect(names: list[str], indices: list[int], detector: str, learner: str | None, beta: float,
-            seed: int, workers: int, teacher: str | None = None) -> dict:
+            seed: int, workers: int, teacher: str | None = None, view: str = "screen") -> dict:
     jobs = [
         {"chart": names[i], "chart_index": i, "detector": detector, "learner": learner, "beta": beta,
-         "seed": seed * 100_000 + i, "teacher": teacher}
+         "seed": seed * 100_000 + i, "teacher": teacher, "view": view}
         for i in indices
     ]
     with ProcessPoolExecutor(max_workers=workers) as ex:
@@ -170,7 +196,8 @@ def _cat(a: dict | None, b: dict) -> dict:
 
 
 class _FrameData:
-    """Re-renders the frame of each (chart, time) sample, for a DataLoader."""
+    """Re-renders the frame of each (chart, time) sample, for a DataLoader.
+    Camera frames depend on the arm, so they are stored, not re-rendered."""
 
     def __init__(self, names: list[str], data: dict):
         self.names = names
@@ -185,6 +212,8 @@ class _FrameData:
         from ..game import FrameRenderer
         from .features import frame_input
 
+        if "frame" in self.data:
+            return self.data["frame"][i], self.data["hand"][i], self.data["act"][i]
         if self._renderer is None:
             self._renderer = FrameRenderer(DEFAULT)
         c = int(self.data["chart"][i])
@@ -298,6 +327,8 @@ def main(argv=None):
     ap.add_argument("--workers", type=int, default=8, help="rollout processes")
     ap.add_argument("--loader-workers", type=int, default=8, help="frame-rendering DataLoader workers (pixels)")
     ap.add_argument("--device", default="cuda")
+    ap.add_argument("--view", default="screen", choices=["screen", "camera"],
+                    help="pixel input: the game's own frame, or an external camera on the screen (full simulation)")
     args = ap.parse_args(argv)
 
     out = Path(args.out)
@@ -309,7 +340,7 @@ def main(argv=None):
     print(f"[bc] collecting expert demos on {len(names)} charts ({args.detector})", flush=True)
     if args.teacher and args.detector != "oracle":
         raise SystemExit("--teacher sees oracle notes; use --detector oracle")
-    data = collect(names, list(range(len(names))), args.detector, None, 1.0, 0, args.workers, args.teacher)
+    data = collect(names, list(range(len(names))), args.detector, None, 1.0, 0, args.workers, args.teacher, args.view)
     print(f"[bc] {len(data['t'])} samples ({time.time() - t0:.0f} s)", flush=True)
     for r in range(args.dagger_rounds + 1):
         path = out if r == args.dagger_rounds else out.with_name(f"{out.stem}_r{r}{out.suffix}")
@@ -322,7 +353,8 @@ def main(argv=None):
         rng = np.random.default_rng(r + 1)
         sub = sorted(rng.choice(len(names), size=min(args.dagger_charts, len(names)), replace=False).tolist())
         print(f"[bc] DAgger round {r + 1}: learner drives, expert labels, {len(sub)} charts", flush=True)
-        data = _cat(data, collect(names, sub, args.detector, str(path), args.beta, r + 1, args.workers, args.teacher))
+        data = _cat(data, collect(names, sub, args.detector, str(path), args.beta, r + 1, args.workers, args.teacher,
+                                  args.view))
     log["wall_s"] = time.time() - t0
     out.with_suffix(".json").write_text(json.dumps(log, indent=1))
     print(f"[bc] done in {time.time() - t0:.0f} s -> {out}")

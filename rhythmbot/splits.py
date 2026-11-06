@@ -8,6 +8,8 @@ held-out chart.  Held-out charts vary along the axes the proposal names:
     heldout-iid      more charts from the same generator as the training ones
     heldout-dense    denser charts: shorter gaps, more chords and holds
     heldout-real     hand-made and imported charts (demo, Slow Ride, osu!mania)
+    hard             osu!mania-style dense charts (`dense_random_chart`): up to
+                     ~13 notes/s and four-note chords, more than one arm can play
 
 Procedural charts are generated from seeds, so a split is a list of names
 that `load` turns back into charts.
@@ -16,7 +18,7 @@ that `load` turns back into charts.
 from __future__ import annotations
 
 from . import PROJECT_ROOT
-from .chart import Chart, demo_chart, random_chart, varied_random_chart
+from .chart import Chart, demo_chart, dense_random_chart, random_chart, varied_random_chart
 
 CHARTS = PROJECT_ROOT / "charts"
 SONGS = PROJECT_ROOT / "songs"
@@ -34,6 +36,7 @@ SPLITS: dict[str, list[str]] = {
     "bc-train": [f"varied:{s}" for s in range(1000, 1200)],
     "heldout-iid": [f"varied:{s}" for s in range(5000, 5010)],
     "heldout-dense": [f"dense:{s}" for s in range(6000, 6005)],
+    "hard": [f"hard:{s}" for s in range(7000, 7010)],
     "heldout-real": [
         "demo",
         "file:random-3",
@@ -61,6 +64,8 @@ def load(name: str) -> Chart | None:
         return varied_random_chart(int(arg))
     if kind == "dense":
         return _dense(int(arg))
+    if kind == "hard":
+        return dense_random_chart(int(arg))
     raise ValueError(f"unknown chart {name!r}")
 
 

@@ -791,6 +791,37 @@ against 11–13 ms for every other policy, because it reads time straight off
 pixel rows), but the play does not, especially on the denser held-out charts
 (80 %).
 
+### External camera (`--view camera`)
+
+The frame above is the game's own render. With `--view camera` the
+perception stage sees the screen through an `RgbdSensor` instead (`camera.py`):
+a 384 × 256 camera beside and above the screen, so the screen is in
+perspective, the arm and gripper are in the picture and hide the notes under
+them, and the image has sensor noise (σ = 3). The screen body's label image
+marks its pixels, and those pixels get the game frame, looked up once by
+intersecting each camera ray with the screen plane. `play`, `evaluate`, the
+CaP loop (`--view camera`, task `TASK_CAMERA.md`) and BC collection take it.
+Calibration examples are recorded while the classical planner plays, so the
+arm moves in them as a competent player's would.
+
+```bash
+python -m rhythmbot.play --demo --view camera
+python -m rhythmbot.cap.loop run --name fable-camera --iterations 5 --self-test --view camera
+```
+
+| camera CaP revision | train | held-out | iid | dense | real |
+|---|---|---|---|---|---|
+| v0 | 99.1 % | 95.2 % | 97.0 | 89.8 | 100 |
+| v1 | 100 | 95.7 | 99.0 | 88.5 | 100 |
+| v2 | 99.1 | **97.2** | 99.0 | 93.0 | 100 |
+| v3, v4 | 100 | 96.5 | 99.0 | 91.1 | 100 |
+
+The program that saw the camera did better than the one that saw the clean
+render (97.2 % against 89.6 %). Its losses are again on the dense charts,
+where the classical planner gets 100 %; the screen-pixels policy fed the
+camera image scores 0 %. Classical play is unchanged by the camera (99.1 %
+on `cap-train` either way).
+
 ## Comparison
 
 Held-out completion over all 20 charts (460 notes), best revision or final
@@ -801,6 +832,7 @@ model of each:
 | classical planner | tracked notes | 100 % | 98.0 % |
 | code-as-policy, self-test (v1) | tracked notes | 98.0 | 96.1 |
 | code-as-policy, harness feedback only (v7) | tracked notes | 96.3 | 92.0 |
+| code-as-policy, camera only (v2) | **camera image**, own perception code | 97.2 | – |
 | code-as-policy, pixels only (v3) | **frame**, own perception code | 89.6 | – |
 | BC diffusion, from classical | **frame** | **98.7** | – |
 | BC diffusion, state teacher | tracked notes | 95.2 | 88.5 |
@@ -841,9 +873,8 @@ model of each:
 * Touch is geometric, not physical. Switching to a compliant (hydroelastic)
   screen and the station's `contact_results` port would let contact force
   be a metric too; `TouchSensor` is the only place to change.
-* The 2D frame is rendered from the chart, not from a Drake camera. An
-  `RgbdSensor` looking at the Meshcat highway could replace `GameScreen`
-  once the vision model should see the real scene.
+* The camera view (`--view camera`) is one-arm only and its pose is fixed
+  relative to the screen; with two arms' wider screen it would need moving.
 * The soundtrack is synthesized from the chart (click track plus a tone per
   note). Playing a real song means authoring or importing a chart against
   its beat grid; `Chart.bpm` and note times are all that is needed.

@@ -42,15 +42,17 @@ def policy_tag(spec: str) -> str:
 
 
 def _run_one(job: dict) -> dict:
-    from .config import DEFAULT
+    from .config import DEFAULT, two_arm_config
     from .play import run
     from .policies import make_policy
 
     chart = splits.load(job["chart"])
     out = Path(job["out"])
     extra: dict = {"split": job["split"], "chart_entry": job["chart"]}
+    cfg = two_arm_config() if job.get("arms", 1) == 2 else DEFAULT
     try:
-        policy = make_policy(job["policy"], DEFAULT)
+        # Classical: `play` gives each arm its own planner.
+        policy = None if job["policy"] == "classical" else make_policy(job["policy"], cfg)
     except Exception as e:  # a generated program that does not load
         rep = {"chart": chart.name, "n_notes": len(chart), "completion_rate": 0.0, "load_error": repr(e), **extra}
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -58,7 +60,7 @@ def _run_one(job: dict) -> dict:
         return rep
     rep = run(
         chart,
-        DEFAULT,
+        cfg,
         detector=job["detector"],
         model_path=job.get("model"),
         realtime=False,
@@ -66,6 +68,7 @@ def _run_one(job: dict) -> dict:
         quiet=True,
         policy=policy,
         policy_name=job["policy"],
+        view=job.get("view", "screen"),
     )
     if hasattr(policy, "stats"):
         extra["policy_stats"] = policy.stats()
@@ -82,6 +85,8 @@ def evaluate(
     detectors: tuple[str, ...] = ("oracle",),
     model: str | None = None,
     workers: int = 6,
+    view: str = "screen",
+    arms: int = 1,
 ) -> list[dict]:
     out_dir = Path(out_dir)
     jobs = []
@@ -100,6 +105,8 @@ def evaluate(
                             "detector": det,
                             "model": str(model or DEFAULT_MODEL) if det == "torch" else None,
                             "out": str(out_dir / policy_tag(pol) / det / f"{stem}.json"),
+                            "view": view,
+                            "arms": arms,
                         }
                     )
     if workers <= 1:
@@ -190,12 +197,15 @@ def main(argv=None):
     ap.add_argument("--model", help="vision model for --detector torch (default results/note_detector.pt)")
     ap.add_argument("--out", default=str(PROJECT_ROOT / "results" / "compare"))
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--view", default="screen", choices=["screen", "camera"],
+                    help="perception input: the game's own frame, or an external camera on the screen")
+    ap.add_argument("--arms", type=int, default=1, choices=[1, 2], help="one arm, or two side by side (classical only)")
     ap.add_argument("--summarize", metavar="DIR", help="only rebuild the summary of an existing output dir")
     args = ap.parse_args(argv)
     if args.summarize:
         print(format_table(summarize(args.summarize)))
         return
-    evaluate(args.policy, args.split, args.out, tuple(args.detector), args.model, args.workers)
+    evaluate(args.policy, args.split, args.out, tuple(args.detector), args.model, args.workers, args.view, args.arms)
     print(format_table(summarize(args.out)))
 
 
