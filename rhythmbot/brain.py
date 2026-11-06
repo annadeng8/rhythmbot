@@ -105,7 +105,12 @@ class RhythmBrain(LeafSystem):
         t = context.get_time()
         s: BrainState = state.get_mutable_abstract_state(self._state_index).get_mutable_value()
 
-        frame = self.frame_port.Eval(context) if self.detector.needs_frames else None
+        # A policy that looks at the screen itself (pixel BC) gets the frame
+        # too, through `policy.frame`, set before each `plan` call.
+        wants = [p for p in self.policies if getattr(p, "wants_frames", False)]
+        frame = self.frame_port.Eval(context) if self.detector.needs_frames or wants else None
+        for p in wants:
+            p.frame = frame
         detections = self.detector.detect(frame, t)
         s.n_detections += len(detections)
         self._merge(s, detections, t)

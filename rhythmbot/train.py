@@ -313,6 +313,10 @@ def main(argv=None):
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--limit", type=int, help="use only this many frames (debug)")
     ap.add_argument("--eval-only", action="store_true")
+    ap.add_argument(
+        "--export-state", action="store_true",
+        help="write --model's plain weights to <model>.state.pt, for torch versions that cannot load its TorchScript",
+    )
     args = ap.parse_args(argv)
 
     cfg = DEFAULT
@@ -320,6 +324,11 @@ def main(argv=None):
     device = pick_device()
     print(f"device {device}")
 
+    if args.export_state:
+        state = torch.jit.load(args.model, map_location="cpu").state_dict()
+        torch.save(state, Path(args.model).with_suffix(".state.pt"))
+        print(f"weights -> {Path(args.model).with_suffix('.state.pt')}")
+        return
     model = torch.jit.load(args.model, map_location="cpu").to(device) if args.eval_only else None
     k_slots = int(model.k_slots) if model is not None else K_SLOTS
     t0 = time.time()

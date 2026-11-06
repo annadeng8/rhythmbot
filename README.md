@@ -443,6 +443,11 @@ these. Two-arm reports are in `results/*-2arm.json`.
 | `rhythmbot/train.py` | the vision model (`NoteNet`), its training loop, validation metrics and TorchScript export |
 | `rhythmbot/audio.py` | soundtrack synthesized from the chart, or a song file, played in sync with a live run |
 | `rhythmbot/importers.py` | osu!mania, StepMania and Clone Hero chart importers; GuitarHeroBot's Slow Ride |
+| `rhythmbot/policies.py` | every policy by name: `classical`, `cap:<policy.py>`, `bc:<model.pt>` (`play --policy`) |
+| `rhythmbot/splits.py` | chart splits: `cap-train`, `bc-train`, and the held-out `heldout-iid` / `heldout-dense` / `heldout-real` |
+| `rhythmbot/evaluate.py` | runs policies × detectors × a split headless in parallel; `summary.md` with completion, timing, contact, slide error |
+| `rhythmbot/cap/` | code-as-policy: `TASK.md` (the agent's problem statement), `api.py` (the control API generated programs use), `sandbox.py` (import check + guarded execution), `feedback.py`, `loop.py` (the agent ↔ simulator refinement loop) |
+| `rhythmbot/bc/` | behavior cloning: `features.py` (observation / action-chunk encoding), `train.py` (demos from the classical planner + DAgger), `policy.py` (`BCPolicy`) |
 | `charts/` | demo and three random charts |
 
 ## How the pieces work
@@ -561,20 +566,297 @@ belief): taps need a *fresh* touch-down in the lane within ±140 ms (perfect
 RMS lateral error is recorded. Both fingertips are eligible, which is what
 lets chords score.
 
-## Plugging in the other approaches from the proposal
+## Code-as-policy and behavior cloning
 
-* **Vision model** → `train.py` is the baseline; a different architecture
-  only has to keep `TorchDetector.decode`'s output contract, or override
-  `decode`. Harder perception (a real Drake camera looking at the Meshcat
-  highway, visual clutter, a different game skin) means regenerating
-  `dataset.py` frames from that source and retraining.
-* **LLM direct control / code-as-policy, behavior cloning** → implement
-  `Policy.plan(tracked_notes, t, X_WT_cmd, width_cmd) -> Plan` (or, for a
-  lower-level policy, replace `RhythmBrain`'s output with your own pose
-  stream). `ClassicalPlanner` doubles as the demonstration generator for
-  behavior cloning; `judge.Judge` scores every approach identically.
-* **Harder charts** → `random_chart` has density / hold / slide / chord
-  probabilities; `Layout` has lane count and scroll speed.
+Both approaches implement the same `Policy.plan(tracked_notes, t, X_WT_cmd,
+width_cmd) -> Plan` as `ClassicalPlanner`, see the same tracked notes, and
+are scored by the same judge (`play --policy ...`). Each is developed on its
+own training charts and judged on held-out charts it never saw
+(`rhythmbot/splits.py`):
+
+| split | charts | what varies |
+|---|---|---|
+| `heldout-iid` | 10 `varied_random_chart` seeds 5000–5009 | nothing: same generator as training |
+| `heldout-dense` | 5 random charts, 3.2 notes/s, 0.18 s gaps, 25 % chords | density, chords |
+| `heldout-real` | demo, random-3, Slow Ride easy/medium/hard (+ NekoTeto Easy if `songs/` has it) | hand-made / real charts |
+
+```bash
+python -m rhythmbot.evaluate --policy classical bc:results/bc/teacher_diffusion.pt cap:<policy.py> \
+    --split heldout --detector oracle torch --out results/compare
+```
+
+### Behavior cloning (`rhythmbot/bc`)
+
+The classical planner is the demonstrator. Two observation encoders and two
+action heads (`rhythmbot/bc/models.py`):
+
+* **state**: the commanded hand state (x, height, opening, rise) and the
+  next 8 tracked notes, each with its kind, time to hit and to end, and its
+  lane at the hit and at 25/50/75/100 % of its length, *relative to the
+  hand*; an MLP encodes it;
+* **pixels**: the game frame itself (downsampled to 192 × 128) plus the hand
+  state; a CNN (four stride-2 stages, flattened 12 × 8 map, so position on
+  screen is kept) encodes it. No detector, no tracker: perception is learned;
+* **mlp head**: regresses the hand state at the next 16 ticks (0.53 s),
+  replanned every tick;
+* **diffusion head** (a diffusion policy, Chi et al. 2023): DDPM over the
+  normalized 16-tick action chunk, 100 noise levels, residual MLP denoiser
+  conditioned on the observation and noise level (FiLM), 10 DDIM steps at
+  run time; plays 4 ticks of each sampled chunk before sampling again.
+
+Demonstrations need no physics: the brain only ever reads its own commanded
+pose, so the brain + detector alone are simulated (0.3 s per 20 s chart
+with the oracle). 200 `bc-train` charts give 127k labelled ticks; two DAgger
+rounds (the learner drives 80 % of ticks on 100 charts each, the
+demonstrator labels what it reaches) bring that to 254k. Pixel samples
+store only (chart, time) and frames are re-rendered while training. Trained
+on gpu156 (L40S): state models in 1–8 min, pixel models in 55–80 min
+including DAgger rollouts.
+
+**State → vision distillation** (`--teacher`): a state policy trained on
+exact (oracle) notes is the teacher, and a pixel student is trained on its
+labels: the teacher, which sees the oracle notes, labels every state, first
+while it drives, then (DAgger) while the student drives.
+
+```bash
+python -m rhythmbot.bc.train --encoder state --head diffusion --epochs 80 --out results/bc/teacher_diffusion.pt
+python -m rhythmbot.bc.train --encoder pixels --head diffusion --batch 256 --lr 3e-4 \
+    --teacher results/bc/teacher_diffusion.pt --out results/bc/student_diffusion.pt          # distilled
+python -m rhythmbot.bc.train --encoder pixels --head diffusion --batch 256 --lr 3e-4 \
+    --out results/bc/pixels_diffusion_from_classical.pt                                    # from the planner directly
+python -m rhythmbot.bc.train --encoder state --head diffusion --epochs 80 --detector torch \
+    --out results/bc/state_vision_diffusion.pt                                             # on the vision model's notes
+```
+
+Held-out completion, full Drake simulation (`results/compare_bc/summary.md`).
+"Notes from" is what the state policies' tracker is fed; pixel policies
+read the frame and ignore it.
+
+| policy | input | notes from | iid | dense | real | **all** | tap / hold / slide |
+|---|---|---|---|---|---|---|---|
+| classical | state | oracle | 100 % | 100 % | 100 % | **100 %** | 100 / 100 / 100 |
+| classical | state | vision model | 96.0 | 99.4 | 100 | **98.0** | 100 / 100 / 84.2 |
+| teacher, MLP | state | oracle | 94.0 | 87.9 | 83.3 | **89.6** | 86.1 / 96.3 / 94.7 |
+| teacher, diffusion | state | oracle | 99.0 | 94.9 | 88.2 | **95.2** | 93.2 / 98.2 / 100 |
+| teacher, MLP | state | vision model | 77.1 | 86.0 | 79.4 | **80.7** | 79.6 / 87.2 / 73.7 |
+| teacher, diffusion | state | vision model | 88.1 | 92.4 | 83.3 | **88.5** | 90.8 / 85.3 / 82.5 |
+| trained on vision notes, diffusion | state | vision model | 95.0 | 96.2 | 93.1 | **95.0** | 95.2 / 100 / 84.2 |
+| student of MLP teacher | **pixels** | – | 94.5 | 90.4 | 85.3 | **91.1** | 86.4 / 100 / 98.2 |
+| student of diffusion teacher | **pixels** | – | 94.5 | 85.4 | 86.3 | **89.6** | 88.4 / 92.7 / 89.5 |
+| from classical, diffusion | **pixels** | – | 99.5 | 97.5 | 99.0 | **98.7** | 98.3 / 99.1 / 100 |
+
+* **The diffusion head beats regression**: 95.2 vs 89.6 % for the state
+  teacher, almost all of it on taps (93.2 vs 86.1 %). Regression averages
+  "lift for the next tap" with "stay low", and a tap needs a fresh touch
+  (≥ 4 mm lift); the regressed hand ran together runs of taps 0.18–0.3 s
+  apart and missed both notes of chords.
+* **Distillation inherits the teacher's mistakes.** The pixel students
+  (89.6–91.1 %) end up at or just below their teachers; they learn to see
+  well enough (they play as well as the teacher does with exact notes, and
+  far better than the teacher does with the vision model's notes), but no
+  better than the teacher plays.
+* **The best vision-based policy is a pixel diffusion policy trained from
+  the classical planner directly** (98.7 %, within 1.3 points of the
+  planner with exact notes and above the planner with the vision model,
+  98.0 %). That is also state → vision distillation, with the classical
+  planner (which plans from the exact notes) as the privileged teacher: a
+  strong teacher matters more than a learned one. Its hits are as precise
+  (13 ms mean |error|) and slides as accurate (9.6 mm RMS).
+* A state policy trained on the vision model's tracked notes (95.0 %)
+  beats the oracle-trained teacher run with them (88.5 %): train on the
+  observations you deploy with. Its weak spot is the vision model's slide
+  paths (slides 84 %, as for the classical planner).
+* The real charts (Slow Ride's same-lane runs and long sustains) are the
+  hardest generalization for the state policies (83–93 %); the pixel
+  policy from the planner gets 99 % there.
+
+Checkpoints are not in git (diffusion models are 74–100 MB); they are on
+gpu156 under `/data/YifanKang/rhythmbot/results/bc/`, with the training
+logs (`*.json`, also in `results/bc/`) next to them.
+
+### Agentic code-as-policy (`rhythmbot/cap`)
+
+A coding agent (Claude Code, non-interactive, default model
+`claude-fable-5-1`) writes the policy as a Python program against a small
+control API, `rhythmbot/cap/api.py`: screen and hand geometry, judge
+windows, comfortable arm speeds, and `Keyframe` / `Plan` builders. The
+problem statement it gets is `rhythmbot/cap/TASK.md`. It does *not* get
+the classical planner: the program may import only numpy, math, some
+standard-library modules and `rhythmbot.cap.api` (checked on its syntax
+tree before it runs), and the agent's tools are confined to its workspace.
+
+```bash
+python -m rhythmbot.cap.loop run --name fable-feedback --iterations 8               # harness feedback each round
+python -m rhythmbot.cap.loop run --name fable-selftest --iterations 5 --self-test   # agent may also run the sim itself
+python -m rhythmbot.cap.loop heldout /Users/Shared/rhythmbot_cap/fable-feedback      # every revision on held-out charts
+```
+
+Each iteration is one `claude -p` call continuing the same conversation.
+After it, the program is snapshotted (`history/policy_v<i>.py`), run on the
+6 `cap-train` charts (113 notes) with the oracle, and `feedback.md` is
+written: per-chart scores, then every note not completed (missed, or hit
+but contact lost, with its timing error and the notes around it), the
+program's exceptions with tracebacks, and its planning time.
+`GuardedPolicy` catches exceptions and malformed plans at run time and lifts
+the hand in place, so a buggy revision still gets a score and its errors are
+reported. With `--self-test` the agent may also run `./evaluate.sh` (the
+same feedback, printed) as often as it wants. `history.json` records per
+revision the training score, the agent's cost and turns, and after
+`heldout`, the held-out completion, which measures improvement across
+revisions and on unseen charts.
+
+**Isolation.** Claude Code lets the Read/Glob/Grep tools read anywhere by
+default, and in a first run both agents went looking for the project
+source (`Glob **/rhythmbot/planner.py` over the home directory). The loop
+therefore puts workspaces in `/Users/Shared/rhythmbot_cap/` and denies
+Read/Glob/Grep on the repository, the home directory (which also holds
+Claude's transcripts of other runs) and every sibling workspace. Bash is
+denied, except `./evaluate.sh` with `--self-test`. Probed: reads of the
+repository, `~/.claude` and a sibling workspace are refused, reads and
+writes in the workspace work. Workspaces of runs started together must
+exist before either run starts. Long programs written in one go hit Claude
+Code's default output cap, so the loop raises `CLAUDE_CODE_MAX_OUTPUT_TOKENS`
+to 64k.
+
+**Results so far.** `fable-feedback` (8 revisions, harness feedback only,
+the agent cannot run anything):
+
+| revision | train (113 notes) | held-out, oracle notes | held-out, vision-model notes |
+|---|---|---|---|
+| v0 | 94.7 % | 87.2 % | 75.2 % |
+| v1 | 98.2 | 91.5 | 87.2 |
+| v2 | 98.2 | 91.3 | 87.4 |
+| v3 | 98.2 | 92.0 | 88.0 |
+| v4 | 97.3 | 91.7 | 88.3 |
+| v5 | 97.3 | 93.5 | 90.0 |
+| v6 | 98.2 | 96.3 | 92.0 |
+| v7 | 98.2 | **96.3** | **92.0** |
+
+The training score is flat from v1 while the held-out score keeps rising
+(91.5 → 96.3 %): the agent fixed the few remaining training misses by
+general changes, not chart-specific ones. Its programs were developed only
+against oracle notes; v0 completed only 23 % of slides on the vision model's
+notes (it trusted the slide waypoints exactly), v7 is much more robust.
+
+`fable-selftest` (5 revisions; the agent may also run `./evaluate.sh`, and
+did so many times within each revision):
+
+| revision | train | held-out, oracle notes | held-out, vision-model notes |
+|---|---|---|---|
+| v0 | 100 % | **97.6 %** | **95.2 %** |
+| v1 | 100 | **98.0** | **96.1** |
+| v2 | 100 | 93.7 | 92.0 |
+| v3 | 100 | 96.1 | 93.7 |
+| v4 | 100 | 96.3 | 94.1 |
+
+Testing its own program got the agent to 100 % on the training charts in
+its first revision. With nothing left to fix there, later revisions were
+judged only by the training charts, and v2 lost 4 held-out points that v3–v4
+won back only partly: the feedback signal saturated, so further revisions
+are a random walk on unseen charts. Its best revision (v1, 98.0 %) is the
+strongest learned or generated policy on exact notes.
+
+**Pixels only (`--pixels`).** The program gets no tracked notes and no
+vision model, only the 384 × 256 RGB frame, and has to write its own
+perception too: find note heads, map pixels to lanes and seconds, track
+notes across frames. `TASK_PIXELS.md` says only what a player would know
+(notes appear 1.6 s ahead and scroll at constant speed, lanes are
+equal-width columns, kinds look different). For calibration the workspace
+has 30 example frames from the training charts as PNGs (the agent can look
+at them) with the notes visible in each, and `./probe.sh`, which runs the
+agent's `probe.py` (same import rules) on every training frame every 0.1 s
+with its ground-truth notes. The policy spec is `cappx:<policy.py>`.
+
+```bash
+python -m rhythmbot.cap.loop run --name fable-pixels --iterations 5 --self-test --pixels
+```
+
+The agent calibrated the screen through the probe (6 lanes of 42.67 px,
+notes scroll at 206.26 px/s, judgment line at row 329.5, each kind's colour
+and shape), wrote colour segmentation with `scipy.ndimage`, a frame-to-frame
+tracker and a DP scheduler (920 lines), and completed every training note
+from v0:
+
+| revision | train | held-out | iid | dense | real |
+|---|---|---|---|---|---|
+| v0 | 100 % | 86.3 % | 88.6 | 77.7 | 95.1 |
+| v1 | 100 | 86.5 | | | |
+| v2 | 100 | 87.2 | | | |
+| v3 | 100 | **89.6** | | | |
+| v4 | 100 | 88.9 | 92.5 | 80.3 | 95.1 |
+
+It is the largest train/held-out gap of any approach: perception written
+against the training charts holds up (hits land 2–3 ms from the note time,
+against 11–13 ms for every other policy, because it reads time straight off
+pixel rows), but the play does not, especially on the denser held-out charts
+(80 %).
+
+### External camera (`--view camera`)
+
+The frame above is the game's own render. With `--view camera` the
+perception stage sees the screen through an `RgbdSensor` instead (`camera.py`):
+a 384 × 256 camera beside and above the screen, so the screen is in
+perspective, the arm and gripper are in the picture and hide the notes under
+them, and the image has sensor noise (σ = 3). The screen body's label image
+marks its pixels, and those pixels get the game frame, looked up once by
+intersecting each camera ray with the screen plane. `play`, `evaluate`, the
+CaP loop (`--view camera`, task `TASK_CAMERA.md`) and BC collection take it.
+Calibration examples are recorded while the classical planner plays, so the
+arm moves in them as a competent player's would.
+
+```bash
+python -m rhythmbot.play --demo --view camera
+python -m rhythmbot.cap.loop run --name fable-camera --iterations 5 --self-test --view camera
+```
+
+| camera CaP revision | train | held-out | iid | dense | real |
+|---|---|---|---|---|---|
+| v0 | 99.1 % | 95.2 % | 97.0 | 89.8 | 100 |
+| v1 | 100 | 95.7 | 99.0 | 88.5 | 100 |
+| v2 | 99.1 | **97.2** | 99.0 | 93.0 | 100 |
+| v3, v4 | 100 | 96.5 | 99.0 | 91.1 | 100 |
+
+The program that saw the camera did better than the one that saw the clean
+render (97.2 % against 89.6 %). Its losses are again on the dense charts,
+where the classical planner gets 100 %; the screen-pixels policy fed the
+camera image scores 0 %. Classical play is unchanged by the camera (99.1 %
+on `cap-train` either way).
+
+## Comparison
+
+Held-out completion over all 20 charts (460 notes), best revision or final
+model of each:
+
+| approach | input | held-out | with vision-model notes |
+|---|---|---|---|
+| classical planner | tracked notes | 100 % | 98.0 % |
+| code-as-policy, self-test (v1) | tracked notes | 98.0 | 96.1 |
+| code-as-policy, harness feedback only (v7) | tracked notes | 96.3 | 92.0 |
+| code-as-policy, camera only (v2) | **camera image**, own perception code | 97.2 | – |
+| code-as-policy, pixels only (v3) | **frame**, own perception code | 89.6 | – |
+| BC diffusion, from classical | **frame** | **98.7** | – |
+| BC diffusion, state teacher | tracked notes | 95.2 | 88.5 |
+| BC diffusion, trained on vision notes | tracked notes | – | 95.0 |
+| BC, pixel student of MLP teacher | **frame** | 91.1 | – |
+| BC MLP, state teacher | tracked notes | 89.6 | 80.7 |
+
+* On tracked notes, a generated program that could test itself (98.0 %)
+  beats every cloned policy (≤ 95.2 %), at about $13 of agent time and no
+  demonstrations; from pixels it is the other way round: pixel BC from the
+  planner (98.7 %) beats the agent's own perception + control (89.6 %).
+* Letting the agent run the simulator itself is worth more than feedback
+  rounds: one self-tested revision (97.6 %) beats eight feedback-only
+  revisions (96.3 %).
+* Every revision's program and `history.json` (scores, agent replies, cost)
+  are in `results/cap/<run>/`; e.g. `python -m rhythmbot.play --demo --policy
+  cap:results/cap/fable-selftest/policy_v1.py` or `--policy
+  cappx:results/cap/fable-pixels/policy_v3.py`.
+* Agent costs are the conversation's running total as reported by Claude
+  Code: $18 for 8 feedback revisions, $29 for 5 self-test revisions, $24
+  for 5 pixels revisions (Fable).
+* Agents probe their sandbox: in every run they tried to find the project
+  source, write Claude's auto-memory, or run commands with the sandbox off;
+  all denied (see *Isolation*).
 
 ## Known limits / next steps
 
@@ -591,9 +873,8 @@ lets chords score.
 * Touch is geometric, not physical. Switching to a compliant (hydroelastic)
   screen and the station's `contact_results` port would let contact force
   be a metric too; `TouchSensor` is the only place to change.
-* The 2D frame is rendered from the chart, not from a Drake camera. An
-  `RgbdSensor` looking at the Meshcat highway could replace `GameScreen`
-  once the vision model should see the real scene.
+* The camera view (`--view camera`) is one-arm only and its pose is fixed
+  relative to the screen; with two arms' wider screen it would need moving.
 * The soundtrack is synthesized from the chart (click track plus a tone per
   note). Playing a real song means authoring or importing a chart against
   its beat grid; `Chart.bpm` and note times are all that is needed.

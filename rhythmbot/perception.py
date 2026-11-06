@@ -232,13 +232,23 @@ class TorchDetector(NoteDetector):
         import torch  # lazy: optional dependency
 
         self.torch = torch
-        self.model = torch.jit.load(model_path, map_location=device)
+        sidecar = Path(model_path).with_suffix(".json")
+        meta = json.loads(sidecar.read_text()) if sidecar.exists() else {}
+        try:
+            self.model = torch.jit.load(model_path, map_location=device)
+        except RuntimeError:
+            # A TorchScript archive from a newer torch does not load in an
+            # older one (CUDA builds lag behind); fall back to the plain
+            # weights `<model>.state.pt` (`train.py --export-state`).
+            from .train import NoteNet
+
+            self.model = NoteNet(meta["n_lanes"], meta["rows"], meta["k_slots"]).to(device)
+            state = torch.load(Path(model_path).with_suffix(".state.pt"), map_location=device)
+            self.model.load_state_dict(state)
         self.model.eval()
         self.device = device
         self.threshold = threshold
         self.cfg = cfg
-        sidecar = Path(model_path).with_suffix(".json")
-        meta = json.loads(sidecar.read_text()) if sidecar.exists() else {}
         self.approach = meta.get("approach_time", cfg.layout.approach_time)
         self.max_duration = meta.get("max_duration", 2.0)
         self.duration_norm = meta.get("duration_norm", "linear")

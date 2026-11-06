@@ -7,6 +7,7 @@
     HEADLESS=1 python -m rhythmbot.play --demo            # no browser, fast
     python -m rhythmbot.play --chart charts/random-1.json --detector color
     python -m rhythmbot.play --random 7 --noise 0.03 --latency 0.1
+    python -m rhythmbot.play --demo --policy bc:results/bc_policy.pt   # another policy
     python -m rhythmbot.play --chart charts/song.json --arms 2  # two arms, wider lanes
 
 Diagram:
@@ -41,29 +42,44 @@ from .config import DEFAULT, Config, Perception, two_arm_config
 from .game import HighwayVisualizer
 from .judge import Judge
 from .perception import make_detector
-from .planner import ClassicalPlanner
+from .planner import ClassicalPlanner, Policy
+from .policies import make_policy
 from .robot import WSG_NAME, Robot, TouchSensor
 from .viz import HEADLESS, get_meshcat, keep_meshcat_open, publish_recording, start_recording
 
 
-def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None, meshcat):
+def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None, meshcat, policy: Policy | None = None,
+          view: str = "screen"):
+    """`view`: what the perception stage sees, the game's own frame
+    ("screen") or an external camera on the screen ("camera")."""
     builder = DiagramBuilder()
-    robot = Robot(builder, cfg, meshcat)
+    robot = Robot(builder, cfg, meshcat, camera=view == "camera")
 
     # Start hovering over the judgment line: the middle of it, or with two
     # arms, the middle of each hand's half.
     X_GT = np.array([0.0, cfg.gripper.tip_offset, 0.0])
     X_WG0s = []
     policies = []
+    if policy is not None and cfg.arms.n != 1:
+        raise ValueError("--policy other than classical plays with one arm only")
     for k, arm in enumerate(robot.arms):
-        policy = ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
-        X_WT0 = initial_tip_pose(cfg, policy.rest_x())
+        p = policy or ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
+        X_WT0 = initial_tip_pose(cfg, p.rest_x() if hasattr(p, "rest_x") else 0.0)
         q0 = arm.solve_start_configuration(X_WT0 @ RigidTransform(-X_GT))
         X_WG0s.append(arm.gripper_pose_at(q0))
-        policies.append(policy)
+        policies.append(p)
 
     detector = make_detector(detector_name, chart, cfg, model_path)
-    screen = builder.AddSystem(GameScreen(chart, cfg))
+    if view == "camera":
+        from .camera import CAMERA_NAME, CameraScreen
+
+        label = int(robot.plant.GetBodyByName("screen").index())
+        screen = builder.AddSystem(CameraScreen(chart, cfg, label))
+        builder.Connect(robot.station.GetOutputPort(f"{CAMERA_NAME}.rgb_image"), screen.GetInputPort("rgb_image"))
+        builder.Connect(robot.station.GetOutputPort(f"{CAMERA_NAME}.label_image"), screen.GetInputPort("label_image"))
+    else:
+        screen = builder.AddSystem(GameScreen(chart, cfg))
+    screen.set_name("screen")
     brain = builder.AddSystem(RhythmBrain(detector, policies, cfg, X_WG0s))
     brain.set_name("brain")
     touch = builder.AddSystem(TouchSensor(robot.plant, cfg, meshcat))
@@ -102,13 +118,16 @@ def run(
     song: str | Path | None = None,
     song_offset: float = 0.0,
     song_rate: float = 1.0,
+    policy: Policy | None = None,
+    policy_name: str = "classical",
+    view: str = "screen",
 ) -> dict:
     meshcat = get_meshcat()
     if meshcat is not None:
         # Look at the screen from the robot's front-left, slightly above.
         c = cfg.layout.screen_center()
         meshcat.SetCameraPose(c + np.array([0.9, -1.1, 0.8]), c + np.array([0.0, 0.15, 0.0]))
-    diagram, robot, brain, judge = build(chart, cfg, detector, model_path, meshcat)
+    diagram, robot, brain, judge = build(chart, cfg, detector, model_path, meshcat, policy, view)
     simulator = Simulator(diagram)
     context = simulator.get_mutable_context()
     robot.initialize(context)
@@ -143,6 +162,8 @@ def run(
     rep = judge.report(
         extra={
             "detector": detector,
+            "policy": policy_name,
+            "view": view,
             "skipped_by_planner": sorted(brain.last_state.skipped_note_ids),
             "n_detections": brain.last_state.n_detections,
             "sim_seconds": t_end,
@@ -154,8 +175,9 @@ def run(
         Judge.print_report(rep)
         print(f"(simulated {t_end:.1f} s in {wall:.1f} s wall)")
     if out_path is None:
+        tag = "" if policy_name == "classical" else f"-{policy_name.split(':')[0]}"
         arms = "-2arm" if cfg.arms.n == 2 else ""
-        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}{arms}.json"
+        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}{tag}{arms}.json"
     Judge.save_report(rep, out_path)
     if not quiet:
         print(f"report -> {out_path}")
@@ -170,6 +192,12 @@ def main(argv=None):
     src.add_argument("--demo", action="store_true", help="the built-in demo chart (default)")
     ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch"])
     ap.add_argument("--model", help="TorchScript model for --detector torch")
+    ap.add_argument(
+        "--policy", default="classical",
+        help="classical, bc:<model.pt> (behavior cloning) or cap:<policy.py> (generated program)",
+    )
+    ap.add_argument("--view", default="screen", choices=["screen", "camera"],
+                    help="perception input: the game's own frame, or an external camera on the screen")
     ap.add_argument("--arms", type=int, default=1, choices=[1, 2], help="how many arms play")
     ap.add_argument("--noise", type=float, default=0.0, help="oracle hit-time noise std (s)")
     ap.add_argument("--latency", type=float, default=0.0, help="oracle detection latency (s)")
@@ -224,6 +252,9 @@ def main(argv=None):
         song=song,
         song_offset=song_offset,
         song_rate=args.tempo,
+        policy=None if args.policy == "classical" else make_policy(args.policy, cfg),
+        policy_name=args.policy,
+        view=args.view,
     )
     if args.hold and not HEADLESS:
         print("Holding Meshcat open; Ctrl-C to quit.")

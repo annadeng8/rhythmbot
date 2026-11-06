@@ -246,10 +246,14 @@ class Arm:
 class Robot:
     """Everything built onto the DiagramBuilder for the arms."""
 
-    def __init__(self, builder: DiagramBuilder, cfg: Config, meshcat: Meshcat | None):
+    def __init__(self, builder: DiagramBuilder, cfg: Config, meshcat: Meshcat | None, camera: bool = False):
         self.cfg = cfg
         screen_sdf = write_screen_sdf(cfg)
         self.scenario = LoadScenario(data=make_scenario_yaml(cfg, screen_sdf))
+        if camera:
+            from .camera import CAMERA_NAME, camera_config
+
+            self.scenario.cameras = {**self.scenario.cameras, CAMERA_NAME: camera_config(cfg)}
         self.station = builder.AddSystem(MakeHardwareStation(self.scenario, meshcat=meshcat))
         self.station.set_name("station")
         self.plant = self.station.GetSubsystemByName("plant")

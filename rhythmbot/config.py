@@ -204,6 +204,21 @@ class Perception:
 
 
 @dataclass(frozen=True)
+class Camera:
+    """The external camera of `--view camera` (see `camera.py`).  Its pose
+    is given relative to the screen centre."""
+
+    # 384 x 256 halves to the 192 x 128 the pixel BC encoder takes.
+    width: int = 384
+    height: int = 256
+    fov_y_deg: float = 45.0
+    eye_offset: tuple[float, float, float] = (0.55, -0.05, 0.65)
+    target_offset: tuple[float, float, float] = (0.07, 0.0, 0.0)
+    # Per-pixel Gaussian sensor noise (0-255 scale).
+    noise_std: float = 3.0
+
+
+@dataclass(frozen=True)
 class Arms:
     """How many iiwa + WSG arms play, and where they stand.
 
@@ -232,6 +247,7 @@ class Config:
     motion: Motion = field(default_factory=Motion)
     perception: Perception = field(default_factory=Perception)
     arms: Arms = field(default_factory=Arms)
+    camera: Camera = field(default_factory=Camera)
     # Simulation
     plant_time_step: float = 0.001
     diffik_time_step: float = 0.005
