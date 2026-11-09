@@ -958,3 +958,22 @@ flat diagnostic view.
 The export writes 15 fps PNGs and `report.json`. `--duration 0.1` is a quick
 rendering warmup. `--chart` selects another existing chart. The original demo
 still includes two cross-hand slides unsupported by the fixed-hand planner.
+
+### Concert-screen art revision
+
+`SekaiScreen` now draws a translucent, contracting highway over an original
+purple concert backdrop, twelve fine lane divisions, luminous cyan taps,
+green sustain/slide ribbons, a white score HUD, combo, judgment flashes and
+hit particles. It follows the visual vocabulary of the
+[COLORFUL STAGE gameplay reference](https://www.cosmocover.com/newsroom/tap-to-the-rhythm-hatsune-miku-colorful-stage-mobile-game-to-offer-public-beta-october-5-20/),
+without importing character art. This is inspired artwork, not the original
+game or a complete mechanics port: the controller still has six logical lanes,
+and there is no flick mechanic. The displayed score uses our judge's 3/2/1
+points, not the original game's scoring system.
+
+Perspective contraction is exactly identity at the judgment line: lane centers
+still coincide with `Layout.lane_x`, and hit y is unchanged. The perception
+renderer stays calibrated. Combo, flashes and particles use actual judge
+results; none are fabricated from chart timing. The recording includes a
+readable inset of the *same* live display texture alongside the actual Drake
+camera, since the physical screen is small in the whole-robot view.

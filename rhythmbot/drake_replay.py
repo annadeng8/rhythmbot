@@ -14,26 +14,11 @@ from pydrake.all import Simulator
 from .camera import CameraScreen, CAMERA_NAME
 from .chart import Chart, demo_chart
 from .config import Camera, Perception, two_arm_config
-from .game import FrameRenderer
 from .play import build
 from .judge import Judge
 
 
-class ScreenArt(FrameRenderer):
-    """Flat physical screen; perspective comes from the Drake camera."""
-    def render(self, chart, t):
-        image=Image.fromarray(super().render(chart,t))
-        d=ImageDraw.Draw(image)
-        # Keep the same physical lane/time mapping used by the controller.
-        for note in chart.visible(t,self.layout.approach_time):
-            lane=note.lane_at(max(t,note.time))
-            x=self.lane_to_px(lane); y=self.dt_to_row(max(0,note.time-t))
-            half=self.lane_px*.40
-            d.line((x-half,y-2,x+half,y-2),fill=(232,255,250),width=2)
-        d.line((0,self.hit_row,self.W,self.hit_row),fill=(226,221,255),width=4)
-        d.rectangle((0,self.hit_row+12,self.W,self.H),fill=(22,25,46))
-        d.text((12,self.hit_row+20),'RHYTHM / BOT    |    BIMANUAL LIVE',fill=(108,240,229))
-        return np.asarray(image)
+from .sekai_screen import SekaiScreen
 
 
 def main():
@@ -53,7 +38,8 @@ def main():
     diagram,robot,brain,judge=build(chart,cfg,'oracle',None,None,record_camera=True)
     sim=Simulator(diagram); context=sim.get_mutable_context();robot.initialize(context)
     compositor=CameraScreen(chart,cfg,int(robot.plant.GetBodyByName('screen').index()))
-    compositor.renderer=ScreenArt(cfg)
+    compositor.renderer=SekaiScreen(cfg)
+    compositor.renderer.results=judge.results
     station_context=robot.station.GetMyContextFromRoot(context)
     args.out.mkdir(parents=True,exist_ok=True)
     window = None
@@ -76,6 +62,16 @@ def main():
         complete=sum(r.completed is True for r in judge.results.values())
         d.text((22,12),'DRAKE  /  TWO IIWA + WSG',font=font,fill=(130,246,227))
         d.text((590,12),f'{t:05.2f}s   |   {complete:02d}/{len(chart.notes)} COMPLETE',font=font,fill='white')
+        # A readable inset shows the exact same display texture, not a second game.
+        canvas=Image.new('RGB',(1440,720),(19,20,38))
+        canvas.paste(frame,(0,0))
+        screen=Image.fromarray(compositor.renderer.render(chart,float(t))).resize((480,320),Image.Resampling.LANCZOS)
+        canvas.paste(screen,(960,180))
+        cd=ImageDraw.Draw(canvas)
+        cd.text((984,115),'LIVE SCREEN / SAME SIMULATION',font=font,fill=(196,246,239))
+        cd.text((984,535),'Two Drake arms + WSG grippers',font=font,fill='white')
+        cd.text((984,570),'Contact-aligned judgment line',font=font,fill=(185,184,209))
+        frame=canvas
         frame.save(args.out/f'{i:06d}.png')
         if window is not None:
             panel.image=ImageTk.PhotoImage(frame)
