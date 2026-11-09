@@ -931,3 +931,30 @@ All new remote files, temporary files and caches live under
 its counters come from the live judge. Circles show measured lateral fingertip
 positions at the judgment line, with filled centers indicating contact; they
 are not a full 3D robot visualization (that remains in Meshcat).
+
+## Actual Drake bimanual environment (3D)
+
+The main robot demonstration is now the **Drake camera view**, showing both
+simulated iiwa arms and their WSG grippers playing the physical screen:
+
+![Two Drake arms playing the game](docs/drake-bimanual.gif)
+
+```bash
+# Desktop: actual 3D camera, simulation, and screen, with a live window
+HEADLESS=1 python -m rhythmbot.drake_replay --live --out results/drake-frames
+# Server: use a virtual display for Drake's renderer
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay --out results/drake-frames
+```
+
+`HEADLESS=1` disables the separate Meshcat server, not the Drake camera.
+The environment uses the existing two-arm station, differential IK controllers,
+planner, touch sensor and judge. The game is mapped onto the physical screen
+with camera rays and Drake body labels, preserving gripper occlusion. The
+screen artwork is a composited display surface, not contact geometry; the
+existing geometric touch model remains unchanged. No scripted arm animation
+or 2D hand replacement is used. The earlier `stage` viewer is only a secondary
+flat diagnostic view.
+
+The export writes 15 fps PNGs and `report.json`. `--duration 0.1` is a quick
+rendering warmup. `--chart` selects another existing chart. The original demo
+still includes two cross-hand slides unsupported by the fixed-hand planner.
