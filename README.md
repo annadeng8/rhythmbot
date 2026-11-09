@@ -881,3 +881,53 @@ model of each:
 * Replanning restarts from the commanded (not measured) pose; DiffIK
   tracking lag is small here (std of timing error ≈ 15 ms) but a measured-
   state feedback term would make it robust to saturation on fast charts.
+
+## Perspective stage preview
+
+The SEKAI-inspired presentation uses perspective lanes, mint note bars, green
+sustain ribbons and cyan/pink left/right target indicators. Its projection is
+adapted from the local RoboRhythm renderer. The calibrated detector frames stay
+unchanged, so existing vision checkpoints retain their input geometry.
+
+```bash
+python3 -m rhythmbot.stage
+python3 -m rhythmbot.stage --chart charts/demo.json
+python3 -m rhythmbot.stage --snapshot docs/sekai-stage.png --time 5.8
+```
+
+The preview needs NumPy and Pillow (plus Tk for the window). Space pauses and R
+restarts. It displays chart targets, not measured physics or judged scores.
+
+![Perspective stage](docs/sekai-stage.png)
+
+The Drake player now defaults to **two arms** for the classical screen policy:
+`python -m rhythmbot.play --demo --hold`. Use `--arms 1` for a single arm.
+Camera and custom-policy runs retain their supported single-arm default.
+The standalone preview displays chart targets. Use the measured replay export
+below to connect this presentation to the Drake simulation.
+
+### Measured bimanual replay
+
+Export the stage from the actual Drake touch sensor and judge (four fingertips,
+cyan left / pink right), rather than chart-target animation:
+
+```bash
+HEADLESS=1 python -m rhythmbot.play --demo --no-realtime \
+  --stage-frames frames --out results/sekai-demo-2arm.json
+ffmpeg -framerate 30 -i frames/%06d.png -filter_complex \
+  'fps=15,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse' \
+  docs/sekai-bimanual.gif
+```
+
+![Measured dual-arm stage replay](docs/sekai-bimanual.gif)
+
+Validated on gpu156 using its existing Drake environment, with two CPU threads
+and no GPU. The 17.5-second original demo completes 16/18 notes; both cross-hand
+slides are skipped by the existing fixed-hand planner. This remains a real
+limitation, not a rendering success counted as a robot success. A 0.2-second
+startup warmup checked construction only and is not a scoring evaluation.
+All new remote files, temporary files and caches live under
+`/data/YifanKang/rhythmbot_sekai_20261109`. Stage export streams PNG files at 30 fps;
+its counters come from the live judge. Circles show measured lateral fingertip
+positions at the judgment line, with filled centers indicating contact; they
+are not a full 3D robot visualization (that remains in Meshcat).

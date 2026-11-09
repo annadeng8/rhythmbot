@@ -121,6 +121,7 @@ def run(
     policy: Policy | None = None,
     policy_name: str = "classical",
     view: str = "screen",
+    stage_frames: str | Path | None = None,
 ) -> dict:
     meshcat = get_meshcat()
     if meshcat is not None:
@@ -152,7 +153,23 @@ def run(
                     chart, cfg.layout.n_lanes, PROJECT_ROOT / "results" / f"{chart.name}.wav"
                 )
                 player = audio.play(wav)
-        simulator.AdvanceTo(t_end)
+        if stage_frames is None:
+            simulator.AdvanceTo(t_end)
+        else:
+            from .stage import StageRenderer
+            from .robot import unpack_touch
+            destination = Path(stage_frames)
+            destination.mkdir(parents=True, exist_ok=True)
+            renderer = StageRenderer(lanes=cfg.layout.n_lanes)
+            index = 0
+            while context.get_time() < t_end:
+                simulator.AdvanceTo(min(t_end, context.get_time() + 1 / 30))
+                jc = judge.GetMyContextFromRoot(context)
+                touches = [(down, cfg.layout.x_to_lane(p[0]))
+                           for down, p in unpack_touch(judge.touch_port.Eval(jc))]
+                renderer.render(chart, context.get_time(), touches, judge.results).save(
+                    destination / f"{index:06d}.png")
+                index += 1
     finally:
         audio.stop(player)
     wall = time.time() - wall
@@ -186,6 +203,7 @@ def run(
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--stage-frames", type=Path, help="export measured stage replay PNGs at 30 fps")
     src = ap.add_mutually_exclusive_group()
     src.add_argument("--chart", help="chart JSON file")
     src.add_argument("--random", type=int, metavar="SEED", help="generate a random chart")
@@ -198,7 +216,7 @@ def main(argv=None):
     )
     ap.add_argument("--view", default="screen", choices=["screen", "camera"],
                     help="perception input: the game's own frame, or an external camera on the screen")
-    ap.add_argument("--arms", type=int, default=1, choices=[1, 2], help="how many arms play")
+    ap.add_argument("--arms", type=int, default=None, choices=[1, 2], help="arms (default: 2; camera/custom policies: 1)")
     ap.add_argument("--noise", type=float, default=0.0, help="oracle hit-time noise std (s)")
     ap.add_argument("--latency", type=float, default=0.0, help="oracle detection latency (s)")
     ap.add_argument("--duration", type=float, help="simulate this long instead of the whole chart")
@@ -232,6 +250,8 @@ def main(argv=None):
         song = None
     song_offset = args.song_offset if args.song_offset is not None else chart.audio_offset
 
+    if args.arms is None:
+        args.arms = 1 if args.view == "camera" or args.policy != "classical" else 2
     base = two_arm_config() if args.arms == 2 else DEFAULT
     cfg = dataclasses.replace(
         base,
@@ -255,6 +275,7 @@ def main(argv=None):
         policy=None if args.policy == "classical" else make_policy(args.policy, cfg),
         policy_name=args.policy,
         view=args.view,
+        stage_frames=args.stage_frames,
     )
     if args.hold and not HEADLESS:
         print("Holding Meshcat open; Ctrl-C to quit.")
