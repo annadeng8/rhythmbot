@@ -1104,3 +1104,77 @@ The 342-frame, 15 fps recording lasts 22.8 s. Minimum sampled tip-center distanc
 was 18.6 mm and gripper-center distance 219.8 mm; these are diagnostics, not full
 collision certification. Run used the existing gpu156 Drake environment, two
 CPU threads, no GPU, and task-local outputs/caches under `/data/YifanKang/`.
+
+## Systematic bimanual experiments
+
+A reproducible 61-run suite expands the single-tip demonstration into paired
+comparisons. Generate and inspect the manifest before running:
+
+```bash
+python -m rhythmbot.experiments --out results/bimanual-suite-v1 --prepare
+HEADLESS=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+  python -m rhythmbot.experiments --out results/bimanual-suite-v1 --workers 2
+python scripts/plot_bimanual_suite.py results/bimanual-suite-v1
+```
+
+The same command resumes compatible completed jobs. Source and chart hashes
+prevent accidental mixing across versions. Use a new output directory after
+changing source. Each simulation saves the full configuration and all per-note
+judgments; exceptions are reported separately and never converted into passes.
+Warmup is only an initialization check, excluded from the matrix scores.
+
+| Experiment | Conditions | Simulations |
+|---|---|---:|
+| Crossing speed | 0.3/0.4/0.5/0.6/0.8 s per crossing × 3 chart variants × 2 tools | 30 |
+| Parallel holds + local slides | 3 variants × 2 tools | 6 |
+| Dense two-note chords + deliberate three-note capacity stress | 3 variants × 2 tools | 6 |
+| Calibrated-image perception | Color detector on stylus: 0.6 s crossing / holds / chords × 3 variants | 9 |
+| Handoff ablation | Coordination disabled: stylus at 0.4/0.6 s × 3 variants | 6 |
+| Existing anchor charts | Original demo and hard chart × 2 tools | 4 |
+
+The main comparisons use the classical controller and exact chart (oracle)
+input. Color perception reads the calibrated `FrameRenderer`, **not** the new
+concert artwork or an external camera; camera/learned-vision robustness is not
+established by this suite. Both tools use the same strict slide judge. The
+tool comparison changes gripper opening, tool length, tilt and usable contact
+count together, so it is a configuration comparison, not an isolated causal
+measurement of finger count. Handoff ablation only disables path partitioning.
+Three seeds produce paired chart variants, not independent stochastic repeats;
+no confidence intervals or significance claims are attached to this pilot.
+The chord family intentionally includes rows beyond two simultaneous contacts.
+
+Results: [full table](results/bimanual-suite-v1/summary.md),
+[machine-readable summary](results/bimanual-suite-v1/summary.json),
+[manifest](results/bimanual-suite-v1/manifest.json), and per-run JSON in `runs/`.
+
+![Bimanual experiment overview](results/bimanual-suite-v1/overview.png)
+
+Within each crossing chart, the first slide is a four-crossing zigzag at the
+listed seconds-per-crossing parameter. Two subsequent opposite-direction
+single-crossing slides each take **twice** that duration, separated by 0.2 s.
+Thus the table aggregates three different notes; panel A isolates the first
+zigzag so its failures are not diluted by the easier single-crossing controls.
+
+Completed pilot: **61/61 simulations, zero execution errors, zero missing
+reports**, plus 13 passing tests. All 61 result fingerprints were verified
+against the frozen manifest; a resume probe reused an existing result without
+re-running simulation.
+
+- Four-crossing zigzag: both tool configurations fail all three variants at
+  0.3 and 0.4 s per crossing; all three pass at 0.5, 0.6 and 0.8 s. This brackets
+  a pattern-specific transition between 0.4 and 0.5 s, not a universal limit.
+- Disabling handoff: 0/9 crossing notes complete at both 0.4 and 0.6 s settings,
+  versus 6/9 and 9/9 with coordination enabled.
+- Parallel holds/local slides: 18/18 for each tool and for stylus color input.
+- Dense/chord stress: stylus 72/81, two-finger WSG 81/81. The nine stylus misses
+  occur in the deliberately over-capacity three-note rows.
+- Perception: at the 0.6 s crossing condition, stylus oracle achieves 9/9 and
+  calibrated-image color achieves 6/9; all three additional failures are
+  missing-tail failures. Holds and chord totals are unchanged by color input.
+- Anchor reproduction: both tools score 18/18 on the original demo and 23/24
+  on the harder handoff chart.
+
+These results prioritize two follow-ups: inspect inferred slide endpoints for
+the color detector, and improve trajectory execution in the 0.4–0.5 s zigzag
+transition. BC/LLM policy training and real-camera perception are not part of
+this completed classical-control pilot.

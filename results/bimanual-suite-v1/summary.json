@@ -1,0 +1,697 @@
+{
+  "expected": 61,
+  "finished": 61,
+  "errors": [],
+  "missing": [],
+  "rows": [
+    {
+      "family": "crossing",
+      "speed": 0.3,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 6,
+      "notes": 9,
+      "micro_completion": 0.6666666666666666,
+      "macro_completion": 0.6666666666666666,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 6,
+          "total": 9
+        }
+      },
+      "failures": {
+        "tail_missing": 3
+      },
+      "max_gap_s": 0.10000000000000002,
+      "wall_seconds": 13.721172094345093
+    },
+    {
+      "family": "crossing",
+      "speed": 0.3,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 6,
+      "notes": 9,
+      "micro_completion": 0.6666666666666666,
+      "macro_completion": 0.6666666666666666,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 6,
+          "total": 9
+        }
+      },
+      "failures": {
+        "tail_missing": 3
+      },
+      "max_gap_s": 0.12500000000000003,
+      "wall_seconds": 11.439238786697388
+    },
+    {
+      "family": "crossing",
+      "speed": 0.4,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 6,
+      "notes": 9,
+      "micro_completion": 0.6666666666666666,
+      "macro_completion": 0.6666666666666666,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 6,
+          "total": 9
+        }
+      },
+      "failures": {
+        "contact_break": 3
+      },
+      "max_gap_s": 0.085,
+      "wall_seconds": 15.483070850372314
+    },
+    {
+      "family": "crossing",
+      "speed": 0.4,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 6,
+      "notes": 9,
+      "micro_completion": 0.6666666666666666,
+      "macro_completion": 0.6666666666666666,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 6,
+          "total": 9
+        }
+      },
+      "failures": {
+        "contact_break": 3
+      },
+      "max_gap_s": 0.085,
+      "wall_seconds": 12.834029197692871
+    },
+    {
+      "family": "crossing",
+      "speed": 0.4,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": false,
+      "charts": 3,
+      "completed": 0,
+      "notes": 9,
+      "micro_completion": 0.0,
+      "macro_completion": 0.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 0,
+          "total": 9
+        }
+      },
+      "failures": {
+        "head_miss": 9
+      },
+      "max_gap_s": 0.0,
+      "wall_seconds": 15.086268663406372
+    },
+    {
+      "family": "crossing",
+      "speed": 0.5,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 9,
+      "notes": 9,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 9,
+          "total": 9
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.030000000000000002,
+      "wall_seconds": 17.27051281929016
+    },
+    {
+      "family": "crossing",
+      "speed": 0.5,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 9,
+      "notes": 9,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 9,
+          "total": 9
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.030000000000000002,
+      "wall_seconds": 13.857630729675293
+    },
+    {
+      "family": "crossing",
+      "speed": 0.6,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 9,
+      "notes": 9,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 9,
+          "total": 9
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.015,
+      "wall_seconds": 19.098241090774536
+    },
+    {
+      "family": "crossing",
+      "speed": 0.6,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 9,
+      "notes": 9,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 9,
+          "total": 9
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.015,
+      "wall_seconds": 15.337093830108643
+    },
+    {
+      "family": "crossing",
+      "speed": 0.6,
+      "tool": "stylus",
+      "detector": "color",
+      "handoff": true,
+      "charts": 3,
+      "completed": 6,
+      "notes": 9,
+      "micro_completion": 0.6666666666666666,
+      "macro_completion": 0.6666666666666666,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 6,
+          "total": 9
+        }
+      },
+      "failures": {
+        "tail_missing": 3
+      },
+      "max_gap_s": 0.3800000000000002,
+      "wall_seconds": 30.479124546051025
+    },
+    {
+      "family": "crossing",
+      "speed": 0.6,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": false,
+      "charts": 3,
+      "completed": 0,
+      "notes": 9,
+      "micro_completion": 0.0,
+      "macro_completion": 0.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 0,
+          "total": 9
+        }
+      },
+      "failures": {
+        "head_miss": 9
+      },
+      "max_gap_s": 0.0,
+      "wall_seconds": 18.70028519630432
+    },
+    {
+      "family": "crossing",
+      "speed": 0.8,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 9,
+      "notes": 9,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 9,
+          "total": 9
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.015,
+      "wall_seconds": 22.483297109603882
+    },
+    {
+      "family": "crossing",
+      "speed": 0.8,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 9,
+      "notes": 9,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 9,
+          "total": 9
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.015,
+      "wall_seconds": 18.590118885040283
+    },
+    {
+      "family": "holds",
+      "speed": null,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 18,
+      "notes": 18,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 12,
+          "total": 12
+        },
+        "slide": {
+          "completed": 6,
+          "total": 6
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.005,
+      "wall_seconds": 22.66365885734558
+    },
+    {
+      "family": "holds",
+      "speed": null,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 18,
+      "notes": 18,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 12,
+          "total": 12
+        },
+        "slide": {
+          "completed": 6,
+          "total": 6
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.005,
+      "wall_seconds": 16.479021072387695
+    },
+    {
+      "family": "holds",
+      "speed": null,
+      "tool": "stylus",
+      "detector": "color",
+      "handoff": true,
+      "charts": 3,
+      "completed": 18,
+      "notes": 18,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "total": 0
+        },
+        "hold": {
+          "completed": 12,
+          "total": 12
+        },
+        "slide": {
+          "completed": 6,
+          "total": 6
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.005,
+      "wall_seconds": 32.408135175704956
+    },
+    {
+      "family": "chords",
+      "speed": null,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 72,
+      "notes": 81,
+      "micro_completion": 0.8888888888888888,
+      "macro_completion": 0.8888888888888888,
+      "by_kind": {
+        "tap": {
+          "completed": 72,
+          "total": 81
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 0,
+          "total": 0
+        }
+      },
+      "failures": {
+        "head_miss": 9
+      },
+      "max_gap_s": 0.0,
+      "wall_seconds": 19.402523279190063
+    },
+    {
+      "family": "chords",
+      "speed": null,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 3,
+      "completed": 81,
+      "notes": 81,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 81,
+          "total": 81
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 0,
+          "total": 0
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.0,
+      "wall_seconds": 15.853891611099243
+    },
+    {
+      "family": "chords",
+      "speed": null,
+      "tool": "stylus",
+      "detector": "color",
+      "handoff": true,
+      "charts": 3,
+      "completed": 72,
+      "notes": 81,
+      "micro_completion": 0.8888888888888888,
+      "macro_completion": 0.8888888888888888,
+      "by_kind": {
+        "tap": {
+          "completed": 72,
+          "total": 81
+        },
+        "hold": {
+          "completed": 0,
+          "total": 0
+        },
+        "slide": {
+          "completed": 0,
+          "total": 0
+        }
+      },
+      "failures": {
+        "head_miss": 9
+      },
+      "max_gap_s": 0.0,
+      "wall_seconds": 31.130993843078613
+    },
+    {
+      "family": "anchor-demo",
+      "speed": null,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 1,
+      "completed": 18,
+      "notes": 18,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 14,
+          "total": 14
+        },
+        "hold": {
+          "completed": 2,
+          "total": 2
+        },
+        "slide": {
+          "completed": 2,
+          "total": 2
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.005,
+      "wall_seconds": 12.504884958267212
+    },
+    {
+      "family": "anchor-demo",
+      "speed": null,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 1,
+      "completed": 18,
+      "notes": 18,
+      "micro_completion": 1.0,
+      "macro_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "completed": 14,
+          "total": 14
+        },
+        "hold": {
+          "completed": 2,
+          "total": 2
+        },
+        "slide": {
+          "completed": 2,
+          "total": 2
+        }
+      },
+      "failures": {},
+      "max_gap_s": 0.005,
+      "wall_seconds": 8.56999659538269
+    },
+    {
+      "family": "anchor-stylus-hard-handoffs",
+      "speed": null,
+      "tool": "stylus",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 1,
+      "completed": 23,
+      "notes": 24,
+      "micro_completion": 0.9583333333333334,
+      "macro_completion": 0.9583333333333334,
+      "by_kind": {
+        "tap": {
+          "completed": 12,
+          "total": 12
+        },
+        "hold": {
+          "completed": 5,
+          "total": 5
+        },
+        "slide": {
+          "completed": 6,
+          "total": 7
+        }
+      },
+      "failures": {
+        "contact_break": 1
+      },
+      "max_gap_s": 0.08,
+      "wall_seconds": 14.752101421356201
+    },
+    {
+      "family": "anchor-stylus-hard-handoffs",
+      "speed": null,
+      "tool": "two_finger",
+      "detector": "oracle",
+      "handoff": true,
+      "charts": 1,
+      "completed": 23,
+      "notes": 24,
+      "micro_completion": 0.9583333333333334,
+      "macro_completion": 0.9583333333333334,
+      "by_kind": {
+        "tap": {
+          "completed": 12,
+          "total": 12
+        },
+        "hold": {
+          "completed": 5,
+          "total": 5
+        },
+        "slide": {
+          "completed": 6,
+          "total": 7
+        }
+      },
+      "failures": {
+        "contact_break": 1
+      },
+      "max_gap_s": 0.08,
+      "wall_seconds": 11.732160806655884
+    }
+  ]
+}

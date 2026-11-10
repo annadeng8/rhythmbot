@@ -7,6 +7,8 @@ from .chart import SLIDE
 def hand_notes(notes, hand, cfg):
     if cfg.arms.n == 1:
         return notes
+    if not cfg.arms.slide_handoff:
+        return [n for n in notes if cfg.hand_for_lane(n.lane) == hand]
     out=[]
     middle=(cfg.layout.n_lanes-1)/2
     # Reach with the inner fingertip, leaving the two gripper bodies separated.

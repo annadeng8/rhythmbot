@@ -1,0 +1,18 @@
+{
+  "host": "gpu156",
+  "task_directory": "/data/YifanKang/rhythmbot_suite_v1_20261109",
+  "root_free_gb": 379,
+  "data_free_tb": 2.7,
+  "available_ram_gib": 534,
+  "swap_used_mib": 31,
+  "budget": {
+    "workers": 2,
+    "cpu_threads_per_worker": 1,
+    "ram_gb": 8,
+    "disk_gb": 2,
+    "gpus": 0
+  },
+  "shared_memory_requirement": "Not applicable: CPU Drake, no CUDA/Triton kernels",
+  "cache": "/data/YifanKang/rhythmbot_sekai_20261109/cache",
+  "monitoring": "Mid-run: 533 GiB available RAM, suite directory 18 MiB, /data still 2.7 TiB free"
+}

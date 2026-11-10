@@ -238,6 +238,7 @@ class Arms:
     """
 
     n: int = 1
+    slide_handoff: bool = True
     # Bases at x = -/+ this, on the same line as the single arm's base.
     base_x: float = 0.33
     # A hand's centre stays this far from the middle of the screen: half the
