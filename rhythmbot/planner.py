@@ -419,7 +419,9 @@ class ClassicalPlanner(Policy):
         path = [(float(off), self.L.lane_x(lane)) for off, lane in wps]
         if path[0][0] > 0.0:
             path.insert(0, (0.0, self.L.lane_x(n.lane)))
-        return _Action(n.hit_time, n.hit_time + path[-1][0], SLIDE, 0.0, path, [n])
+        side = 0 if self.hand is None else (1 if self.hand == 0 else -1)
+        width = 0.0 if self.hand is None else self.home_width
+        return _Action(n.hit_time, n.hit_time + path[-1][0], SLIDE, width, path, [n], side)
 
     # -- rolling about a holding fingertip ---------------------------------
     @staticmethod
@@ -633,7 +635,7 @@ class ClassicalPlanner(Policy):
         for off, x in a.path:
             if off < M.press_time:
                 continue
-            kfs.append(Keyframe(a.t_hit + off, x, self.touch_z, a.width, y, True))
+            kfs.append(Keyframe(a.t_hit + off, x, self.touch_z, a.width, y, True, a.side, up))
         if a.kind == TAP or a.path[-1][0] < M.press_time:
             kfs.append(Keyframe(a.t_end, a.x_end, self.touch_z, a.width, y, True, a.side, up))
         st.prev = _Release(a.t_end, a.x_end, a.width, a.kind, a.side)

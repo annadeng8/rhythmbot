@@ -125,7 +125,8 @@ class RhythmBrain(LeafSystem):
             # starts there, so the commanded pose is continuous across replans.
             s.X_WT_cmds[k] = s.plans[k].tip_pose(t)
             s.width_cmds[k] = s.plans[k].width_at(t)
-            mine = [n for n in confirmed if self.cfg.hand_for_lane(n.lane) == k]
+            from .handoff import hand_notes
+            mine = hand_notes(confirmed, k, self.cfg)
             s.plans[k] = policy.plan(mine, t, s.X_WT_cmds[k], s.width_cmds[k])
         self.last_state = s
 

@@ -43,6 +43,16 @@ class NoteResult:
     status: str = "pending"  # pending | hit | miss
     timing_error: float | None = None
     judgment: str | None = None  # perfect | great | good | miss
+    head_judgment: str | None = None
+    judged_at: float | None = None
+    gap_seconds: float = 0.0
+    max_gap_seconds: float = 0.0
+    tail_ticks: int = 0
+    tail_contact_ticks: int = 0
+    failure_reason: str | None = None
+    contact_ticks_by_hand: list[int] = field(default_factory=lambda: [0, 0])
+    handoffs: int = 0
+    last_contact_hand: int | None = None
     active_ticks: int = 0
     contact_ticks: int = 0
     lateral_errors: list[float] = field(default_factory=list)
@@ -109,6 +119,7 @@ class Judge(LeafSystem):
             return
         if t > note.time + self.T.miss_after:
             r.status, r.judgment, r.completed = "miss", "miss", False
+            r.judged_at = t
             return
         for k, (down, p) in enumerate(touches):
             since = self.down_since[k]
@@ -119,7 +130,14 @@ class Judge(LeafSystem):
             if self._in_lane(p[0], note.lane) and self._near_line(p[1]):
                 err = since - note.time
                 r.status, r.timing_error = "hit", err
-                r.judgment = self._judgment(abs(err))
+                r.head_judgment = self._judgment(abs(err))
+                r.judgment = r.head_judgment if note.kind == TAP else None
+                r.judged_at = t if note.kind == TAP else None
+                if note.kind == SLIDE and t > note.time:
+                    missed = max(0, int(round((t-note.time)*self.cfg.judge_hz)))
+                    r.active_ticks = missed
+                    r.gap_seconds = missed/self.cfg.judge_hz
+                    r.max_gap_seconds = r.gap_seconds
                 self.touch_used[k] = note.time
                 if note.kind == TAP:
                     r.completed = True
@@ -132,10 +150,24 @@ class Judge(LeafSystem):
             return "great"
         return "good"
 
+    def _finish_sustain(self, note, r, t):
+        if note.kind == SLIDE:
+            expected_tail = max(1, int(min(note.duration, self.T.slide_tail_window)*self.cfg.judge_hz))
+            tail_ok = r.tail_ticks >= expected_tail and r.tail_contact_ticks == r.tail_ticks
+            gap_ok = r.max_gap_seconds <= self.T.slide_max_gap + 1e-9
+            fraction_ok = (r.maintenance or 0) >= self.T.slide_min_maintenance
+            r.completed = bool(tail_ok and gap_ok and fraction_ok)
+            r.failure_reason = ("tail_missing" if not tail_ok else "contact_break" if not gap_ok
+                                else "insufficient_tracking" if not fraction_ok else None)
+        else:
+            r.completed = (r.maintenance or 0) >= self.T.hold_fraction
+            r.failure_reason = None if r.completed else "insufficient_contact"
+        r.judgment = r.head_judgment if r.completed else "miss"
+        r.judged_at = t
+
     def _track_body(self, note: Note, r: NoteResult, t: float, touches) -> None:
-        if t > note.end_time:
-            m = r.maintenance or 0.0
-            r.completed = m >= self.T.hold_fraction
+        if t > note.end_time + 1e-9:
+            self._finish_sustain(note, r, t)
             return
         if t < note.time:
             return
@@ -143,13 +175,28 @@ class Judge(LeafSystem):
         target_x = self.L.lane_x(note.lane_at(t))
         tol = 0.5 if note.kind == HOLD else self.T.slide_tolerance_lanes
         down_xs = [p[0] for down, p in touches if down and self._near_line(p[1])]
-        if not down_xs:
-            return
-        closest = min(down_xs, key=lambda x: abs(x - target_x))
+        error = min((abs(x-target_x) for x in down_xs), default=float("inf"))
+        tracked = error <= tol * self.L.lane_width + (0.004 if note.kind == HOLD else 0)
         if note.kind == SLIDE:
-            r.lateral_errors.append(abs(closest - target_x))
-        if abs(closest - target_x) <= tol * self.L.lane_width + 0.004:
+            if down_xs: r.lateral_errors.append(error)
+            r.gap_seconds = 0.0 if tracked else r.gap_seconds + 1/self.cfg.judge_hz
+            r.max_gap_seconds = max(r.max_gap_seconds, r.gap_seconds)
+            if t >= note.end_time-self.T.slide_tail_window-1e-9:
+                r.tail_ticks += 1
+                # Tail requires both being down and reaching the final lane.
+                tail_error = min((abs(x-self.L.lane_x(note.lane_at(note.end_time)))
+                                  for x in down_xs), default=float("inf"))
+                r.tail_contact_ticks += int(tracked and tail_error <= tol*self.L.lane_width)
+        if tracked:
             r.contact_ticks += 1
+            if note.kind == SLIDE:
+                eligible = [(abs(p[0]-target_x), k//2) for k,(down,p) in enumerate(touches)
+                            if down and self._near_line(p[1])]
+                hand = min(eligible)[1]
+                r.contact_ticks_by_hand[hand] += 1
+                if r.last_contact_hand is not None and hand != r.last_contact_hand:
+                    r.handoffs += 1
+                r.last_contact_hand = hand
 
     # -- report -----------------------------------------------------------------
     def finalize(self, t_end: float) -> None:
@@ -158,7 +205,13 @@ class Judge(LeafSystem):
             if r.status == "pending":
                 r.status, r.judgment, r.completed = "miss", "miss", False
             if r.completed is None:
-                r.completed = (r.maintenance or 0.0) >= self.T.hold_fraction
+                if t_end >= note.end_time:
+                    self._finish_sustain(note, r, t_end)
+                else:
+                    r.completed = False
+                    r.judgment = "miss"
+                    r.failure_reason = "truncated"
+                    r.judged_at = t_end
 
     def report(self, extra: dict | None = None) -> dict:
         rs = list(self.results.values())

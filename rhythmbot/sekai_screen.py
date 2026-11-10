@@ -83,12 +83,12 @@ class SekaiScreen:
             nd.line((a+3,y,b-3,y),fill=(242,255,255,255),width=2)
         # The judge, not the chart, drives feedback and combo.
         judged=sorted((r for r in self.results.values() if r.judgment is not None),
-                      key=lambda r:r.time+(r.timing_error or 0))
+                      key=lambda r:r.judged_at if r.judged_at is not None else r.time)
         combo=0
         for r in judged:
             combo=combo+1 if r.status=='hit' and r.completed is not False else 0
         for r in judged:
-            age=t-(r.time+(r.timing_error or 0))
+            age=t-(r.judged_at if r.judged_at is not None else r.time)
             if r.status=='hit' and 0<=age<.32:
                 x,y=self.project(next(n for n in chart.notes if n.id == r.id).lane_at(t),0)
                 radius=12+age*100
@@ -114,7 +114,7 @@ class SekaiScreen:
         text(.85,.36,f'{combo}',48,(244,206,255),anchor='mt')
         text(.85,.48,'COMBO',16,(244,206,255),anchor='mt')
         if judged:
-            r=judged[-1];age=t-(r.time+(r.timing_error or 0))
+            r=judged[-1];age=t-(r.judged_at if r.judged_at is not None else r.time)
             if 0<=age<.45:
                 text(.5,.73,r.judgment.upper(),28,(230,208,255),anchor='mt')
         text(.5,.935,chart.name.upper()+'  /  LIVE',14,(215,207,244),anchor='mt')

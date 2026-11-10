@@ -42,6 +42,9 @@ def main():
     compositor.renderer.results=judge.results
     station_context=robot.station.GetMyContextFromRoot(context)
     args.out.mkdir(parents=True,exist_ok=True)
+    grippers = [robot.plant.GetBodyByName('body', robot.plant.GetModelInstanceByName('wsg'+suffix))
+                for suffix in cfg.arms.suffixes]
+    min_gripper_distance = float('inf')
     window = None
     if args.live:
         import tkinter as tk
@@ -52,6 +55,9 @@ def main():
     end=args.duration if args.duration is not None else chart.end_time+1
     for i,t in enumerate(np.arange(0,end+1e-8,1/args.fps)):
         sim.AdvanceTo(float(t))
+        pc = robot.plant.GetMyContextFromRoot(context)
+        centers = [robot.plant.EvalBodyPoseInWorld(pc, body).translation() for body in grippers]
+        min_gripper_distance = min(min_gripper_distance, float(np.linalg.norm(centers[0]-centers[1])))
         rgb=robot.station.GetOutputPort(f'{CAMERA_NAME}.rgb_image').Eval(station_context).data
         labels=robot.station.GetOutputPort(f'{CAMERA_NAME}.label_image').Eval(station_context).data[...,0]
         frame=Image.fromarray(compositor.compose(rgb,labels,float(t)))
@@ -78,7 +84,8 @@ def main():
             panel.configure(image=panel.image)
             window.update()
     judge.finalize(end)
-    report=judge.report(extra={'config':dataclasses.asdict(cfg),'sim_seconds':end,'renderer':'Drake RGB + label-masked screen'})
+    report=judge.report(extra={'config':dataclasses.asdict(cfg),'sim_seconds':end,'renderer':'Drake RGB + label-masked screen',
+        'min_gripper_center_distance_m': min_gripper_distance})
     Judge.save_report(report,args.out/'report.json');Judge.print_report(report)
     if window is not None: window.mainloop()
 

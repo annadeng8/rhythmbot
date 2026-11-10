@@ -94,7 +94,10 @@ class Timing:
     hold_fraction: float = 0.80
     # A slide is tracked when the fingertip is within this many lanes of the
     # moving target.
-    slide_tolerance_lanes: float = 0.6
+    slide_tolerance_lanes: float = 0.35
+    slide_max_gap: float = 0.05
+    slide_tail_window: float = 0.04
+    slide_min_maintenance: float = 0.95
 
     @property
     def miss_after(self) -> float:

@@ -922,9 +922,8 @@ ffmpeg -framerate 30 -i frames/%06d.png -filter_complex \
 ![Measured dual-arm stage replay](docs/sekai-bimanual.gif)
 
 Validated on gpu156 using its existing Drake environment, with two CPU threads
-and no GPU. The 17.5-second original demo completes 16/18 notes; both cross-hand
-slides are skipped by the existing fixed-hand planner. This remains a real
-limitation, not a rendering success counted as a robot success. A 0.2-second
+and no GPU. The earlier recording completed 16/18 notes. The slide repair below supersedes
+that result: both crossing slides now execute with measured handoffs. A 0.2-second
 startup warmup checked construction only and is not a scoring evaluation.
 All new remote files, temporary files and caches live under
 `/data/YifanKang/rhythmbot_sekai_20261109`. Stage export streams PNG files at 30 fps;
@@ -956,8 +955,8 @@ or 2D hand replacement is used. The earlier `stage` viewer is only a secondary
 flat diagnostic view.
 
 The export writes 15 fps PNGs and `report.json`. `--duration 0.1` is a quick
-rendering warmup. `--chart` selects another existing chart. The original demo
-still includes two cross-hand slides unsupported by the fixed-hand planner.
+rendering warmup. `--chart` selects another existing chart. The original demo includes two cross-hand slides; they now execute via the
+overlapping handoff planner described below.
 
 ### Concert-screen art revision
 
@@ -977,3 +976,49 @@ renderer stays calibrated. Combo, flashes and particles use actual judge
 results; none are fabricated from chart timing. The recording includes a
 readable inset of the *same* live display texture alongside the actual Drake
 camera, since the physical screen is small in the whole-robot view.
+
+### Slide execution and scoring repair
+
+Cross-center slides are split into left/right trajectory segments with an
+80 ms overlap (40 ms on either side of the crossing). Each arm uses its inner
+fingertip with the normal two-arm gripper opening. Near the center, the contact
+path is bounded to preserve the configured 90 mm gripper-center clearance on
+each side. Clamp intersections are explicit waypoints, so clipping does not
+distort the rest of the slide. The source chart and its judged path are unchanged.
+The planner now preserves the selected fingertip reference throughout slide
+keyframes, including lateral travel.
+
+Slides receive **no score or final Perfect at the head**. The head timing grade
+is saved separately. The final grade is emitted only after the slide ends and
+all of these conditions pass:
+
+- At least 95% of the complete slide is tracked, including a late head's gap.
+- No continuous loss of contact / tracking exceeds 50 ms.
+- Lateral tracking error is at most 0.35 lane (42 mm in the dual-arm layout,
+  reduced from the previous 76 mm tolerance).
+- Every sampled point in the last 40 ms has contact on the path and within
+  that tolerance of the final lane. A missing or wrong tail fails.
+
+A failed sustain receives Miss and zero points, regardless of its head grade.
+Holds also defer their final grade until completion. Truncated active sustains
+are not awarded successful grades. The live HUD uses the final judgment time.
+These are this simulator's explicit rules, not a claim to exactly reproduce
+Project Sekai's scoring system.
+
+Run regression checks with `python -m unittest discover -s tests -v` in the
+Drake environment. Seven tests cover successful completion, deferred scoring,
+head-only contact, contact breaks, absent/wrong tails, truncated runs, and
+reachability/path coverage for both crossing directions. The unmodified demo
+is then exercised end-to-end in the actual two-arm Drake station. Reports now
+include maximum gap, tail contact samples, per-hand tracking counts, and
+measured handoff counts. The camera replay also records the minimum sampled
+gripper-center separation; this is not a full collision-certification test.
+
+Validated result (`results/drake-bimanual.json`, gpu156): **18/18 completed,
+18 final Perfect**. Slides #7 and #13 each made one measured handoff with both
+hands contributing contact samples. Tracking coverage was 99.50% / 99.69%;
+maximum gap was 5 ms each; both tails passed 9/9 samples. Mean slide RMS lateral
+error was 5.9 mm. The 263-frame GIF above is the actual Drake camera recording
+of this run. Minimum sampled gripper-center separation was 153.7 mm; the
+station uses its existing no-collision iiwa models and geometric touch sensing,
+so this does not certify arm-arm collision safety outside this demonstration.
