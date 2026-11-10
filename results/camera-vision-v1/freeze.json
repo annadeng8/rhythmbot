@@ -1,0 +1,690 @@
+{
+  "source_hash": "2cbfb5a6abfd8bc7c1d08038ee2eeaa0244232c696f3219ff4922920a83b2a5d",
+  "runner_sha256": "aa08ea0ea12252d3023f9c4970ab4d9576cbe26388c7a32a69638bb60c552655",
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "policies": {
+    "cap-v1": {
+      "path": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "sha256": "501a2b78795b79691b495341ab5295ebd5810d1e8ab5fa08d9d6eb985dcd476c"
+    },
+    "bc-mlp": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "sha256": "579c390ecda5e5de25957d23d95a6a1d6b0813a134d412d9f992528e91725f28"
+    },
+    "bc-diffusion": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "sha256": "2a6a019b51785facd9a5e4006d2f776022e3ed9c625c6896a2fbd98f10bcbcba"
+    }
+  },
+  "jobs": [
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/crossing-s31000-0.6s.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/screen/crossing-s41001-0.4s.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/crossing-s31000-0.6s.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "classical",
+      "policy": "classical",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/classical/camera/crossing-s41001-0.4s.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/crossing-s31000-0.6s.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/screen/crossing-s41001-0.4s.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/crossing-s31000-0.6s.json",
+      "capture": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/frames/cap-v1/crossing-s31000-0.6s"
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "cap-v1",
+      "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/cap-v1/camera/crossing-s41001-0.4s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/crossing-s31000-0.6s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/screen/crossing-s41001-0.4s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/crossing-s31000-0.6s.json",
+      "capture": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/frames/bc-mlp/crossing-s31000-0.6s"
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-mlp",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-mlp/camera/crossing-s41001-0.4s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/crossing-s31000-0.6s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "screen",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "screen",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/screen/crossing-s41001-0.4s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/crossing-s31000-0.6s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/holds-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31000.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/chords-s31000.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/crossing-s31001-0.8s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/holds-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_iid/chords-s31001.json",
+      "view": "camera",
+      "split": "test_iid",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/chords-s31001.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41000-0.3s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/crossing-s41000-0.3s.json",
+      "capture": null
+    },
+    {
+      "label": "bc-diffusion",
+      "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/test_speed/crossing-s41001-0.4s.json",
+      "view": "camera",
+      "split": "test_speed",
+      "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/eval/bc-diffusion/camera/crossing-s41001-0.4s.json",
+      "capture": null
+    }
+  ],
+  "frozen_at": 1794282530.9693139,
+  "protocol": "8 unchanged held-out charts x 4 frozen policies x camera/direct concert RGB; no retraining or test tuning"
+}

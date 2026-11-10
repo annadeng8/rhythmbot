@@ -1210,3 +1210,29 @@ For BC, fetch the checkpoint identified in `freeze.json` from gpu156 and use
 `--policy bc:/absolute/path/bc-mlp.pt`. Legacy single-gripper checkpoints are
 rejected in single-stylus mode. This pilot uses one seed per BC head and one CAP
 chain, so its results do not establish statistical superiority.
+
+### Control from the Drake camera RGB image
+
+`--view camera --detector concert --stylus` now runs both arms from RGB vision on
+the concert-style display. A fixed geometric calibration rectifies the camera
+pixels and the display's perspective; color/shape segmentation estimates notes.
+The detector receives no chart, depth or render labels, and occlusions remain
+visible in its input. Camera mode explicitly rejects the oracle detector.
+
+The simulator composites the dynamic display onto the visible screen in Drake's
+scene RGB using render labels **inside the renderer only**. This preserves actual
+robot occlusion; it is not a physical-camera experiment or a native animated
+Drake texture. The camera GIF shows the actual RGB and rectified pixels used for
+control, rather than a separate clean-screen preview.
+
+The [camera study](results/camera-vision-v1/README.md) compares four unchanged
+controllers on eight matching held-out charts, using direct concert RGB and
+camera RGB. It also reports the previous oracle/color baselines, two full
+blackout controls and all per-note judgments. See the
+[paired results](results/camera-vision-v1/summary.md) and
+[verification](results/camera-vision-v1/verification.json).
+
+![RGB camera comparison](results/camera-vision-v1/comparison.png)
+
+[CAP camera GIF](results/camera-vision-v1/cap-v1-camera.gif) ·
+[BC MLP camera GIF](results/camera-vision-v1/bc-mlp-camera.gif)

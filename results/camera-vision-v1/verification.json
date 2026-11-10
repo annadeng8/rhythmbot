@@ -1,0 +1,11 @@
+{
+  "fingerprints_verified": 70,
+  "evaluation_runs": 64,
+  "training_warmups": 4,
+  "blackout_controls": 2,
+  "execution_errors": [],
+  "policy_runtime_errors": 0,
+  "frozen_controllers_match_previous_study": true,
+  "blackout_detections": 0,
+  "blackout_completed_notes": 0
+}

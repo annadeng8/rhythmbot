@@ -52,6 +52,8 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
           view: str = "screen", record_camera: bool = False):
     """`view`: what the perception stage sees, the game's own frame
     ("screen") or an external camera on the screen ("camera")."""
+    if view == "camera" and detector_name == "oracle":
+        raise ValueError("camera control requires an image detector; oracle is not camera vision")
     builder = DiagramBuilder()
     robot = Robot(builder, cfg, meshcat, camera=view == "camera" or record_camera)
 
@@ -77,7 +79,11 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
         X_WG0s.append(arm.gripper_pose_at(q0))
         policies.append(p)
 
-    detector = make_detector(detector_name, chart, cfg, model_path)
+    if detector_name == "concert":
+        from .camera_vision import ConcertVisionDetector
+        detector = ConcertVisionDetector(cfg, camera=view == "camera")
+    else:
+        detector = make_detector(detector_name, chart, cfg, model_path)
     if view == "camera":
         from .camera import CAMERA_NAME, CameraScreen
 
@@ -87,6 +93,9 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
         builder.Connect(robot.station.GetOutputPort(f"{CAMERA_NAME}.label_image"), screen.GetInputPort("label_image"))
     else:
         screen = builder.AddSystem(GameScreen(chart, cfg))
+    if detector_name == "concert":
+        from .sekai_screen import SekaiScreen
+        screen.renderer = SekaiScreen(cfg)
     screen.set_name("screen")
     brain = builder.AddSystem(RhythmBrain(detector, policies, cfg, X_WG0s))
     brain.set_name("brain")
@@ -94,6 +103,8 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     touch.set_name("touch_sensor")
     judge = builder.AddSystem(Judge(chart, cfg))
     judge.set_name("judge")
+    if detector_name == "concert":
+        screen.renderer.results = judge.results  # display feedback only; never a detector input
     builder.AddSystem(HighwayVisualizer(chart, cfg, meshcat)).set_name("highway")
 
     builder.Connect(screen.get_output_port(), brain.GetInputPort("frame"))
@@ -196,6 +207,8 @@ def run(
             "config": dataclasses.asdict(cfg),
         }
     )
+    if hasattr(brain.detector, "stats"):
+        rep["vision"] = brain.detector.stats()
     if not quiet:
         Judge.print_report(rep)
         print(f"(simulated {t_end:.1f} s in {wall:.1f} s wall)")
@@ -217,7 +230,7 @@ def main(argv=None):
     src.add_argument("--chart", help="chart JSON file")
     src.add_argument("--random", type=int, metavar="SEED", help="generate a random chart")
     src.add_argument("--demo", action="store_true", help="the built-in demo chart (default)")
-    ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch"])
+    ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch", "concert"])
     ap.add_argument("--model", help="TorchScript model for --detector torch")
     ap.add_argument(
         "--policy", default="classical",
