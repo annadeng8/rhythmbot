@@ -46,6 +46,8 @@ CM = 0.01
 
 def hand_state(cfg: Config, x_axis_z: float, x_axis_x: float, p: np.ndarray, width: float) -> np.ndarray:
     rise = tip_gap(cfg.gripper, width) * float(np.sin(np.arctan2(x_axis_z, x_axis_x)))
+    if cfg.gripper.single_tip:
+        width, rise = 0.0, 0.0
     return np.array([p[0], p[2], width, rise])
 
 

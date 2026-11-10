@@ -17,7 +17,7 @@ def _why(n: dict) -> str:
     m = n.get("maintenance")
     parts = [f"hit {1000 * n['timing_error']:+.0f} ms ({n['judgment']})"]
     if m is not None:
-        parts.append(f"but contact kept only {100 * m:.0f}% of its length (needs 80%)")
+        parts.append(f"contact {100 * m:.1f}%; failure={n.get('failure_reason')}; max gap={1000*n.get('max_gap_seconds',0):.0f} ms; tail={n.get('tail_contact_ticks',0)}/{n.get('tail_ticks',0)}")
     if n.get("slide_rms_m") is not None:
         parts.append(f"slide lateral RMS error {1000 * n['slide_rms_m']:.0f} mm")
     return ", ".join(parts)

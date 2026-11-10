@@ -1,0 +1,16 @@
+{
+  "host": "gpu156",
+  "root_free_gb": 379,
+  "data_free_tb": 2.7,
+  "available_ram_gib": 534,
+  "workdir": "/data/YifanKang/rhythmbot_yifan_study_v1",
+  "gpu": 1,
+  "resources": {
+    "cpu_threads_max": 4,
+    "ram_gb": 10,
+    "gpu_vram_gb": 6,
+    "disk_gb": 4
+  },
+  "kernels": "PyTorch eager linear, layernorm, activation, diffusion; no custom Triton",
+  "source_proposal": "6.4212_Project_Proposal.pdf section 8: Yifan Kang \u2014 Agentic Code-as-Policy and Behavior Cloning"
+}

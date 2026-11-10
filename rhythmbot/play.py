@@ -60,16 +60,19 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     X_GT = np.array([0.0, cfg.gripper.tip_offset, 0.0])
     X_WG0s = []
     policies = []
-    if policy is not None and cfg.arms.n != 1:
-        raise ValueError("--policy other than classical plays with one arm only")
+    if policy is not None and cfg.arms.n != 1 and not isinstance(policy, (list, tuple)):
+        raise ValueError("multi-arm execution requires one independent policy instance per arm")
+    if isinstance(policy, (list, tuple)) and len(policy) != cfg.arms.n:
+        raise ValueError("policy count must match arm count")
     for k, arm in enumerate(robot.arms):
-        p = policy or ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
-        X_WT0 = initial_tip_pose(cfg, p.rest_x() if hasattr(p, "rest_x") else 0.0)
+        geometry = ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
+        p = policy[k] if isinstance(policy, (list, tuple)) else policy or geometry
+        X_WT0 = initial_tip_pose(cfg, geometry.rest_x())
         if cfg.gripper.single_tip:
             from pydrake.all import RotationMatrix
             tilt = np.deg2rad(cfg.gripper.tilt_degrees) * (-1 if k == 0 else 1)
             X_WT0 = RigidTransform(RotationMatrix.MakeYRotation(tilt) @ X_WT0.rotation(),
-                [p.rest_x(), p.hit_y, p.hover_z])
+                [geometry.rest_x(), geometry.hit_y, geometry.hover_z])
         q0 = arm.solve_start_configuration(X_WT0 @ RigidTransform(-X_GT))
         X_WG0s.append(arm.gripper_pose_at(q0))
         policies.append(p)
@@ -257,11 +260,11 @@ def main(argv=None):
     song_offset = args.song_offset if args.song_offset is not None else chart.audio_offset
 
     if args.arms is None:
-        args.arms = 1 if args.view == "camera" or args.policy != "classical" else 2
+        args.arms = 2 if args.stylus else (1 if args.view == "camera" or args.policy != "classical" else 2)
     base = two_arm_config() if args.arms == 2 else DEFAULT
     if args.stylus:
-        if args.arms != 2 or args.policy != "classical":
-            ap.error("--stylus requires --arms 2 and the classical policy")
+        if args.arms != 2:
+            ap.error("--stylus requires --arms 2")
         base = stylus_config(base)
     cfg = dataclasses.replace(
         base,
@@ -282,7 +285,7 @@ def main(argv=None):
         song=song,
         song_offset=song_offset,
         song_rate=args.tempo,
-        policy=None if args.policy == "classical" else make_policy(args.policy, cfg),
+        policy=None if args.policy == "classical" else ([make_policy(args.policy, cfg, hand=k) for k in range(cfg.arms.n)] if cfg.arms.n > 1 else make_policy(args.policy, cfg)),
         policy_name=args.policy,
         view=args.view,
         stage_frames=args.stage_frames,

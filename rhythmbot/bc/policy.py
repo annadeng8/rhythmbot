@@ -21,7 +21,8 @@ from .models import BCModel
 
 
 class BCPolicy(Policy):
-    def __init__(self, model: BCModel, cfg: Config, exec_steps: int | None = None, device: str = "cpu"):
+    def __init__(self, model: BCModel, cfg: Config, exec_steps: int | None = None, device: str = "cpu", hand: int | None = None):
+        self.hand = hand
         self.model = model.eval().to(device)
         self.device = device
         self.cfg = cfg
@@ -37,12 +38,14 @@ class BCPolicy(Policy):
         self.generator = torch.Generator(device=device).manual_seed(0)
 
     @staticmethod
-    def load(path: str | Path, cfg: Config, device: str = "cpu") -> "BCPolicy":
+    def load(path: str | Path, cfg: Config, device: str = "cpu", hand: int | None = None) -> "BCPolicy":
         torch.set_num_threads(1)
         ckpt = torch.load(path, map_location=device, weights_only=False)
+        if cfg.gripper.single_tip and ckpt.get("tool_mode") != "bimanual_stylus":
+            raise ValueError("single-tip deployment requires a bimanual_stylus checkpoint")
         model = BCModel(**ckpt["arch"])
         model.load_state_dict(ckpt["state_dict"])
-        return BCPolicy(model, cfg, ckpt.get("exec_steps"), device)
+        return BCPolicy(model, cfg, ckpt.get("exec_steps"), device, hand)
 
     def observe(self, notes, t_now, hand) -> dict:
         if self.pixels:
@@ -72,9 +75,17 @@ class BCPolicy(Policy):
         p = X_WT_cmd.translation()
         kfs = [Keyframe(t_now, p[0], p[2], width_cmd, p[1], False, 0, hand[3])]
         lo, hi = L.lane_x(-0.5), L.lane_x(L.n_lanes - 0.5)
+        tilt, y, radius = 0.0, L.hit_y, 0.0
+        if self.cfg.gripper.single_tip:
+            tilt=np.deg2rad(self.cfg.gripper.tilt_degrees)*(-1 if self.hand==0 else 1)
+            y += (-1 if self.hand==0 else 1)*self.cfg.gripper.hand_y_offset
+            radius=self.cfg.gripper.tip_radius
+            if self.hand==0: hi=0.0
+            else: lo=0.0
         for k, (x, z, w, rise) in enumerate(hands, start=1):
             x = float(np.clip(x, lo, hi))
-            z = float(max(z, L.screen_z - M.touch_depth))
-            kfs.append(Keyframe(t_now + k * self.dt, x, z, float(w), L.hit_y, False, 0, float(rise)))
-        self._plan, self._planned_at = Plan(kfs, self.cfg.gripper), t_now
+            z = float(np.clip(z, L.screen_z + radius - M.touch_depth, L.screen_z + radius + .10))
+            if self.cfg.gripper.single_tip: w, rise = 0.0, 0.0
+            kfs.append(Keyframe(t_now + k * self.dt, x, z, float(w), y, False, 0, float(rise)))
+        self._plan, self._planned_at = Plan(kfs, self.cfg.gripper, tilt), t_now
         return self._plan

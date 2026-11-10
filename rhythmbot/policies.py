@@ -15,16 +15,16 @@ from .config import Config
 from .planner import ClassicalPlanner, Policy
 
 
-def make_policy(spec: str, cfg: Config) -> Policy:
+def make_policy(spec: str, cfg: Config, hand: int | None = None) -> Policy:
     kind, _, arg = spec.partition(":")
     if kind == "classical":
-        return ClassicalPlanner(cfg)
+        return ClassicalPlanner(cfg, hand)
     if kind in ("cap", "cappx"):
         from .cap.sandbox import load_policy
 
-        return load_policy(arg, cfg, pixels=kind == "cappx")
+        return load_policy(arg, cfg, pixels=kind == "cappx", hand=hand)
     if kind == "bc":
         from .bc.policy import BCPolicy
 
-        return BCPolicy.load(arg, cfg)
+        return BCPolicy.load(arg, cfg, hand=hand)
     raise ValueError(f"unknown policy {spec!r}: use classical, cap:<policy.py>, cappx:<policy.py> or bc:<model.pt>")

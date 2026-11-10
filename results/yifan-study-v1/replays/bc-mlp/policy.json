@@ -1,0 +1,6 @@
+{
+  "policy": "bc:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+  "sha256": "579c390ecda5e5de25957d23d95a6a1d6b0813a134d412d9f992528e91725f28",
+  "input": "oracle",
+  "note": "Camera replay; quantitative benchmark uses the frozen evaluation reports."
+}

@@ -43,6 +43,11 @@ class RobotAPI:
     """
 
     cfg: Config
+    hand: int | None = None
+
+    @property
+    def tilt(self) -> float:
+        return math.radians(self.cfg.gripper.tilt_degrees)*(-1 if self.hand==0 else 1) if self.cfg.gripper.single_tip else 0.0
 
     # -- the screen ------------------------------------------------------------
     @property
@@ -55,22 +60,22 @@ class RobotAPI:
 
     @property
     def hit_y(self) -> float:
-        return self.cfg.layout.hit_y
+        return self.cfg.layout.hit_y + ((-1 if self.hand==0 else 1)*self.cfg.gripper.hand_y_offset if self.cfg.gripper.single_tip else 0)
 
     @property
     def screen_z(self) -> float:
-        return self.cfg.layout.screen_z
+        return self.cfg.layout.screen_z + (self.cfg.gripper.tip_radius if self.cfg.gripper.single_tip else 0)
 
     @property
     def contact_z(self) -> float:
         """A fingertip at or below this height counts as touching."""
-        return self.cfg.layout.screen_z + self.cfg.motion.contact_tolerance
+        return self.screen_z + self.cfg.motion.contact_tolerance
 
     @property
     def touch_z(self) -> float:
         """Where to command a fingertip that should stay pressed (a little
         below the surface; the screen does not push back)."""
-        return self.cfg.layout.screen_z - self.cfg.motion.touch_depth
+        return self.screen_z - self.cfg.motion.touch_depth
 
     def lane_x(self, lane: float) -> float:
         """World x of a lane centre; fractional lanes interpolate."""
@@ -89,13 +94,15 @@ class RobotAPI:
         count.  Holds and slides also need contact in the (moving) lane for
         `hold_fraction` of their duration."""
         T = self.cfg.timing
-        return {"perfect": T.perfect, "great": T.great, "good": T.good, "hold_fraction": T.hold_fraction}
+        return {"perfect": T.perfect, "great": T.great, "good": T.good, "hold_fraction": T.hold_fraction,
+                "slide_fraction": T.slide_min_maintenance, "slide_max_gap": T.slide_max_gap,
+                "slide_tail_window": T.slide_tail_window, "slide_tolerance_lanes": T.slide_tolerance_lanes}
 
     # -- the hand --------------------------------------------------------------
     @property
     def max_width(self) -> float:
         """Widest gripper opening (m)."""
-        return self.cfg.gripper.max_width
+        return 0.0 if self.cfg.gripper.single_tip else self.cfg.gripper.max_width
 
     def tip_gap(self, width: float) -> float:
         """Distance between the two fingertips at opening `width`.  At width
@@ -137,6 +144,7 @@ class RobotAPI:
         p = X_WT_cmd.translation()
         x_axis = X_WT_cmd.rotation().matrix()[:, 0]
         rise = self.tip_gap(width_cmd) * float(np.sin(np.arctan2(x_axis[2], x_axis[0])))
+        if self.cfg.gripper.single_tip: rise = 0.0
         return Keyframe(t_now, float(p[0]), float(p[2]), float(width_cmd), float(p[1]), False, 0, rise)
 
     def keyframe(
@@ -163,5 +171,8 @@ class RobotAPI:
             if out and k.t <= out[-1].t + 1e-3:
                 k = Keyframe(out[-1].t + 1e-3, k.x, k.z, k.width, k.y, k.down, k.ref, k.rise)
             out.append(k)
-        return Plan(out, self.cfg.gripper)
+        if self.cfg.gripper.single_tip:
+            lo,hi = ((-self.cfg.layout.half_width,0.0) if self.hand==0 else (0.0,self.cfg.layout.half_width))
+            out = [Keyframe(k.t,float(np.clip(k.x,lo,hi)),float(np.clip(k.z,self.touch_z,self.screen_z+.10)),0.0,self.hit_y,k.down,0,0.0) for k in out]
+        return Plan(out, self.cfg.gripper, self.tilt)
 

@@ -1,0 +1,14 @@
+{
+  "charts": 6,
+  "samples": 3588,
+  "observation_shape": [
+    3588,
+    108
+  ],
+  "action_shape": [
+    3588,
+    16,
+    4
+  ],
+  "type": "commanded-target demonstrations through shared brain+router; no physics during collection"
+}

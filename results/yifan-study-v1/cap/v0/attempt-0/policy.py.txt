@@ -1,0 +1,122 @@
+ n):
+        d = getattr(n, "duration", None)
+        if d is None:
+            d = float(getattr(n, "end_time", n.hit_time)) - float(n.hit_time)
+        return max(0.0, float(d))
+
+    def _end(self, n):
+        e = getattr(n, "end_time", None)
+        if e is None:
+            return float(n.hit_time) + self._dur(n)
+        return float(e)
+
+    def _path_x(self, n, off):
+        if self._kind(n) == "slide":
+            off = min(self._dur(n), max(0.0, off))
+            try:
+                lane = n.lane_at_offset(off)
+            except Exception:
+                lane = n.lane
+        else:
+            lane = n.lane
+        return self._clip(self._lane_x(lane))
+
+    def _x_start(self, n):
+        return self._path_x(n, 0.0)
+
+    def _x_end(self, n):
+        return self._path_x(n, self._dur(n))
+
+    def _raw_x(self, n, off):
+        try:
+            lane = n.lane_at_offset(off) if self._kind(n) == "slide" else n.lane
+        except Exception:
+            lane = n.lane
+        return self._lane_x(lane)
+
+    def _on_my_side(self, n):
+        if self._kind(n) == "slide":
+            d = self._dur(n)
+            xs = [self._raw_x(n, d * f) for f in (0.0, 0.25, 0.5, 0.75, 1.0)]
+        else:
+            xs = [self._raw_x(n, 0.0)]
+        for x in xs:
+            if self.hand == 0 and x <= 0.03:
+                return True
+            if self.hand == 1 and x >= -0.03:
+                return True
+        return False
+
+    def _tol(self, n):
+        return TOL_TAP if self._kind(n) == "tap" else TOL_SUSTAIN
+
+    def _end_min(self, n):
+        if self._kind(n) == "tap":
+            return float(n.hit_time) - LAG + TAP_MIN_DWELL
+        return self._end(n)
+
+    def _finished(self, n, t_now):
+        if self._kind(n) == "tap":
+            return t_now > float(n.hit_time) + 0.07
+        return t_now > self._end(n) + 0.03
+
+    # ---------------- transition timing ----------------
+    def _cands(self, z_a):
+        c = [self.hover_z, 0.132, 0.124, self.low_up]
+        if self.contact_z + 0.006 < z_a <= self.hover_z + 1e-6:
+            c.append(z_a)
+        c = [z for z in c if z > self.contact_z + 0.004]
+        return sorted(set(c), reverse=True)
+
+    def _times(self, z_a, dx, zu):
+        tl = abs(zu - z_a) / V_LIFT
+        tm = dx / V_LAT if dx > 0.004 else 0.0
+        tdc = (zu - self.contact_z) / V_DESC
+        return tl, tm, tdc
+
+    def _need(self, z_a, dx, k):
+        best = None
+        for zu in self._cands(z_a):
+            tl, tm, tdc = self._times(z_a, dx, zu)
+            T = (tl + tm + tdc) / k
+            if best is None or T < best:
+                best = T
+        return best if best is not None else 0.1
+
+    def _transition(self, t_a, x_a, z_a, x_b, tc):
+        """Keyframes (t,x,z) from state a to a contact crossing at tc at x_b.
+        Returns (kfs, tc_actual, t_press)."""
+        dx = abs(x_b - x_a)
+        if dx <= 0.004 and z_a > self.contact_z + 0.006:
+            x_a = x_b
+            dx = 0.0
+        gap = tc - t_a
+        chosen = None
+        for zu in self._cands(z_a):
+            tl, tm, tdc = self._times(z_a, dx, zu)
+            if tl + tm + tdc <= gap:
+                chosen = (zu, tl, tm, tdc, 1.0)
+                break
+        if chosen is None:
+            bestT, best = None, None
+            for zu in self._cands(z_a):
+                tl, tm, tdc = self._times(z_a, dx, zu)
+                T = tl + tm + tdc
+                if bestT is None or T < bestT:
+                    bestT, best = T, (zu, tl, tm, tdc)
+            zu, tl, tm, tdc = best
+            k = bestT / gap if gap > 1e-3 else K_MAX
+            k = min(K_MAX, max(1.0, k))
+            tc = max(tc, t_a + bestT / k)
+            chosen = (zu, tl, tm, tdc, k)
+        zu, tl, tm, tdc, k = chosen
+        kfs = []
+        t1 = t_a + tl / k
+        kfs.append((t1, x_a, zu))
+        t2 = t1 + tm / k
+        kfs.append((t2, x_b, zu))
+        t3 = max(t2, tc - tdc / k)
+        kfs.append((t3, x_b, zu))
+        tp = tc + (self.contact_z - self.press_z) / (V_DESC * k)
+        kfs.append((tp, x_b, self.press_z))
+        return kfs, tc, tp

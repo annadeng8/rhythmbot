@@ -1,0 +1,967 @@
+{
+  "protocol": "Pilot: one BC seed per head and one 3-revision CAP chain; shared classical handoff routing and tool constraints. Color sees calibrated frames, not camera/concert art. Test accessed only after freezing models and programs.",
+  "rows": [
+    {
+      "phase": "feedback",
+      "policy": "cap-v0",
+      "detector": "oracle",
+      "split": "train",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 60,
+      "notes": 72,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.6790123456790124,
+      "by_kind": {
+        "tap": {
+          "complete": 47,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 5,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 4,
+        "contact_break": 1,
+        "head_miss": 7
+      },
+      "mean_abs_timing_ms": 11.923076923077664,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "cap-v1",
+      "detector": "oracle",
+      "split": "train",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 71,
+      "notes": 72,
+      "completion": 0.9861111111111112,
+      "chart_mean_completion": 0.9938271604938271,
+      "by_kind": {
+        "tap": {
+          "complete": 53,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 10,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 1
+      },
+      "mean_abs_timing_ms": 28.52112676056382,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "cap-v2",
+      "detector": "oracle",
+      "split": "train",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 66,
+      "notes": 72,
+      "completion": 0.9166666666666666,
+      "chart_mean_completion": 0.9629629629629629,
+      "by_kind": {
+        "tap": {
+          "complete": 48,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 10,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 6
+      },
+      "mean_abs_timing_ms": 22.121212121212398,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion",
+      "detector": "color",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 36,
+      "notes": 72,
+      "completion": 0.5,
+      "chart_mean_completion": 0.22222222222222224,
+      "by_kind": {
+        "tap": {
+          "complete": 36,
+          "total": 54
+        },
+        "hold": {
+          "complete": 0,
+          "total": 8
+        },
+        "slide": {
+          "complete": 0,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 35,
+        "tail_missing": 1
+      },
+      "mean_abs_timing_ms": 29.59459459459466,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion",
+      "detector": "color",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 0,
+      "notes": 6,
+      "completion": 0.0,
+      "chart_mean_completion": 0.0,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 0,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 4,
+        "insufficient_tracking": 1,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 43.33333333333375,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion",
+      "detector": "oracle",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 44,
+      "notes": 72,
+      "completion": 0.6111111111111112,
+      "chart_mean_completion": 0.4444444444444444,
+      "by_kind": {
+        "tap": {
+          "complete": 36,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 0,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 6,
+        "head_miss": 19,
+        "contact_break": 3
+      },
+      "mean_abs_timing_ms": 29.339622641509543,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion",
+      "detector": "oracle",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 0,
+      "notes": 6,
+      "completion": 0.0,
+      "chart_mean_completion": 0.0,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 0,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 4,
+        "insufficient_tracking": 1,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 27.500000000000373,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp",
+      "detector": "color",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 41,
+      "notes": 72,
+      "completion": 0.5694444444444444,
+      "chart_mean_completion": 0.3611111111111111,
+      "by_kind": {
+        "tap": {
+          "complete": 36,
+          "total": 54
+        },
+        "hold": {
+          "complete": 5,
+          "total": 8
+        },
+        "slide": {
+          "complete": 0,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 31
+      },
+      "mean_abs_timing_ms": 27.439024390244015,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp",
+      "detector": "color",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 0,
+      "notes": 6,
+      "completion": 0.0,
+      "chart_mean_completion": 0.0,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 0,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "contact_break": 1,
+        "head_miss": 3,
+        "insufficient_tracking": 1
+      },
+      "mean_abs_timing_ms": 80.00000000000021,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp",
+      "detector": "oracle",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 47,
+      "notes": 72,
+      "completion": 0.6527777777777778,
+      "chart_mean_completion": 0.5555555555555556,
+      "by_kind": {
+        "tap": {
+          "complete": 36,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 3,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 3,
+        "head_miss": 22
+      },
+      "mean_abs_timing_ms": 20.300000000000082,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp",
+      "detector": "oracle",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 2,
+      "notes": 6,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 2,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "head_miss": 2,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 51.25000000000046,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "detector": "color",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 63,
+      "notes": 72,
+      "completion": 0.875,
+      "chart_mean_completion": 0.8456790123456791,
+      "by_kind": {
+        "tap": {
+          "complete": 47,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 8,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "head_miss": 7,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 12.230769230769925,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "detector": "color",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 0,
+      "notes": 6,
+      "completion": 0.0,
+      "chart_mean_completion": 0.0,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 0,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 3,
+        "insufficient_tracking": 1,
+        "contact_break": 2
+      },
+      "mean_abs_timing_ms": 5.833333333333653,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "detector": "oracle",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 61,
+      "notes": 72,
+      "completion": 0.8472222222222222,
+      "chart_mean_completion": 0.7345679012345679,
+      "by_kind": {
+        "tap": {
+          "complete": 47,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 6,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 2,
+        "head_miss": 7,
+        "tail_missing": 2
+      },
+      "mean_abs_timing_ms": 12.538461538462226,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "detector": "oracle",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 2,
+      "notes": 6,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 2,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "insufficient_tracking": 2,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 9.166666666666915,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "detector": "color",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 70,
+      "notes": 72,
+      "completion": 0.9722222222222222,
+      "chart_mean_completion": 0.8888888888888888,
+      "by_kind": {
+        "tap": {
+          "complete": 54,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 8,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 30.347222222222626,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "detector": "color",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 5,
+      "notes": 6,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.8333333333333333,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 5,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 11.666666666666272,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "detector": "oracle",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 72,
+      "notes": 72,
+      "completion": 1.0,
+      "chart_mean_completion": 1.0,
+      "by_kind": {
+        "tap": {
+          "complete": 54,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 10,
+          "total": 10
+        }
+      },
+      "failure_reasons": {},
+      "mean_abs_timing_ms": 30.138888888889298,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "detector": "oracle",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 5,
+      "notes": 6,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.8333333333333333,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 5,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 11.666666666666272,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "detector": "color",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 65,
+      "notes": 72,
+      "completion": 0.9027777777777778,
+      "chart_mean_completion": 0.8580246913580248,
+      "by_kind": {
+        "tap": {
+          "complete": 49,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 8,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "head_miss": 5,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 23.208955223880864,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "detector": "color",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 5,
+      "notes": 6,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.8333333333333333,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 5,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 11.666666666666272,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "detector": "oracle",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 67,
+      "notes": 72,
+      "completion": 0.9305555555555556,
+      "chart_mean_completion": 0.9691358024691358,
+      "by_kind": {
+        "tap": {
+          "complete": 49,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 10,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 5
+      },
+      "mean_abs_timing_ms": 22.985074626865945,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "detector": "oracle",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 5,
+      "notes": 6,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.8333333333333333,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 5,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 11.666666666666272,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "detector": "color",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 64,
+      "notes": 72,
+      "completion": 0.8888888888888888,
+      "chart_mean_completion": 0.8518518518518517,
+      "by_kind": {
+        "tap": {
+          "complete": 48,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 8,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "head_miss": 6,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 8.333333333334108,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "detector": "color",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 5,
+      "notes": 6,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.8333333333333333,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 5,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1
+      },
+      "mean_abs_timing_ms": 8.3333333333336,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "detector": "oracle",
+      "split": "test_iid",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 66,
+      "notes": 72,
+      "completion": 0.9166666666666666,
+      "chart_mean_completion": 0.9629629629629629,
+      "by_kind": {
+        "tap": {
+          "complete": 48,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 10,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 6
+      },
+      "mean_abs_timing_ms": 8.333333333334112,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "detector": "oracle",
+      "split": "test_speed",
+      "charts": 2,
+      "execution_errors": 0,
+      "complete": 4,
+      "notes": 6,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_kind": {
+        "tap": {
+          "complete": 0,
+          "total": 0
+        },
+        "hold": {
+          "complete": 0,
+          "total": 0
+        },
+        "slide": {
+          "complete": 4,
+          "total": 6
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "contact_break": 1
+      },
+      "mean_abs_timing_ms": 8.3333333333336,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "validation",
+      "policy": "bc-diffusion",
+      "detector": "oracle",
+      "split": "validation",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 43,
+      "notes": 72,
+      "completion": 0.5972222222222222,
+      "chart_mean_completion": 0.43827160493827155,
+      "by_kind": {
+        "tap": {
+          "complete": 35,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 0,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 4,
+        "head_miss": 21,
+        "tail_missing": 4
+      },
+      "mean_abs_timing_ms": 31.568627450980472,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "validation",
+      "policy": "bc-mlp",
+      "detector": "oracle",
+      "split": "validation",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 47,
+      "notes": 72,
+      "completion": 0.6527777777777778,
+      "chart_mean_completion": 0.5555555555555556,
+      "by_kind": {
+        "tap": {
+          "complete": 36,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 3,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 3,
+        "head_miss": 22
+      },
+      "mean_abs_timing_ms": 16.700000000000188,
+      "policy_runtime_errors": 0
+    },
+    {
+      "phase": "validation",
+      "policy": "classical",
+      "detector": "oracle",
+      "split": "validation",
+      "charts": 6,
+      "execution_errors": 0,
+      "complete": 66,
+      "notes": 72,
+      "completion": 0.9166666666666666,
+      "chart_mean_completion": 0.9629629629629631,
+      "by_kind": {
+        "tap": {
+          "complete": 48,
+          "total": 54
+        },
+        "hold": {
+          "complete": 8,
+          "total": 8
+        },
+        "slide": {
+          "complete": 10,
+          "total": 10
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 6
+      },
+      "mean_abs_timing_ms": 9.3181818181826,
+      "policy_runtime_errors": 0
+    }
+  ],
+  "total_runs": 132,
+  "execution_errors": 0
+}

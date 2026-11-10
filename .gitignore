@@ -10,3 +10,6 @@ results/*.wav
 
 # Diffusion checkpoints are 74-100 MB: kept on gpu156 (see README)
 results/bc/*.pt
+# Yifan bimanual pilot: reproducible training data and weights live on gpu156.
+results/yifan-study-v1/checkpoints/
+results/yifan-study-v1/*.npz

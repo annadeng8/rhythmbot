@@ -99,6 +99,8 @@ class GuardedPolicy(Policy):
             plan = self.inner.plan(seen, t_now, X_WT_cmd, width_cmd)
             if not isinstance(plan, Plan):
                 raise TypeError(f"plan() returned {type(plan).__name__}, expected api.Plan")
+            if self.api.cfg.gripper.single_tip:
+                plan = self.api.make_plan(plan.keyframes)
             for dt in (0.0, 1.0 / 30, 0.1):
                 p = plan.tip_pose(t_now + dt).translation()
                 w = plan.width_at(t_now + dt)
@@ -134,11 +136,11 @@ def load_module(path: str | Path):
     return module
 
 
-def load_policy(path: str | Path, cfg: Config, pixels: bool = False) -> GuardedPolicy:
+def load_policy(path: str | Path, cfg: Config, pixels: bool = False, hand: int | None = None) -> GuardedPolicy:
     module = load_module(path)
     if not hasattr(module, "make_policy"):
         raise PolicyRejected("the file must define make_policy(api)")
-    api = RobotAPI(cfg)
+    api = RobotAPI(cfg, hand)
     inner = module.make_policy(api)
     if not callable(getattr(inner, "plan", None)):
         raise PolicyRejected("make_policy(api) must return an object with a plan(...) method")

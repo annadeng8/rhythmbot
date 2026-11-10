@@ -1,0 +1,23 @@
+test_chart_reproducible_and_two_tool_pairs_match (test_experiments.ExperimentTests.test_chart_reproducible_and_two_tool_pairs_match) ... fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+ok
+test_no_handoff_ablation_only_assigns_start_hand (test_experiments.ExperimentTests.test_no_handoff_ablation_only_assigns_start_hand) ... ok
+test_both_crossing_directions_stay_reachable (test_slide.SlideTests.test_both_crossing_directions_stay_reachable) ... ok
+test_contact_break_fails_even_with_correct_tail (test_slide.SlideTests.test_contact_break_fails_even_with_correct_tail) ... ok
+test_good_path_only_scores_after_tail (test_slide.SlideTests.test_good_path_only_scores_after_tail) ... ok
+test_head_only_is_miss_and_zero_score (test_slide.SlideTests.test_head_only_is_miss_and_zero_score) ... ok
+test_missing_tail_fails (test_slide.SlideTests.test_missing_tail_fails) ... ok
+test_truncated_run_does_not_award_perfect (test_slide.SlideTests.test_truncated_run_does_not_award_perfect) ... ok
+test_wrong_tail_lane_fails (test_slide.SlideTests.test_wrong_tail_lane_fails) ... ok
+test_exactly_two_contacts (test_stylus.StylusTests.test_exactly_two_contacts) ... ok
+test_fixed_tilt_does_not_accumulate_on_replan (test_stylus.StylusTests.test_fixed_tilt_does_not_accumulate_on_replan) ... ok
+test_single_tip_has_no_chord_action (test_stylus.StylusTests.test_single_tip_has_no_chord_action) ... ok
+test_three_simultaneous_notes_cannot_all_score (test_stylus.StylusTests.test_three_simultaneous_notes_cannot_all_score) ... ok
+test_bc_single_tip_plan_has_fixed_tilt (test_yifan_methods.MethodTests.test_bc_single_tip_plan_has_fixed_tilt) ... ok
+test_cap_enforces_single_tip_geometry (test_yifan_methods.MethodTests.test_cap_enforces_single_tip_geometry) ... ok
+test_two_independent_custom_policies_build_and_run (test_yifan_methods.MethodTests.test_two_independent_custom_policies_build_and_run) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 3.357s
+
+OK

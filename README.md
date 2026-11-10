@@ -1178,3 +1178,35 @@ These results prioritize two follow-ups: inspect inferred slide endpoints for
 the color detector, and improve trajectory execution in the 0.4–0.5 s zigzag
 transition. BC/LLM policy training and real-camera perception are not part of
 this completed classical-control pilot.
+
+### Yifan: dual-arm Code-as-Policy and Behavior Cloning
+
+The single-stylus Drake environment now runs an independent custom policy per
+arm. CAP receives a hand-aware, geometry-constrained API; BC checkpoints declare
+the single-stylus tool mode and preserve its fixed tilt. All methods use the same
+cross-hand router and strict slide judgment.
+
+The new [CAP/BC study](results/yifan-study-v1/README.md) implements Yifan's proposal
+scope: actual coding-agent generation with training-only feedback, MLP/diffusion
+cloning of classical commanded demonstrations, and a frozen held-out comparison
+against classical planning. It is distinct from the classical-only benchmark
+above. See [full results](results/yifan-study-v1/summary.md),
+[verification](results/yifan-study-v1/verification.json), and the saved prompts,
+programs, training logs and per-note reports in that directory.
+
+![Frozen held-out CAP and BC comparison](results/yifan-study-v1/overview.png)
+
+Actual Drake replays on the same first held-out crossing chart:
+[CAP v2](results/yifan-study-v1/replays/cap-v2.gif) and
+[BC MLP](results/yifan-study-v1/replays/bc-mlp.gif).
+These replays use oracle note input; the main table separately reports oracle and
+calibrated color input. The concert-style display is a visualization.
+
+```sh
+HEADLESS=1 python -m rhythmbot.play --stylus --no-realtime --policy cap:results/yifan-study-v1/cap/v1/policy.py --chart results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json
+```
+
+For BC, fetch the checkpoint identified in `freeze.json` from gpu156 and use
+`--policy bc:/absolute/path/bc-mlp.pt`. Legacy single-gripper checkpoints are
+rejected in single-stylus mode. This pilot uses one seed per BC head and one CAP
+chain, so its results do not establish statistical superiority.

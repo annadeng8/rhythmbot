@@ -1,0 +1,136 @@
+{
+  "frozen_at_utc": "2026-11-10T02:46:15.186599+00:00",
+  "source_hash": "daf25746ec9ad11f2a0d3fd4ed33faaa870abb4b623d9184c4eefac169ca844e",
+  "protocol_sha256": "aa37814fc1cc2c13a82730a2c48abb90a8b7310e524331ddc7bbe5d6bedb9e4e",
+  "artifacts": {
+    "cap-v0": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v0/policy.py",
+      "sha256": "800ed8d2d82e95096422b0faf260fd0588200ec33e9994efbfda3c9f26cc83da",
+      "bytes": 5654
+    },
+    "cap-v1": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "sha256": "501a2b78795b79691b495341ab5295ebd5810d1e8ab5fa08d9d6eb985dcd476c",
+      "bytes": 8217
+    },
+    "cap-v2": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v2/policy.py",
+      "sha256": "fd303e38bf68ccda14b17d3438e46107ed6adab0b53f4f838aba2d4b62781383",
+      "bytes": 8605
+    },
+    "bc-mlp": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "sha256": "579c390ecda5e5de25957d23d95a6a1d6b0813a134d412d9f992528e91725f28",
+      "bytes": 717521
+    },
+    "bc-diffusion": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "sha256": "2a6a019b51785facd9a5e4006d2f776022e3ed9c625c6896a2fbd98f10bcbcba",
+      "bytes": 74186487
+    }
+  },
+  "selection": "BC best validation loss; all CAP revisions evaluated; no test selection",
+  "expected_runs": {
+    "validation": 18,
+    "feedback": 18,
+    "test": 96
+  }
+}
+1 96 classical 1.0 ok
+2 96 classical 1.0 ok
+3 96 classical 0.8888888888888888 ok
+4 96 classical 1.0 ok
+5 96 classical 0.8888888888888888 ok
+6 96 classical 1.0 ok
+7 96 classical 0.6666666666666666 ok
+8 96 classical 0.6666666666666666 ok
+9 96 classical 0.6666666666666666 ok
+10 96 classical 1.0 ok
+11 96 classical 0.8888888888888888 ok
+12 96 classical 0.6666666666666666 ok
+13 96 classical 1.0 ok
+14 96 classical 0.8888888888888888 ok
+15 96 classical 0.6666666666666666 ok
+16 96 classical 1.0 ok
+17 96 bc-mlp 0.3333333333333333 ok
+18 96 bc-mlp 0.7037037037037037 ok
+19 96 bc-mlp 0.8333333333333334 ok
+20 96 bc-mlp 0.0 ok
+21 96 bc-mlp 0.8333333333333334 ok
+22 96 bc-mlp 0.3333333333333333 ok
+23 96 bc-mlp 0.6296296296296297 ok
+24 96 bc-mlp 0.3333333333333333 ok
+25 96 bc-mlp 0.0 ok
+26 96 bc-mlp 0.3333333333333333 ok
+27 96 bc-mlp 0.7037037037037037 ok
+28 96 bc-mlp 0.0 ok
+29 96 bc-mlp 0.5 ok
+30 96 bc-mlp 0.0 ok
+31 96 bc-mlp 0.6296296296296297 ok
+32 96 bc-mlp 0.0 ok
+33 96 bc-diffusion 0.0 ok
+34 96 bc-diffusion 0.6666666666666666 ok
+35 96 bc-diffusion 0.6296296296296297 ok
+36 96 bc-diffusion 0.0 ok
+37 96 bc-diffusion 0.6666666666666666 ok
+38 96 bc-diffusion 0.7037037037037037 ok
+39 96 bc-diffusion 0.0 ok
+40 96 bc-diffusion 0.0 ok
+41 96 bc-diffusion 0.0 ok
+42 96 bc-diffusion 0.0 ok
+43 96 bc-diffusion 0.6296296296296297 ok
+44 96 bc-diffusion 0.0 ok
+45 96 bc-diffusion 0.0 ok
+46 96 bc-diffusion 0.7037037037037037 ok
+47 96 bc-diffusion 0.0 ok
+48 96 cap-v0 0.6666666666666666 ok
+49 96 bc-diffusion 0.0 ok
+50 96 cap-v0 0.8518518518518519 ok
+51 96 cap-v0 1.0 ok
+52 96 cap-v0 0.0 ok
+53 96 cap-v0 1.0 ok
+54 96 cap-v0 0.0 ok
+55 96 cap-v0 0.8888888888888888 ok
+56 96 cap-v0 0.6666666666666666 ok
+57 96 cap-v0 0.6666666666666666 ok
+58 96 cap-v0 1.0 ok
+59 96 cap-v0 0.8518518518518519 ok
+60 96 cap-v0 0.6666666666666666 ok
+61 96 cap-v0 1.0 ok
+62 96 cap-v0 0.0 ok
+63 96 cap-v0 0.8888888888888888 ok
+64 96 cap-v0 0.0 ok
+65 96 cap-v1 1.0 ok
+66 96 cap-v1 1.0 ok
+67 96 cap-v1 1.0 ok
+68 96 cap-v1 1.0 ok
+69 96 cap-v1 1.0 ok
+70 96 cap-v1 0.6666666666666666 ok
+71 96 cap-v1 1.0 ok
+72 96 cap-v1 1.0 ok
+73 96 cap-v1 0.6666666666666666 ok
+74 96 cap-v1 1.0 ok
+75 96 cap-v1 1.0 ok
+76 96 cap-v1 0.6666666666666666 ok
+77 96 cap-v1 1.0 ok
+78 96 cap-v1 1.0 ok
+79 96 cap-v1 0.6666666666666666 ok
+80 96 cap-v1 1.0 ok
+81 96 cap-v2 1.0 ok
+82 96 cap-v2 0.9259259259259259 ok
+83 96 cap-v2 1.0 ok
+84 96 cap-v2 1.0 ok
+85 96 cap-v2 1.0 ok
+86 96 cap-v2 0.6666666666666666 ok
+87 96 cap-v2 0.8888888888888888 ok
+88 96 cap-v2 1.0 ok
+89 96 cap-v2 0.6666666666666666 ok
+90 96 cap-v2 1.0 ok
+91 96 cap-v2 0.9259259259259259 ok
+92 96 cap-v2 0.6666666666666666 ok
+93 96 cap-v2 1.0 ok
+94 96 cap-v2 0.8888888888888888 ok
+95 96 cap-v2 0.6666666666666666 ok
+96 96 cap-v2 1.0 ok
+{"counts": {"test": 96, "feedback": 18, "validation": 18}, "fingerprints_verified": 132, "execution_errors": [], "policy_runtime_errors": 0}
+{"runs": 132, "errors": 0}

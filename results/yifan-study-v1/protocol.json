@@ -1,0 +1,457 @@
+{
+  "entries": [
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11000,
+      "path": "charts/train/crossing-s11000-0.8s.json",
+      "sha256": "55aff005c04892f166c67c5b8db13aa3ff39c21742ddc9017be75bb67eae37d4"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11000,
+      "path": "charts/train/holds-s11000.json",
+      "sha256": "c1e50c549123bc367155df573492ed6f07487d7f5f8853f19740f30b6ecfe193"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11000,
+      "path": "charts/train/chords-s11000.json",
+      "sha256": "f7befcc6fd0f1c985400e776d56ff58858cf826efee988c30854854e9e6ea714"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11001,
+      "path": "charts/train/crossing-s11001-0.5s.json",
+      "sha256": "1d80d4c149206dbc5745d062ee42ccf58ccbd63ef5135f477b0fab5ba9a259d8"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11001,
+      "path": "charts/train/holds-s11001.json",
+      "sha256": "a4dd6822b423cdccbb3cafea9e309407651871b851a1c4900df52dc234ac8e30"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11001,
+      "path": "charts/train/chords-s11001.json",
+      "sha256": "fe1e0457fe434e3a5cd0a53250359c327fe95103aa1c8270efb71ba3459dee02"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11002,
+      "path": "charts/train/crossing-s11002-0.6s.json",
+      "sha256": "88bc31735f249a05ca9bb8000704fb1b42a0f5c950c8456420619e3d338a1fcf"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11002,
+      "path": "charts/train/holds-s11002.json",
+      "sha256": "0d3e3c879602acb2ea6cedaf737f34a125ae9fabb9e8d1628c198997dd90a1d0"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11002,
+      "path": "charts/train/chords-s11002.json",
+      "sha256": "58593802c6669575d711d99f7dc5d2b48f3a167ebae91640a09bb3c3c7cd3261"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11003,
+      "path": "charts/train/crossing-s11003-0.8s.json",
+      "sha256": "133ba8b148b1c4c25384a01cbada319e27c3fb740cecf65f4807996de69e1309"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11003,
+      "path": "charts/train/holds-s11003.json",
+      "sha256": "8e464e44b3cc32638a4907e5deaa58d2766ad31025abaf384d98d4fd3f37a3e8"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11003,
+      "path": "charts/train/chords-s11003.json",
+      "sha256": "adf27fcd7ed352dbb7df04b35aec54d583d937d910c6d94afa90353110aeb429"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11004,
+      "path": "charts/train/crossing-s11004-0.5s.json",
+      "sha256": "678aee22fb8a3aa0de21d8bfd99399cf061bc701568fcb1e07e82675170ab212"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11004,
+      "path": "charts/train/holds-s11004.json",
+      "sha256": "17dff8406a356162b4057f44dabb1d60a34d75b230d8c34d71e9d1f45ed39aaa"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11004,
+      "path": "charts/train/chords-s11004.json",
+      "sha256": "8b23459534cef5d35d937571f5bf555529fadda5b9d9bb0be314cd9b58f7b599"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11005,
+      "path": "charts/train/crossing-s11005-0.6s.json",
+      "sha256": "6d56ca725d09d7ed9e4c3319e484bfb499b37f97cb73bf92fb21ea58deb68cd4"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11005,
+      "path": "charts/train/holds-s11005.json",
+      "sha256": "aaf0c10b128e6d3af3f20af4f82eda754da79b8983b52179be0b2471358e28f0"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11005,
+      "path": "charts/train/chords-s11005.json",
+      "sha256": "01db30d18e9a68b87d2fd2bd25e226ed507a6cd75a4b143d7011db260842fc8f"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11006,
+      "path": "charts/train/crossing-s11006-0.8s.json",
+      "sha256": "73bab9dfacee92d8be6eb715318e90b7bbf22c56d29fbb25e4f2d92b22b9114c"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11006,
+      "path": "charts/train/holds-s11006.json",
+      "sha256": "4871f8b0f18791ccc8ac81cf9336bcbf86c52580ce103df5396480620db0ed20"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11006,
+      "path": "charts/train/chords-s11006.json",
+      "sha256": "32affc276a7d2f8fff93ef4b95a7f4211ec6545c5fdb18ef68b7c3eb5abaa2e4"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11007,
+      "path": "charts/train/crossing-s11007-0.5s.json",
+      "sha256": "dbc0ccc35a25b29fde9bd943fc63d60e1514e0658354626d74c1b83f0794f3af"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11007,
+      "path": "charts/train/holds-s11007.json",
+      "sha256": "8d47acdaa2de38fa8722a6252f5730049501cc28306019ada5b73fce8cfea2b8"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11007,
+      "path": "charts/train/chords-s11007.json",
+      "sha256": "686424331e6d8ea3edfd6e4eddac4d13cd9d9e3711ed242d09e9e36e0c5a6867"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11008,
+      "path": "charts/train/crossing-s11008-0.6s.json",
+      "sha256": "83417341474a35c41f19920aeda9996174f3ec2b8aafc11a114c7235977fae10"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11008,
+      "path": "charts/train/holds-s11008.json",
+      "sha256": "7573a0fe4d9e8a6098fe9ce0ee566513862c3f46e8b27464fa9c84c789ea6471"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11008,
+      "path": "charts/train/chords-s11008.json",
+      "sha256": "d9a994f5dd8158be19e9cb1492b3f4dbf74ba04d8861111dd641bc9ed7f5cd6d"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11009,
+      "path": "charts/train/crossing-s11009-0.8s.json",
+      "sha256": "963373e516e1574c46e30c069042f6ea57db8ef84cfd5e0900b4118529475207"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11009,
+      "path": "charts/train/holds-s11009.json",
+      "sha256": "b9663e5bc9c661f481900cd0210ed5590b5b228905f83f7dbf8e25700ea454ee"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11009,
+      "path": "charts/train/chords-s11009.json",
+      "sha256": "13408dcda0241c2b25297019de51d0718b4bc8079a51ab7e90ae1b331d37dc98"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11010,
+      "path": "charts/train/crossing-s11010-0.5s.json",
+      "sha256": "3e935601677006765f623e09e8964cfb0572f0524243cb6797d2a2cc7c5c2f9a"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11010,
+      "path": "charts/train/holds-s11010.json",
+      "sha256": "8782beff097d5d5664ee479499053cc8f21f95110e61323599b46f325a844b96"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11010,
+      "path": "charts/train/chords-s11010.json",
+      "sha256": "842d89f9cb4b702a52cb5f9a19612fd64649938b194bbd045fae278f67a4f42e"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11011,
+      "path": "charts/train/crossing-s11011-0.6s.json",
+      "sha256": "4730a655554f48c998e4bd41530ca708c43587ac7bfbd653b6ec6ed1e8a96623"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11011,
+      "path": "charts/train/holds-s11011.json",
+      "sha256": "7228c0a07c1aea11dc692d7b98fe55ae8139fc9587e138a4aa8e2a805d81490a"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11011,
+      "path": "charts/train/chords-s11011.json",
+      "sha256": "fbb7e81ee477ed26e208bd00a17c1b5a76489d32e66354bf97382a0fbf17053a"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11012,
+      "path": "charts/train/crossing-s11012-0.8s.json",
+      "sha256": "61efed580ab1a180fce6b37109213ae57935f4f72d12d35f4842edd96180ecca"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11012,
+      "path": "charts/train/holds-s11012.json",
+      "sha256": "98be37d710749539b717df6ad5adbf74998356227cb50a0a3f6e0341a08de0cd"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11012,
+      "path": "charts/train/chords-s11012.json",
+      "sha256": "a08e1f40c5b7cbad6c7d076e735ee907dec3f241b8d19a11195f231379344c33"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11013,
+      "path": "charts/train/crossing-s11013-0.5s.json",
+      "sha256": "2c65064c2e7e2767fd086cf5432e3725a8703ab6dc7dfe28a41b7868e5ff875c"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11013,
+      "path": "charts/train/holds-s11013.json",
+      "sha256": "4c870c9a14df58c96148f0b00aa0fad84ee49d6a717ce525800efffb2d021dbe"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11013,
+      "path": "charts/train/chords-s11013.json",
+      "sha256": "da438d505a19924d4203a036d084cded5a19caf493dade3def8e7315bec0d189"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11014,
+      "path": "charts/train/crossing-s11014-0.6s.json",
+      "sha256": "a8227dc84eb7c5915d3d3823e791e78d07f6f3ad6e24edc9817e85e4ebfd1678"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11014,
+      "path": "charts/train/holds-s11014.json",
+      "sha256": "d6359062f381878a3abcff300e8cd3ef3f63ef3dafdbdba2b70ec2a34b7f239a"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11014,
+      "path": "charts/train/chords-s11014.json",
+      "sha256": "98c3b4f3cd7287e2c2d7fe4dc426070eb33b616aed8475e281ec385246470bed"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 11015,
+      "path": "charts/train/crossing-s11015-0.8s.json",
+      "sha256": "1a1709caaa35288b3f781c83592c9d03b41203382f2fe4381527a030182f3497"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 11015,
+      "path": "charts/train/holds-s11015.json",
+      "sha256": "2feb69610e2902857ee1f4ba3d0c8b1d4eab7132403031a86d39c11a490f5c07"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 11015,
+      "path": "charts/train/chords-s11015.json",
+      "sha256": "a4a8f0642f676ea414fd3e2998ee43108be9c152ec0660c76238c5cff32847c8"
+    },
+    {
+      "split": "validation",
+      "family": "crossing",
+      "seed": 21000,
+      "path": "charts/validation/crossing-s21000-0.5s.json",
+      "sha256": "1fc33b69a20e4680eb21a4732b9683630687760cb62c8355f9012a1ffa58c7ec"
+    },
+    {
+      "split": "validation",
+      "family": "holds",
+      "seed": 21000,
+      "path": "charts/validation/holds-s21000.json",
+      "sha256": "b6b9d2fe44419f83a4d0ea6691ca68e0d380dc39ba9eeed459c48e536ee5a731"
+    },
+    {
+      "split": "validation",
+      "family": "chords",
+      "seed": 21000,
+      "path": "charts/validation/chords-s21000.json",
+      "sha256": "311e291f5dae133486c0c35de4068cb56fe3a2e2e46609246750a3e9ad855730"
+    },
+    {
+      "split": "validation",
+      "family": "crossing",
+      "seed": 21001,
+      "path": "charts/validation/crossing-s21001-0.6s.json",
+      "sha256": "cb2796958fa8f4b47efcf55845501de4f204a5df71486b466c31f753fcc1fc73"
+    },
+    {
+      "split": "validation",
+      "family": "holds",
+      "seed": 21001,
+      "path": "charts/validation/holds-s21001.json",
+      "sha256": "8eebd44f69c23d42e81b44052b0cc8ca6065cfe583316a549f11bfae3f08ba8e"
+    },
+    {
+      "split": "validation",
+      "family": "chords",
+      "seed": 21001,
+      "path": "charts/validation/chords-s21001.json",
+      "sha256": "9aba1fdf40354bec87b5a74a5e96b5db35c835ba982c8aa07fa4ccd345c19cd9"
+    },
+    {
+      "split": "test_iid",
+      "family": "crossing",
+      "seed": 31000,
+      "path": "charts/test_iid/crossing-s31000-0.6s.json",
+      "sha256": "b34fb75fa1743852e7d083dfdc15bb267b3febbe429932906cc242347312f8dd"
+    },
+    {
+      "split": "test_iid",
+      "family": "holds",
+      "seed": 31000,
+      "path": "charts/test_iid/holds-s31000.json",
+      "sha256": "b8ffd9325ac419abd9d9b2c2293315960d9e7d3203e7671d3d9be3abde9c166d"
+    },
+    {
+      "split": "test_iid",
+      "family": "chords",
+      "seed": 31000,
+      "path": "charts/test_iid/chords-s31000.json",
+      "sha256": "af1963dd2c5f2a0ff5a3e23d213e338f79d1643102f7e4c50c0dd13c3d504470"
+    },
+    {
+      "split": "test_iid",
+      "family": "crossing",
+      "seed": 31001,
+      "path": "charts/test_iid/crossing-s31001-0.8s.json",
+      "sha256": "0076397732611a1abc6d9dba671f89d87ad7a3b36ee9562c9d11c95e6ecf8262"
+    },
+    {
+      "split": "test_iid",
+      "family": "holds",
+      "seed": 31001,
+      "path": "charts/test_iid/holds-s31001.json",
+      "sha256": "2f5d711d6392c18d42bb5313ed13343830cf5896cfb800509a8b55ebb22a1fb6"
+    },
+    {
+      "split": "test_iid",
+      "family": "chords",
+      "seed": 31001,
+      "path": "charts/test_iid/chords-s31001.json",
+      "sha256": "af6e3e86b12ebfb11506bb468a546ffdd654c80d6d2e757a4518cbffdb4667cd"
+    },
+    {
+      "split": "test_speed",
+      "family": "crossing",
+      "seed": 41000,
+      "path": "charts/test_speed/crossing-s41000-0.3s.json",
+      "sha256": "6cd6ba410ef31e55ebf103403b2bfbd3967f59c014738529c1e05ff2da0c40f3"
+    },
+    {
+      "split": "test_speed",
+      "family": "crossing",
+      "seed": 41001,
+      "path": "charts/test_speed/crossing-s41001-0.4s.json",
+      "sha256": "c4c9549cbe46880a9a119d587062d58cdc1a7cae469d59845072cb57c86bfb09"
+    }
+  ],
+  "bc_seed": 0,
+  "bc_epochs": 30,
+  "bc_train_charts": 48,
+  "bc_validation_charts": 6,
+  "cap_feedback_charts": [
+    "charts/train/crossing-s11000-0.8s.json",
+    "charts/train/holds-s11000.json",
+    "charts/train/chords-s11000.json",
+    "charts/train/crossing-s11001-0.5s.json",
+    "charts/train/holds-s11001.json",
+    "charts/train/chords-s11001.json"
+  ],
+  "cap_revisions": 3,
+  "test_charts": 8,
+  "detectors": [
+    "oracle",
+    "color"
+  ],
+  "notes": "Pilot: one BC seed per head and one 3-revision CAP chain; shared classical handoff routing and tool constraints. Color sees calibrated frames, not camera/concert art. Test accessed only after freezing models and programs."
+}
