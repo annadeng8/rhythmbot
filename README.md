@@ -1062,3 +1062,45 @@ command is zero; maximum measured individual finger-joint displacement was
 qualifying tip, so the overlap can register multiple switches between two
 simultaneously valid tips. These measurements do not certify whole-arm
 collision safety; the inherited iiwa models still omit collision geometry.
+
+## Harder single-tip stress chart
+
+`charts/stylus-hard-handoffs.json` is a fixed 24-note, 150 BPM authored stress
+chart (last note at 21.75 s), run with the same controller and judgment settings
+as the single-tip demo:
+
+- 3–5 s and 17–18.2 s: simultaneous left/right holds.
+- 7–9.4 s: one zigzag slide crossing the center four times, 0.6 s per crossing.
+- 10–13.8 s: four alternating-direction crossing slides with 0.2 s release gaps.
+- 14.6–16.2 s: left hold while the right hand follows a local zigzag slide.
+- 18.6–20.2 s: four crossings in a single faster slide, 0.4 s per crossing.
+- Alternating taps and a closing two-hand chord stream, down to 0.25 s spacing.
+
+```bash
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay \
+  --chart charts/stylus-hard-handoffs.json --out results/stylus-hard-frames
+```
+
+This tests robot execution from the oracle chart input, not learned vision.
+
+![Harder single-tip chart: actual Drake run](docs/drake-stylus-hard.gif)
+
+Result (`results/drake-stylus-hard.json`): **23/24 completed (95.83%)**, 23 Perfect,
+1 Miss, score 69/72. All 12 taps and all 5 holds completed; every hold maintained
+100% contact, including both simultaneous pairs. Six of seven slides completed:
+the 0.6-second-per-crossing zigzag, all four back-to-back crossing slides, and
+the local slide alongside the other hand's hold.
+
+The sole failure is note #15, 18.6–20.2 s: four center crossings at 0.4 s each.
+Tracking coverage fell to 84.74%, with an 80 ms maximum interval without valid
+on-path contact (limits: 95% coverage, 50 ms maximum gap). The tail still passed
+9/9 samples; the final grade correctly remained Miss and earned no points.
+The report's gap metric includes both lifted contact and contact outside the
+lateral tracking tolerance; it does not isolate the physical cause. This run
+finds a limit of the current controller on this pattern, not a universal speed
+limit for single-tip robots. No planner or judgment thresholds were changed.
+
+The 342-frame, 15 fps recording lasts 22.8 s. Minimum sampled tip-center distance
+was 18.6 mm and gripper-center distance 219.8 mm; these are diagnostics, not full
+collision certification. Run used the existing gpu156 Drake environment, two
+CPU threads, no GPU, and task-local outputs/caches under `/data/YifanKang/`.
