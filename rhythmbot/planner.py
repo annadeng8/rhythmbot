@@ -125,7 +125,8 @@ class Plan:
     neighbouring segment uses.
     """
 
-    def __init__(self, keyframes: list[Keyframe], gripper: Gripper | None = None):
+    def __init__(self, keyframes: list[Keyframe], gripper: Gripper | None = None, tilt: float = 0.0):
+        self.tilt = tilt
         if len(keyframes) < 2:
             k = keyframes[0]
             keyframes = [k, Keyframe(k.t + 1.0, k.x, k.z, k.width, k.y, k.down, k.ref, k.rise)]
@@ -160,7 +161,7 @@ class Plan:
         ref, p, width, rise = self._state(t)
         th = roll_for_rise(self.G, width, rise)
         half_x = 0.5 * tip_gap(self.G, width) * np.array([np.cos(th), 0.0, np.sin(th)])
-        return RigidTransform(R_rolled(th), p - ref * half_x)
+        return RigidTransform(RotationMatrix.MakeYRotation(self.tilt) @ R_rolled(th), p - ref * half_x)
 
     def width_at(self, t: float) -> float:
         return float(self._state(t)[2])
@@ -268,10 +269,12 @@ class ClassicalPlanner(Policy):
         self.L = cfg.layout
         self.M = cfg.motion
         self.G = cfg.gripper
-        self.hover_z = self.L.screen_z + self.M.hover_height
-        self.touch_z = self.L.screen_z - self.M.touch_depth
+        self.surface_z = self.L.screen_z + (self.G.tip_radius if self.G.single_tip else 0)
+        self.hit_y = self.L.hit_y + ((-1 if hand == 0 else 1)*self.G.hand_y_offset if self.G.single_tip and hand is not None else 0)
+        self.hover_z = self.surface_z + self.M.hover_height
+        self.touch_z = self.surface_z - self.M.touch_depth
         # With two arms the fingertips stay one lane apart.
-        self.home_width = 0.0 if hand is None else self.G.width_for_tip_gap(self.L.lane_width)
+        self.home_width = 0.0 if hand is None or self.G.single_tip else self.G.width_for_tip_gap(self.L.lane_width)
         self.inner_lane = None if hand is None else self.L.n_lanes // 2 - 1 + hand
 
     def rest_x(self) -> float:
@@ -283,7 +286,7 @@ class ClassicalPlanner(Policy):
     def _home(self, lane: float) -> tuple[int, float]:
         """(fingertip side, opening) that plays a lane.  With one arm, both
         fingertips straddle it unless a hold says otherwise."""
-        if self.hand is None:
+        if self.hand is None or self.G.single_tip:
             return 0, 0.0
         if self.hand == 0:
             return (1 if lane >= self.inner_lane else -1), self.home_width
@@ -293,6 +296,9 @@ class ClassicalPlanner(Policy):
         """With two arms, does a keep this hand out of the other's half?"""
         if self.hand is None:
             return True
+        if self.G.single_tip:
+            sign = 1 if self.hand == 1 else -1
+            return all(sign*x >= -1e-6 for _,x in a.path)
         mids = [self._mid_x(x, a.side, a.width) for _, x in a.path]
         sign = 1 if self.hand == 1 else -1
         return all(sign * m >= self.cfg.arms.middle_clearance - 1e-6 for m in mids)
@@ -345,6 +351,8 @@ class ClassicalPlanner(Policy):
     def _options(self, group: list[TrackedNote]) -> list[_Action]:
         """The ways of playing a group: any note alone, any two together."""
         options = [self._single(n) for n in group]
+        if self.G.single_tip:
+            return [a for a in options if self._reachable(a)]
         for i, a in enumerate(group):
             for b in group[i + 1 :]:
                 chord = self._chord(a, b) if a.kind == b.kind == TAP else self._hold_chord(a, b)
@@ -419,7 +427,7 @@ class ClassicalPlanner(Policy):
         path = [(float(off), self.L.lane_x(lane)) for off, lane in wps]
         if path[0][0] > 0.0:
             path.insert(0, (0.0, self.L.lane_x(n.lane)))
-        side = 0 if self.hand is None else (1 if self.hand == 0 else -1)
+        side = 0 if self.hand is None or self.G.single_tip else (1 if self.hand == 0 else -1)
         width = 0.0 if self.hand is None else self.home_width
         return _Action(n.hit_time, n.hit_time + path[-1][0], SLIDE, width, path, [n], side)
 
@@ -440,6 +448,8 @@ class ClassicalPlanner(Policy):
         fingertip may land `lane_slack` off its lane centre; the holding one
         only if it is not down yet (`can_shift`)."""
         if len(b.notes) != 1 or b.kind not in (TAP, HOLD):
+            return None
+        if self.G.single_tip:
             return None
         dx = b.x_start - x_hold
         slack = (2 if can_shift else 1) * self.M.lane_slack
@@ -555,7 +565,7 @@ class ClassicalPlanner(Policy):
         t_end = max(hold.t_end, kfs[-1].t)
         if hold.t_end > kfs[-1].t + 1e-3:
             kfs.append(
-                Keyframe(hold.t_end, hold.x, self.touch_z, hold.width, self.L.hit_y, True, hold.side, hold.rise)
+                Keyframe(hold.t_end, hold.x, self.touch_z, hold.width, self.hit_y, True, hold.side, hold.rise)
             )
         return _Release(t_end, hold.x, hold.width, HOLD, hold.side)
 
@@ -563,7 +573,7 @@ class ClassicalPlanner(Policy):
     def _step(self, a: _Action, rest: list[_Action], st: _State) -> bool:
         """Add action a to the keyframes in st, if it can be played from there."""
         M, L = self.M, self.L
-        y = L.hit_y
+        y = self.hit_y
         kfs = st.kfs
         if st.hold is not None:
             if a.t_hit < st.hold.t_end + M.post_time * 0.5:
@@ -603,7 +613,7 @@ class ClassicalPlanner(Policy):
                 # between the two touches, lower when the gap is tight
                 # but always high enough to register as a release.
                 frac = max(gap, 0.02) / (M.pre_time + M.post_time)
-                z = L.screen_z + max(0.015, M.hover_height * frac)
+                z = self.surface_z + max(0.015, M.hover_height * frac)
                 t_apex = prev.t_end + 0.5 * max(gap, 0.02)
                 x_apex = 0.5 * (
                     self._mid_x(a.x_start, a.side, a.width) + self._mid_x(prev.x_end, prev.ref, prev.width)
@@ -623,7 +633,7 @@ class ClassicalPlanner(Policy):
             )
         # Down phase: the fingertip crosses the contact height exactly at
         # the hit time, then presses on to touch_z.
-        kfs.append(Keyframe(a.t_hit, a.x_start, L.screen_z + M.contact_tolerance, a.width, y, True, a.side, up))
+        kfs.append(Keyframe(a.t_hit, a.x_start, self.surface_z + M.contact_tolerance, a.width, y, True, a.side, up))
         if a.partner_end is not None:
             self._land_hold_chord(a, st)
             return True
@@ -683,7 +693,7 @@ class ClassicalPlanner(Policy):
         if st.prev is not None:
             prev = st.prev
             st.kfs.append(
-                Keyframe(prev.t_end + self.M.post_time, prev.x_end, self.hover_z, prev.width, self.L.hit_y, False, prev.ref)
+                Keyframe(prev.t_end + self.M.post_time, prev.x_end, self.hover_z, prev.width, self.hit_y, False, prev.ref)
             )
         return st.kfs
 
@@ -707,6 +717,8 @@ class ClassicalPlanner(Policy):
         p = X_WT_cmd.translation()
         x_axis = X_WT_cmd.rotation().matrix()[:, 0]
         rise = tip_gap(self.G, width_cmd) * float(np.sin(np.arctan2(x_axis[2], x_axis[0])))
+        if self.G.single_tip:
+            rise = 0.0  # fixed stylus tilt is not a two-finger rolling command
         start = Keyframe(t_now, p[0], p[2], width_cmd, p[1], False, 0, rise)
         future = [k for k in kfs if k.t > t_now + 1e-3]
         out = [start]
@@ -716,4 +728,5 @@ class ClassicalPlanner(Policy):
                 k.t = last_t + 1e-3
             out.append(k)
             last_t = k.t
-        return Plan(out, self.G)
+        tilt = np.deg2rad(self.G.tilt_degrees) * (-1 if self.hand == 0 else 1) if self.G.single_tip else 0.0
+        return Plan(out, self.G, tilt)

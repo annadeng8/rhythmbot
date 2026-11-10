@@ -12,7 +12,8 @@ from .chart import Chart, demo_chart
 
 
 class StageRenderer:
-    def __init__(self, width=1280, height=720, lanes=6, approach=2.4):
+    def __init__(self, width=1280, height=720, lanes=6, approach=2.4, contacts_per_arm=2):
+        self.contacts_per_arm = contacts_per_arm
         self.width, self.height, self.lanes, self.approach = width, height, lanes, approach
 
     def project(self, lane, dt):
@@ -84,7 +85,7 @@ class StageRenderer:
         if touches is not None:
             for k, (down, lane) in enumerate(touches):
                 x,y=self.project(lane,0)
-                color=(99,234,242) if k<2 else (251,140,207)
+                color=(99,234,242) if k<self.contacts_per_arm else (251,140,207)
                 d.ellipse((x-12,y-12,x+12,y+12),outline=color,width=3)
                 if down: d.ellipse((x-6,y-6,x+6,y+6),fill=color)
             text(.08,.91,'L / MEASURED FINGERTIPS',16,(99,234,242))

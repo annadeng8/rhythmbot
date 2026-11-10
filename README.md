@@ -1022,3 +1022,43 @@ error was 5.9 mm. The 263-frame GIF above is the actual Drake camera recording
 of this run. Minimum sampled gripper-center separation was 153.7 mm; the
 station uses its existing no-collision iiwa models and geometric touch sensing,
 so this does not certify arm-arm collision safety outside this demonstration.
+
+## One finger per arm: closed WSG + central stylus
+
+The default `rhythmbot.drake_replay` demonstration now uses two closed WSGs,
+each carrying a central cylinder and a 6 mm-radius rounded tip. Only that tip
+is connected to the touch sensor: **two arms, two contact channels total**.
+The existing WSG finger meshes cannot earn extra hits. The detector, judge
+windows, slide gap limit and tail checks remain unchanged.
+
+```bash
+HEADLESS=1 python -m rhythmbot.play --stylus --demo --no-realtime
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay --out results/stylus-frames
+# Previous open-gripper/two-finger demonstration:
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay --two-finger --out results/wsg-frames
+```
+
+The stylus sphere center is 220 mm from the gripper frame along its central
+axis. Each arm tilts inward by 30 degrees, keeping its gripper body away from
+the crossing. Contacts are staggered 12 mm forward/back along the judgment
+line so two round tips do not occupy the same point during handoff. Planning
+and sensing account for the sphere radius. Width commands remain zero, and
+single-arm chord / free-finger-while-holding actions are disabled. Three
+simultaneous distinct targets cannot all score with two tips.
+
+The regression suite now has 11 tests, including contact-channel count,
+single-tip action constraints, three-note limits and fixed tilt across repeated
+replanning. The displayed styluses are welded simulation tools with geometric
+touch sensing; this is not a force-controlled physical grasp simulation.
+
+![Two single-tip styluses in Drake](docs/drake-stylus.gif)
+
+Recorded validation (`results/drake-stylus.json`): 18/18 completed, two contact
+channels, slide coverage 99.50% / 99.69%, both tails 9/9 samples, unchanged
+maximum gap 5 ms. Minimum sampled tip-center separation was 24.1 mm (tip
+diameter 12 mm); minimum gripper-center separation was 217.4 mm. The width
+command is zero; maximum measured individual finger-joint displacement was
+1.25 mm during the run. The handoff counter tracks changes of the nearest
+qualifying tip, so the overlap can register multiple switches between two
+simultaneously valid tips. These measurements do not certify whole-arm
+collision safety; the inherited iiwa models still omit collision geometry.

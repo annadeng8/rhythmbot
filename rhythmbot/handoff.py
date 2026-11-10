@@ -10,7 +10,7 @@ def hand_notes(notes, hand, cfg):
     out=[]
     middle=(cfg.layout.n_lanes-1)/2
     # Reach with the inner fingertip, leaving the two gripper bodies separated.
-    inner_x=cfg.arms.middle_clearance-cfg.layout.lane_width/2
+    inner_x=0.0 if cfg.gripper.single_tip else cfg.arms.middle_clearance-cfg.layout.lane_width/2
     edge=cfg.layout.x_to_lane((-1 if hand==0 else 1)*inner_x)
     for n in notes:
         if n.kind != SLIDE:

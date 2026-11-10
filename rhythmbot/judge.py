@@ -83,7 +83,7 @@ class Judge(LeafSystem):
         self.results: dict[int, NoteResult] = {
             n.id: NoteResult(n.id, n.kind, n.lane, n.time, n.duration) for n in chart.notes
         }
-        n_tips = 2 * cfg.arms.n
+        n_tips = cfg.gripper.contacts_per_arm * cfg.arms.n
         self.down_since: list[float | None] = [None] * n_tips
         # A fresh touch may be spent on one note only.
         self.touch_used: list[float | None] = [None] * n_tips
@@ -190,7 +190,7 @@ class Judge(LeafSystem):
         if tracked:
             r.contact_ticks += 1
             if note.kind == SLIDE:
-                eligible = [(abs(p[0]-target_x), k//2) for k,(down,p) in enumerate(touches)
+                eligible = [(abs(p[0]-target_x), k//self.cfg.gripper.contacts_per_arm) for k,(down,p) in enumerate(touches)
                             if down and self._near_line(p[1])]
                 hand = min(eligible)[1]
                 r.contact_ticks_by_hand[hand] += 1

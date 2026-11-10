@@ -38,7 +38,7 @@ from . import PROJECT_ROOT
 from . import audio
 from .brain import GameScreen, RhythmBrain, initial_tip_pose
 from .chart import Chart, demo_chart, random_chart
-from .config import DEFAULT, Config, Perception, two_arm_config
+from .config import DEFAULT, Config, Perception, two_arm_config, stylus_config
 from .game import HighwayVisualizer
 from .judge import Judge
 from .perception import make_detector
@@ -65,6 +65,11 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     for k, arm in enumerate(robot.arms):
         p = policy or ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
         X_WT0 = initial_tip_pose(cfg, p.rest_x() if hasattr(p, "rest_x") else 0.0)
+        if cfg.gripper.single_tip:
+            from pydrake.all import RotationMatrix
+            tilt = np.deg2rad(cfg.gripper.tilt_degrees) * (-1 if k == 0 else 1)
+            X_WT0 = RigidTransform(RotationMatrix.MakeYRotation(tilt) @ X_WT0.rotation(),
+                [p.rest_x(), p.hit_y, p.hover_z])
         q0 = arm.solve_start_configuration(X_WT0 @ RigidTransform(-X_GT))
         X_WG0s.append(arm.gripper_pose_at(q0))
         policies.append(p)
@@ -160,7 +165,7 @@ def run(
             from .robot import unpack_touch
             destination = Path(stage_frames)
             destination.mkdir(parents=True, exist_ok=True)
-            renderer = StageRenderer(lanes=cfg.layout.n_lanes)
+            renderer = StageRenderer(lanes=cfg.layout.n_lanes, contacts_per_arm=cfg.gripper.contacts_per_arm)
             index = 0
             while context.get_time() < t_end:
                 simulator.AdvanceTo(min(t_end, context.get_time() + 1 / 30))
@@ -203,6 +208,7 @@ def run(
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--stylus", action="store_true", help="two closed grippers with one central stylus each")
     ap.add_argument("--stage-frames", type=Path, help="export measured stage replay PNGs at 30 fps")
     src = ap.add_mutually_exclusive_group()
     src.add_argument("--chart", help="chart JSON file")
@@ -253,6 +259,10 @@ def main(argv=None):
     if args.arms is None:
         args.arms = 1 if args.view == "camera" or args.policy != "classical" else 2
     base = two_arm_config() if args.arms == 2 else DEFAULT
+    if args.stylus:
+        if args.arms != 2 or args.policy != "classical":
+            ap.error("--stylus requires --arms 2 and the classical policy")
+        base = stylus_config(base)
     cfg = dataclasses.replace(
         base,
         perception=dataclasses.replace(

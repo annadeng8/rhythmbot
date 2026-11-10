@@ -118,6 +118,14 @@ class Gripper:
     # fingertips sit at x = -/+ this when the command is 0.
     half_closed: float = 0.0115
     max_width: float = 0.107
+    single_tip: bool = False
+    tip_radius: float = 0.006
+    tilt_degrees: float = 30.0
+    hand_y_offset: float = 0.012
+
+    @property
+    def contacts_per_arm(self) -> int:
+        return 1 if self.single_tip else 2
 
     def tip_x_offsets(self, width: float) -> tuple[float, float]:
         """Fingertip x positions in G for a commanded opening `width`."""
@@ -275,3 +283,9 @@ def two_arm_config(base: Config = DEFAULT) -> Config:
     the densest map.  The game frame is drawn in pixels, so the vision model
     does not change."""
     return replace(base, arms=Arms(n=2), layout=replace(base.layout, lane_width=0.12))
+
+
+def stylus_config(base: Config = DEFAULT) -> Config:
+    """Two closed WSGs, each holding one central round stylus."""
+    cfg = two_arm_config(base)
+    return replace(cfg, gripper=replace(cfg.gripper, single_tip=True, tip_offset=0.22))
