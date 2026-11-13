@@ -1,0 +1,14 @@
+{
+  "host": "gpu156",
+  "workspace": "/data/YifanKang/rhythmbot_handoff_20261113",
+  "base_commit": "5c644a7715624d7f08161f84db0f473e4e76ce76",
+  "root_free_gb": 378,
+  "data_free_tb": 2.7,
+  "available_ram_gib": 536,
+  "swap_used_mib": 31,
+  "load_1m": 0.45,
+  "graphics_gpu": 0,
+  "graphics_gpu_free_mib": 45464,
+  "budget": {"workers": 2, "cpu_threads": 2, "ram_gb": 6, "graphics_vram_gb": 1, "disk_gb": 1},
+  "kernel_requirements": "No custom CUDA/Triton kernels; CPU inference, EGL GPU 0 graphics. Validate exact camera config on two charts before the remaining smoke runs."
+}

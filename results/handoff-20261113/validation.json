@@ -1,0 +1,140 @@
+{
+  "tests_passed": 39,
+  "base_commit": "5c644a7715624d7f08161f84db0f473e4e76ce76",
+  "source_sha256": "2be0043046f7c195f799d03bc60406e33e8fe073a6635ee9f51d94dc63a40fa5",
+  "judge_sha256": "447e724fdb8120bc",
+  "runs_verified": 16,
+  "execution_errors": 0,
+  "policy_errors": 0,
+  "scope": "2 charts x 4 methods x 2 presets: entry-point validation, not a complete benchmark",
+  "rows": [
+    {
+      "preset": "sekai-camera",
+      "policy": "classical",
+      "label": "classical",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 2,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-camera",
+      "policy": "classical",
+      "label": "classical",
+      "chart": "holds-s31000",
+      "completed": 5,
+      "notes": 6
+    },
+    {
+      "preset": "sekai-camera",
+      "policy": "cap:results/yifan-study-v1/cap/v1/policy.py",
+      "label": "cap-v1",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 2,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-camera",
+      "policy": "cap:results/yifan-study-v1/cap/v1/policy.py",
+      "label": "cap-v1",
+      "chart": "holds-s31000",
+      "completed": 5,
+      "notes": 6
+    },
+    {
+      "preset": "sekai-camera",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "label": "bc-mlp",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 0,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-camera",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "label": "bc-mlp",
+      "chart": "holds-s31000",
+      "completed": 2,
+      "notes": 6
+    },
+    {
+      "preset": "sekai-camera",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "label": "bc-diffusion",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 0,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-camera",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "label": "bc-diffusion",
+      "chart": "holds-s31000",
+      "completed": 0,
+      "notes": 6
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "classical",
+      "label": "classical",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 2,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "classical",
+      "label": "classical",
+      "chart": "holds-s31000",
+      "completed": 5,
+      "notes": 6
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "cap:results/yifan-study-v1/cap/v1/policy.py",
+      "label": "cap-v1",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 2,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "cap:results/yifan-study-v1/cap/v1/policy.py",
+      "label": "cap-v1",
+      "chart": "holds-s31000",
+      "completed": 5,
+      "notes": 6
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "label": "bc-mlp",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 0,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "label": "bc-mlp",
+      "chart": "holds-s31000",
+      "completed": 2,
+      "notes": 6
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "label": "bc-diffusion",
+      "chart": "crossing-s31000-0.6s",
+      "completed": 0,
+      "notes": 3
+    },
+    {
+      "preset": "sekai-screen",
+      "policy": "bc:results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "label": "bc-diffusion",
+      "chart": "holds-s31000",
+      "completed": 0,
+      "notes": 6
+    }
+  ]
+}
