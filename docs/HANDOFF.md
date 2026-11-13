@@ -21,6 +21,10 @@ CAP/BC policies are instantiated independently for each arm. The camera preset
 uses the prior camera study's exact camera geometry, 960×720 resolution and noise
 standard deviation 3/255. No retraining or score-window relaxation is included.
 
+The fixed external RGB camera is the control input for `sekai-camera`. Meshcat
+also offers a separate movable 3D observer view. Moving the Meshcat observer
+does not change the control-camera calibration or its RGB stream.
+
 The dynamic game display is composited into Drake's scene RGB using render labels
 inside the renderer, preserving robot occlusion. The detector sees neither labels,
 depth nor chart state. It receives RGB and time, rectifies with known calibration,
