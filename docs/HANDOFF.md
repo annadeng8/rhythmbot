@@ -147,4 +147,4 @@ old frozen artifacts; running them against changed code is not a reproduction of
 the original experiments. Use the original commits to reproduce historical data.
 
 Existing camera GIFs are clearly labeled historical; this handoff does not claim
-that they show the new judge. 
+that they show the new judge.
