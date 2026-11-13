@@ -18123,7 +18123,7 @@
  "skipped_by_planner": [],
  "n_detections": 59740,
  "sim_seconds": 99.426,
- "wall_seconds": 63.959015130996704,
+ "wall_seconds": 42.622101068496704,
  "config": {
   "layout": {
    "n_lanes": 6,

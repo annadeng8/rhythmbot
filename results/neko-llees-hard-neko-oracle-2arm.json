@@ -13646,7 +13646,7 @@
  ],
  "n_detections": 45033,
  "sim_seconds": 99.426,
- "wall_seconds": 25.72610306739807,
+ "wall_seconds": 25.015583992004395,
  "config": {
   "layout": {
    "n_lanes": 6,

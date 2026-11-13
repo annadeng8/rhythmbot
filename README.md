@@ -251,15 +251,14 @@ below, in *Two arms*):
 | difficulty | stars | notes | notes/s | oracle completion | vision model completion | previous vision model (3 slots) | mean \|timing error\|, oracle / vision |
 |---|---|---|---|---|---|---|---|
 | Easy Neko | 1.10 | 244 | 2.5 | 99.6 % | 99.6 % | 98.4 % | 8 / 7 ms |
-| Normal Neko | 1.64 | 446 | 4.7 | 85.2 % | 84.3 % | 66.6 % | 31 / 29 ms |
-| Advanced Neko | 2.49 | 759 | 7.9 | 73.1 % | 72.9 % | 50.1 % | 28 / 27 ms |
-| Llee's Hard Neko | 2.88 | 907 | 9.5 | 70.9 % | 69.8 % | 53.4 % | 34 / 33 ms |
-| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 61.3 % | 59.5 % | 42.1 % | 38 / 31 ms |
+| Normal Neko | 1.64 | 446 | 4.7 | 82.7 % | 81.8 % | 66.6 % | 26 / 24 ms |
+| Advanced Neko | 2.49 | 759 | 7.9 | 71.7 % | 71.5 % | 50.1 % | 24 / 24 ms |
+| Llee's Hard Neko | 2.88 | 907 | 9.5 | 66.5 % | 67.1 % | 53.4 % | 25 / 24 ms |
+| Nyanyannyanyan | 3.85 | 1206 | 12.6 | 59.1 % | 57.2 % | 42.1 % | 26 / 25 ms |
 
-Where the oracle's misses came from before the four planner and tracker
-fixes below, which between them added 19, 64, 128 and 207 notes. So these
-rows are not all physics: the first, especially, was partly the planner's
-own timing and choices.
+Where the oracle's misses came from before the planner and tracker fixes
+below. These rows are not all physics: the first, especially, was partly the
+planner's own timing and choices.
 
 | why the oracle run missed a note | Normal | Advanced | Hard | Nyan |
 |---|---|---|---|---|
@@ -283,8 +282,13 @@ hold-duration error.
 The oracle is a guide rather than a true ceiling on these maps, which ask for
 more than one hand can play: the planner has to choose, and small timing
 differences change its choices. On Nyanyannyanyan vision and the oracle share
-588 completed notes, with 151 only by the oracle and 130 only by vision, and
-color segmentation (61.8 %) edges past the oracle.
+559 completed notes, with 154 only by the oracle and 131 only by vision, and
+color segmentation (59.8 %) edges past the oracle.
+
+**Scoring note.** The table above uses the judge's stricter touch rule (see
+*A stricter judge*). Percentages quoted in the fixes below, up to and including
+*Chords with a hold*, were measured under the earlier rule, so they run 1–4
+points higher with one arm than this table.
 
 **Close notes in the tracker.** The tracker used to match each detection to
 the nearest tracked note of the same kind and lane within 0.15 s, and several
@@ -356,6 +360,16 @@ With one arm, completion rose from 71.0 to 72.9 %, 68.0 to 69.8 % and 56.3 to
 arms, where this was nearly the only thing left, it took Advanced from 92.4 to
 99.9 %.
 
+**A stricter judge.** On a second song the one-arm runs showed notes judged
+"good" about 0.15 s early on an easy chart. Both fingertips land together, only
+one was marked as used, and the other stayed down and dragged into the next
+lane, which the judge counted as a new touch. A touch must now land inside the
+note's lane, and a note uses up every fingertip that landed in its lane. With
+one arm and the oracle, this lowers completion from 85.2 to 82.7 %, 73.1 to
+71.7 %, 70.9 to 66.5 % and 61.3 to 59.1 %. Timing error also drops, because the
+dragged touches were the worst ones (from 28–38 ms to 24–26 ms). The regression
+charts and every two-arm result are unchanged: fixed fingertips do not drag.
+
 Reports are in `results/neko-<difficulty>-<detector>.json`.
 
 ### Two arms
@@ -375,10 +389,10 @@ changes the world geometry.
 | difficulty | vision, 1 arm → 2 arms | oracle, 2 arms | color, 2 arms | judgments, vision (perfect/great/good/miss) | mean \|timing error\|, vision, 1 → 2 arms |
 |---|---|---|---|---|---|
 | Easy Neko | 99.6 → **100 %** | 100 % | 100 % | 244/0/0/0 | 7 → 5 ms |
-| Normal Neko | 84.3 → **100 %** | 100 % | 100 % | 446/0/0/0 | 29 → 10 ms |
-| Advanced Neko | 72.9 → **99.9 %** | 100 % | 100 % | 756/2/0/1 | 27 → 13 ms |
-| Llee's Hard Neko | 69.8 → **97.8 %** | 97.7 % | 97.7 % | 832/52/5/18 | 33 → 18 ms |
-| Nyanyannyanyan | 59.5 → **93.9 %** | 93.4 % | 93.7 % | 1005/126/6/69 | 31 → 24 ms |
+| Normal Neko | 81.8 → **100 %** | 100 % | 100 % | 446/0/0/0 | 24 → 10 ms |
+| Advanced Neko | 71.5 → **99.9 %** | 100 % | 100 % | 756/2/0/1 | 24 → 13 ms |
+| Llee's Hard Neko | 67.1 → **97.8 %** | 97.7 % | 97.7 % | 832/52/5/18 | 24 → 18 ms |
+| Nyanyannyanyan | 57.2 → **93.9 %** | 93.4 % | 93.7 % | 1005/126/6/69 | 25 → 24 ms |
 
 Of the oracle's remaining misses on Hard (21) and Nyanyannyanyan (80), most are
 very fast repeats in one lane, where the whole hand has to lift and come back,
@@ -388,7 +402,8 @@ jitter, 150 ms latency) also completes 100 % of Advanced Neko.
 **Lanes are wider.** The WSG body is 146 mm wide, so at 50 mm lanes the hands
 would collide. At 100 mm they still touched while rolling on Nyanyannyanyan. At
 the 120 mm chosen (`two_arm_config`), the closest the two hands' collision
-geometry comes is 48 mm on Nyanyannyanyan and 59 mm on Normal.
+geometry comes is 42 mm, on Cityyy – Unknown's top difficulty (48 mm on
+Nyanyannyanyan).
 
 **Measured motion.** On Nyanyannyanyan, rolls stay around 8° at most, the arms stay at
 least 0.41 rad from every joint limit, and a holding fingertip slides at most
@@ -426,6 +441,39 @@ and chords two lanes apart on one hand no longer fit the WSG's 130 mm reach:
 One arm remains the default and still completes all of
 these. Two-arm reports are in `results/*-2arm.json`.
 
+### A second song: Cityyy – Unknown
+
+To test on a song nothing was tuned on: *Unknown* by Cityyy, an osu! Featured
+Artist (beatmap set 2553938, mapped by RhythmHomura, 190 BPM, 91 s). It has
+eight 4K difficulties and, unlike NekoTeto, almost no holds. The vision model
+was not retrained. Vision model completion, then oracle:
+
+| difficulty | stars | notes | notes/s | 1 arm: vision / oracle | 2 arms: vision / oracle | judgments, 2 arms, vision (perfect/great/good/miss) | mean \|timing error\|, vision, 1 → 2 arms |
+|---|---|---|---|---|---|---|---|
+| Easy | 1.26 | 282 | 3.1 | 99.3 / 99.3 % | **100** / 100 % | 282/0/0/0 | 15 → 7 ms |
+| Intermediate | 1.44 | 341 | 3.7 | 97.7 / 97.9 % | **100** / 100 % | 341/0/0/0 | 20 → 8 ms |
+| Normal | 1.93 | 483 | 5.3 | 98.6 / 99.8 % | **100** / 100 % | 483/0/0/0 | 19 → 6 ms |
+| Advanced | 2.46 | 664 | 7.3 | 99.5 / 99.5 % | **100** / 100 % | 664/0/0/0 | 22 → 9 ms |
+| Hard | 3.14 | 905 | 10.0 | 84.4 / 86.1 % | **99.4** / 99.4 % | 859/40/1/5 | 25 → 17 ms |
+| Hyper | 3.46 | 974 | 10.7 | 78.0 / 79.9 % | **99.5** / 98.6 % | 870/98/1/5 | 24 → 21 ms |
+| Insane | 3.76 | 1059 | 11.6 | 72.4 / 76.1 % | **98.2** / 97.0 % | 833/205/2/19 | 25 → 25 ms |
+| Extra | 4.16 | 1172 | 12.9 | 64.4 / 69.7 % | **91.2** / 90.0 % | 737/322/10/103 | 31 → 33 ms |
+
+"Extra" stands for the top difficulty, whose real name is a string of symbols.
+On it, two arms exceed the joint speed limits more than one arm does (17.8 % of
+the time against 11.3 %, both peaking at 188 %), since the one-arm run skips more
+notes. To reproduce, fetch each chart from `osu.ppy.sh/osu/<beatmap id>` (5679964,
+5679967, 5676157, 5676155, 5676156, 5670174, 5670175, 5677829, in the table's order) and:
+
+```bash
+python -m rhythmbot.importers songs/cityyy-unknown/hard.osu --out songs/cityyy-unknown/hard.json
+python -m rhythmbot.play --chart songs/cityyy-unknown/hard.json --arms 2 --detector torch --model results/note_detector.pt --audio --hold
+```
+
+The song audio is not in the repository and has not been lined up with these
+charts yet, so live runs use `--audio`. Reports are in
+`results/cityyy-<difficulty>-<detector>[-2arm].json`.
+
 ## Modules
 
 | file | role |
@@ -444,8 +492,9 @@ these. Two-arm reports are in `results/*-2arm.json`.
 | `rhythmbot/audio.py` | soundtrack synthesized from the chart, or a song file, played in sync with a live run |
 | `rhythmbot/importers.py` | osu!mania, StepMania and Clone Hero chart importers; GuitarHeroBot's Slow Ride |
 | `rhythmbot/policies.py` | every policy by name: `classical`, `cap:<policy.py>`, `bc:<model.pt>` (`play --policy`) |
-| `rhythmbot/splits.py` | chart splits: `cap-train`, `bc-train`, and the held-out `heldout-iid` / `heldout-dense` / `heldout-real` |
-| `rhythmbot/evaluate.py` | runs policies × detectors × a split headless in parallel; `summary.md` with completion, timing, contact, slide error |
+| `rhythmbot/splits.py` | chart splits: `cap-train`, `bc-train`, and the held-out `heldout-iid` / `heldout-dense` / `heldout-real` / `heldout-song` |
+| `rhythmbot/evaluate.py` | runs policies × detectors × a split headless in parallel; `summary.md` with completion, timing, contact, slide error; per-run time limit, provenance on every report, warnings for mixed scoring rules and missing song charts |
+| `rhythmbot/failures.py` | sorts every failed note of an evaluation into perception, lost contact, beyond the robot, skipped or missed head |
 | `rhythmbot/cap/` | code-as-policy: `TASK.md` (the agent's problem statement), `api.py` (the control API generated programs use), `sandbox.py` (import check + guarded execution), `feedback.py`, `loop.py` (the agent ↔ simulator refinement loop) |
 | `rhythmbot/bc/` | behavior cloning: `features.py` (observation / action-chunk encoding), `train.py` (demos from the classical planner + DAgger), `policy.py` (`BCPolicy`) |
 | `charts/` | demo and three random charts |
@@ -560,7 +609,7 @@ start configuration is solved with `InverseKinematics` so the arm begins
 hovering over the middle of the judgment line.
 
 **Judge.** At 200 Hz against the chart (ground truth, not the brain's
-belief): taps need a *fresh* touch-down in the lane within ±140 ms (perfect
+belief): notes need a *fresh* touch-down that lands in the lane within ±140 ms (perfect
 ≤45, great ≤90, good ≤140); holds and slides additionally need contact for
 ≥80% of their duration, slides within 0.6 lanes of the moving target; slide
 RMS lateral error is recorded. Both fingertips are eligible, which is what
@@ -822,7 +871,85 @@ where the classical planner gets 100 %; the screen-pixels policy fed the
 camera image scores 0 %. Classical play is unchanged by the camera (99.1 %
 on `cap-train` either way).
 
+## Evaluation under one scoring rule
+
+Every approach that can be run from this repository, re-scored together:
+same code, same strict judge (slides need 95 % tracking, no gap over 50 ms
+and a correct tail; see *Slide execution and scoring repair*), one arm, and
+the trained vision model for the vision runs. Reports are in
+`results/eval-v2/`, with `summary.md` and `failures.md`.
+
+```bash
+HEADLESS=1 python -m rhythmbot.evaluate --policy classical \
+    cap:results/cap/fable-selftest/policy_v1.py cap:results/cap/fable-feedback/policy_v7.py \
+    --split heldout,heldout-song --detector oracle torch --out results/eval-v2
+HEADLESS=1 python -m rhythmbot.evaluate --policy cappx:results/cap/fable-pixels/policy_v3.py \
+    --split heldout,heldout-song --detector oracle --out results/eval-v2
+python -m rhythmbot.failures results/eval-v2 --examples 5
+```
+
+`heldout-song` is new: three difficulties (easy, intermediate, normal; 1106
+notes, 3–5 notes/s) of a second ranked osu!mania song, Cityyy's "Unknown",
+imported after the planner, the vision model and every generated program
+were made. It is the only set none of them has seen. Like every song chart
+it needs `songs/` (see *Playing a real osu!mania beatmap*); without it,
+`evaluate` now lists the charts it could not run instead of skipping them.
+
+Completion, oracle notes / vision-model notes:
+
+| approach | held-out iid + dense + real (21 charts, 704 notes) | unseen song (3 charts, 1106 notes) | all (1810 notes) |
+|---|---|---|---|
+| classical planner | 98.7 / 95.6 % | 99.1 / 98.5 % | 99.0 / 97.3 % |
+| code-as-policy, feedback only (v7) | 95.9 / 91.6 % | 82.5 / 81.3 % | 87.7 / 85.3 % |
+| code-as-policy, self-test (v1) | 94.9 / 91.6 % | 67.5 / 74.1 % | 78.2 / 80.9 % |
+| code-as-policy, pixels only (v3) | 84.7 % | 73.2 % | 77.7 % |
+
+Why notes failed, all 1810 notes (`rhythmbot.failures`; "did not play"
+adds up *skipped* and *missed head*, which can only be told apart with the
+oracle because vision-model notes carry no chart ids):
+
+| approach | notes | failed | perception | lost contact | beyond the robot | did not play |
+|---|---|---|---|---|---|---|
+| classical, oracle | 1810 | 19 | – | 3 | 0 | 16 |
+| classical, vision | 1810 | 48 | 33 | 3 | 0 | 12 |
+| code-as-policy v7, oracle | 1810 | 222 | – | 11 | 2 | 209 |
+| code-as-policy v7, vision | 1810 | 266 | 69 | 10 | 2 | 185 |
+| code-as-policy v1, oracle | 1810 | 395 | – | 5 | 10 | 380 |
+| code-as-policy v1, vision | 1810 | 345 | 83 | 5 | 7 | 250 |
+| code-as-policy pixels v3 | 1810 | 404 | – | 31 | 9 | 364 |
+
+What this shows:
+
+* **The unseen song separates the approaches.** On the held-out charts the
+  two programs that read tracked notes trail the planner by 3–4 points (the
+  pixels-only one by 14); on the song all three trail by 17–32.
+  The self-test program (v1), the best on the earlier held-out comparison,
+  falls to 67.5 % and marked 269 of the song's notes as skipped itself. The
+  feedback-only program (v7) generalizes better, so the ranking of the two
+  revisions flips on music none of them had seen.
+* **The generated programs' failures are their own choices**, not the
+  robot's limits: almost all are notes they did not play. At most 10 notes
+  per approach, under 3 % of its failures, are "beyond the robot" on these
+  charts, which one arm can play (the planner completes 99 %).
+* **Perception costs the planner 1.7 points, mostly slides.** 33 of its 48
+  vision-run failures are notes it completes with the oracle. Under the strict
+  slide rules the vision model's slides complete 52.6 % against 91.2 % with
+  the oracle: 17 of the 27 failed slides miss the *tail* (the last 40 ms on
+  the final lane), so the vision model's slide end time and end lane, not the
+  path in between, is the next thing to improve.
+
+Caveats: behavior cloning is not in these tables, because its checkpoints
+are not in the repository (they are on gpu156). The classical planner was
+developed on the `heldout-real` charts, so only `heldout-song` is unseen
+for it. The generated programs were written and selected under the earlier,
+looser slide rules. These reports were produced from commit 0267fc9 plus
+uncommitted changes (this section's evaluation work and the judge's
+touch-rule fix), which each report's `provenance` records.
+
 ## Comparison
+
+*Scored under the earlier, looser slide rules, before the stricter judge; see
+*Evaluation under one scoring rule* above for the current numbers.*
 
 Held-out completion over all 20 charts (460 notes), best revision or final
 model of each:

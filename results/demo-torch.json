@@ -31,7 +31,7 @@
    "hit": 2,
    "completed": 2,
    "mean_maintenance": 0.9109375,
-   "mean_slide_rms_m": 0.006963453691537711
+   "mean_slide_rms_m": 0.00696345369153771
   }
  },
  "notes": [
@@ -243,7 +243,7 @@
    "contact_ticks": 263,
    "completed": true,
    "maintenance": 0.821875,
-   "slide_rms_m": 0.006869701033705235
+   "slide_rms_m": 0.0068697010337052345
   },
   {
    "id": 14,
@@ -310,7 +310,7 @@
  "skipped_by_planner": [],
  "n_detections": 988,
  "sim_seconds": 17.5,
- "wall_seconds": 6.400443077087402,
+ "wall_seconds": 7.4560019969940186,
  "config": {
   "layout": {
    "n_lanes": 6,

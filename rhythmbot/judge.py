@@ -13,10 +13,12 @@ metrics:
   * slide tracking error: lateral distance from the fingertip to the moving
     target along the path, RMS over the slide.
 
-A tap counts only for a *fresh* touch: a tip that has been down since
+A note counts only for a *fresh* touch: a tip that has been down since
 before the window (e.g. still finishing a hold) does not hit the next note
-in that lane.  Both fingertips are eligible, which is what makes two-finger
-chords score.
+in that lane, a touch has to land inside the note's lane, so a fingertip
+dragged in from another lane does not count, and a note uses up every tip
+that landed in its lane.  Both fingertips are eligible, which is what makes
+two-finger chords score.
 """
 
 from __future__ import annotations
@@ -87,6 +89,8 @@ class Judge(LeafSystem):
         self.down_since: list[float | None] = [None] * n_tips
         # A fresh touch may be spent on one note only.
         self.touch_used: list[float | None] = [None] * n_tips
+        # Where each tip landed.
+        self.down_x: list[float | None] = [None] * n_tips
         self.t_last = 0.0
 
     # -- geometry helpers -----------------------------------------------------
@@ -104,8 +108,10 @@ class Judge(LeafSystem):
             if down and self.down_since[k] is None:
                 self.down_since[k] = t
                 self.touch_used[k] = None
+                self.down_x[k] = p[0]
             elif not down:
                 self.down_since[k] = None
+                self.down_x[k] = None
         for note in self.chart.notes:
             r = self.results[note.id]
             if r.status == "pending":
@@ -127,7 +133,11 @@ class Judge(LeafSystem):
                 continue
             if since < note.time - self.T.good - 0.01:
                 continue  # stale contact, not a tap at this note
-            if self._in_lane(p[0], note.lane) and self._near_line(p[1]):
+            # Where the tip landed; the per-tick update always records it with
+            # the touch-down time, but unit tests that set `down_since`
+            # directly do not, so fall back to where the tip is now.
+            landed = self.down_x[k] if self.down_x[k] is not None else p[0]
+            if self._in_lane(landed, note.lane) and self._in_lane(p[0], note.lane) and self._near_line(p[1]):
                 err = since - note.time
                 r.status, r.timing_error = "hit", err
                 r.head_judgment = self._judgment(abs(err))
@@ -138,7 +148,12 @@ class Judge(LeafSystem):
                     r.active_ticks = missed
                     r.gap_seconds = missed/self.cfg.judge_hz
                     r.max_gap_seconds = r.gap_seconds
-                self.touch_used[k] = note.time
+                # A note uses up every fingertip that landed in its lane, so a
+                # second tip that touched down with this one cannot be dragged
+                # into the next lane and counted as a fresh touch there.
+                for j, x in enumerate(self.down_x):
+                    if x is not None and self.touch_used[j] is None and self._in_lane(x, note.lane):
+                        self.touch_used[j] = note.time
                 if note.kind == TAP:
                     r.completed = True
                 return

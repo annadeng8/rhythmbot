@@ -11418,7 +11418,7 @@
  "skipped_by_planner": [],
  "n_detections": 38397,
  "sim_seconds": 99.499,
- "wall_seconds": 61.192291021347046,
+ "wall_seconds": 39.965901136398315,
  "config": {
   "layout": {
    "n_lanes": 6,

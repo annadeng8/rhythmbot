@@ -31,7 +31,7 @@
    "hit": 2,
    "completed": 2,
    "mean_maintenance": 1.0,
-   "mean_slide_rms_m": 0.010966013271446931
+   "mean_slide_rms_m": 0.010966013268887204
   }
  },
  "notes": [
@@ -123,7 +123,7 @@
    "contact_ticks": 150,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011234638410254481
+   "slide_rms_m": 0.011234638405135272
   },
   {
    "id": 6,
@@ -273,7 +273,7 @@
    "contact_ticks": 170,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.010697388132639382
+   "slide_rms_m": 0.010697388132639138
   },
   {
    "id": 16,
@@ -325,7 +325,7 @@
  "skipped_by_planner": [],
  "n_detections": 1015,
  "sim_seconds": 19.853,
- "wall_seconds": 2.885773181915283,
+ "wall_seconds": 2.961721897125244,
  "config": {
   "layout": {
    "n_lanes": 6,

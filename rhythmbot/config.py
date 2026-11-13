@@ -280,8 +280,8 @@ DEFAULT = Config()
 def two_arm_config(base: Config = DEFAULT) -> Config:
     """Two arms need wider lanes: at 50 mm, hands over lanes 1-2 and 3-4
     would be 100 mm apart and their 146 mm wide bodies would collide.  At
-    100 mm they still touch as they roll; at 120 mm they stay 48 mm apart on
-    the densest map.  The game frame is drawn in pixels, so the vision model
+    100 mm they still touch as they roll; at 120 mm they stay at least 42 mm
+    apart on the densest map tried.  The game frame is drawn in pixels, so the vision model
     does not change."""
     return replace(base, arms=Arms(n=2), layout=replace(base.layout, lane_width=0.12))
 

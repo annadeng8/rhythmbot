@@ -10,6 +10,10 @@ held-out chart.  Held-out charts vary along the axes the proposal names:
     heldout-real     hand-made and imported charts (demo, Slow Ride, osu!mania)
     hard             osu!mania-style dense charts (`dense_random_chart`): up to
                      ~13 notes/s and four-note chords, more than one arm can play
+    heldout-song     a second real osu!mania song (Cityyy, "Unknown"), easy,
+                     intermediate and normal: 3-5 notes/s, imported after the
+                     planner, the vision model and every policy were developed,
+                     so unseen by all of them (needs songs/, see README)
 
 Procedural charts are generated from seeds, so a split is a list of names
 that `load` turns back into charts.
@@ -46,6 +50,11 @@ SPLITS: dict[str, list[str]] = {
         "song:nekoteto/easy-neko",
     ],
 }
+SPLITS["heldout-song"] = [
+    "song:cityyy-unknown/easy",
+    "song:cityyy-unknown/intermediate",
+    "song:cityyy-unknown/normal",
+]
 SPLITS["heldout"] = SPLITS["heldout-iid"] + SPLITS["heldout-dense"] + SPLITS["heldout-real"]
 
 

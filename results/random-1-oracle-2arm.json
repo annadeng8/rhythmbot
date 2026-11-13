@@ -31,7 +31,7 @@
    "hit": 1,
    "completed": 1,
    "mean_maintenance": 1.0,
-   "mean_slide_rms_m": 0.011217898502887248
+   "mean_slide_rms_m": 0.011217898502883837
   }
  },
  "notes": [
@@ -243,7 +243,7 @@
    "contact_ticks": 192,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.011217898502887248
+   "slide_rms_m": 0.011217898502883837
   },
   {
    "id": 14,
@@ -269,7 +269,7 @@
  ],
  "n_detections": 905,
  "sim_seconds": 20.787,
- "wall_seconds": 5.691998243331909,
+ "wall_seconds": 5.187574625015259,
  "config": {
   "layout": {
    "n_lanes": 6,

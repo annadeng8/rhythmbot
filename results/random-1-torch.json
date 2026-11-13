@@ -183,7 +183,7 @@
    "contact_ticks": 192,
    "completed": true,
    "maintenance": 1.0,
-   "slide_rms_m": 0.007657501281987264
+   "slide_rms_m": 0.007657501281987266
   },
   {
    "id": 10,
@@ -258,14 +258,14 @@
    "contact_ticks": 213,
    "completed": true,
    "maintenance": 0.8801652892561983,
-   "slide_rms_m": 0.017330467156627127
+   "slide_rms_m": 0.01733046715662713
   }
  ],
  "detector": "torch",
  "skipped_by_planner": [],
  "n_detections": 904,
  "sim_seconds": 20.787,
- "wall_seconds": 7.654911041259766,
+ "wall_seconds": 9.111041784286499,
  "config": {
   "layout": {
    "n_lanes": 6,
