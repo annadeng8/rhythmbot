@@ -21,6 +21,8 @@ that `load` turns back into charts.
 
 from __future__ import annotations
 
+import json
+
 from . import PROJECT_ROOT
 from .chart import Chart, demo_chart, dense_random_chart, random_chart, varied_random_chart
 
@@ -58,12 +60,21 @@ SPLITS["heldout-song"] = [
 SPLITS["heldout"] = SPLITS["heldout-iid"] + SPLITS["heldout-dense"] + SPLITS["heldout-real"]
 
 
+# Versioned, committed charts shared with the bimanual camera pilot.
+STUDY = PROJECT_ROOT / 'results/yifan-study-v1'
+_protocol = json.loads((STUDY / 'protocol.json').read_text())
+SPLITS['bimanual-test'] = ['study:' + e['path'] for e in _protocol['entries'] if e['split'].startswith('test')]
+SPLITS['bimanual-smoke'] = ['study:charts/test_iid/crossing-s31000-0.6s.json', 'study:charts/test_iid/holds-s31000.json']
+
+
 def load(name: str) -> Chart | None:
     """A chart by split entry name; None if it is a song chart that is not
     on disk (songs/ is gitignored)."""
     kind, _, arg = name.partition(":")
     if kind == "demo":
         return demo_chart()
+    if kind == "study":
+        return Chart.load(STUDY / arg)
     if kind == "file":
         return Chart.load(CHARTS / f"{arg}.json")
     if kind == "song":

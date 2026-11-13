@@ -83,6 +83,12 @@ def provenance(cfg, job: dict) -> dict:
         "arms": cfg.arms.n,
         "contacts_per_arm": cfg.gripper.contacts_per_arm,
         "view": job.get("view", "screen"),
+        "preset": job.get("preset"),
+        "display": "concert" if job["detector"] == "concert" else "calibrated",
+        "single_tip": cfg.gripper.single_tip,
+        "camera": dataclasses.asdict(cfg.camera),
+        "source_sha256": job.get("source_sha256"),
+        "judge_sha256": _sha256(PROJECT_ROOT / "rhythmbot/judge.py"),
         "model_sha256": _sha256(job.get("model")),
         "policy_sha256": _sha256(policy_file) if policy_file else None,
     }
@@ -109,18 +115,25 @@ def policy_tag(spec: str) -> str:
 
 
 def _run_one(job: dict) -> dict:
-    from .config import DEFAULT, two_arm_config
+    from .profiles import config
     from .play import run
     from .policies import make_policy
 
     chart = splits.load(job["chart"])
     out = Path(job["out"])
     out.parent.mkdir(parents=True, exist_ok=True)
-    cfg = two_arm_config() if job.get("arms", 1) == 2 else DEFAULT
+    cfg = config(job)
     extra: dict = {"split": job["split"], "chart_entry": job["chart"], "provenance": provenance(cfg, job)}
+    extra["chart_sha256"] = hashlib.sha256(json.dumps([n.to_dict() for n in chart.notes], sort_keys=True).encode()).hexdigest()
     try:
         # Classical: `play` gives each arm its own planner.
-        policy = None if job["policy"] == "classical" else make_policy(job["policy"], cfg)
+        if job['policy'].startswith('bc:'):
+            import torch
+            torch.set_num_threads(1)
+            torch.manual_seed(0)
+        policy = None if job["policy"] == "classical" else (
+            [make_policy(job["policy"], cfg, hand=k) for k in range(cfg.arms.n)]
+            if cfg.arms.n > 1 else make_policy(job["policy"], cfg))
     except Exception as e:  # a generated program that does not load
         rep = {"chart": chart.name, "n_notes": len(chart), "completion_rate": 0.0, "load_error": repr(e), **extra}
         out.write_text(json.dumps(rep, indent=1))
@@ -153,6 +166,8 @@ def _run_one(job: dict) -> dict:
             signal.signal(signal.SIGALRM, previous)
     if hasattr(policy, "stats"):
         extra["policy_stats"] = policy.stats()
+    if isinstance(policy, (list, tuple)):
+        extra["policy_stats_by_hand"] = [p.stats() if hasattr(p, "stats") else {} for p in policy]
     rep.update(extra)
     rep.pop("config", None)
     out.write_text(json.dumps(rep, indent=1))
@@ -163,15 +178,31 @@ def evaluate(
     policies: list[str],
     split: str,
     out_dir: str | Path,
-    detectors: tuple[str, ...] = ("oracle",),
+    detectors: tuple[str, ...] | None = None,
     model: str | None = None,
     workers: int = 6,
-    view: str = "screen",
-    arms: int = 1,
+    view: str | None = None,
+    arms: int | None = None,
     time_limit: int = DEFAULT_TIME_LIMIT_S,
+    preset: str | None = None,
+    stylus: bool = False,
 ) -> list[dict]:
+    from .profiles import resolve, config
+    from .experiments import source_hash
+    arms, view, detectors, stylus = resolve(preset, arms, view, detectors, stylus)
+    source = source_hash()
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    if preset:
+        manifest = out_dir / 'environment.json'
+        environment = dict(preset=preset, source_sha256=source,
+            config=dataclasses.asdict(config(dict(preset=preset, arms=arms, stylus=stylus))))
+        environment = json.loads(json.dumps(environment))
+        if manifest.exists() and json.loads(manifest.read_text()) != environment:
+            raise ValueError('Output directory belongs to another environment/source; use a fresh --out')
+        if not manifest.exists() and list(out_dir.glob('*/*/*.json')):
+            raise ValueError('Existing reports have no environment manifest; use a fresh --out')
+        manifest.write_text(json.dumps(environment, indent=2)+'\n')
     code = code_version()
     if code["uncommitted_code"]:
         print("[evaluate] warning: rhythmbot/ has uncommitted edits; the commit in each report "
@@ -195,10 +226,15 @@ def evaluate(
                             "out": str(out_dir / policy_tag(pol) / det / f"{stem}.json"),
                             "view": view,
                             "arms": arms,
+                            "preset": preset,
+                            "stylus": stylus,
+                            "source_sha256": source,
                             "time_limit": time_limit,
                             "code": code,
                         }
                     )
+    if preset and any(Path(j["out"]).exists() for j in jobs):
+        raise ValueError("Refusing to overwrite preset reports; use a fresh --out")
     _record_missing(out_dir, missing)
     if workers <= 1:
         return [_run_one(j) for j in jobs]
@@ -245,7 +281,7 @@ def _agg(reps: list[dict]) -> dict:
         "slide_rms_mm": 1000 * float(np.mean(rms)) if rms else None,
         "load_errors": sum("load_error" in r for r in reps),
         "run_errors": sum("run_error" in r for r in reps),
-        "plan_errors": sum(r.get("policy_stats", {}).get("plan_errors", 0) for r in reps),
+        "plan_errors": sum(r.get("policy_stats", {}).get("plan_errors", 0) + sum(p.get("plan_errors", 0) for p in r.get("policy_stats_by_hand", [])) for r in reps),
     }
     for kind in ("tap", "hold", "slide"):
         ks = [x for x in notes if x["kind"] == kind]
@@ -301,6 +337,9 @@ def consistency_notes(reps: list[dict]) -> list[str]:
     models = {p.get("model_sha256") for p in provs if p.get("model_sha256")}
     if len(models) > 1:
         out.append(f"Vision-model runs used {len(models)} different models.")
+    for key in ('arms', 'contacts_per_arm', 'view', 'display', 'single_tip', 'camera', 'judge_sha256', 'source_sha256'):
+        if len({json.dumps(p.get(key), sort_keys=True) for p in provs}) > 1:
+            out.append(f'Reports mix {key}; do not pool these environments/scoring implementations.')
     return out
 
 
@@ -333,14 +372,16 @@ def format_table(summary: dict) -> str:
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--policy", nargs="+", default=["classical"])
-    ap.add_argument("--split", default="heldout", help=f"one of {', '.join(splits.SPLITS)} (comma-separated ok)")
-    ap.add_argument("--detector", nargs="+", default=["oracle"], choices=["oracle", "color", "torch"])
+    ap.add_argument("--split", default=None, help=f"one of {', '.join(splits.SPLITS)} (comma-separated ok)")
+    ap.add_argument("--detector", nargs="+", default=None, choices=["oracle", "color", "torch", "concert"])
     ap.add_argument("--model", help="vision model for --detector torch (default results/note_detector.pt)")
     ap.add_argument("--out", default=str(PROJECT_ROOT / "results" / "compare"))
-    ap.add_argument("--workers", type=int, default=6)
-    ap.add_argument("--view", default="screen", choices=["screen", "camera"],
+    ap.add_argument("--workers", type=int, default=2)
+    ap.add_argument("--view", default=None, choices=["screen", "camera"],
                     help="perception input: the game's own frame, or an external camera on the screen")
-    ap.add_argument("--arms", type=int, default=1, choices=[1, 2], help="one arm, or two side by side (classical only)")
+    ap.add_argument("--arms", type=int, default=None, choices=[1, 2], help="independent policies per arm")
+    ap.add_argument("--stylus", action="store_true", help="two closed grippers, one contact per arm")
+    ap.add_argument("--preset", choices=["sekai-camera", "sekai-screen"], help="complete bimanual single-stylus RGB environment")
     ap.add_argument("--time-limit", type=int, default=DEFAULT_TIME_LIMIT_S,
                     help="seconds per run before it is recorded as a timeout (0: no limit)")
     ap.add_argument("--summarize", metavar="DIR", help="only rebuild the summary of an existing output dir")
@@ -348,8 +389,12 @@ def main(argv=None):
     if args.summarize:
         print(format_table(summarize(args.summarize)))
         return
-    evaluate(args.policy, args.split, args.out, tuple(args.detector), args.model, args.workers, args.view, args.arms,
-             args.time_limit)
+    try:
+        evaluate(args.policy, args.split or ('bimanual-test' if args.preset else 'heldout'), args.out,
+                 tuple(args.detector) if args.detector else None, args.model, args.workers, args.view, args.arms,
+                 args.time_limit, args.preset, args.stylus)
+    except ValueError as exc:
+        ap.error(str(exc))
     print(format_table(summarize(args.out)))
 
 

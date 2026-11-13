@@ -1,0 +1,46 @@
+test_blank_rgb_cannot_reveal_notes (test_camera_vision.CameraVisionTests.test_blank_rgb_cannot_reveal_notes) ... ok
+test_camera_rejects_oracle_before_building_robot (test_camera_vision.CameraVisionTests.test_camera_rejects_oracle_before_building_robot) ... ok
+test_detections_change_with_pixels_at_fixed_time (test_camera_vision.CameraVisionTests.test_detections_change_with_pixels_at_fixed_time) ... ok
+test_partial_blackout_is_not_filled_from_texture (test_camera_vision.CameraVisionTests.test_partial_blackout_is_not_filled_from_texture) ... ok
+test_wrong_rgb_dimensions_fail_loudly (test_camera_vision.CameraVisionTests.test_wrong_rgb_dimensions_fail_loudly) ... ok
+test_adjacent_chord_fits_one_gripper (test_evaluation.BeyondTheRobotTests.test_adjacent_chord_fits_one_gripper) ... ok
+test_chord_wider_than_the_gripper (test_evaluation.BeyondTheRobotTests.test_chord_wider_than_the_gripper) ... ok
+test_fast_lane_change (test_evaluation.BeyondTheRobotTests.test_fast_lane_change) ... ok
+test_single_tap_is_playable (test_evaluation.BeyondTheRobotTests.test_single_tap_is_playable) ... ok
+test_slow_lane_change_is_playable (test_evaluation.BeyondTheRobotTests.test_slow_lane_change_is_playable) ... ok
+test_tap_during_another_lanes_hold_counts_the_hold (test_evaluation.BeyondTheRobotTests.test_tap_during_another_lanes_hold_counts_the_hold) ... ok
+test_three_lanes_at_once_exceed_two_fingertips (test_evaluation.BeyondTheRobotTests.test_three_lanes_at_once_exceed_two_fingertips) ... ok
+test_two_arms_have_four_fingertips (test_evaluation.BeyondTheRobotTests.test_two_arms_have_four_fingertips) ... ok
+test_different_commits_and_models_are_flagged (test_evaluation.ConsistencyTests.test_different_commits_and_models_are_flagged) ... ok
+test_mixed_judges_are_flagged (test_evaluation.ConsistencyTests.test_mixed_judges_are_flagged) ... ok
+test_reports_without_provenance_are_flagged (test_evaluation.ConsistencyTests.test_reports_without_provenance_are_flagged) ... ok
+test_same_settings_no_warning (test_evaluation.ConsistencyTests.test_same_settings_no_warning) ... ok
+test_chart_reproducible_and_two_tool_pairs_match (test_experiments.ExperimentTests.test_chart_reproducible_and_two_tool_pairs_match) ... fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+ok
+test_no_handoff_ablation_only_assigns_start_hand (test_experiments.ExperimentTests.test_no_handoff_ablation_only_assigns_start_hand) ... ok
+test_committed_chart_sets (test_handoff.HandoffTests.test_committed_chart_sets) ... ok
+test_complete_preset (test_handoff.HandoffTests.test_complete_preset) ... ok
+test_mixed_environments_warn (test_handoff.HandoffTests.test_mixed_environments_warn) ... ok
+test_no_silent_override (test_handoff.HandoffTests.test_no_silent_override) ... ok
+test_output_environment_guard (test_handoff.HandoffTests.test_output_environment_guard) ... ok
+test_two_custom_policy_instances_reach_run (test_handoff.HandoffTests.test_two_custom_policy_instances_reach_run) ... ok
+test_both_crossing_directions_stay_reachable (test_slide.SlideTests.test_both_crossing_directions_stay_reachable) ... ok
+test_contact_break_fails_even_with_correct_tail (test_slide.SlideTests.test_contact_break_fails_even_with_correct_tail) ... ok
+test_good_path_only_scores_after_tail (test_slide.SlideTests.test_good_path_only_scores_after_tail) ... ok
+test_head_only_is_miss_and_zero_score (test_slide.SlideTests.test_head_only_is_miss_and_zero_score) ... ok
+test_missing_tail_fails (test_slide.SlideTests.test_missing_tail_fails) ... ok
+test_truncated_run_does_not_award_perfect (test_slide.SlideTests.test_truncated_run_does_not_award_perfect) ... ok
+test_wrong_tail_lane_fails (test_slide.SlideTests.test_wrong_tail_lane_fails) ... ok
+test_exactly_two_contacts (test_stylus.StylusTests.test_exactly_two_contacts) ... ok
+test_fixed_tilt_does_not_accumulate_on_replan (test_stylus.StylusTests.test_fixed_tilt_does_not_accumulate_on_replan) ... ok
+test_single_tip_has_no_chord_action (test_stylus.StylusTests.test_single_tip_has_no_chord_action) ... ok
+test_three_simultaneous_notes_cannot_all_score (test_stylus.StylusTests.test_three_simultaneous_notes_cannot_all_score) ... ok
+test_bc_single_tip_plan_has_fixed_tilt (test_yifan_methods.MethodTests.test_bc_single_tip_plan_has_fixed_tilt) ... ok
+test_cap_enforces_single_tip_geometry (test_yifan_methods.MethodTests.test_cap_enforces_single_tip_geometry) ... ok
+test_two_independent_custom_policies_build_and_run (test_yifan_methods.MethodTests.test_two_independent_custom_policies_build_and_run) ... ok
+
+----------------------------------------------------------------------
+Ran 39 tests in 3.308s
+
+OK

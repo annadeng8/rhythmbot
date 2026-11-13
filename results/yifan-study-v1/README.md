@@ -1,5 +1,7 @@
 # Yifan's bimanual CAP / BC pilot
 
+> Historical experiment: these scores and GIFs predate Anna's stricter touch-landing judge in `5c644a7`. They are not current-main benchmark results. See [the current handoff](../../docs/HANDOFF.md) for the unified environment and new validation.
+
 This is the Agentic Code-as-Policy and Behavior Cloning work assigned to Yifan
 in section 8 of the project proposal. It is separate from the preceding
 classical-only 61-run benchmark. The two closed WSG grippers each carry one

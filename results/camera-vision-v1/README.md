@@ -1,5 +1,7 @@
 # Dual-arm control from the Drake camera's RGB image
 
+> Historical experiment: these scores and GIFs predate Anna's stricter touch-landing judge in `5c644a7`. They are not current-main benchmark results. See [the current handoff](../../docs/HANDOFF.md) for the unified environment and new validation.
+
 This study replaces note-state input with RGB vision on the concert-style
 (Project Sekai-inspired) display. It compares four **unchanged** controllers:
 classical, the previous CAP v1, MLP BC, and diffusion BC. The same eight held-out

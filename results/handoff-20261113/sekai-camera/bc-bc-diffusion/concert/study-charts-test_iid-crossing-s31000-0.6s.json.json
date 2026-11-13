@@ -1,0 +1,176 @@
+{
+ "chart": "crossing-s31000-0.6s",
+ "n_notes": 3,
+ "completion_rate": 0.0,
+ "hit_rate": 0.0,
+ "judgments": {
+  "perfect": 0,
+  "great": 0,
+  "good": 0,
+  "miss": 3
+ },
+ "score": 0,
+ "max_score": 9,
+ "timing_error_mean_s": null,
+ "timing_error_abs_mean_s": null,
+ "timing_error_std_s": null,
+ "by_kind": {
+  "slide": {
+   "n": 3,
+   "hit": 0,
+   "completed": 0,
+   "mean_maintenance": null,
+   "mean_slide_rms_m": null
+  }
+ },
+ "notes": [
+  {
+   "id": 0,
+   "kind": "slide",
+   "lane": 0.9557911049052771,
+   "time": 3.0,
+   "duration": 2.4,
+   "status": "miss",
+   "timing_error": null,
+   "judgment": "miss",
+   "head_judgment": null,
+   "judged_at": 3.145,
+   "gap_seconds": 0.0,
+   "max_gap_seconds": 0.0,
+   "tail_ticks": 0,
+   "tail_contact_ticks": 0,
+   "failure_reason": null,
+   "contact_ticks_by_hand": [
+    0,
+    0
+   ],
+   "handoffs": 0,
+   "last_contact_hand": null,
+   "active_ticks": 0,
+   "contact_ticks": 0,
+   "completed": false,
+   "maintenance": null,
+   "slide_rms_m": null
+  },
+  {
+   "id": 1,
+   "kind": "slide",
+   "lane": 0.9557911049052771,
+   "time": 6.0,
+   "duration": 1.2,
+   "status": "miss",
+   "timing_error": null,
+   "judgment": "miss",
+   "head_judgment": null,
+   "judged_at": 6.140000000000001,
+   "gap_seconds": 0.0,
+   "max_gap_seconds": 0.0,
+   "tail_ticks": 0,
+   "tail_contact_ticks": 0,
+   "failure_reason": null,
+   "contact_ticks_by_hand": [
+    0,
+    0
+   ],
+   "handoffs": 0,
+   "last_contact_hand": null,
+   "active_ticks": 0,
+   "contact_ticks": 0,
+   "completed": false,
+   "maintenance": null,
+   "slide_rms_m": null
+  },
+  {
+   "id": 2,
+   "kind": "slide",
+   "lane": 3.90561316785862,
+   "time": 7.4,
+   "duration": 1.2,
+   "status": "miss",
+   "timing_error": null,
+   "judgment": "miss",
+   "head_judgment": null,
+   "judged_at": 7.545,
+   "gap_seconds": 0.0,
+   "max_gap_seconds": 0.0,
+   "tail_ticks": 0,
+   "tail_contact_ticks": 0,
+   "failure_reason": null,
+   "contact_ticks_by_hand": [
+    0,
+    0
+   ],
+   "handoffs": 0,
+   "last_contact_hand": null,
+   "active_ticks": 0,
+   "contact_ticks": 0,
+   "completed": false,
+   "maintenance": null,
+   "slide_rms_m": null
+  }
+ ],
+ "detector": "concert",
+ "policy": "bc:results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+ "view": "camera",
+ "skipped_by_planner": [],
+ "n_detections": 421,
+ "sim_seconds": 9.6,
+ "wall_seconds": 40.24341797828674,
+ "vision": {
+  "frames": 288,
+  "blank_detection_frames": 71,
+  "input_rgb_sha256": "42c89a4ef5bd1fefeed21991dfdbd40623f7205da94c6a033fdc5bc94e371988",
+  "input": "Drake composed RGB",
+  "chart_access": false,
+  "label_input": false,
+  "depth_input": false,
+  "method": "fixed geometric calibration + RGB color/shape segmentation"
+ },
+ "split": "bimanual-smoke",
+ "chart_entry": "study:charts/test_iid/crossing-s31000-0.6s.json",
+ "provenance": {
+  "commit": null,
+  "uncommitted_code": false,
+  "judge": {
+   "perfect": 0.045,
+   "great": 0.09,
+   "good": 0.14,
+   "hold_fraction": 0.8,
+   "slide_tolerance_lanes": 0.35,
+   "slide_max_gap": 0.05,
+   "slide_tail_window": 0.04,
+   "slide_min_maintenance": 0.95
+  },
+  "arms": 2,
+  "contacts_per_arm": 1,
+  "view": "camera",
+  "preset": "sekai-camera",
+  "display": "concert",
+  "single_tip": true,
+  "camera": {
+   "width": 960,
+   "height": 720,
+   "fov_y_deg": 48,
+   "eye_offset": [
+    0.35,
+    -0.5,
+    1.15
+   ],
+   "target_offset": [
+    0.0,
+    0.05,
+    0.0
+   ],
+   "noise_std": 3.0
+  },
+  "source_sha256": "2be0043046f7c195f799d03bc60406e33e8fe073a6635ee9f51d94dc63a40fa5",
+  "judge_sha256": "447e724fdb8120bc",
+  "model_sha256": null,
+  "policy_sha256": "2a6a019b51785fac"
+ },
+ "chart_sha256": "b6a5c1e699adb519eb465c4053c5e66fe4e826bbe773480349f76f8fcd17e2ae",
+ "policy_stats_by_hand": [
+  {},
+  {}
+ ]
+}

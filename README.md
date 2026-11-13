@@ -1,9 +1,49 @@
 # RhythmBot — simulation pipeline
 
+## Start here: current bimanual Sekai-camera handoff
+
+**The target environment is two Drake iiwa arms, closed WSG grippers with one
+stylus contact per arm, the Sekai-inspired concert display, and camera RGB-only
+vision.** Use the unified evaluator's `sekai-camera` preset. A plain invocation
+of `evaluate` still selects the legacy single-arm/oracle environment; it is **not**
+the target experiment.
+
+```sh
+HEADLESS=1 python -m rhythmbot.evaluate --preset sekai-camera \
+  --split bimanual-smoke --policy classical cap:results/yifan-study-v1/cap/v1/policy.py \
+  --workers 2 --out results/sekai-camera-smoke
+```
+
+This explicitly selects two single-tip arms, `view=camera`, `detector=concert`,
+and the calibrated 960×720 camera. Each custom policy gets an independent instance
+per arm. For the same artwork without the camera, use `--preset sekai-screen`
+and a **different output directory**. For all eight committed charts, replace
+`bimanual-smoke` with `bimanual-test`.
+
+**[Complete handoff: commands, BC checkpoint retrieval, environment matrix,
+validation and remaining work](docs/HANDOFF.md).**
+
+The latest base is Anna's `5c644a7`, including the stricter touch-landing rule.
+The earlier 64-run camera table and GIFs are **historical results under the prior
+judge**, not a re-evaluation of this base. The new handoff validation lives in
+`results/handoff-20261113/`; it checks the unified entry point, not a new complete
+benchmark. Do not mix it with `results/eval-v2/` (single arm, simpler screen,
+trained detector) or call those results bimanual camera results.
+
+The screen is dynamically composited into Drake RGB with correct robot occlusion.
+Only the environment renderer uses render labels; vision receives RGB and a clock,
+with known geometric calibration. This is classical RGB vision, not a VLM or a
+physical-camera experiment.
+
+## Background and historical experiments
+
+The sections below cover multiple older environments. Their commands and scores
+must be read with their own settings; the handoff above is the current entry point.
+
 A simulated KUKA iiwa (with the course's Schunk WSG gripper) playing a
 Project SEKAI–style rhythm game in Drake: **tap**, **hold** and **slide**
 notes on a touch surface, with the notes delivered to the robot by a
-perception stage that a trained vision model will eventually fill.
+perception stage with separate oracle, trained-detector and calibrated RGB modes.
 
 The design borrows from [GuitarHeroBot](https://github.com/JRed46/GuitarHeroBot)
 (6.4210, Fall 2023): a `MakeHardwareStation` iiwa+WSG scene, notes written as
