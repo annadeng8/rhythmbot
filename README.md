@@ -443,6 +443,11 @@ these. Two-arm reports are in `results/*-2arm.json`.
 | `rhythmbot/train.py` | the vision model (`NoteNet`), its training loop, validation metrics and TorchScript export |
 | `rhythmbot/audio.py` | soundtrack synthesized from the chart, or a song file, played in sync with a live run |
 | `rhythmbot/importers.py` | osu!mania, StepMania and Clone Hero chart importers; GuitarHeroBot's Slow Ride |
+| `rhythmbot/policies.py` | every policy by name: `classical`, `cap:<policy.py>`, `bc:<model.pt>` (`play --policy`) |
+| `rhythmbot/splits.py` | chart splits: `cap-train`, `bc-train`, and the held-out `heldout-iid` / `heldout-dense` / `heldout-real` |
+| `rhythmbot/evaluate.py` | runs policies × detectors × a split headless in parallel; `summary.md` with completion, timing, contact, slide error |
+| `rhythmbot/cap/` | code-as-policy: `TASK.md` (the agent's problem statement), `api.py` (the control API generated programs use), `sandbox.py` (import check + guarded execution), `feedback.py`, `loop.py` (the agent ↔ simulator refinement loop) |
+| `rhythmbot/bc/` | behavior cloning: `features.py` (observation / action-chunk encoding), `train.py` (demos from the classical planner + DAgger), `policy.py` (`BCPolicy`) |
 | `charts/` | demo and three random charts |
 
 ## How the pieces work
@@ -561,20 +566,297 @@ belief): taps need a *fresh* touch-down in the lane within ±140 ms (perfect
 RMS lateral error is recorded. Both fingertips are eligible, which is what
 lets chords score.
 
-## Plugging in the other approaches from the proposal
+## Code-as-policy and behavior cloning
 
-* **Vision model** → `train.py` is the baseline; a different architecture
-  only has to keep `TorchDetector.decode`'s output contract, or override
-  `decode`. Harder perception (a real Drake camera looking at the Meshcat
-  highway, visual clutter, a different game skin) means regenerating
-  `dataset.py` frames from that source and retraining.
-* **LLM direct control / code-as-policy, behavior cloning** → implement
-  `Policy.plan(tracked_notes, t, X_WT_cmd, width_cmd) -> Plan` (or, for a
-  lower-level policy, replace `RhythmBrain`'s output with your own pose
-  stream). `ClassicalPlanner` doubles as the demonstration generator for
-  behavior cloning; `judge.Judge` scores every approach identically.
-* **Harder charts** → `random_chart` has density / hold / slide / chord
-  probabilities; `Layout` has lane count and scroll speed.
+Both approaches implement the same `Policy.plan(tracked_notes, t, X_WT_cmd,
+width_cmd) -> Plan` as `ClassicalPlanner`, see the same tracked notes, and
+are scored by the same judge (`play --policy ...`). Each is developed on its
+own training charts and judged on held-out charts it never saw
+(`rhythmbot/splits.py`):
+
+| split | charts | what varies |
+|---|---|---|
+| `heldout-iid` | 10 `varied_random_chart` seeds 5000–5009 | nothing: same generator as training |
+| `heldout-dense` | 5 random charts, 3.2 notes/s, 0.18 s gaps, 25 % chords | density, chords |
+| `heldout-real` | demo, random-3, Slow Ride easy/medium/hard (+ NekoTeto Easy if `songs/` has it) | hand-made / real charts |
+
+```bash
+python -m rhythmbot.evaluate --policy classical bc:results/bc/teacher_diffusion.pt cap:<policy.py> \
+    --split heldout --detector oracle torch --out results/compare
+```
+
+### Behavior cloning (`rhythmbot/bc`)
+
+The classical planner is the demonstrator. Two observation encoders and two
+action heads (`rhythmbot/bc/models.py`):
+
+* **state**: the commanded hand state (x, height, opening, rise) and the
+  next 8 tracked notes, each with its kind, time to hit and to end, and its
+  lane at the hit and at 25/50/75/100 % of its length, *relative to the
+  hand*; an MLP encodes it;
+* **pixels**: the game frame itself (downsampled to 192 × 128) plus the hand
+  state; a CNN (four stride-2 stages, flattened 12 × 8 map, so position on
+  screen is kept) encodes it. No detector, no tracker: perception is learned;
+* **mlp head**: regresses the hand state at the next 16 ticks (0.53 s),
+  replanned every tick;
+* **diffusion head** (a diffusion policy, Chi et al. 2023): DDPM over the
+  normalized 16-tick action chunk, 100 noise levels, residual MLP denoiser
+  conditioned on the observation and noise level (FiLM), 10 DDIM steps at
+  run time; plays 4 ticks of each sampled chunk before sampling again.
+
+Demonstrations need no physics: the brain only ever reads its own commanded
+pose, so the brain + detector alone are simulated (0.3 s per 20 s chart
+with the oracle). 200 `bc-train` charts give 127k labelled ticks; two DAgger
+rounds (the learner drives 80 % of ticks on 100 charts each, the
+demonstrator labels what it reaches) bring that to 254k. Pixel samples
+store only (chart, time) and frames are re-rendered while training. Trained
+on gpu156 (L40S): state models in 1–8 min, pixel models in 55–80 min
+including DAgger rollouts.
+
+**State → vision distillation** (`--teacher`): a state policy trained on
+exact (oracle) notes is the teacher, and a pixel student is trained on its
+labels: the teacher, which sees the oracle notes, labels every state, first
+while it drives, then (DAgger) while the student drives.
+
+```bash
+python -m rhythmbot.bc.train --encoder state --head diffusion --epochs 80 --out results/bc/teacher_diffusion.pt
+python -m rhythmbot.bc.train --encoder pixels --head diffusion --batch 256 --lr 3e-4 \
+    --teacher results/bc/teacher_diffusion.pt --out results/bc/student_diffusion.pt          # distilled
+python -m rhythmbot.bc.train --encoder pixels --head diffusion --batch 256 --lr 3e-4 \
+    --out results/bc/pixels_diffusion_from_classical.pt                                    # from the planner directly
+python -m rhythmbot.bc.train --encoder state --head diffusion --epochs 80 --detector torch \
+    --out results/bc/state_vision_diffusion.pt                                             # on the vision model's notes
+```
+
+Held-out completion, full Drake simulation (`results/compare_bc/summary.md`).
+"Notes from" is what the state policies' tracker is fed; pixel policies
+read the frame and ignore it.
+
+| policy | input | notes from | iid | dense | real | **all** | tap / hold / slide |
+|---|---|---|---|---|---|---|---|
+| classical | state | oracle | 100 % | 100 % | 100 % | **100 %** | 100 / 100 / 100 |
+| classical | state | vision model | 96.0 | 99.4 | 100 | **98.0** | 100 / 100 / 84.2 |
+| teacher, MLP | state | oracle | 94.0 | 87.9 | 83.3 | **89.6** | 86.1 / 96.3 / 94.7 |
+| teacher, diffusion | state | oracle | 99.0 | 94.9 | 88.2 | **95.2** | 93.2 / 98.2 / 100 |
+| teacher, MLP | state | vision model | 77.1 | 86.0 | 79.4 | **80.7** | 79.6 / 87.2 / 73.7 |
+| teacher, diffusion | state | vision model | 88.1 | 92.4 | 83.3 | **88.5** | 90.8 / 85.3 / 82.5 |
+| trained on vision notes, diffusion | state | vision model | 95.0 | 96.2 | 93.1 | **95.0** | 95.2 / 100 / 84.2 |
+| student of MLP teacher | **pixels** | – | 94.5 | 90.4 | 85.3 | **91.1** | 86.4 / 100 / 98.2 |
+| student of diffusion teacher | **pixels** | – | 94.5 | 85.4 | 86.3 | **89.6** | 88.4 / 92.7 / 89.5 |
+| from classical, diffusion | **pixels** | – | 99.5 | 97.5 | 99.0 | **98.7** | 98.3 / 99.1 / 100 |
+
+* **The diffusion head beats regression**: 95.2 vs 89.6 % for the state
+  teacher, almost all of it on taps (93.2 vs 86.1 %). Regression averages
+  "lift for the next tap" with "stay low", and a tap needs a fresh touch
+  (≥ 4 mm lift); the regressed hand ran together runs of taps 0.18–0.3 s
+  apart and missed both notes of chords.
+* **Distillation inherits the teacher's mistakes.** The pixel students
+  (89.6–91.1 %) end up at or just below their teachers; they learn to see
+  well enough (they play as well as the teacher does with exact notes, and
+  far better than the teacher does with the vision model's notes), but no
+  better than the teacher plays.
+* **The best vision-based policy is a pixel diffusion policy trained from
+  the classical planner directly** (98.7 %, within 1.3 points of the
+  planner with exact notes and above the planner with the vision model,
+  98.0 %). That is also state → vision distillation, with the classical
+  planner (which plans from the exact notes) as the privileged teacher: a
+  strong teacher matters more than a learned one. Its hits are as precise
+  (13 ms mean |error|) and slides as accurate (9.6 mm RMS).
+* A state policy trained on the vision model's tracked notes (95.0 %)
+  beats the oracle-trained teacher run with them (88.5 %): train on the
+  observations you deploy with. Its weak spot is the vision model's slide
+  paths (slides 84 %, as for the classical planner).
+* The real charts (Slow Ride's same-lane runs and long sustains) are the
+  hardest generalization for the state policies (83–93 %); the pixel
+  policy from the planner gets 99 % there.
+
+Checkpoints are not in git (diffusion models are 74–100 MB); they are on
+gpu156 under `/data/YifanKang/rhythmbot/results/bc/`, with the training
+logs (`*.json`, also in `results/bc/`) next to them.
+
+### Agentic code-as-policy (`rhythmbot/cap`)
+
+A coding agent (Claude Code, non-interactive, default model
+`claude-fable-5-1`) writes the policy as a Python program against a small
+control API, `rhythmbot/cap/api.py`: screen and hand geometry, judge
+windows, comfortable arm speeds, and `Keyframe` / `Plan` builders. The
+problem statement it gets is `rhythmbot/cap/TASK.md`. It does *not* get
+the classical planner: the program may import only numpy, math, some
+standard-library modules and `rhythmbot.cap.api` (checked on its syntax
+tree before it runs), and the agent's tools are confined to its workspace.
+
+```bash
+python -m rhythmbot.cap.loop run --name fable-feedback --iterations 8               # harness feedback each round
+python -m rhythmbot.cap.loop run --name fable-selftest --iterations 5 --self-test   # agent may also run the sim itself
+python -m rhythmbot.cap.loop heldout /Users/Shared/rhythmbot_cap/fable-feedback      # every revision on held-out charts
+```
+
+Each iteration is one `claude -p` call continuing the same conversation.
+After it, the program is snapshotted (`history/policy_v<i>.py`), run on the
+6 `cap-train` charts (113 notes) with the oracle, and `feedback.md` is
+written: per-chart scores, then every note not completed (missed, or hit
+but contact lost, with its timing error and the notes around it), the
+program's exceptions with tracebacks, and its planning time.
+`GuardedPolicy` catches exceptions and malformed plans at run time and lifts
+the hand in place, so a buggy revision still gets a score and its errors are
+reported. With `--self-test` the agent may also run `./evaluate.sh` (the
+same feedback, printed) as often as it wants. `history.json` records per
+revision the training score, the agent's cost and turns, and after
+`heldout`, the held-out completion, which measures improvement across
+revisions and on unseen charts.
+
+**Isolation.** Claude Code lets the Read/Glob/Grep tools read anywhere by
+default, and in a first run both agents went looking for the project
+source (`Glob **/rhythmbot/planner.py` over the home directory). The loop
+therefore puts workspaces in `/Users/Shared/rhythmbot_cap/` and denies
+Read/Glob/Grep on the repository, the home directory (which also holds
+Claude's transcripts of other runs) and every sibling workspace. Bash is
+denied, except `./evaluate.sh` with `--self-test`. Probed: reads of the
+repository, `~/.claude` and a sibling workspace are refused, reads and
+writes in the workspace work. Workspaces of runs started together must
+exist before either run starts. Long programs written in one go hit Claude
+Code's default output cap, so the loop raises `CLAUDE_CODE_MAX_OUTPUT_TOKENS`
+to 64k.
+
+**Results so far.** `fable-feedback` (8 revisions, harness feedback only,
+the agent cannot run anything):
+
+| revision | train (113 notes) | held-out, oracle notes | held-out, vision-model notes |
+|---|---|---|---|
+| v0 | 94.7 % | 87.2 % | 75.2 % |
+| v1 | 98.2 | 91.5 | 87.2 |
+| v2 | 98.2 | 91.3 | 87.4 |
+| v3 | 98.2 | 92.0 | 88.0 |
+| v4 | 97.3 | 91.7 | 88.3 |
+| v5 | 97.3 | 93.5 | 90.0 |
+| v6 | 98.2 | 96.3 | 92.0 |
+| v7 | 98.2 | **96.3** | **92.0** |
+
+The training score is flat from v1 while the held-out score keeps rising
+(91.5 → 96.3 %): the agent fixed the few remaining training misses by
+general changes, not chart-specific ones. Its programs were developed only
+against oracle notes; v0 completed only 23 % of slides on the vision model's
+notes (it trusted the slide waypoints exactly), v7 is much more robust.
+
+`fable-selftest` (5 revisions; the agent may also run `./evaluate.sh`, and
+did so many times within each revision):
+
+| revision | train | held-out, oracle notes | held-out, vision-model notes |
+|---|---|---|---|
+| v0 | 100 % | **97.6 %** | **95.2 %** |
+| v1 | 100 | **98.0** | **96.1** |
+| v2 | 100 | 93.7 | 92.0 |
+| v3 | 100 | 96.1 | 93.7 |
+| v4 | 100 | 96.3 | 94.1 |
+
+Testing its own program got the agent to 100 % on the training charts in
+its first revision. With nothing left to fix there, later revisions were
+judged only by the training charts, and v2 lost 4 held-out points that v3–v4
+won back only partly: the feedback signal saturated, so further revisions
+are a random walk on unseen charts. Its best revision (v1, 98.0 %) is the
+strongest learned or generated policy on exact notes.
+
+**Pixels only (`--pixels`).** The program gets no tracked notes and no
+vision model, only the 384 × 256 RGB frame, and has to write its own
+perception too: find note heads, map pixels to lanes and seconds, track
+notes across frames. `TASK_PIXELS.md` says only what a player would know
+(notes appear 1.6 s ahead and scroll at constant speed, lanes are
+equal-width columns, kinds look different). For calibration the workspace
+has 30 example frames from the training charts as PNGs (the agent can look
+at them) with the notes visible in each, and `./probe.sh`, which runs the
+agent's `probe.py` (same import rules) on every training frame every 0.1 s
+with its ground-truth notes. The policy spec is `cappx:<policy.py>`.
+
+```bash
+python -m rhythmbot.cap.loop run --name fable-pixels --iterations 5 --self-test --pixels
+```
+
+The agent calibrated the screen through the probe (6 lanes of 42.67 px,
+notes scroll at 206.26 px/s, judgment line at row 329.5, each kind's colour
+and shape), wrote colour segmentation with `scipy.ndimage`, a frame-to-frame
+tracker and a DP scheduler (920 lines), and completed every training note
+from v0:
+
+| revision | train | held-out | iid | dense | real |
+|---|---|---|---|---|---|
+| v0 | 100 % | 86.3 % | 88.6 | 77.7 | 95.1 |
+| v1 | 100 | 86.5 | | | |
+| v2 | 100 | 87.2 | | | |
+| v3 | 100 | **89.6** | | | |
+| v4 | 100 | 88.9 | 92.5 | 80.3 | 95.1 |
+
+It is the largest train/held-out gap of any approach: perception written
+against the training charts holds up (hits land 2–3 ms from the note time,
+against 11–13 ms for every other policy, because it reads time straight off
+pixel rows), but the play does not, especially on the denser held-out charts
+(80 %).
+
+### External camera (`--view camera`)
+
+The frame above is the game's own render. With `--view camera` the
+perception stage sees the screen through an `RgbdSensor` instead (`camera.py`):
+a 384 × 256 camera beside and above the screen, so the screen is in
+perspective, the arm and gripper are in the picture and hide the notes under
+them, and the image has sensor noise (σ = 3). The screen body's label image
+marks its pixels, and those pixels get the game frame, looked up once by
+intersecting each camera ray with the screen plane. `play`, `evaluate`, the
+CaP loop (`--view camera`, task `TASK_CAMERA.md`) and BC collection take it.
+Calibration examples are recorded while the classical planner plays, so the
+arm moves in them as a competent player's would.
+
+```bash
+python -m rhythmbot.play --demo --view camera
+python -m rhythmbot.cap.loop run --name fable-camera --iterations 5 --self-test --view camera
+```
+
+| camera CaP revision | train | held-out | iid | dense | real |
+|---|---|---|---|---|---|
+| v0 | 99.1 % | 95.2 % | 97.0 | 89.8 | 100 |
+| v1 | 100 | 95.7 | 99.0 | 88.5 | 100 |
+| v2 | 99.1 | **97.2** | 99.0 | 93.0 | 100 |
+| v3, v4 | 100 | 96.5 | 99.0 | 91.1 | 100 |
+
+The program that saw the camera did better than the one that saw the clean
+render (97.2 % against 89.6 %). Its losses are again on the dense charts,
+where the classical planner gets 100 %; the screen-pixels policy fed the
+camera image scores 0 %. Classical play is unchanged by the camera (99.1 %
+on `cap-train` either way).
+
+## Comparison
+
+Held-out completion over all 20 charts (460 notes), best revision or final
+model of each:
+
+| approach | input | held-out | with vision-model notes |
+|---|---|---|---|
+| classical planner | tracked notes | 100 % | 98.0 % |
+| code-as-policy, self-test (v1) | tracked notes | 98.0 | 96.1 |
+| code-as-policy, harness feedback only (v7) | tracked notes | 96.3 | 92.0 |
+| code-as-policy, camera only (v2) | **camera image**, own perception code | 97.2 | – |
+| code-as-policy, pixels only (v3) | **frame**, own perception code | 89.6 | – |
+| BC diffusion, from classical | **frame** | **98.7** | – |
+| BC diffusion, state teacher | tracked notes | 95.2 | 88.5 |
+| BC diffusion, trained on vision notes | tracked notes | – | 95.0 |
+| BC, pixel student of MLP teacher | **frame** | 91.1 | – |
+| BC MLP, state teacher | tracked notes | 89.6 | 80.7 |
+
+* On tracked notes, a generated program that could test itself (98.0 %)
+  beats every cloned policy (≤ 95.2 %), at about $13 of agent time and no
+  demonstrations; from pixels it is the other way round: pixel BC from the
+  planner (98.7 %) beats the agent's own perception + control (89.6 %).
+* Letting the agent run the simulator itself is worth more than feedback
+  rounds: one self-tested revision (97.6 %) beats eight feedback-only
+  revisions (96.3 %).
+* Every revision's program and `history.json` (scores, agent replies, cost)
+  are in `results/cap/<run>/`; e.g. `python -m rhythmbot.play --demo --policy
+  cap:results/cap/fable-selftest/policy_v1.py` or `--policy
+  cappx:results/cap/fable-pixels/policy_v3.py`.
+* Agent costs are the conversation's running total as reported by Claude
+  Code: $18 for 8 feedback revisions, $29 for 5 self-test revisions, $24
+  for 5 pixels revisions (Fable).
+* Agents probe their sandbox: in every run they tried to find the project
+  source, write Claude's auto-memory, or run commands with the sandbox off;
+  all denied (see *Isolation*).
 
 ## Known limits / next steps
 
@@ -591,12 +873,366 @@ lets chords score.
 * Touch is geometric, not physical. Switching to a compliant (hydroelastic)
   screen and the station's `contact_results` port would let contact force
   be a metric too; `TouchSensor` is the only place to change.
-* The 2D frame is rendered from the chart, not from a Drake camera. An
-  `RgbdSensor` looking at the Meshcat highway could replace `GameScreen`
-  once the vision model should see the real scene.
+* The camera view (`--view camera`) is one-arm only and its pose is fixed
+  relative to the screen; with two arms' wider screen it would need moving.
 * The soundtrack is synthesized from the chart (click track plus a tone per
   note). Playing a real song means authoring or importing a chart against
   its beat grid; `Chart.bpm` and note times are all that is needed.
 * Replanning restarts from the commanded (not measured) pose; DiffIK
   tracking lag is small here (std of timing error ≈ 15 ms) but a measured-
   state feedback term would make it robust to saturation on fast charts.
+
+## Perspective stage preview
+
+The SEKAI-inspired presentation uses perspective lanes, mint note bars, green
+sustain ribbons and cyan/pink left/right target indicators. Its projection is
+adapted from the local RoboRhythm renderer. The calibrated detector frames stay
+unchanged, so existing vision checkpoints retain their input geometry.
+
+```bash
+python3 -m rhythmbot.stage
+python3 -m rhythmbot.stage --chart charts/demo.json
+python3 -m rhythmbot.stage --snapshot docs/sekai-stage.png --time 5.8
+```
+
+The preview needs NumPy and Pillow (plus Tk for the window). Space pauses and R
+restarts. It displays chart targets, not measured physics or judged scores.
+
+![Perspective stage](docs/sekai-stage.png)
+
+The Drake player now defaults to **two arms** for the classical screen policy:
+`python -m rhythmbot.play --demo --hold`. Use `--arms 1` for a single arm.
+Camera and custom-policy runs retain their supported single-arm default.
+The standalone preview displays chart targets. Use the measured replay export
+below to connect this presentation to the Drake simulation.
+
+### Measured bimanual replay
+
+Export the stage from the actual Drake touch sensor and judge (four fingertips,
+cyan left / pink right), rather than chart-target animation:
+
+```bash
+HEADLESS=1 python -m rhythmbot.play --demo --no-realtime \
+  --stage-frames frames --out results/sekai-demo-2arm.json
+ffmpeg -framerate 30 -i frames/%06d.png -filter_complex \
+  'fps=15,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse' \
+  docs/sekai-bimanual.gif
+```
+
+![Measured dual-arm stage replay](docs/sekai-bimanual.gif)
+
+Validated on gpu156 using its existing Drake environment, with two CPU threads
+and no GPU. The earlier recording completed 16/18 notes. The slide repair below supersedes
+that result: both crossing slides now execute with measured handoffs. A 0.2-second
+startup warmup checked construction only and is not a scoring evaluation.
+All new remote files, temporary files and caches live under
+`/data/YifanKang/rhythmbot_sekai_20261109`. Stage export streams PNG files at 30 fps;
+its counters come from the live judge. Circles show measured lateral fingertip
+positions at the judgment line, with filled centers indicating contact; they
+are not a full 3D robot visualization (that remains in Meshcat).
+
+## Actual Drake bimanual environment (3D)
+
+The main robot demonstration is now the **Drake camera view**, showing both
+simulated iiwa arms and their WSG grippers playing the physical screen:
+
+![Two Drake arms playing the game](docs/drake-bimanual.gif)
+
+```bash
+# Desktop: actual 3D camera, simulation, and screen, with a live window
+HEADLESS=1 python -m rhythmbot.drake_replay --live --out results/drake-frames
+# Server: use a virtual display for Drake's renderer
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay --out results/drake-frames
+```
+
+`HEADLESS=1` disables the separate Meshcat server, not the Drake camera.
+The environment uses the existing two-arm station, differential IK controllers,
+planner, touch sensor and judge. The game is mapped onto the physical screen
+with camera rays and Drake body labels, preserving gripper occlusion. The
+screen artwork is a composited display surface, not contact geometry; the
+existing geometric touch model remains unchanged. No scripted arm animation
+or 2D hand replacement is used. The earlier `stage` viewer is only a secondary
+flat diagnostic view.
+
+The export writes 15 fps PNGs and `report.json`. `--duration 0.1` is a quick
+rendering warmup. `--chart` selects another existing chart. The original demo includes two cross-hand slides; they now execute via the
+overlapping handoff planner described below.
+
+### Concert-screen art revision
+
+`SekaiScreen` now draws a translucent, contracting highway over an original
+purple concert backdrop, twelve fine lane divisions, luminous cyan taps,
+green sustain/slide ribbons, a white score HUD, combo, judgment flashes and
+hit particles. It follows the visual vocabulary of the
+[COLORFUL STAGE gameplay reference](https://www.cosmocover.com/newsroom/tap-to-the-rhythm-hatsune-miku-colorful-stage-mobile-game-to-offer-public-beta-october-5-20/),
+without importing character art. This is inspired artwork, not the original
+game or a complete mechanics port: the controller still has six logical lanes,
+and there is no flick mechanic. The displayed score uses our judge's 3/2/1
+points, not the original game's scoring system.
+
+Perspective contraction is exactly identity at the judgment line: lane centers
+still coincide with `Layout.lane_x`, and hit y is unchanged. The perception
+renderer stays calibrated. Combo, flashes and particles use actual judge
+results; none are fabricated from chart timing. The recording includes a
+readable inset of the *same* live display texture alongside the actual Drake
+camera, since the physical screen is small in the whole-robot view.
+
+### Slide execution and scoring repair
+
+Cross-center slides are split into left/right trajectory segments with an
+80 ms overlap (40 ms on either side of the crossing). Each arm uses its inner
+fingertip with the normal two-arm gripper opening. Near the center, the contact
+path is bounded to preserve the configured 90 mm gripper-center clearance on
+each side. Clamp intersections are explicit waypoints, so clipping does not
+distort the rest of the slide. The source chart and its judged path are unchanged.
+The planner now preserves the selected fingertip reference throughout slide
+keyframes, including lateral travel.
+
+Slides receive **no score or final Perfect at the head**. The head timing grade
+is saved separately. The final grade is emitted only after the slide ends and
+all of these conditions pass:
+
+- At least 95% of the complete slide is tracked, including a late head's gap.
+- No continuous loss of contact / tracking exceeds 50 ms.
+- Lateral tracking error is at most 0.35 lane (42 mm in the dual-arm layout,
+  reduced from the previous 76 mm tolerance).
+- Every sampled point in the last 40 ms has contact on the path and within
+  that tolerance of the final lane. A missing or wrong tail fails.
+
+A failed sustain receives Miss and zero points, regardless of its head grade.
+Holds also defer their final grade until completion. Truncated active sustains
+are not awarded successful grades. The live HUD uses the final judgment time.
+These are this simulator's explicit rules, not a claim to exactly reproduce
+Project Sekai's scoring system.
+
+Run regression checks with `python -m unittest discover -s tests -v` in the
+Drake environment. Seven tests cover successful completion, deferred scoring,
+head-only contact, contact breaks, absent/wrong tails, truncated runs, and
+reachability/path coverage for both crossing directions. The unmodified demo
+is then exercised end-to-end in the actual two-arm Drake station. Reports now
+include maximum gap, tail contact samples, per-hand tracking counts, and
+measured handoff counts. The camera replay also records the minimum sampled
+gripper-center separation; this is not a full collision-certification test.
+
+Validated result (`results/drake-bimanual.json`, gpu156): **18/18 completed,
+18 final Perfect**. Slides #7 and #13 each made one measured handoff with both
+hands contributing contact samples. Tracking coverage was 99.50% / 99.69%;
+maximum gap was 5 ms each; both tails passed 9/9 samples. Mean slide RMS lateral
+error was 5.9 mm. The 263-frame GIF above is the actual Drake camera recording
+of this run. Minimum sampled gripper-center separation was 153.7 mm; the
+station uses its existing no-collision iiwa models and geometric touch sensing,
+so this does not certify arm-arm collision safety outside this demonstration.
+
+## One finger per arm: closed WSG + central stylus
+
+The default `rhythmbot.drake_replay` demonstration now uses two closed WSGs,
+each carrying a central cylinder and a 6 mm-radius rounded tip. Only that tip
+is connected to the touch sensor: **two arms, two contact channels total**.
+The existing WSG finger meshes cannot earn extra hits. The detector, judge
+windows, slide gap limit and tail checks remain unchanged.
+
+```bash
+HEADLESS=1 python -m rhythmbot.play --stylus --demo --no-realtime
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay --out results/stylus-frames
+# Previous open-gripper/two-finger demonstration:
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay --two-finger --out results/wsg-frames
+```
+
+The stylus sphere center is 220 mm from the gripper frame along its central
+axis. Each arm tilts inward by 30 degrees, keeping its gripper body away from
+the crossing. Contacts are staggered 12 mm forward/back along the judgment
+line so two round tips do not occupy the same point during handoff. Planning
+and sensing account for the sphere radius. Width commands remain zero, and
+single-arm chord / free-finger-while-holding actions are disabled. Three
+simultaneous distinct targets cannot all score with two tips.
+
+The regression suite now has 11 tests, including contact-channel count,
+single-tip action constraints, three-note limits and fixed tilt across repeated
+replanning. The displayed styluses are welded simulation tools with geometric
+touch sensing; this is not a force-controlled physical grasp simulation.
+
+![Two single-tip styluses in Drake](docs/drake-stylus.gif)
+
+Recorded validation (`results/drake-stylus.json`): 18/18 completed, two contact
+channels, slide coverage 99.50% / 99.69%, both tails 9/9 samples, unchanged
+maximum gap 5 ms. Minimum sampled tip-center separation was 24.1 mm (tip
+diameter 12 mm); minimum gripper-center separation was 217.4 mm. The width
+command is zero; maximum measured individual finger-joint displacement was
+1.25 mm during the run. The handoff counter tracks changes of the nearest
+qualifying tip, so the overlap can register multiple switches between two
+simultaneously valid tips. These measurements do not certify whole-arm
+collision safety; the inherited iiwa models still omit collision geometry.
+
+## Harder single-tip stress chart
+
+`charts/stylus-hard-handoffs.json` is a fixed 24-note, 150 BPM authored stress
+chart (last note at 21.75 s), run with the same controller and judgment settings
+as the single-tip demo:
+
+- 3–5 s and 17–18.2 s: simultaneous left/right holds.
+- 7–9.4 s: one zigzag slide crossing the center four times, 0.6 s per crossing.
+- 10–13.8 s: four alternating-direction crossing slides with 0.2 s release gaps.
+- 14.6–16.2 s: left hold while the right hand follows a local zigzag slide.
+- 18.6–20.2 s: four crossings in a single faster slide, 0.4 s per crossing.
+- Alternating taps and a closing two-hand chord stream, down to 0.25 s spacing.
+
+```bash
+HEADLESS=1 xvfb-run -a python -m rhythmbot.drake_replay \
+  --chart charts/stylus-hard-handoffs.json --out results/stylus-hard-frames
+```
+
+This tests robot execution from the oracle chart input, not learned vision.
+
+![Harder single-tip chart: actual Drake run](docs/drake-stylus-hard.gif)
+
+Result (`results/drake-stylus-hard.json`): **23/24 completed (95.83%)**, 23 Perfect,
+1 Miss, score 69/72. All 12 taps and all 5 holds completed; every hold maintained
+100% contact, including both simultaneous pairs. Six of seven slides completed:
+the 0.6-second-per-crossing zigzag, all four back-to-back crossing slides, and
+the local slide alongside the other hand's hold.
+
+The sole failure is note #15, 18.6–20.2 s: four center crossings at 0.4 s each.
+Tracking coverage fell to 84.74%, with an 80 ms maximum interval without valid
+on-path contact (limits: 95% coverage, 50 ms maximum gap). The tail still passed
+9/9 samples; the final grade correctly remained Miss and earned no points.
+The report's gap metric includes both lifted contact and contact outside the
+lateral tracking tolerance; it does not isolate the physical cause. This run
+finds a limit of the current controller on this pattern, not a universal speed
+limit for single-tip robots. No planner or judgment thresholds were changed.
+
+The 342-frame, 15 fps recording lasts 22.8 s. Minimum sampled tip-center distance
+was 18.6 mm and gripper-center distance 219.8 mm; these are diagnostics, not full
+collision certification. Run used the existing gpu156 Drake environment, two
+CPU threads, no GPU, and task-local outputs/caches under `/data/YifanKang/`.
+
+## Systematic bimanual experiments
+
+A reproducible 61-run suite expands the single-tip demonstration into paired
+comparisons. Generate and inspect the manifest before running:
+
+```bash
+python -m rhythmbot.experiments --out results/bimanual-suite-v1 --prepare
+HEADLESS=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+  python -m rhythmbot.experiments --out results/bimanual-suite-v1 --workers 2
+python scripts/plot_bimanual_suite.py results/bimanual-suite-v1
+```
+
+The same command resumes compatible completed jobs. Source and chart hashes
+prevent accidental mixing across versions. Use a new output directory after
+changing source. Each simulation saves the full configuration and all per-note
+judgments; exceptions are reported separately and never converted into passes.
+Warmup is only an initialization check, excluded from the matrix scores.
+
+| Experiment | Conditions | Simulations |
+|---|---|---:|
+| Crossing speed | 0.3/0.4/0.5/0.6/0.8 s per crossing × 3 chart variants × 2 tools | 30 |
+| Parallel holds + local slides | 3 variants × 2 tools | 6 |
+| Dense two-note chords + deliberate three-note capacity stress | 3 variants × 2 tools | 6 |
+| Calibrated-image perception | Color detector on stylus: 0.6 s crossing / holds / chords × 3 variants | 9 |
+| Handoff ablation | Coordination disabled: stylus at 0.4/0.6 s × 3 variants | 6 |
+| Existing anchor charts | Original demo and hard chart × 2 tools | 4 |
+
+The main comparisons use the classical controller and exact chart (oracle)
+input. Color perception reads the calibrated `FrameRenderer`, **not** the new
+concert artwork or an external camera; camera/learned-vision robustness is not
+established by this suite. Both tools use the same strict slide judge. The
+tool comparison changes gripper opening, tool length, tilt and usable contact
+count together, so it is a configuration comparison, not an isolated causal
+measurement of finger count. Handoff ablation only disables path partitioning.
+Three seeds produce paired chart variants, not independent stochastic repeats;
+no confidence intervals or significance claims are attached to this pilot.
+The chord family intentionally includes rows beyond two simultaneous contacts.
+
+Results: [full table](results/bimanual-suite-v1/summary.md),
+[machine-readable summary](results/bimanual-suite-v1/summary.json),
+[manifest](results/bimanual-suite-v1/manifest.json), and per-run JSON in `runs/`.
+
+![Bimanual experiment overview](results/bimanual-suite-v1/overview.png)
+
+Within each crossing chart, the first slide is a four-crossing zigzag at the
+listed seconds-per-crossing parameter. Two subsequent opposite-direction
+single-crossing slides each take **twice** that duration, separated by 0.2 s.
+Thus the table aggregates three different notes; panel A isolates the first
+zigzag so its failures are not diluted by the easier single-crossing controls.
+
+Completed pilot: **61/61 simulations, zero execution errors, zero missing
+reports**, plus 13 passing tests. All 61 result fingerprints were verified
+against the frozen manifest; a resume probe reused an existing result without
+re-running simulation.
+
+- Four-crossing zigzag: both tool configurations fail all three variants at
+  0.3 and 0.4 s per crossing; all three pass at 0.5, 0.6 and 0.8 s. This brackets
+  a pattern-specific transition between 0.4 and 0.5 s, not a universal limit.
+- Disabling handoff: 0/9 crossing notes complete at both 0.4 and 0.6 s settings,
+  versus 6/9 and 9/9 with coordination enabled.
+- Parallel holds/local slides: 18/18 for each tool and for stylus color input.
+- Dense/chord stress: stylus 72/81, two-finger WSG 81/81. The nine stylus misses
+  occur in the deliberately over-capacity three-note rows.
+- Perception: at the 0.6 s crossing condition, stylus oracle achieves 9/9 and
+  calibrated-image color achieves 6/9; all three additional failures are
+  missing-tail failures. Holds and chord totals are unchanged by color input.
+- Anchor reproduction: both tools score 18/18 on the original demo and 23/24
+  on the harder handoff chart.
+
+These results prioritize two follow-ups: inspect inferred slide endpoints for
+the color detector, and improve trajectory execution in the 0.4–0.5 s zigzag
+transition. BC/LLM policy training and real-camera perception are not part of
+this completed classical-control pilot.
+
+### Yifan: dual-arm Code-as-Policy and Behavior Cloning
+
+The single-stylus Drake environment now runs an independent custom policy per
+arm. CAP receives a hand-aware, geometry-constrained API; BC checkpoints declare
+the single-stylus tool mode and preserve its fixed tilt. All methods use the same
+cross-hand router and strict slide judgment.
+
+The new [CAP/BC study](results/yifan-study-v1/README.md) implements Yifan's proposal
+scope: actual coding-agent generation with training-only feedback, MLP/diffusion
+cloning of classical commanded demonstrations, and a frozen held-out comparison
+against classical planning. It is distinct from the classical-only benchmark
+above. See [full results](results/yifan-study-v1/summary.md),
+[verification](results/yifan-study-v1/verification.json), and the saved prompts,
+programs, training logs and per-note reports in that directory.
+
+![Frozen held-out CAP and BC comparison](results/yifan-study-v1/overview.png)
+
+Actual Drake replays on the same first held-out crossing chart:
+[CAP v2](results/yifan-study-v1/replays/cap-v2.gif) and
+[BC MLP](results/yifan-study-v1/replays/bc-mlp.gif).
+These replays use oracle note input; the main table separately reports oracle and
+calibrated color input. The concert-style display is a visualization.
+
+```sh
+HEADLESS=1 python -m rhythmbot.play --stylus --no-realtime --policy cap:results/yifan-study-v1/cap/v1/policy.py --chart results/yifan-study-v1/charts/test_iid/crossing-s31000-0.6s.json
+```
+
+For BC, fetch the checkpoint identified in `freeze.json` from gpu156 and use
+`--policy bc:/absolute/path/bc-mlp.pt`. Legacy single-gripper checkpoints are
+rejected in single-stylus mode. This pilot uses one seed per BC head and one CAP
+chain, so its results do not establish statistical superiority.
+
+### Control from the Drake camera RGB image
+
+`--view camera --detector concert --stylus` now runs both arms from RGB vision on
+the concert-style display. A fixed geometric calibration rectifies the camera
+pixels and the display's perspective; color/shape segmentation estimates notes.
+The detector receives no chart, depth or render labels, and occlusions remain
+visible in its input. Camera mode explicitly rejects the oracle detector.
+
+The simulator composites the dynamic display onto the visible screen in Drake's
+scene RGB using render labels **inside the renderer only**. This preserves actual
+robot occlusion; it is not a physical-camera experiment or a native animated
+Drake texture. The camera GIF shows the actual RGB and rectified pixels used for
+control, rather than a separate clean-screen preview.
+
+The [camera study](results/camera-vision-v1/README.md) compares four unchanged
+controllers on eight matching held-out charts, using direct concert RGB and
+camera RGB. It also reports the previous oracle/color baselines, two full
+blackout controls and all per-note judgments. See the
+[paired results](results/camera-vision-v1/summary.md) and
+[verification](results/camera-vision-v1/verification.json).
+
+![RGB camera comparison](results/camera-vision-v1/comparison.png)
+
+[CAP camera GIF](results/camera-vision-v1/cap-v1-camera.gif) ·
+[BC MLP camera GIF](results/camera-vision-v1/bc-mlp-camera.gif)

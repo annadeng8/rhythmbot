@@ -1,0 +1,237 @@
+{
+  "chart": "crossing-s31001-0.8s",
+  "n_notes": 3,
+  "completion_rate": 0.6666666666666666,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 2,
+    "great": 0,
+    "good": 0,
+    "miss": 1
+  },
+  "score": 6,
+  "max_score": 9,
+  "timing_error_mean_s": -0.013333333333333197,
+  "timing_error_abs_mean_s": 0.013333333333333197,
+  "timing_error_std_s": 0.002357022603955213,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 2,
+      "mean_maintenance": 0.8653146125845034,
+      "mean_slide_rms_m": 0.04782847263321682
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 3.935815571119104,
+      "time": 3.0,
+      "duration": 3.2,
+      "status": "hit",
+      "timing_error": -0.015000000000000124,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 6.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 1.2949999999999944,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": "contact_break",
+      "contact_ticks_by_hand": [
+        169,
+        213
+      ],
+      "handoffs": 6,
+      "last_contact_hand": 1,
+      "active_ticks": 641,
+      "contact_ticks": 382,
+      "completed": false,
+      "maintenance": 0.5959438377535101,
+      "slide_rms_m": 0.1336491903053091
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 3.935815571119104,
+      "time": 6.8,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": -0.01499999999999968,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 8.405,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        169,
+        152
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 0,
+      "active_ticks": 321,
+      "contact_ticks": 321,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": 0.006342924045717287
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 0.8724410477746084,
+      "time": 8.6,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": -0.009999999999999787,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 10.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        168,
+        153
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 1,
+      "active_ticks": 321,
+      "contact_ticks": 321,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": 0.003493303548624055
+    }
+  ],
+  "detector": "color",
+  "policy": "cap-v1",
+  "view": "screen",
+  "skipped_by_planner": [],
+  "n_detections": 339,
+  "sim_seconds": 11.2,
+  "wall_seconds": 11.872041463851929,
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 384,
+      "height": 256,
+      "fov_y_deg": 45.0,
+      "eye_offset": [
+        0.55,
+        -0.05,
+        0.65
+      ],
+      "target_offset": [
+        0.07,
+        0.0,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "execution_status": "ok",
+  "policy_stats_by_hand": [
+    {
+      "plan_calls": 337,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7948848592996244,
+      "plan_ms_max": 2.161100972443819
+    },
+    {
+      "plan_calls": 337,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.82173183261906,
+      "plan_ms_max": 1.4955438673496246
+    }
+  ],
+  "study_job": {
+    "policy": "cap:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v1/policy.py",
+    "label": "cap-v1",
+    "detector": "color",
+    "chart": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/charts/test_iid/crossing-s31001-0.8s.json",
+    "split": "test_iid",
+    "out": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/eval/test/cap-v1/color/crossing-s31001-0.8s.json"
+  },
+  "fingerprint": "36160b38ad3afb9078ceb93a3af920dc2c9fa766a9d65c3a66f54818cc405765"
+}

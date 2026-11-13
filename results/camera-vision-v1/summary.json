@@ -1,0 +1,484 @@
+{
+  "rows": [
+    {
+      "policy": "bc-diffusion",
+      "input": "concert-camera",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 28,
+      "notes": 78,
+      "completion": 0.358974358974359,
+      "chart_mean_completion": 0.12962962962962962,
+      "by_kind": {
+        "tap": {
+          "completed": 28,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 44,
+        "tail_missing": 4,
+        "insufficient_tracking": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "bc-diffusion",
+      "input": "concert-screen",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 28,
+      "notes": 78,
+      "completion": 0.358974358974359,
+      "chart_mean_completion": 0.12962962962962962,
+      "by_kind": {
+        "tap": {
+          "completed": 28,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 43,
+        "tail_missing": 5,
+        "insufficient_tracking": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "bc-diffusion",
+      "input": "prior-color",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 36,
+      "notes": 78,
+      "completion": 0.46153846153846156,
+      "chart_mean_completion": 0.16666666666666669,
+      "by_kind": {
+        "tap": {
+          "completed": 36,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 35,
+        "tail_missing": 5,
+        "insufficient_tracking": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "bc-diffusion",
+      "input": "prior-oracle",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 44,
+      "notes": 78,
+      "completion": 0.5641025641025641,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_kind": {
+        "tap": {
+          "completed": 36,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 10,
+        "head_miss": 19,
+        "contact_break": 4,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "bc-mlp",
+      "input": "concert-camera",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 12,
+      "notes": 78,
+      "completion": 0.15384615384615385,
+      "chart_mean_completion": 0.15740740740740738,
+      "by_kind": {
+        "tap": {
+          "completed": 7,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 4,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 63,
+        "tail_missing": 2,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "bc-mlp",
+      "input": "concert-screen",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 12,
+      "notes": 78,
+      "completion": 0.15384615384615385,
+      "chart_mean_completion": 0.15740740740740738,
+      "by_kind": {
+        "tap": {
+          "completed": 7,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 4,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 63,
+        "tail_missing": 2,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "bc-mlp",
+      "input": "prior-color",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 41,
+      "notes": 78,
+      "completion": 0.5256410256410257,
+      "chart_mean_completion": 0.27083333333333337,
+      "by_kind": {
+        "tap": {
+          "completed": 36,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 5,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 34,
+        "tail_missing": 1,
+        "contact_break": 1,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "bc-mlp",
+      "input": "prior-oracle",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 49,
+      "notes": 78,
+      "completion": 0.6282051282051282,
+      "chart_mean_completion": 0.5,
+      "by_kind": {
+        "tap": {
+          "completed": 36,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 4,
+        "head_miss": 24,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "cap-v1",
+      "input": "concert-camera",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 66,
+      "notes": 78,
+      "completion": 0.8461538461538461,
+      "chart_mean_completion": 0.8009259259259258,
+      "by_kind": {
+        "tap": {
+          "completed": 47,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 11,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 5,
+        "head_miss": 7
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "cap-v1",
+      "input": "concert-screen",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 65,
+      "notes": 78,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.7592592592592593,
+      "by_kind": {
+        "tap": {
+          "completed": 47,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 5,
+        "head_miss": 7,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "cap-v1",
+      "input": "prior-color",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 75,
+      "notes": 78,
+      "completion": 0.9615384615384616,
+      "chart_mean_completion": 0.875,
+      "by_kind": {
+        "tap": {
+          "completed": 54,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 13,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 1,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "cap-v1",
+      "input": "prior-oracle",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 77,
+      "notes": 78,
+      "completion": 0.9871794871794872,
+      "chart_mean_completion": 0.9583333333333333,
+      "by_kind": {
+        "tap": {
+          "completed": 54,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 15,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "classical",
+      "input": "concert-camera",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 66,
+      "notes": 78,
+      "completion": 0.8461538461538461,
+      "chart_mean_completion": 0.7638888888888888,
+      "by_kind": {
+        "tap": {
+          "completed": 48,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 6,
+        "head_miss": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "classical",
+      "input": "concert-screen",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 66,
+      "notes": 78,
+      "completion": 0.8461538461538461,
+      "chart_mean_completion": 0.7638888888888888,
+      "by_kind": {
+        "tap": {
+          "completed": 48,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 6,
+        "head_miss": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "classical",
+      "input": "prior-color",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 69,
+      "notes": 78,
+      "completion": 0.8846153846153846,
+      "chart_mean_completion": 0.8472222222222221,
+      "by_kind": {
+        "tap": {
+          "completed": 48,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 13,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "tail_missing": 2,
+        "head_miss": 6,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "policy": "classical",
+      "input": "prior-oracle",
+      "charts": 8,
+      "execution_errors": 0,
+      "completed": 70,
+      "notes": 78,
+      "completion": 0.8974358974358975,
+      "chart_mean_completion": 0.8888888888888888,
+      "by_kind": {
+        "tap": {
+          "completed": 48,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 14,
+          "notes": 16
+        }
+      },
+      "failure_reasons": {
+        "head_miss": 6,
+        "tail_missing": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    }
+  ],
+  "source_hash": "2cbfb5a6abfd8bc7c1d08038ee2eeaa0244232c696f3219ff4922920a83b2a5d"
+}

@@ -1,0 +1,38 @@
+{
+  "frozen_at_utc": "2026-11-10T02:46:15.186599+00:00",
+  "source_hash": "daf25746ec9ad11f2a0d3fd4ed33faaa870abb4b623d9184c4eefac169ca844e",
+  "protocol_sha256": "aa37814fc1cc2c13a82730a2c48abb90a8b7310e524331ddc7bbe5d6bedb9e4e",
+  "artifacts": {
+    "cap-v0": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v0/policy.py",
+      "sha256": "800ed8d2d82e95096422b0faf260fd0588200ec33e9994efbfda3c9f26cc83da",
+      "bytes": 5654
+    },
+    "cap-v1": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v1/policy.py",
+      "sha256": "501a2b78795b79691b495341ab5295ebd5810d1e8ab5fa08d9d6eb985dcd476c",
+      "bytes": 8217
+    },
+    "cap-v2": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v2/policy.py",
+      "sha256": "fd303e38bf68ccda14b17d3438e46107ed6adab0b53f4f838aba2d4b62781383",
+      "bytes": 8605
+    },
+    "bc-mlp": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt",
+      "sha256": "579c390ecda5e5de25957d23d95a6a1d6b0813a134d412d9f992528e91725f28",
+      "bytes": 717521
+    },
+    "bc-diffusion": {
+      "path": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt",
+      "sha256": "2a6a019b51785facd9a5e4006d2f776022e3ed9c625c6896a2fbd98f10bcbcba",
+      "bytes": 74186487
+    }
+  },
+  "selection": "BC best validation loss; all CAP revisions evaluated; no test selection",
+  "expected_runs": {
+    "validation": 18,
+    "feedback": 18,
+    "test": 96
+  }
+}

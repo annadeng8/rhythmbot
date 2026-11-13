@@ -1,0 +1,228 @@
+{
+  "chart": "crossing-s101-0.6s",
+  "n_notes": 3,
+  "completion_rate": 0.0,
+  "hit_rate": 0.0,
+  "judgments": {
+    "perfect": 0,
+    "great": 0,
+    "good": 0,
+    "miss": 3
+  },
+  "score": 0,
+  "max_score": 9,
+  "timing_error_mean_s": null,
+  "timing_error_abs_mean_s": null,
+  "timing_error_std_s": null,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 0,
+      "completed": 0,
+      "mean_maintenance": null,
+      "mean_slide_rms_m": null
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 1.1330597516831662,
+      "time": 3.0,
+      "duration": 2.4,
+      "status": "miss",
+      "timing_error": null,
+      "judgment": "miss",
+      "head_judgment": null,
+      "judged_at": 3.145,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 0,
+      "contact_ticks": 0,
+      "completed": false,
+      "maintenance": null,
+      "slide_rms_m": null
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 1.1330597516831662,
+      "time": 6.0,
+      "duration": 1.2,
+      "status": "miss",
+      "timing_error": null,
+      "judgment": "miss",
+      "head_judgment": null,
+      "judged_at": 6.140000000000001,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 0,
+      "contact_ticks": 0,
+      "completed": false,
+      "maintenance": null,
+      "slide_rms_m": null
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 3.957826310002472,
+      "time": 7.4,
+      "duration": 1.2,
+      "status": "miss",
+      "timing_error": null,
+      "judgment": "miss",
+      "head_judgment": null,
+      "judged_at": 7.545,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 0,
+      "contact_ticks": 0,
+      "completed": false,
+      "maintenance": null,
+      "slide_rms_m": null
+    }
+  ],
+  "detector": "oracle",
+  "policy": "classical",
+  "view": "screen",
+  "skipped_by_planner": [
+    0,
+    1,
+    2
+  ],
+  "n_detections": 290,
+  "sim_seconds": 9.6,
+  "wall_seconds": 6.069984436035156,
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": false,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 384,
+      "height": 256,
+      "fov_y_deg": 45.0,
+      "eye_offset": [
+        0.55,
+        -0.05,
+        0.65
+      ],
+      "target_offset": [
+        0.07,
+        0.0,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "execution_status": "ok",
+  "fingerprint": "1453336a7bb26156e9ec8f70b05f3a202f78b09bc94900bc4c243f37117b8023",
+  "experiment": {
+    "id": "crossing-s101-0.6s-stylus-oracle-no_handoff",
+    "family": "crossing",
+    "speed": 0.6,
+    "seed": 101,
+    "tool": "stylus",
+    "detector": "oracle",
+    "handoff": false,
+    "chart": "charts/crossing-s101-0.6s.json",
+    "chart_hash": "9dcec79e4ce305566a4360fc5149e29a80b598a18b08a99f2b9410d4f5060fc1"
+  }
+}

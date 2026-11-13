@@ -1,0 +1,17 @@
+{
+  "python": "3.13.18",
+  "system": "Linux-6.8.0-90-generic-x86_64-with-glibc2.39",
+  "packages": {
+    "drake": "1.57.0",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "Pillow": "12.3.0",
+    "matplotlib": "3.11.2"
+  },
+  "base_commit": "5807cb9",
+  "source_identity": "freeze.json/source_hash",
+  "simulation_workers": 2,
+  "simulation_threads_per_worker": 1,
+  "training_gpu_physical_index": 1
+}

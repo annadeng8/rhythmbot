@@ -1,0 +1,26 @@
+[
+  {
+    "policy": "cap-v1",
+    "gif": "results/camera-vision-v1/cap-v1-camera.gif",
+    "sha256": "7e7a5fa0d62d6b95d420e778b84dee87665aac79d491505824df79114e88a51c",
+    "bytes": 7236535,
+    "report": "results/camera-vision-v1/eval/cap-v1/camera/crossing-s31000-0.6s.json",
+    "evaluation_fingerprint": "07193eec4edce633a1ef704b59dae260c2e1d11f49c68fa4d79869b9be2f44d5",
+    "completed": 2,
+    "notes": 3,
+    "fps": 8,
+    "caption": "Recorded during the evaluated camera run; last-observed RGB and rectified pixels. Resized to 720x390 and quantized to 64 colors for GIF delivery; original PNG frames remain on gpu156."
+  },
+  {
+    "policy": "bc-mlp",
+    "gif": "results/camera-vision-v1/bc-mlp-camera.gif",
+    "sha256": "d0ea35649264919e9812a8daf65e644c5a1da85d4cd645398f40beecaa3fbf02",
+    "bytes": 7509898,
+    "report": "results/camera-vision-v1/eval/bc-mlp/camera/crossing-s31000-0.6s.json",
+    "evaluation_fingerprint": "19c26b46a9e1cac2eaf1171ca4f9a5e1db316bb22063f9a71b3c8a7b7d3932c7",
+    "completed": 0,
+    "notes": 3,
+    "fps": 8,
+    "caption": "Recorded during the evaluated camera run; last-observed RGB and rectified pixels. Resized to 720x390 and quantized to 64 colors for GIF delivery; original PNG frames remain on gpu156."
+  }
+]

@@ -1,0 +1,33 @@
+/data/YifanKang/rhythmbot_yifan_study_v1/rhythmbot/yifan_study.py:105: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  torch.nn.utils.clip_grad_norm_(model.parameters(),1.0);opt.step();total+=float(loss)*len(ids)
+diffusion {'epoch': 1, 'train_loss': 0.18202829875898724, 'validation_loss': 0.1007687374326497, 'wall_seconds': 1.0012500286102295}
+diffusion {'epoch': 2, 'train_loss': 0.08512771528674054, 'validation_loss': 0.08331667283838542, 'wall_seconds': 0.6742711067199707}
+diffusion {'epoch': 3, 'train_loss': 0.06986838468776377, 'validation_loss': 0.06517752385080491, 'wall_seconds': 0.6730000972747803}
+diffusion {'epoch': 4, 'train_loss': 0.05983979791775548, 'validation_loss': 0.06086555967022277, 'wall_seconds': 0.675417423248291}
+diffusion {'epoch': 5, 'train_loss': 0.05339971660976179, 'validation_loss': 0.05502064983332436, 'wall_seconds': 0.675731897354126}
+diffusion {'epoch': 6, 'train_loss': 0.04930656590479233, 'validation_loss': 0.04978270758537279, 'wall_seconds': 0.6727404594421387}
+diffusion {'epoch': 7, 'train_loss': 0.04544941634304372, 'validation_loss': 0.044687649520651886, 'wall_seconds': 0.6785111427307129}
+diffusion {'epoch': 8, 'train_loss': 0.042700691415020274, 'validation_loss': 0.0433189014467092, 'wall_seconds': 0.675408124923706}
+diffusion {'epoch': 9, 'train_loss': 0.04079429404187163, 'validation_loss': 0.04170469412218817, 'wall_seconds': 0.672316312789917}
+diffusion {'epoch': 10, 'train_loss': 0.0379499336233633, 'validation_loss': 0.04018382061430675, 'wall_seconds': 0.6730809211730957}
+diffusion {'epoch': 11, 'train_loss': 0.036765999948203794, 'validation_loss': 0.03857074230037206, 'wall_seconds': 0.6708035469055176}
+diffusion {'epoch': 12, 'train_loss': 0.035503643193667576, 'validation_loss': 0.03634522957862287, 'wall_seconds': 0.6705589294433594}
+diffusion {'epoch': 13, 'train_loss': 0.03424576005294246, 'validation_loss': 0.034448549056938595, 'wall_seconds': 0.6736264228820801}
+diffusion {'epoch': 14, 'train_loss': 0.03257070248009654, 'validation_loss': 0.033517168687372034, 'wall_seconds': 0.6706972122192383}
+diffusion {'epoch': 15, 'train_loss': 0.03168854022792593, 'validation_loss': 0.03364390884541648, 'wall_seconds': 0.6705307960510254}
+diffusion {'epoch': 16, 'train_loss': 0.030933103405137694, 'validation_loss': 0.03222844365012387, 'wall_seconds': 0.6713807582855225}
+diffusion {'epoch': 17, 'train_loss': 0.02925655510845782, 'validation_loss': 0.03131521717928674, 'wall_seconds': 0.6723377704620361}
+diffusion {'epoch': 18, 'train_loss': 0.028915289371128052, 'validation_loss': 0.03130197991204833, 'wall_seconds': 0.6715497970581055}
+diffusion {'epoch': 19, 'train_loss': 0.028714797648440697, 'validation_loss': 0.029444537879826465, 'wall_seconds': 0.6730203628540039}
+diffusion {'epoch': 20, 'train_loss': 0.027259617245767736, 'validation_loss': 0.02988365319647817, 'wall_seconds': 0.6729128360748291}
+diffusion {'epoch': 21, 'train_loss': 0.027067891226361277, 'validation_loss': 0.027645848453701074, 'wall_seconds': 0.6695272922515869}
+diffusion {'epoch': 22, 'train_loss': 0.026770064432038245, 'validation_loss': 0.026889736559335454, 'wall_seconds': 0.6725759506225586}
+diffusion {'epoch': 23, 'train_loss': 0.026119583294954295, 'validation_loss': 0.028202320819195263, 'wall_seconds': 0.6725876331329346}
+diffusion {'epoch': 24, 'train_loss': 0.025278725855299607, 'validation_loss': 0.026492881923997017, 'wall_seconds': 0.7022697925567627}
+diffusion {'epoch': 25, 'train_loss': 0.025100449983348594, 'validation_loss': 0.02696795320790365, 'wall_seconds': 0.6711781024932861}
+diffusion {'epoch': 26, 'train_loss': 0.02473464516933973, 'validation_loss': 0.02399727361694128, 'wall_seconds': 0.6708426475524902}
+diffusion {'epoch': 27, 'train_loss': 0.02283935391867271, 'validation_loss': 0.026013125585539552, 'wall_seconds': 0.6721460819244385}
+diffusion {'epoch': 28, 'train_loss': 0.023862098476861143, 'validation_loss': 0.024099329706082077, 'wall_seconds': 0.67049241065979}
+diffusion {'epoch': 29, 'train_loss': 0.022457481599440714, 'validation_loss': 0.025665526847285503, 'wall_seconds': 0.6743674278259277}
+diffusion {'epoch': 30, 'train_loss': 0.023217569629480943, 'validation_loss': 0.025573481367475278, 'wall_seconds': 0.6716392040252686}

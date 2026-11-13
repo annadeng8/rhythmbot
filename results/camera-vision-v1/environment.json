@@ -1,0 +1,14 @@
+{
+  "python": "3.13.18",
+  "packages": {
+    "drake": "1.57.0",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "Pillow": "12.3.0",
+    "matplotlib": "3.11.2"
+  },
+  "inference_device": "cpu",
+  "rendering": "VTK/EGL graphics on GPU 0",
+  "baseline_commit": "21370c9b53d700c6cf28b16582cb32d05727279f"
+}

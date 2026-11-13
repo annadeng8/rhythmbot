@@ -1,0 +1,27 @@
+{
+  "gpu": "NVIDIA L40S",
+  "vram_bytes": 47677177856,
+  "shared_memory_per_block_bytes": 49152,
+  "kernels": "PyTorch eager MLP/diffusion; no torch.compile/Triton",
+  "checks": [
+    {
+      "head": "mlp",
+      "loss": 1.7033641338348389,
+      "action_shape": [
+        256,
+        16,
+        4
+      ]
+    },
+    {
+      "head": "diffusion",
+      "loss": 1.326175570487976,
+      "action_shape": [
+        256,
+        16,
+        4
+      ]
+    }
+  ],
+  "peak_allocated_bytes": 175181824
+}

@@ -140,6 +140,24 @@ def make_scenario_yaml(cfg: Config, screen_sdf_path: str) -> str:
     file: package://manipulation/iiwa_and_wsg.dmd.yaml"""
     else:
         arms = arm_directives(A.suffixes[0], -A.base_x) + arm_directives(A.suffixes[1], A.base_x)
+    if cfg.gripper.single_tip:
+        stylus_path = os.path.join(temp_directory(), "rhythmbot_stylus.sdf")
+        length = cfg.gripper.tip_offset - 0.08
+        with open(stylus_path, "w") as f:
+            f.write(f'''<sdf version="1.7"><model name="stylus"><link name="tip">
+<inertial><mass>0.01</mass><inertia><ixx>0.00001</ixx><iyy>0.00001</iyy><izz>0.00001</izz></inertia></inertial>
+<visual name="shaft"><pose>0 {0.08+length/2} 0 1.57079632679 0 0</pose><geometry><cylinder><radius>0.004</radius><length>{length}</length></cylinder></geometry><material><diffuse>0.25 0.85 0.90 1</diffuse></material></visual>
+<visual name="round_tip"><pose>0 {cfg.gripper.tip_offset} 0 0 0 0</pose><geometry><sphere><radius>{cfg.gripper.tip_radius}</radius></sphere></geometry><material><diffuse>1 0.5 0.7 1</diffuse></material></visual>
+</link></model></sdf>''')
+        for suffix in A.suffixes:
+            arms += f"""
+- add_model:
+    name: stylus{suffix}
+    file: file://{stylus_path}
+- add_weld:
+    parent: {WSG_NAME}{suffix}::body
+    child: stylus{suffix}::tip
+"""
     drivers = "".join(
         f"""
     {IIWA_NAME}{sx}: !IiwaDriver
@@ -246,10 +264,14 @@ class Arm:
 class Robot:
     """Everything built onto the DiagramBuilder for the arms."""
 
-    def __init__(self, builder: DiagramBuilder, cfg: Config, meshcat: Meshcat | None):
+    def __init__(self, builder: DiagramBuilder, cfg: Config, meshcat: Meshcat | None, camera: bool = False):
         self.cfg = cfg
         screen_sdf = write_screen_sdf(cfg)
         self.scenario = LoadScenario(data=make_scenario_yaml(cfg, screen_sdf))
+        if camera:
+            from .camera import CAMERA_NAME, camera_config
+
+            self.scenario.cameras = {**self.scenario.cameras, CAMERA_NAME: camera_config(cfg)}
         self.station = builder.AddSystem(MakeHardwareStation(self.scenario, meshcat=meshcat))
         self.station.set_name("station")
         self.plant = self.station.GetSubsystemByName("plant")
@@ -274,7 +296,7 @@ class Robot:
 # Output layout of TouchSensor: for each fingertip (left, right, per arm) a
 # block of [down, x, y, z].
 def touch_width(cfg: Config) -> int:
-    return 8 * cfg.arms.n
+    return 4 * cfg.gripper.contacts_per_arm * cfg.arms.n
 
 
 class TouchSensor(LeafSystem):
@@ -290,9 +312,9 @@ class TouchSensor(LeafSystem):
         self.finger_indices = [
             plant.GetBodyByName(finger, plant.GetModelInstanceByName(WSG_NAME + suffix)).index()
             for suffix in cfg.arms.suffixes
-            for finger in ("left_finger", "right_finger")
+            for finger in (("body",) if cfg.gripper.single_tip else ("left_finger", "right_finger"))
         ]
-        self.p_Ftip = np.array([0.0, cfg.gripper.finger_tip_offset, 0.0])
+        self.p_Ftip = np.array([0.0, (cfg.gripper.tip_offset if cfg.gripper.single_tip else cfg.gripper.finger_tip_offset), 0.0])
         self.poses_port = self.DeclareAbstractInputPort(
             "body_poses", AbstractValue.Make([RigidTransform()])
         )
@@ -315,7 +337,7 @@ class TouchSensor(LeafSystem):
         cfg_tol = self.cfg.motion.contact_tolerance
         for k, p in enumerate(self.tips(context)):
             down = (
-                p[2] <= self.L.screen_z + cfg_tol
+                p[2] - (self.cfg.gripper.tip_radius if self.cfg.gripper.single_tip else 0) <= self.L.screen_z + cfg_tol
                 and self.x_range[0] <= p[0] <= self.x_range[1]
                 and self.y_range[0] <= p[1] <= self.y_range[1]
             )

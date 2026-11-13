@@ -7,3 +7,11 @@ data/
 songs/
 # Synthesized soundtracks, rewritten on every `play --audio` run.
 results/*.wav
+
+# Diffusion checkpoints are 74-100 MB: kept on gpu156 (see README)
+results/bc/*.pt
+# Yifan bimanual pilot: reproducible training data and weights live on gpu156.
+results/yifan-study-v1/checkpoints/
+results/yifan-study-v1/*.npz
+# Full-resolution camera frame sequences stay on gpu156; GIFs are committed.
+results/camera-vision-v1/frames/

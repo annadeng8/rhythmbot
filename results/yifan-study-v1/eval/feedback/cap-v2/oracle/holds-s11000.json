@@ -1,0 +1,327 @@
+{
+  "chart": "holds-s11000",
+  "n_notes": 6,
+  "completion_rate": 1.0,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 6,
+    "great": 0,
+    "good": 0,
+    "miss": 0
+  },
+  "score": 18,
+  "max_score": 18,
+  "timing_error_mean_s": -0.012499999999999881,
+  "timing_error_abs_mean_s": 0.012499999999999881,
+  "timing_error_std_s": 0.0025000000000000946,
+  "by_kind": {
+    "hold": {
+      "n": 4,
+      "hit": 4,
+      "completed": 4,
+      "mean_maintenance": 1.0
+    },
+    "slide": {
+      "n": 2,
+      "hit": 2,
+      "completed": 2,
+      "mean_maintenance": 1.0,
+      "mean_slide_rms_m": 0.009318965613321203
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "hold",
+      "lane": 1.0,
+      "time": 3.0,
+      "duration": 2.0,
+      "status": "hit",
+      "timing_error": -0.015000000000000124,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 5.005,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 401,
+      "contact_ticks": 401,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 1,
+      "kind": "hold",
+      "lane": 3.0,
+      "time": 3.0,
+      "duration": 2.0,
+      "status": "hit",
+      "timing_error": -0.015000000000000124,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 5.005,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 401,
+      "contact_ticks": 401,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 2,
+      "kind": "hold",
+      "lane": 1.0,
+      "time": 5.6,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": -0.009999999999999787,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 321,
+      "contact_ticks": 321,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 3,
+      "kind": "slide",
+      "lane": 3.0,
+      "time": 5.6,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": -0.009999999999999787,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        321
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 1,
+      "active_ticks": 321,
+      "contact_ticks": 321,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": 0.009362428855794592
+    },
+    {
+      "id": 4,
+      "kind": "slide",
+      "lane": 2.0,
+      "time": 8.0,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": -0.01499999999999968,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 9.605,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        321,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 0,
+      "active_ticks": 321,
+      "contact_ticks": 321,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": 0.009275502370847814
+    },
+    {
+      "id": 5,
+      "kind": "hold",
+      "lane": 4.0,
+      "time": 8.0,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": -0.009999999999999787,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 9.605,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 321,
+      "contact_ticks": 321,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    }
+  ],
+  "detector": "oracle",
+  "policy": "cap-v2",
+  "view": "screen",
+  "skipped_by_planner": [],
+  "n_detections": 604,
+  "sim_seconds": 10.6,
+  "wall_seconds": 7.692544221878052,
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 384,
+      "height": 256,
+      "fov_y_deg": 45.0,
+      "eye_offset": [
+        0.55,
+        -0.05,
+        0.65
+      ],
+      "target_offset": [
+        0.07,
+        0.0,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "execution_status": "ok",
+  "policy_stats_by_hand": [
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.8287468478433951,
+      "plan_ms_max": 1.5911702066659927
+    },
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7871586455727072,
+      "plan_ms_max": 1.606025267392397
+    }
+  ],
+  "study_job": {
+    "policy": "cap:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v2/policy.py",
+    "label": "cap-v2",
+    "detector": "oracle",
+    "chart": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/charts/train/holds-s11000.json",
+    "split": "train",
+    "out": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/eval/feedback/cap-v2/oracle/holds-s11000.json"
+  },
+  "fingerprint": "90820664df058b35d4d1a9d37b0a1074da3c87fcd8575fa8f8aa958e8545ced7"
+}

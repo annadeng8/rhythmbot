@@ -1,0 +1,9 @@
+chart crossing-s101-0.4s: {'tap': 0, 'hold': 0, 'slide': 3}  ends at 7.0 s
+
+=== crossing-s101-0.4s: 3 notes ===
+completion 0.0%   hit 0.0%   score 0/9
+perfect 0  great 0  good 0  miss 3
+  slide: 0/3 completed, 0 hit
+  missed: #0 slide@3.00, #1 slide@5.20, #2 slide@6.20
+(simulated 0.2 s in 0.1 s wall)
+report -> results/bimanual-suite-v1/warmup.json

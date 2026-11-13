@@ -1,0 +1,14 @@
+{
+  "baseline_commit": "21370c9b53d700c6cf28b16582cb32d05727279f",
+  "unchanged_files_sha256": {
+    "rhythmbot/planner.py": "995afe1d0c99e5a28b77d7e7487289728274381b65d565d22de3c248460c1516",
+    "rhythmbot/handoff.py": "a99ddbf3bb54f4f519a1c878da070539577635db0030ca80676c77a22a2ccd92",
+    "rhythmbot/judge.py": "bddba2debf666e3b1c30af48fc5e09629d23b5e62f25b03853e2de856358bfcd",
+    "rhythmbot/brain.py": "d38ca2b3141ece6b18b31de70e31cf0f9d377b708dd7c86bbc5fa8a39cb2b9a2",
+    "rhythmbot/bc/policy.py": "fbfaadb055c6d6f58e081ebfd81ff17ad07b152952006b796ec1347376a48ca8",
+    "rhythmbot/bc/features.py": "95abcbe670eee7e071458f1c9f6f249e0b2a79c563c05d3d8e8822401e55c4c6",
+    "rhythmbot/cap/api.py": "4486e2a995cfc8e8afab30ac2a04dde050e29aa96268f168b74838845fd0de4c",
+    "rhythmbot/config.py": "2960150aea16de6b3d6c8cb7588ccfc65a1bdb493ecf65717f1291485c154530",
+    "rhythmbot/robot.py": "02ae15179f68dcee88561fffebf99c87f85b5d9050a8b22ba28b79f4ca434b3f"
+  }
+}

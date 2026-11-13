@@ -1,0 +1,245 @@
+{
+  "name": "stylus-hard-handoffs",
+  "bpm": 150,
+  "source": "Authored single-tip stress test; unchanged controller and timing rules",
+  "notes": [
+    {
+      "kind": "hold",
+      "time": 3,
+      "lane": 1,
+      "duration": 2
+    },
+    {
+      "kind": "hold",
+      "time": 3,
+      "lane": 4,
+      "duration": 2
+    },
+    {
+      "kind": "tap",
+      "time": 5.4,
+      "lane": 0
+    },
+    {
+      "kind": "tap",
+      "time": 5.65,
+      "lane": 5
+    },
+    {
+      "kind": "tap",
+      "time": 5.9,
+      "lane": 1
+    },
+    {
+      "kind": "tap",
+      "time": 6.15,
+      "lane": 4
+    },
+    {
+      "kind": "slide",
+      "time": 7,
+      "lane": 1,
+      "duration": 2.4,
+      "waypoints": [
+        [
+          0,
+          1
+        ],
+        [
+          0.6,
+          4
+        ],
+        [
+          1.2,
+          1
+        ],
+        [
+          1.8,
+          4
+        ],
+        [
+          2.4,
+          1
+        ]
+      ]
+    },
+    {
+      "kind": "slide",
+      "time": 10,
+      "lane": 1,
+      "duration": 0.8,
+      "waypoints": [
+        [
+          0,
+          1
+        ],
+        [
+          0.8,
+          4
+        ]
+      ]
+    },
+    {
+      "kind": "slide",
+      "time": 11,
+      "lane": 4,
+      "duration": 0.8,
+      "waypoints": [
+        [
+          0,
+          4
+        ],
+        [
+          0.8,
+          1
+        ]
+      ]
+    },
+    {
+      "kind": "slide",
+      "time": 12,
+      "lane": 1,
+      "duration": 0.8,
+      "waypoints": [
+        [
+          0,
+          1
+        ],
+        [
+          0.8,
+          4
+        ]
+      ]
+    },
+    {
+      "kind": "slide",
+      "time": 13,
+      "lane": 4,
+      "duration": 0.8,
+      "waypoints": [
+        [
+          0,
+          4
+        ],
+        [
+          0.8,
+          1
+        ]
+      ]
+    },
+    {
+      "kind": "hold",
+      "time": 14.6,
+      "lane": 1,
+      "duration": 1.6
+    },
+    {
+      "kind": "slide",
+      "time": 14.6,
+      "lane": 3,
+      "duration": 1.6,
+      "waypoints": [
+        [
+          0,
+          3
+        ],
+        [
+          0.4,
+          5
+        ],
+        [
+          0.8,
+          3
+        ],
+        [
+          1.2,
+          5
+        ],
+        [
+          1.6,
+          4
+        ]
+      ]
+    },
+    {
+      "kind": "hold",
+      "time": 17,
+      "lane": 0,
+      "duration": 1.2
+    },
+    {
+      "kind": "hold",
+      "time": 17,
+      "lane": 5,
+      "duration": 1.2
+    },
+    {
+      "kind": "slide",
+      "time": 18.6,
+      "lane": 1,
+      "duration": 1.6,
+      "waypoints": [
+        [
+          0,
+          1
+        ],
+        [
+          0.4,
+          4
+        ],
+        [
+          0.8,
+          1
+        ],
+        [
+          1.2,
+          4
+        ],
+        [
+          1.6,
+          1
+        ]
+      ]
+    },
+    {
+      "kind": "tap",
+      "time": 20.8,
+      "lane": 1
+    },
+    {
+      "kind": "tap",
+      "time": 20.8,
+      "lane": 4
+    },
+    {
+      "kind": "tap",
+      "time": 21.2,
+      "lane": 1
+    },
+    {
+      "kind": "tap",
+      "time": 21.2,
+      "lane": 4
+    },
+    {
+      "kind": "tap",
+      "time": 21.5,
+      "lane": 1
+    },
+    {
+      "kind": "tap",
+      "time": 21.5,
+      "lane": 4
+    },
+    {
+      "kind": "tap",
+      "time": 21.75,
+      "lane": 1
+    },
+    {
+      "kind": "tap",
+      "time": 21.75,
+      "lane": 4
+    }
+  ]
+}

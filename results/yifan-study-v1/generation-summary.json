@@ -1,0 +1,29 @@
+{
+  "model": "claude-opus-5-5",
+  "tools_enabled": false,
+  "initial_failed_attempt_cost_usd": 0.6273396,
+  "valid_revisions": [
+    {
+      "revision": 0,
+      "cost_usd": 0.16984180000000001,
+      "seconds": 65.44064211845398,
+      "policy_sha256": "800ed8d2d82e95096422b0faf260fd0588200ec33e9994efbfda3c9f26cc83da",
+      "syntax_error": null
+    },
+    {
+      "revision": 1,
+      "cost_usd": 0.24544980000000002,
+      "seconds": 89.28605580329895,
+      "policy_sha256": "501a2b78795b79691b495341ab5295ebd5810d1e8ab5fa08d9d6eb985dcd476c",
+      "syntax_error": null
+    },
+    {
+      "revision": 2,
+      "cost_usd": 0.16776180000000002,
+      "seconds": 41.74259281158447,
+      "policy_sha256": "fd303e38bf68ccda14b17d3438e46107ed6adab0b53f4f838aba2d4b62781383",
+      "syntax_error": null
+    }
+  ],
+  "total_cost_usd": 1.210393
+}

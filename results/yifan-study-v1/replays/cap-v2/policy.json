@@ -1,0 +1,6 @@
+{
+  "policy": "cap:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v2/policy.py",
+  "sha256": "fd303e38bf68ccda14b17d3438e46107ed6adab0b53f4f838aba2d4b62781383",
+  "input": "oracle",
+  "note": "Camera replay; quantitative benchmark uses the frozen evaluation reports."
+}

@@ -105,7 +105,12 @@ class RhythmBrain(LeafSystem):
         t = context.get_time()
         s: BrainState = state.get_mutable_abstract_state(self._state_index).get_mutable_value()
 
-        frame = self.frame_port.Eval(context) if self.detector.needs_frames else None
+        # A policy that looks at the screen itself (pixel BC) gets the frame
+        # too, through `policy.frame`, set before each `plan` call.
+        wants = [p for p in self.policies if getattr(p, "wants_frames", False)]
+        frame = self.frame_port.Eval(context) if self.detector.needs_frames or wants else None
+        for p in wants:
+            p.frame = frame
         detections = self.detector.detect(frame, t)
         s.n_detections += len(detections)
         self._merge(s, detections, t)
@@ -120,7 +125,8 @@ class RhythmBrain(LeafSystem):
             # starts there, so the commanded pose is continuous across replans.
             s.X_WT_cmds[k] = s.plans[k].tip_pose(t)
             s.width_cmds[k] = s.plans[k].width_at(t)
-            mine = [n for n in confirmed if self.cfg.hand_for_lane(n.lane) == k]
+            from .handoff import hand_notes
+            mine = hand_notes(confirmed, k, self.cfg)
             s.plans[k] = policy.plan(mine, t, s.X_WT_cmds[k], s.width_cmds[k])
         self.last_state = s
 

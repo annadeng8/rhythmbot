@@ -94,7 +94,10 @@ class Timing:
     hold_fraction: float = 0.80
     # A slide is tracked when the fingertip is within this many lanes of the
     # moving target.
-    slide_tolerance_lanes: float = 0.6
+    slide_tolerance_lanes: float = 0.35
+    slide_max_gap: float = 0.05
+    slide_tail_window: float = 0.04
+    slide_min_maintenance: float = 0.95
 
     @property
     def miss_after(self) -> float:
@@ -115,6 +118,14 @@ class Gripper:
     # fingertips sit at x = -/+ this when the command is 0.
     half_closed: float = 0.0115
     max_width: float = 0.107
+    single_tip: bool = False
+    tip_radius: float = 0.006
+    tilt_degrees: float = 30.0
+    hand_y_offset: float = 0.012
+
+    @property
+    def contacts_per_arm(self) -> int:
+        return 1 if self.single_tip else 2
 
     def tip_x_offsets(self, width: float) -> tuple[float, float]:
         """Fingertip x positions in G for a commanded opening `width`."""
@@ -204,6 +215,21 @@ class Perception:
 
 
 @dataclass(frozen=True)
+class Camera:
+    """The external camera of `--view camera` (see `camera.py`).  Its pose
+    is given relative to the screen centre."""
+
+    # 384 x 256 halves to the 192 x 128 the pixel BC encoder takes.
+    width: int = 384
+    height: int = 256
+    fov_y_deg: float = 45.0
+    eye_offset: tuple[float, float, float] = (0.55, -0.05, 0.65)
+    target_offset: tuple[float, float, float] = (0.07, 0.0, 0.0)
+    # Per-pixel Gaussian sensor noise (0-255 scale).
+    noise_std: float = 3.0
+
+
+@dataclass(frozen=True)
 class Arms:
     """How many iiwa + WSG arms play, and where they stand.
 
@@ -212,6 +238,7 @@ class Arms:
     """
 
     n: int = 1
+    slide_handoff: bool = True
     # Bases at x = -/+ this, on the same line as the single arm's base.
     base_x: float = 0.33
     # A hand's centre stays this far from the middle of the screen: half the
@@ -232,6 +259,7 @@ class Config:
     motion: Motion = field(default_factory=Motion)
     perception: Perception = field(default_factory=Perception)
     arms: Arms = field(default_factory=Arms)
+    camera: Camera = field(default_factory=Camera)
     # Simulation
     plant_time_step: float = 0.001
     diffik_time_step: float = 0.005
@@ -256,3 +284,9 @@ def two_arm_config(base: Config = DEFAULT) -> Config:
     the densest map.  The game frame is drawn in pixels, so the vision model
     does not change."""
     return replace(base, arms=Arms(n=2), layout=replace(base.layout, lane_width=0.12))
+
+
+def stylus_config(base: Config = DEFAULT) -> Config:
+    """Two closed WSGs, each holding one central round stylus."""
+    cfg = two_arm_config(base)
+    return replace(cfg, gripper=replace(cfg.gripper, single_tip=True, tip_offset=0.22))

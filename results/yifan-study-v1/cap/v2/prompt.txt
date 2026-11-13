@@ -1,0 +1,399 @@
+You are the coding-agent condition in a robotics experiment. Produce only a complete Python policy in a single fenced python block, no prose.
+The policy must define make_policy(api) returning an object with plan(notes,t_now,X_WT_cmd,width_cmd).
+Each instance controls ONE of two Drake iiwa arms holding a single central stylus. You cannot call the classical planner, access files, run tools, or see a chart. Only import numpy, math, dataclasses, typing, collections, itertools, functools, bisect, copy, or rhythmbot.cap.api.
+An existing common router assigns tap/hold to the appropriate hand and splits cross-hand slides into overlapping local segments; all experimental policies share it. Your job is local trajectory scheduling, including tap release, long holds and changing slide paths. Notes are perceived and tracked at 30 Hz; replanning uses the previous COMMANDED stylus pose (not perfect physical tracking). No neural model needed.
+API:
+api.hand is 0 for left, 1 for right. 6 lanes, width 0.12m, lane_x(lane)=(lane+0.5)*0.12-0.36. Left x range [-.36,0], right [0,.36].
+api.hit_y is the fixed contact y for this hand; all api.keyframe use it. api.screen_z=0.106 (sphere center for contact with surface); api.contact_z=0.110 (down threshold); api.touch_z=0.104; hover_height=0.035. Closed gripper: width=0, ref=0, rise=0 ALWAYS. Fixed 30deg tool tilt is automatically applied by api.make_plan; do not calculate rotations.
+api.current_keyframe(t_now,X_WT_cmd,width_cmd) -> current keyframe; fields t,x,z,width,y,down,ref,rise.
+api.keyframe(t,x,z,width=0,down=False,ref=0,rise=0) -> keyframe.
+api.make_plan(keyframes,t_now=None) -> Plan through time-sorted positions. It clips the trajectory to this hand's half, legal z [0.104,0.206], and enforces tool geometry. Your plan should start at current_keyframe and contain future commands. Do not set kfs before t_now other than current. Plan linearly interpolates positions, not velocities. Simulator follows pose via differential IK, with small tracking lag.
+Every note object has key, kind ('tap','hold','slide'), lane (float), hit_time (absolute seconds), duration, end_time, waypoints [(offset,lane),...], lane_at_offset(off). Mutable note flags skipped/chosen may exist; you need not use them. Notes can be in the future, active or recently finished. Copies may be regenerated at each replan. Plan from these observations only. Local slide segments can start at the midpoint (lane 2.5), including short overlaps at handoff.
+Planning frequency 30Hz. Typical reliable descent time ~.22s, lift .12s, lateral speed ~.9m/s, tap dwell .06s. Faster moves may be needed but can cause tracking lag. Support uninterrupted hold/slide even as future notes appear. At most one stylus contact per hand; skip impossible conflicts rather than invent a second fingertip.
+Judge: a tap or sustain head needs a FRESH down-contact near the lane inside +/-140ms; perfect +/-45ms; great +/-90ms. Staying down from an earlier note does NOT count as a fresh tap. Holds need >=80% contact. Slides need >=95% on-path contact, <=50ms continuous tracking loss, all final40ms samples close to the end lane. Slide lateral tolerance .042m, hand contact y tolerance .06m. Sustains are scored only at completion. Missing tail -> Miss even with perfect head. Best approach may coordinate hover, descend, contact, follow and lift keyframes with absolute times.
+Return code that works entirely through this API. make_policy(api) is called once per hand; internal state may persist. API object contains geometry only, not notes or the classical planner. X_WT_cmd.translation() returns current stylus [x,y,z]. Do not import pydrake or rhythmbot.planner. Use api.keyframe/make_plan.
+
+Previous candidate:
+import math
+import numpy as np
+
+DWELL = 0.07
+CHORD_DWELL = 0.045
+CHORD_SHIFT = 0.10
+LAG = 0.015
+D_DESC = 0.15
+V_UP = 0.40
+V_LAT = 0.9
+K_MAX = 1.6
+STEP = 0.04
+LEAD = 0.02
+TAP_LATE = 0.125
+SUS_LATE = 0.09
+
+
+class LocalPolicy:
+    def __init__(self, api):
+        self.api = api
+        self.hand = int(api.hand)
+        self.hover = float(api.screen_z) + float(getattr(api, "hover_height", 0.035))
+        self.press = float(api.touch_z)
+        self.contact = float(api.contact_z)
+        self.press_t = {}
+
+    def _clip(self, x):
+        return min(0.0, max(-0.36, x)) if self.hand == 0 else min(0.36, max(0.0, x))
+
+    def _lane_x(self, lane):
+        return (float(lane) + 0.5) * 0.12 - 0.36
+
+    def _kind(self, n):
+        return str(getattr(n, "kind", "tap"))
+
+    def _dur(self, n):
+        d = getattr(n, "duration", None)
+        if d is None:
+            d = float(getattr(n, "end_time", n.hit_time)) - float(n.hit_time)
+        return max(0.0, float(d))
+
+    def _end(self, n):
+        return float(n.hit_time) + self._dur(n)
+
+    def _nid(self, n):
+        return (getattr(n, "key", None), round(float(n.hit_time), 2))
+
+    def _lane_at(self, n, off):
+        lane = n.lane
+        if self._kind(n) == "slide":
+            try:
+                lane = n.lane_at_offset(min(self._dur(n), max(0.0, off)))
+            except Exception:
+                lane = n.lane
+        return float(lane)
+
+    def _px(self, n, off):
+        return self._clip(self._lane_x(self._lane_at(n, off)))
+
+    def _desc_time(self, zu):
+        return D_DESC * max(0.0, zu - self.press) / max(1e-6, self.hover - self.press)
+
+    def plan(self, notes, t_now, X_WT_cmd, width_cmd):
+        api = self.api
+        t_now = float(t_now)
+        cur = api.current_keyframe(t_now, X_WT_cmd, width_cmd)
+        st = [float(cur.t), float(cur.x), float(cur.z)]
+        kfs = [cur]
+
+        def add(tt, xx, zz):
+            tt = max(float(tt), st[0] + 1e-3)
+            kfs.append(api.keyframe(tt, float(xx), float(zz)))
+            st[0], st[1], st[2] = tt, float(xx), float(zz)
+
+        def follow(n, tp):
+            hit, dur = float(n.hit_time), self._dur(n)
+            o0 = max(0.0, st[0] - hit, tp - hit)
+            offs = set(np.arange(o0, dur, STEP).tolist())
+            for w in (getattr(n, "waypoints", None) or []):
+                try:
+                    wo = float(w[0]) - LEAD
+                    if o0 < wo < dur:
+                        offs.add(wo)
+                except Exception:
+                    pass
+            offs.add(dur)
+            for o in sorted(offs):
+                add(hit + o, self._px(n, o + LEAD), self.press)
+            add(hit + dur + 0.04, self._px(n, dur), self.press)
+
+        def trans(th, xb, late):
+            t, x, z = st
+            dx = abs(xb - x)
+            down = z <= self.contact + 0.001
+            if not down and dx <= 0.01:
+                opts = [max(z, self.contact + 0.004)]
+                xb_use = x if dx <= 0.004 else xb
+            else:
+                opts = [self.hover, 0.126, 0.118, 0.1145]
+                xb_use = xb
+            best = None
+            for zu in opts:
+                tl = max(0.0, zu - z) / V_UP
+                tm = dx / V_LAT if dx > 0.004 else 0.0
+                tdc = self._desc_time(zu)
+                tot = tl + tm + tdc
+                if tot <= th - t:
+                    best = (zu, tl, tm, tdc, 1.0)
+                    break
+                if best is None or tot < best[1] + best[2] + best[3]:
+                    best = (zu, tl, tm, tdc, None)
+            zu, tl, tm, tdc, k = best
+            if k is None:
+                tot = tl + tm + tdc
+                gap = th - t
+                k = K_MAX if gap <= 1e-3 else min(K_MAX, max(1.0, tot / gap))
+            tp = max(th, t + (tl + tm + tdc) / k)
+            if tp > th + late:
+                return None
+            t1 = t + tl / k
+            t2 = t1 + tm / k
+            t3 = max(t2, tp - tdc / k)
+            return [(t1, x, zu), (t2, xb_use, zu), (t3, xb_use, zu), (tp, xb_use, self.press)], tp
+
+        notes = list(notes or [])
+        by_id = {}
+        for n in notes:
+            by_id[self._nid(n)] = n
+        committed = {}
+        for nid, n in by_id.items():
+            tp = self.press_t.get(nid)
+            if tp is not None and tp <= t_now:
+                committed[nid] = tp
+
+        new_press = dict(committed)
+        down = st[2] <= self.contact + 0.001
+        if down:
+            act = None
+            if committed:
+                akey = max(committed, key=lambda k: committed[k])
+                act = by_id[akey]
+            handled = False
+            if act is not None and self._kind(act) == "tap":
+                add(max(committed[akey] + DWELL, t_now + 0.01), st[1], st[2])
+                handled = True
+            elif act is not None and self._end(act) > t_now:
+                follow(act, committed[akey])
+                handled = True
+            if not handled:
+                # Continue any active sustain under the stylus (e.g. regenerated
+                # or re-split slide segments) instead of lifting mid-path.
+                best, bd = None, 0.05
+                for n in notes:
+                    if self._kind(n) == "tap":
+                        continue
+                    h = float(n.hit_time)
+                    if h > t_now + 0.05 or self._end(n) <= t_now + 0.03:
+                        continue
+                    d = abs(self._px(n, t_now - h) - st[1])
+                    if d < bd:
+                        best, bd = n, d
+                if best is not None:
+                    new_press[self._nid(best)] = min(float(best.hit_time), t_now)
+                    follow(best, t_now)
+
+        pend = []
+        for nid, n in by_id.items():
+            if nid in new_press:
+                continue
+            h = float(n.hit_time)
+            if h < t_now - 0.14 or h > t_now + 2.5:
+                continue
+            if self._kind(n) != "tap" and self._end(n) <= t_now:
+                continue
+            pend.append(n)
+        pend.sort(key=lambda n: float(n.hit_time))
+
+        i = 0
+        while i < len(pend):
+            n = pend[i]
+            h = float(n.hit_time)
+            kind = self._kind(n)
+            dwell = DWELL
+            target = h + LAG
+            if kind == "tap":
+                late = TAP_LATE
+                partner = None
+                for j in range(i + 1, len(pend)):
+                    m = pend[j]
+                    if float(m.hit_time) - h >= 0.12:
+                        break
+                    if self._kind(m) == "tap" and abs(self._px(m, 0.0) - self._px(n, 0.0)) > 0.03:
+                        partner = j
+                        break
+                if partner is not None:
+                    m = pend[partner]
+                    if abs(self._px(m, 0.0) - st[1]) < abs(self._px(n, 0.0) - st[1]):
+                        pend[i], pend[partner] = m, n
+                        n = m
+                        h = float(n.hit_time)
+                    target = h - CHORD_SHIFT
+                    dwell = CHORD_DWELL
+            else:
+                late = SUS_LATE
+                target = h - 0.005
+                if abs(self._lane_at(n, 0.0) - 2.5) < 0.05:
+                    target = h - 0.04
+            i += 1
+            if h + late < st[0]:
+                continue
+            xb = self._px(n, 0.0)
+            r = trans(target, xb, late + (h - target) if kind == "tap" else late + (h - target))
+            if r is None:
+                continue
+            seq, tp = r
+            if tp > h + late:
+                continue
+            if kind != "tap" and tp >= self._end(n) - 0.05:
+                continue
+            for (tt, xx, zz) in seq:
+                add(tt, xx, zz)
+            new_press[self._nid(n)] = st[0]
+            if kind == "tap":
+                add(st[0] + dwell, st[1], self.press)
+            else:
+                follow(n, st[0])
+
+        if st[2] < self.hover:
+            add(st[0] + (self.hover - st[2]) / V_UP, st[1], self.hover)
+        add(st[0] + 0.5, st[1], self.hover)
+        self.press_t = new_press
+        return api.make_plan(kfs, t_now=t_now)
+
+
+def make_policy(api):
+    return LocalPolicy(api)
+
+TRAINING-ONLY SIMULATION FEEDBACK:
+# Feedback on revision 1
+
+Overall: 71/72 notes completed (98.6%) on 6 charts.
+
+### chords-s11000: 100.0% completed (27/27)
+
+judgments perfect 21 / great 0 / good 6 / miss 0
+timing error of hits: mean +12 ms, std 52 ms
+- tap: 27/27 completed, 27 hit
+
+### chords-s11001: 96.3% completed (26/27)
+
+judgments perfect 20 / great 0 / good 6 / miss 1
+timing error of hits: mean +11 ms, std 54 ms
+- tap: 26/27 completed, 26 hit
+
+Notes not completed (with the notes just before and after, for context):
+- #15 tap lane 3 at 6.80 s: no fresh touch in its lane within ±140 ms of the hit time. (prev tap lane 2 at 6.80; next tap lane 2 at 7.05)
+
+### crossing-s11000-0.8s: 100.0% completed (3/3)
+
+judgments perfect 3 / great 0 / good 0 / miss 0
+timing error of hits: mean -12 ms, std 2 ms
+- slide: 3/3 completed, 3 hit, contact 100%, slide RMS 5 mm
+
+### crossing-s11001-0.5s: 100.0% completed (3/3)
+
+judgments perfect 3 / great 0 / good 0 / miss 0
+timing error of hits: mean -12 ms, std 2 ms
+- slide: 3/3 completed, 3 hit, contact 100%, slide RMS 7 mm
+
+### holds-s11000: 100.0% completed (6/6)
+
+judgments perfect 6 / great 0 / good 0 / miss 0
+timing error of hits: mean -12 ms, std 3 ms
+- hold: 4/4 completed, 4 hit, contact 100%
+- slide: 2/2 completed, 2 hit, contact 100%, slide RMS 9 mm
+
+### holds-s11001: 100.0% completed (6/6)
+
+judgments perfect 6 / great 0 / good 0 / miss 0
+timing error of hits: mean -13 ms, std 2 ms
+- hold: 4/4 completed, 4 hit, contact 100%
+- slide: 2/2 completed, 2 hit, contact 100%, slide RMS 9 mm
+
+Per-hand diagnostics:
+[
+  [
+    {
+      "plan_calls": 337,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7538123164071704,
+      "plan_ms_max": 2.776802983134985
+    },
+    {
+      "plan_calls": 337,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7788973269038986,
+      "plan_ms_max": 1.4371522702276707
+    }
+  ],
+  [
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.8061574480049662,
+      "plan_ms_max": 1.5391018241643906
+    },
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7665609754038081,
+      "plan_ms_max": 1.5173740684986115
+    }
+  ],
+  [
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.8141554068762307,
+      "plan_ms_max": 1.4915838837623596
+    },
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7757877399648618,
+      "plan_ms_max": 1.5657339245080948
+    }
+  ],
+  [
+    {
+      "plan_calls": 307,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.4089436803243642,
+      "plan_ms_max": 0.61025470495224
+    },
+    {
+      "plan_calls": 307,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.4064930612009007,
+      "plan_ms_max": 0.7268781773746014
+    }
+  ],
+  [
+    {
+      "plan_calls": 265,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7369653919254834,
+      "plan_ms_max": 1.4223819598555565
+    },
+    {
+      "plan_calls": 265,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.6773668833358107,
+      "plan_ms_max": 1.31995789706707
+    }
+  ],
+  [
+    {
+      "plan_calls": 307,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.42721173340751994,
+      "plan_ms_max": 0.6655189208686352
+    },
+    {
+      "plan_calls": 307,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.3926040337751665,
+      "plan_ms_max": 0.6694099865853786
+    }
+  ]
+]
+Revise this program using only the supplied feedback. Return the entire new program.

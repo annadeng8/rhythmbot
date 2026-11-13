@@ -1,0 +1,86 @@
+{
+ "name": "holds-s11013",
+ "bpm": 150,
+ "notes": [
+  {
+   "kind": "hold",
+   "lane": 0,
+   "time": 3,
+   "duration": 2
+  },
+  {
+   "kind": "hold",
+   "lane": 3,
+   "time": 3,
+   "duration": 2
+  },
+  {
+   "kind": "hold",
+   "lane": 1,
+   "time": 5.6,
+   "duration": 1.6
+  },
+  {
+   "kind": "slide",
+   "lane": 3.0,
+   "time": 5.6,
+   "duration": 1.6,
+   "waypoints": [
+    [
+     0,
+     3
+    ],
+    [
+     0.4,
+     5
+    ],
+    [
+     0.8,
+     3
+    ],
+    [
+     1.2,
+     5
+    ],
+    [
+     1.6,
+     4
+    ]
+   ]
+  },
+  {
+   "kind": "slide",
+   "lane": 2.0,
+   "time": 8,
+   "duration": 1.6,
+   "waypoints": [
+    [
+     0,
+     2
+    ],
+    [
+     0.4,
+     0
+    ],
+    [
+     0.8,
+     2
+    ],
+    [
+     1.2,
+     0
+    ],
+    [
+     1.6,
+     1
+    ]
+   ]
+  },
+  {
+   "kind": "hold",
+   "lane": 4,
+   "time": 8,
+   "duration": 1.6
+  }
+ ]
+}

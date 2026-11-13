@@ -1,0 +1,246 @@
+{
+  "chart": "crossing-s11000-0.8s",
+  "n_notes": 3,
+  "completion_rate": 0.6666666666666666,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 2,
+    "great": 0,
+    "good": 0,
+    "miss": 1
+  },
+  "score": 6,
+  "max_score": 9,
+  "timing_error_mean_s": -0.001666666666666335,
+  "timing_error_abs_mean_s": 0.005000000000000189,
+  "timing_error_std_s": 0.004714045207910635,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 2,
+      "mean_maintenance": 0.8653162325869982,
+      "mean_slide_rms_m": 0.043920267398741254
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 4.132451661943771,
+      "time": 3.0,
+      "duration": 3.2,
+      "status": "hit",
+      "timing_error": -0.004999999999999893,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 6.205,
+      "gap_seconds": 0.049999999999999996,
+      "max_gap_seconds": 1.1449999999999976,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        159,
+        225
+      ],
+      "handoffs": 4,
+      "last_contact_hand": 1,
+      "active_ticks": 641,
+      "contact_ticks": 384,
+      "completed": false,
+      "maintenance": 0.5990639625585024,
+      "slide_rms_m": 0.11492310162774855
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 4.132451661943771,
+      "time": 6.8,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": -0.004999999999999893,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 8.405,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        153,
+        168
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 0,
+      "active_ticks": 321,
+      "contact_ticks": 321,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": 0.00883217864576802
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 1.0407872853213895,
+      "time": 8.6,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": 0.005000000000000782,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 10.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        153,
+        167
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 1,
+      "active_ticks": 321,
+      "contact_ticks": 320,
+      "completed": true,
+      "maintenance": 0.9968847352024922,
+      "slide_rms_m": 0.008005521922707204
+    }
+  ],
+  "execution_status": "ok",
+  "view": "screen",
+  "detector": "concert",
+  "vision": {
+    "frames": 336,
+    "blank_detection_frames": 72,
+    "input_rgb_sha256": "8919dc6e710955a4f2234344b6b651cce02783d365cc23216edc143ab569fe50",
+    "input": "direct concert RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "sim_seconds": 11.2,
+  "wall_seconds": 19.77518892288208,
+  "n_detections": 337,
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "policy_stats_by_hand": [
+    {
+      "plan_calls": 337,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 1.0209461779109803,
+      "plan_ms_max": 4.455996211618185
+    },
+    {
+      "plan_calls": 337,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 1.1098027348142527,
+      "plan_ms_max": 2.2913143038749695
+    }
+  ],
+  "job": {
+    "label": "cap-v1",
+    "policy": "cap:/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/cap/v1/policy.py",
+    "chart": "/data/YifanKang/rhythmbot_camera_vision_v1/results/yifan-study-v1/charts/train/crossing-s11000-0.8s.json",
+    "view": "screen",
+    "split": "train",
+    "out": "/data/YifanKang/rhythmbot_camera_vision_v1/results/camera-vision-v1/warmup/cap-v1/screen/crossing-s11000-0.8s.json",
+    "capture": null
+  },
+  "fingerprint": "3c2d49e1d5cbfe2bb667ed2a5f829ab2a6edd926f95120958318d56abad41920"
+}

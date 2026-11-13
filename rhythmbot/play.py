@@ -7,6 +7,7 @@
     HEADLESS=1 python -m rhythmbot.play --demo            # no browser, fast
     python -m rhythmbot.play --chart charts/random-1.json --detector color
     python -m rhythmbot.play --random 7 --noise 0.03 --latency 0.1
+    python -m rhythmbot.play --demo --policy bc:results/bc_policy.pt   # another policy
     python -m rhythmbot.play --chart charts/song.json --arms 2  # two arms, wider lanes
 
 Diagram:
@@ -37,39 +38,73 @@ from . import PROJECT_ROOT
 from . import audio
 from .brain import GameScreen, RhythmBrain, initial_tip_pose
 from .chart import Chart, demo_chart, random_chart
-from .config import DEFAULT, Config, Perception, two_arm_config
+from .config import DEFAULT, Config, Perception, two_arm_config, stylus_config
 from .game import HighwayVisualizer
 from .judge import Judge
 from .perception import make_detector
-from .planner import ClassicalPlanner
+from .planner import ClassicalPlanner, Policy
+from .policies import make_policy
 from .robot import WSG_NAME, Robot, TouchSensor
 from .viz import HEADLESS, get_meshcat, keep_meshcat_open, publish_recording, start_recording
 
 
-def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None, meshcat):
+def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None, meshcat, policy: Policy | None = None,
+          view: str = "screen", record_camera: bool = False):
+    """`view`: what the perception stage sees, the game's own frame
+    ("screen") or an external camera on the screen ("camera")."""
+    if view == "camera" and detector_name == "oracle":
+        raise ValueError("camera control requires an image detector; oracle is not camera vision")
     builder = DiagramBuilder()
-    robot = Robot(builder, cfg, meshcat)
+    robot = Robot(builder, cfg, meshcat, camera=view == "camera" or record_camera)
 
     # Start hovering over the judgment line: the middle of it, or with two
     # arms, the middle of each hand's half.
     X_GT = np.array([0.0, cfg.gripper.tip_offset, 0.0])
     X_WG0s = []
     policies = []
+    if policy is not None and cfg.arms.n != 1 and not isinstance(policy, (list, tuple)):
+        raise ValueError("multi-arm execution requires one independent policy instance per arm")
+    if isinstance(policy, (list, tuple)) and len(policy) != cfg.arms.n:
+        raise ValueError("policy count must match arm count")
     for k, arm in enumerate(robot.arms):
-        policy = ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
-        X_WT0 = initial_tip_pose(cfg, policy.rest_x())
+        geometry = ClassicalPlanner(cfg, None if cfg.arms.n == 1 else k)
+        p = policy[k] if isinstance(policy, (list, tuple)) else policy or geometry
+        X_WT0 = initial_tip_pose(cfg, geometry.rest_x())
+        if cfg.gripper.single_tip:
+            from pydrake.all import RotationMatrix
+            tilt = np.deg2rad(cfg.gripper.tilt_degrees) * (-1 if k == 0 else 1)
+            X_WT0 = RigidTransform(RotationMatrix.MakeYRotation(tilt) @ X_WT0.rotation(),
+                [geometry.rest_x(), geometry.hit_y, geometry.hover_z])
         q0 = arm.solve_start_configuration(X_WT0 @ RigidTransform(-X_GT))
         X_WG0s.append(arm.gripper_pose_at(q0))
-        policies.append(policy)
+        policies.append(p)
 
-    detector = make_detector(detector_name, chart, cfg, model_path)
-    screen = builder.AddSystem(GameScreen(chart, cfg))
+    if detector_name == "concert":
+        from .camera_vision import ConcertVisionDetector
+        detector = ConcertVisionDetector(cfg, camera=view == "camera")
+    else:
+        detector = make_detector(detector_name, chart, cfg, model_path)
+    if view == "camera":
+        from .camera import CAMERA_NAME, CameraScreen
+
+        label = int(robot.plant.GetBodyByName("screen").index())
+        screen = builder.AddSystem(CameraScreen(chart, cfg, label))
+        builder.Connect(robot.station.GetOutputPort(f"{CAMERA_NAME}.rgb_image"), screen.GetInputPort("rgb_image"))
+        builder.Connect(robot.station.GetOutputPort(f"{CAMERA_NAME}.label_image"), screen.GetInputPort("label_image"))
+    else:
+        screen = builder.AddSystem(GameScreen(chart, cfg))
+    if detector_name == "concert":
+        from .sekai_screen import SekaiScreen
+        screen.renderer = SekaiScreen(cfg)
+    screen.set_name("screen")
     brain = builder.AddSystem(RhythmBrain(detector, policies, cfg, X_WG0s))
     brain.set_name("brain")
     touch = builder.AddSystem(TouchSensor(robot.plant, cfg, meshcat))
     touch.set_name("touch_sensor")
     judge = builder.AddSystem(Judge(chart, cfg))
     judge.set_name("judge")
+    if detector_name == "concert":
+        screen.renderer.results = judge.results  # display feedback only; never a detector input
     builder.AddSystem(HighwayVisualizer(chart, cfg, meshcat)).set_name("highway")
 
     builder.Connect(screen.get_output_port(), brain.GetInputPort("frame"))
@@ -102,13 +137,17 @@ def run(
     song: str | Path | None = None,
     song_offset: float = 0.0,
     song_rate: float = 1.0,
+    policy: Policy | None = None,
+    policy_name: str = "classical",
+    view: str = "screen",
+    stage_frames: str | Path | None = None,
 ) -> dict:
     meshcat = get_meshcat()
     if meshcat is not None:
         # Look at the screen from the robot's front-left, slightly above.
         c = cfg.layout.screen_center()
         meshcat.SetCameraPose(c + np.array([0.9, -1.1, 0.8]), c + np.array([0.0, 0.15, 0.0]))
-    diagram, robot, brain, judge = build(chart, cfg, detector, model_path, meshcat)
+    diagram, robot, brain, judge = build(chart, cfg, detector, model_path, meshcat, policy, view)
     simulator = Simulator(diagram)
     context = simulator.get_mutable_context()
     robot.initialize(context)
@@ -133,7 +172,23 @@ def run(
                     chart, cfg.layout.n_lanes, PROJECT_ROOT / "results" / f"{chart.name}.wav"
                 )
                 player = audio.play(wav)
-        simulator.AdvanceTo(t_end)
+        if stage_frames is None:
+            simulator.AdvanceTo(t_end)
+        else:
+            from .stage import StageRenderer
+            from .robot import unpack_touch
+            destination = Path(stage_frames)
+            destination.mkdir(parents=True, exist_ok=True)
+            renderer = StageRenderer(lanes=cfg.layout.n_lanes, contacts_per_arm=cfg.gripper.contacts_per_arm)
+            index = 0
+            while context.get_time() < t_end:
+                simulator.AdvanceTo(min(t_end, context.get_time() + 1 / 30))
+                jc = judge.GetMyContextFromRoot(context)
+                touches = [(down, cfg.layout.x_to_lane(p[0]))
+                           for down, p in unpack_touch(judge.touch_port.Eval(jc))]
+                renderer.render(chart, context.get_time(), touches, judge.results).save(
+                    destination / f"{index:06d}.png")
+                index += 1
     finally:
         audio.stop(player)
     wall = time.time() - wall
@@ -143,6 +198,8 @@ def run(
     rep = judge.report(
         extra={
             "detector": detector,
+            "policy": policy_name,
+            "view": view,
             "skipped_by_planner": sorted(brain.last_state.skipped_note_ids),
             "n_detections": brain.last_state.n_detections,
             "sim_seconds": t_end,
@@ -150,12 +207,15 @@ def run(
             "config": dataclasses.asdict(cfg),
         }
     )
+    if hasattr(brain.detector, "stats"):
+        rep["vision"] = brain.detector.stats()
     if not quiet:
         Judge.print_report(rep)
         print(f"(simulated {t_end:.1f} s in {wall:.1f} s wall)")
     if out_path is None:
+        tag = "" if policy_name == "classical" else f"-{policy_name.split(':')[0]}"
         arms = "-2arm" if cfg.arms.n == 2 else ""
-        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}{arms}.json"
+        out_path = PROJECT_ROOT / "results" / f"{chart.name}-{detector}{tag}{arms}.json"
     Judge.save_report(rep, out_path)
     if not quiet:
         print(f"report -> {out_path}")
@@ -164,13 +224,21 @@ def run(
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--stylus", action="store_true", help="two closed grippers with one central stylus each")
+    ap.add_argument("--stage-frames", type=Path, help="export measured stage replay PNGs at 30 fps")
     src = ap.add_mutually_exclusive_group()
     src.add_argument("--chart", help="chart JSON file")
     src.add_argument("--random", type=int, metavar="SEED", help="generate a random chart")
     src.add_argument("--demo", action="store_true", help="the built-in demo chart (default)")
-    ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch"])
+    ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch", "concert"])
     ap.add_argument("--model", help="TorchScript model for --detector torch")
-    ap.add_argument("--arms", type=int, default=1, choices=[1, 2], help="how many arms play")
+    ap.add_argument(
+        "--policy", default="classical",
+        help="classical, bc:<model.pt> (behavior cloning) or cap:<policy.py> (generated program)",
+    )
+    ap.add_argument("--view", default="screen", choices=["screen", "camera"],
+                    help="perception input: the game's own frame, or an external camera on the screen")
+    ap.add_argument("--arms", type=int, default=None, choices=[1, 2], help="arms (default: 2; camera/custom policies: 1)")
     ap.add_argument("--noise", type=float, default=0.0, help="oracle hit-time noise std (s)")
     ap.add_argument("--latency", type=float, default=0.0, help="oracle detection latency (s)")
     ap.add_argument("--duration", type=float, help="simulate this long instead of the whole chart")
@@ -204,7 +272,13 @@ def main(argv=None):
         song = None
     song_offset = args.song_offset if args.song_offset is not None else chart.audio_offset
 
+    if args.arms is None:
+        args.arms = 2 if args.stylus else (1 if args.view == "camera" or args.policy != "classical" else 2)
     base = two_arm_config() if args.arms == 2 else DEFAULT
+    if args.stylus:
+        if args.arms != 2:
+            ap.error("--stylus requires --arms 2")
+        base = stylus_config(base)
     cfg = dataclasses.replace(
         base,
         perception=dataclasses.replace(
@@ -224,6 +298,10 @@ def main(argv=None):
         song=song,
         song_offset=song_offset,
         song_rate=args.tempo,
+        policy=None if args.policy == "classical" else ([make_policy(args.policy, cfg, hand=k) for k in range(cfg.arms.n)] if cfg.arms.n > 1 else make_policy(args.policy, cfg)),
+        policy_name=args.policy,
+        view=args.view,
+        stage_frames=args.stage_frames,
     )
     if args.hold and not HEADLESS:
         print("Holding Meshcat open; Ctrl-C to quit.")

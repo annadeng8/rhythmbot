@@ -1,0 +1,141 @@
+{
+ "name": "chords-s11008",
+ "bpm": 150,
+ "notes": [
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 3.0
+  },
+  {
+   "kind": "tap",
+   "lane": 3,
+   "time": 3.0
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 3.5
+  },
+  {
+   "kind": "tap",
+   "lane": 5,
+   "time": 3.5
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 4.0
+  },
+  {
+   "kind": "tap",
+   "lane": 5,
+   "time": 4.0
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 5.0
+  },
+  {
+   "kind": "tap",
+   "lane": 3,
+   "time": 5.0
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 5.35
+  },
+  {
+   "kind": "tap",
+   "lane": 4,
+   "time": 5.35
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 5.699999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 4,
+   "time": 5.699999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 6.549999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 5,
+   "time": 6.549999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 2,
+   "time": 6.799999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 3,
+   "time": 6.799999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 7.049999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 4,
+   "time": 7.049999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 7.799999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 7.799999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 4,
+   "time": 7.799999999999999
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 8.499999999999998
+  },
+  {
+   "kind": "tap",
+   "lane": 4,
+   "time": 8.499999999999998
+  },
+  {
+   "kind": "tap",
+   "lane": 5,
+   "time": 8.499999999999998
+  },
+  {
+   "kind": "tap",
+   "lane": 0,
+   "time": 9.199999999999998
+  },
+  {
+   "kind": "tap",
+   "lane": 1,
+   "time": 9.199999999999998
+  },
+  {
+   "kind": "tap",
+   "lane": 4,
+   "time": 9.199999999999998
+  }
+ ]
+}

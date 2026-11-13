@@ -1,0 +1,327 @@
+{
+  "chart": "holds-s31001",
+  "n_notes": 6,
+  "completion_rate": 1.0,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 6,
+    "great": 0,
+    "good": 0,
+    "miss": 0
+  },
+  "score": 18,
+  "max_score": 18,
+  "timing_error_mean_s": 0.005000000000000486,
+  "timing_error_abs_mean_s": 0.005000000000000486,
+  "timing_error_std_s": 4.186914221394516e-16,
+  "by_kind": {
+    "hold": {
+      "n": 4,
+      "hit": 4,
+      "completed": 4,
+      "mean_maintenance": 1.0
+    },
+    "slide": {
+      "n": 2,
+      "hit": 2,
+      "completed": 2,
+      "mean_maintenance": 0.9719626168224299,
+      "mean_slide_rms_m": 0.011860849915151747
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "hold",
+      "lane": 2.0,
+      "time": 3.0,
+      "duration": 2.0,
+      "status": "hit",
+      "timing_error": 0.004999999999999893,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 5.005,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 400,
+      "contact_ticks": 400,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 1,
+      "kind": "hold",
+      "lane": 4.0,
+      "time": 3.0,
+      "duration": 2.0,
+      "status": "hit",
+      "timing_error": 0.004999999999999893,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 5.005,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 400,
+      "contact_ticks": 400,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 2,
+      "kind": "hold",
+      "lane": 1.0,
+      "time": 5.6,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": 0.005000000000000782,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 320,
+      "contact_ticks": 320,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 3,
+      "kind": "slide",
+      "lane": 3.0,
+      "time": 5.6,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": 0.005000000000000782,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.04,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        312
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 1,
+      "active_ticks": 321,
+      "contact_ticks": 312,
+      "completed": true,
+      "maintenance": 0.9719626168224299,
+      "slide_rms_m": 0.011817895010540059
+    },
+    {
+      "id": 4,
+      "kind": "slide",
+      "lane": 2.0,
+      "time": 8.0,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": 0.005000000000000782,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 9.605,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.04,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        312,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 0,
+      "active_ticks": 321,
+      "contact_ticks": 312,
+      "completed": true,
+      "maintenance": 0.9719626168224299,
+      "slide_rms_m": 0.011903804819763436
+    },
+    {
+      "id": 5,
+      "kind": "hold",
+      "lane": 4.0,
+      "time": 8.0,
+      "duration": 1.6,
+      "status": "hit",
+      "timing_error": 0.005000000000000782,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 9.605,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 320,
+      "contact_ticks": 320,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    }
+  ],
+  "detector": "color",
+  "policy": "cap-v0",
+  "view": "screen",
+  "skipped_by_planner": [],
+  "n_detections": 604,
+  "sim_seconds": 10.6,
+  "wall_seconds": 11.151968717575073,
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 384,
+      "height": 256,
+      "fov_y_deg": 45.0,
+      "eye_offset": [
+        0.55,
+        -0.05,
+        0.65
+      ],
+      "target_offset": [
+        0.07,
+        0.0,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "execution_status": "ok",
+  "policy_stats_by_hand": [
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.806494813038731,
+      "plan_ms_max": 2.3936028592288494
+    },
+    {
+      "plan_calls": 319,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.7710447549516317,
+      "plan_ms_max": 2.378735691308975
+    }
+  ],
+  "study_job": {
+    "policy": "cap:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/cap/v0/policy.py",
+    "label": "cap-v0",
+    "detector": "color",
+    "chart": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/charts/test_iid/holds-s31001.json",
+    "split": "test_iid",
+    "out": "/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/eval/test/cap-v0/color/holds-s31001.json"
+  },
+  "fingerprint": "3ca7f2b0d679f49968ccc7569d1541877e89b45734b6fd2c3a435b51cc4591d7"
+}

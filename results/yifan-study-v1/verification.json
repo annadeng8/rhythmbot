@@ -1,0 +1,10 @@
+{
+  "counts": {
+    "test": 96,
+    "feedback": 18,
+    "validation": 18
+  },
+  "fingerprints_verified": 132,
+  "execution_errors": [],
+  "policy_runtime_errors": 0
+}
