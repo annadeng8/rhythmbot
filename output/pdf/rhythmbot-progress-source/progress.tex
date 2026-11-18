@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\title{RhythmBot: Project Progress Report}
+\author{Anna Deng \and Yifan Kang}
+\date{November 17, 2026}
+\begin{document}
+\maketitle
+\section*{Current progress}
+We have built a Drake rhythm-game environment with two KUKA iiwa arms, closed grippers, and one stylus per arm. The Project SEKAI-inspired display supports taps, simultaneous holds, and continuous slides with cross-hand handoffs. Control now runs from simulated camera RGB through image rectification and color-based note detection, without reading chart state. Classical planning, agent-generated code-as-policy (CAP), and behavior cloning (BC) are integrated. Slide scoring checks sustained tracking, interruptions, and the final tail; touching only the start cannot earn completion. The unified environment is on \texttt{main}, with 39 passing tests and 16 successful simulation runs validating execution under the latest judge.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth,height=.43\textheight,keepaspectratio]{assets/camera.png}
+\caption{External view of the two KUKA arms and the rhythm-game screen, rendered from a running Drake simulation. This observer camera is separate from the RGB camera used for control; both retain robot occlusion.}
+\end{figure}
+\newpage
+\section*{Experiments and remaining work}
+Our earlier dual-arm camera pilot evaluated four controllers on eight held-out charts: classical and CAP each completed 66/78 notes, versus 12/78 for BC MLP and 28/78 for BC diffusion. These are preliminary results under the previous touch-landing judge, not final benchmark scores. CAP feedback improved one revision but regressed on the next, while BC struggled with sustained slides. Anna has also evaluated classical/CAP on an unseen song in the single-arm setup. Next, we propose that Anna focus on learned perception and evaluation, and Yifan on CAP refinement and BC adaptation. Together, we will complete matched oracle/vision tests, harder held-out charts, and timing, tracking, contact, and failure analysis in the final environment.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{assets/comparison.png}
+\caption{Earlier pilot on eight held-out charts (78 notes, including 16 slides). These results predate the latest touch-landing rule and are not the final benchmark.}
+\end{figure}
+\begin{table}[ht]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Controller & Crossing chart & Hold chart\\
+\midrule
+Classical & 2/3 & 5/6\\
+CAP v1 & 2/3 & 5/6\\
+BC MLP & 0/3 & 2/6\\
+BC diffusion & 0/3 & 0/6\\
+\bottomrule
+\end{tabular}
+\caption{Completed notes in the latest integration check. Screen and camera inputs gave identical counts: 16 runs in total, with no execution errors. This is a small validation set, not a full generalization benchmark.}
+\end{table}
+\end{document}

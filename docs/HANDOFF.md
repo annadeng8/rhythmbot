@@ -152,3 +152,22 @@ the original experiments. Use the original commits to reproduce historical data.
 
 Existing camera GIFs are clearly labeled historical; this handoff does not claim
 that they show the new judge.
+
+
+### Full-arm presentation render
+
+`HEADLESS=1 python -m rhythmbot.observer_replay --snapshot 4 --out results/observer`
+renders a neutral-gray, three-light external view with both complete iiwa arms.
+Omit `--snapshot` to save a frame sequence (`--duration 8 --fps 10`).
+This uses the classical controller and the unchanged `sekai-camera` RGB input.
+The observer has a separate renderer, pose and zero sensor noise; its images
+are presentation outputs, never policy inputs. The screen uses the existing
+label-masked composite. Snapshot/short-clip reports truncate the chart and
+must not be treated as full-chart benchmark scores.
+
+Validated on gpu156: an actual camera-controlled Drake snapshot at 4 seconds
+and all 39 existing unit tests. Render budget: one process, one CPU thread,
+GPU 0 for EGL, up to 2 GB GPU memory / 6 GB host RAM / 1 GB output.
+Files, caches and temporary data remain under
+`/data/YifanKang/rhythmbot_observer_20261117` (shared model cache under
+`/data/YifanKang/rhythmbot_sekai_20261109/cache`).

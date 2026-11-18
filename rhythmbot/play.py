@@ -49,13 +49,13 @@ from .viz import HEADLESS, get_meshcat, keep_meshcat_open, publish_recording, st
 
 
 def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None, meshcat, policy: Policy | None = None,
-          view: str = "screen", record_camera: bool = False):
+          view: str = "screen", record_camera: bool = False, observer_camera=None):
     """`view`: what the perception stage sees, the game's own frame
     ("screen") or an external camera on the screen ("camera")."""
     if view == "camera" and detector_name == "oracle":
         raise ValueError("camera control requires an image detector; oracle is not camera vision")
     builder = DiagramBuilder()
-    robot = Robot(builder, cfg, meshcat, camera=view == "camera" or record_camera)
+    robot = Robot(builder, cfg, meshcat, camera=view == "camera" or record_camera, observer_camera=observer_camera)
 
     # Start hovering over the judgment line: the middle of it, or with two
     # arms, the middle of each hand's half.
