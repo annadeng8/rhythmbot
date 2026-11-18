@@ -154,7 +154,7 @@ Existing camera GIFs are clearly labeled historical; this handoff does not claim
 that they show the new judge.
 
 
-### Full-arm presentation render
+### VTK camera presentation render
 
 `HEADLESS=1 python -m rhythmbot.observer_replay --snapshot 4 --out results/observer`
 renders a neutral-gray, three-light external view with both complete iiwa arms.
@@ -171,3 +171,24 @@ GPU 0 for EGL, up to 2 GB GPU memory / 6 GB host RAM / 1 GB output.
 Files, caches and temporary data remain under
 `/data/YifanKang/rhythmbot_observer_20261117` (shared model cache under
 `/data/YifanKang/rhythmbot_sekai_20261109/cache`).
+
+
+### Native Meshcat presentation (preferred)
+
+`HEADLESS=1 python -m rhythmbot.meshcat_snapshot --time 4 --out results/meshcat`
+exports `scene.html`, a self-contained interactive Drake/Meshcat snapshot.
+Use this for presentation images with the default Meshcat materials, lights,
+ground grid, and browser antialiasing. The earlier `observer_replay` output
+uses VTK with custom directional lights; these backends do not shade the
+same iiwa meshes identically. Both the single-arm and dual-arm model
+configurations reference `iiwa7_no_collision.sdf`; the visual difference
+was not a lower-detail robot model.
+
+This exporter runs the real dual-arm simulation with the unchanged
+`sekai-camera` controller input, then publishes its state at the requested
+time. Meshcat shows the existing geometric note highway; the control camera
+continues to see the concert-style RGB screen. The static observer is not a
+new benchmark or an image supplied to the controller. `snapshot.json`
+records the time and input/view distinction. The 4-second export was run on
+gpu156 with one process and one CPU thread, GPU 0 for the control camera,
+and all files/caches under `/data/YifanKang/`.

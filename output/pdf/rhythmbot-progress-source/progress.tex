@@ -9,7 +9,7 @@
 \begin{document}
 \maketitle
 \section*{Current progress}
-We have developed single-arm and dual-arm Drake environments for rhythm-game manipulation, supporting taps, holds, and continuous slides. We have integrated classical planning, agent-generated code-as-policy (CAP), and behavior cloning (BC), and trained a neural note detector for the single-arm setup. We have also extended execution to two KUKA iiwa arms with one stylus per arm, simultaneous holds, and cross-hand slides on a Project SEKAI-inspired display. The dual-arm system uses simulated camera RGB with color-based detection. We now enforce sustained contact and correct slide tails, and have validated the dual-arm integration with 39 passing tests and 16 simulation runs without execution errors.
+We have developed single-arm and dual-arm Drake environments for rhythm-game manipulation, supporting taps, holds, and continuous slides. We compare classical planning, Code-as-Policy (CAP), and behavior cloning (BC). In CAP, a coding agent generates executable Python control programs and revises them using simulation feedback; BC learns a neural controller from classical demonstrations. We have trained a neural note detector for the single-arm setup. We have also extended execution to two KUKA iiwa arms with one stylus per arm, simultaneous holds, and cross-hand slides on a Project SEKAI-inspired display. The dual-arm system uses simulated camera RGB with color-based detection. We now enforce sustained contact and correct slide tails, and have validated the dual-arm integration with 39 passing tests and 16 simulation runs without execution errors.
 \begin{figure}[ht]
 \centering
 \begin{minipage}[b]{.49\linewidth}
@@ -22,11 +22,11 @@ We have developed single-arm and dual-arm Drake environments for rhythm-game man
 \includegraphics[width=\linewidth,height=2.7in,keepaspectratio]{assets/camera.png}\\[6pt]
 (b) Dual-arm environment
 \end{minipage}
-\caption{Our Drake simulation environments. We use the single-arm setup for the completed evaluation below and the dual-arm setup for the remaining experiments. The dual-arm image is an external observer view, separate from the control camera.}
+\caption{Our Drake simulation environments. We use the single-arm setup for the completed evaluation below and the dual-arm setup for the remaining experiments. Both images use the native Meshcat observer; the dual-arm control camera separately retains the concert-style display.}
 \end{figure}
 \newpage
 \section*{Evaluation results and remaining work}
-We have evaluated single-arm control on 24 charts containing 1,810 notes. With the trained visual detector, classical control achieves 97.3\% completion overall and 98.5\% on an unseen song (three difficulties, 1,106 notes); CAP feedback v7 achieves 85.3\% and 81.3\%, respectively. We observe 15\,ms mean absolute timing error for classical control, but visual slide completion is only 52.6\%, versus 91.2\% with oracle input; 17 of 27 failed visual slides miss the tail. We will complete the remaining experiments in the dual-arm environment, including learned perception, CAP refinement, BC adaptation, and matched oracle/vision comparisons on harder unseen charts, with timing, tracking, contact, and failure analysis.
+We have evaluated single-arm control on 24 charts containing 1,810 notes. With the trained visual detector, classical control achieves 97.3\% completion overall and 98.5\% on an unseen song (three difficulties, 1,106 notes); CAP with simulation feedback achieves 85.3\% and 81.3\%, respectively. We observe 15\,ms mean absolute timing error for classical control, but visual slide completion is only 52.6\%, versus 91.2\% with oracle input; 17 of 27 failed visual slides miss the tail. We will complete the remaining experiments in the dual-arm environment, including learned perception, CAP refinement, BC adaptation, and matched oracle/vision comparisons on harder unseen charts, with timing, tracking, contact, and failure analysis.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{assets/evaluation-results.pdf}
@@ -39,11 +39,11 @@ We have evaluated single-arm control on 24 charts containing 1,810 notes. With t
 Controller / input & All 1,810 notes & Unseen song\\
 \midrule
 Classical / trained vision & 97.3\% & 98.5\%\\
-CAP feedback v7 / trained vision & 85.3\% & 81.3\%\\
-CAP self-test v1 / trained vision & 80.9\% & 74.1\%\\
-CAP pixels-only v3 / RGB frame & 77.7\% & 73.2\%\\
+CAP: feedback / trained vision & 85.3\% & 81.3\%\\
+CAP: self-test / trained vision & 80.9\% & 74.1\%\\
+CAP: pixels / RGB frame & 77.7\% & 73.2\%\\
 \bottomrule
 \end{tabular}
-\caption{Single-arm completion rates under strict contact scoring. BC is not included in this evaluation. We will compare all three policy families under a shared, frozen dual-arm configuration.}
+\caption{CAP variants: \emph{feedback} receives scores and failure reports after each revision; \emph{self-test} additionally lets the agent run training simulations during revision; \emph{pixels} generates both perception and control code from RGB input. BC is not included in this single-arm evaluation.}
 \end{table}
 \end{document}
