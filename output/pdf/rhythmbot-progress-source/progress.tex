@@ -16,25 +16,25 @@ We have built a Drake rhythm-game environment with two KUKA iiwa arms, closed gr
 \caption{External view of the two KUKA arms and the rhythm-game screen, rendered from a running Drake simulation. This observer camera is separate from the RGB camera used for control; both retain robot occlusion.}
 \end{figure}
 \newpage
-\section*{Experiments and remaining work}
-Our earlier dual-arm camera pilot evaluated four controllers on eight held-out charts: classical and CAP each completed 66/78 notes, versus 12/78 for BC MLP and 28/78 for BC diffusion. These are preliminary results under the previous touch-landing judge, not final benchmark scores. CAP feedback improved one revision but regressed on the next, while BC struggled with sustained slides. Anna has also evaluated classical/CAP on an unseen song in the single-arm setup. Next, we propose that Anna focus on learned perception and evaluation, and Yifan on CAP refinement and BC adaptation. Together, we will complete matched oracle/vision tests, harder held-out charts, and timing, tracking, contact, and failure analysis in the final environment.
+\section*{Evaluation results and remaining work}
+Anna's evaluation covers 24 charts and 1,810 notes using a single arm, strict contact scoring, and either oracle observations or a trained neural note detector. Classical control achieves 97.3\% completion with learned vision and 98.5\% on the unseen song (three difficulties, 1,106 notes). CAP feedback v7 achieves 85.3\% and 81.3\%, respectively, outperforming self-test v1 on the new song. Classical control has 15\,ms mean absolute timing error with vision, but slide completion drops from 91.2\% with oracle input to 52.6\% with vision; 17 of 27 failed vision slides miss the tail. Next, Anna will focus on perception and failure analysis, while Yifan adapts CAP/BC for the final dual-arm comparison. BC is not included in this evaluation.
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\linewidth]{assets/comparison.png}
-\caption{Earlier pilot on eight held-out charts (78 notes, including 16 slides). These results predate the latest touch-landing rule and are not the final benchmark.}
+\includegraphics[width=\linewidth]{assets/anna-results.pdf}
+\caption{Anna's single-arm evaluation with oracle and trained-vision observations. These are separate from the dual-arm camera setup in Figure 1. Only the new song is unseen by every evaluated controller; some earlier charts informed classical planner development.}
 \end{figure}
 \begin{table}[ht]
 \centering
 \begin{tabular}{lcc}
 \toprule
-Controller & Crossing chart & Hold chart\\
+Controller / input & All 1,810 notes & Unseen song\\
 \midrule
-Classical & 2/3 & 5/6\\
-CAP v1 & 2/3 & 5/6\\
-BC MLP & 0/3 & 2/6\\
-BC diffusion & 0/3 & 0/6\\
+Classical / trained vision & 97.3\% & 98.5\%\\
+CAP feedback v7 / trained vision & 85.3\% & 81.3\%\\
+CAP self-test v1 / trained vision & 80.9\% & 74.1\%\\
+CAP pixels-only v3 / RGB frame & 77.7\% & 73.2\%\\
 \bottomrule
 \end{tabular}
-\caption{Completed notes in the latest integration check. Screen and camera inputs gave identical counts: 16 runs in total, with no execution errors. This is a small validation set, not a full generalization benchmark.}
+\caption{Completion rates from \texttt{results/eval-v2/}. The pixels-only policy implements its own perception. Generated programs were selected under earlier scoring rules; evaluation reports record uncommitted source changes. Final comparisons will use a frozen, shared configuration.}
 \end{table}
 \end{document}
