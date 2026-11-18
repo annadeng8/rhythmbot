@@ -9,7 +9,7 @@
 \begin{document}
 \maketitle
 \section*{Current progress}
-We have developed single-arm and dual-arm Drake environments for rhythm-game manipulation, supporting taps, holds, and continuous slides. We compare classical planning, Code-as-Policy (CAP), and behavior cloning (BC). In CAP, a coding agent generates executable Python control programs and revises them using simulation feedback; BC learns a neural controller from classical demonstrations. We have trained a neural note detector for the single-arm setup. We have also extended execution to two KUKA iiwa arms with one stylus per arm, simultaneous holds, and cross-hand slides on a Project SEKAI-inspired display. The dual-arm system uses simulated camera RGB with color-based detection. We now enforce sustained contact and correct slide tails, and have validated the dual-arm integration with 39 passing tests and 16 simulation runs without execution errors.
+We have developed single-arm and dual-arm Drake environments for rhythm-game manipulation, supporting taps, holds, and continuous slides. We compare classical planning, Code-as-Policy (CAP), and behavior cloning (BC). In CAP, a coding agent generates executable Python control programs and revises them using simulation feedback; BC learns a neural controller from classical demonstrations. We have trained a neural note detector for the single-arm setup. We have also extended execution to two KUKA iiwa arms with one stylus per arm, simultaneous holds, and cross-hand slides on a Project SEKAI-inspired display. The dual-arm system uses simulated camera RGB with color-based detection and a minimal display containing only lanes, notes, and a judgment line. We now enforce sustained contact and correct slide tails, and have validated the dual-arm integration through automated tests and Drake simulations.
 \begin{figure}[ht]
 \centering
 \begin{minipage}[b]{.49\linewidth}
@@ -22,7 +22,7 @@ We have developed single-arm and dual-arm Drake environments for rhythm-game man
 \includegraphics[width=\linewidth,height=2.7in,keepaspectratio]{assets/camera.png}\\[6pt]
 (b) Dual-arm environment
 \end{minipage}
-\caption{Our Drake simulation environments. We use the single-arm setup for the completed evaluation below and the dual-arm setup for the remaining experiments. Both images use the native Meshcat observer; the dual-arm control camera separately retains the concert-style display.}
+\caption{Our Drake simulation environments. We use the single-arm setup for the completed evaluation below and the dual-arm setup for the remaining experiments. Both images use the native Meshcat observer. The dual-arm screen carries the same minimal Sekai texture used by its control camera.}
 \end{figure}
 \newpage
 \section*{Evaluation results and remaining work}

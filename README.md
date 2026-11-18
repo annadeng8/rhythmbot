@@ -2,6 +2,13 @@
 
 ## Start here: current bimanual Sekai-camera handoff
 
+The current display is minimal: lanes, notes and the judgment line only.
+Meshcat retains its native robot materials and shows this same display as
+a live screen texture, instead of the older floating note geometry.
+Export a view with `python -m rhythmbot.meshcat_snapshot --time 4 --out results/meshcat`.
+Earlier concert-artwork experiments remain historical; the new appearance
+is verified separately in `results/minimal-display-v1/`.
+
 **The target environment is two Drake iiwa arms, closed WSG grippers with one
 stylus contact per arm, the Sekai-inspired concert display, and camera RGB-only
 vision.** Use the unified evaluator's `sekai-camera` preset. A plain invocation

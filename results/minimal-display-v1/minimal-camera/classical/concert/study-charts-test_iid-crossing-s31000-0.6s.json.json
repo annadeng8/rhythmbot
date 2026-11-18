@@ -1,0 +1,172 @@
+{
+ "chart": "crossing-s31000-0.6s",
+ "n_notes": 3,
+ "completion_rate": 0.6666666666666666,
+ "hit_rate": 1.0,
+ "judgments": {
+  "perfect": 2,
+  "great": 0,
+  "good": 0,
+  "miss": 1
+ },
+ "score": 6,
+ "max_score": 9,
+ "timing_error_mean_s": 0.008333333333333156,
+ "timing_error_abs_mean_s": 0.008333333333333156,
+ "timing_error_std_s": 0.004714045207910216,
+ "by_kind": {
+  "slide": {
+   "n": 3,
+   "hit": 3,
+   "completed": 2,
+   "mean_maintenance": 0.8981404002150891,
+   "mean_slide_rms_m": 0.024515169727595123
+  }
+ },
+ "notes": [
+  {
+   "id": 0,
+   "kind": "slide",
+   "lane": 0.9557911049052771,
+   "time": 3.0,
+   "duration": 2.4,
+   "status": "hit",
+   "timing_error": 0.004999999999999893,
+   "judgment": "miss",
+   "head_judgment": "perfect",
+   "judged_at": 5.405,
+   "gap_seconds": 0.22500000000000012,
+   "max_gap_seconds": 0.4650000000000003,
+   "tail_ticks": 9,
+   "tail_contact_ticks": 0,
+   "failure_reason": "tail_missing",
+   "contact_ticks_by_hand": [
+    228,
+    114
+   ],
+   "handoffs": 6,
+   "last_contact_hand": 0,
+   "active_ticks": 481,
+   "contact_ticks": 342,
+   "completed": false,
+   "maintenance": 0.7110187110187111,
+   "slide_rms_m": 0.06392257776495387
+  },
+  {
+   "id": 1,
+   "kind": "slide",
+   "lane": 0.9557911049052771,
+   "time": 6.0,
+   "duration": 1.2,
+   "status": "hit",
+   "timing_error": 0.004999999999999893,
+   "judgment": "perfect",
+   "head_judgment": "perfect",
+   "judged_at": 7.205,
+   "gap_seconds": 0.0,
+   "max_gap_seconds": 0.005,
+   "tail_ticks": 9,
+   "tail_contact_ticks": 9,
+   "failure_reason": null,
+   "contact_ticks_by_hand": [
+    128,
+    112
+   ],
+   "handoffs": 3,
+   "last_contact_hand": 1,
+   "active_ticks": 241,
+   "contact_ticks": 240,
+   "completed": true,
+   "maintenance": 0.995850622406639,
+   "slide_rms_m": 0.00615525219458879
+  },
+  {
+   "id": 2,
+   "kind": "slide",
+   "lane": 3.90561316785862,
+   "time": 7.4,
+   "duration": 1.2,
+   "status": "hit",
+   "timing_error": 0.01499999999999968,
+   "judgment": "perfect",
+   "head_judgment": "perfect",
+   "judged_at": 8.605,
+   "gap_seconds": 0.0,
+   "max_gap_seconds": 0.015,
+   "tail_ticks": 9,
+   "tail_contact_ticks": 9,
+   "failure_reason": null,
+   "contact_ticks_by_hand": [
+    122,
+    116
+   ],
+   "handoffs": 3,
+   "last_contact_hand": 0,
+   "active_ticks": 241,
+   "contact_ticks": 238,
+   "completed": true,
+   "maintenance": 0.9875518672199171,
+   "slide_rms_m": 0.0034676792232427077
+  }
+ ],
+ "detector": "concert",
+ "policy": "classical",
+ "view": "camera",
+ "skipped_by_planner": [],
+ "n_detections": 290,
+ "sim_seconds": 9.6,
+ "wall_seconds": 30.84805941581726,
+ "vision": {
+  "frames": 288,
+  "blank_detection_frames": 71,
+  "input_rgb_sha256": "0dbdf5979103df16429a251eb8e03ab4ad603b95e81079a7c16666d8abff99c7",
+  "input": "Drake composed RGB",
+  "chart_access": false,
+  "label_input": false,
+  "depth_input": false,
+  "method": "fixed geometric calibration + RGB color/shape segmentation"
+ },
+ "split": "bimanual-smoke",
+ "chart_entry": "study:charts/test_iid/crossing-s31000-0.6s.json",
+ "provenance": {
+  "commit": null,
+  "uncommitted_code": false,
+  "judge": {
+   "perfect": 0.045,
+   "great": 0.09,
+   "good": 0.14,
+   "hold_fraction": 0.8,
+   "slide_tolerance_lanes": 0.35,
+   "slide_max_gap": 0.05,
+   "slide_tail_window": 0.04,
+   "slide_min_maintenance": 0.95
+  },
+  "arms": 2,
+  "contacts_per_arm": 1,
+  "view": "camera",
+  "preset": "sekai-camera",
+  "display": "concert",
+  "single_tip": true,
+  "camera": {
+   "width": 960,
+   "height": 720,
+   "fov_y_deg": 48,
+   "eye_offset": [
+    0.35,
+    -0.5,
+    1.15
+   ],
+   "target_offset": [
+    0.0,
+    0.05,
+    0.0
+   ],
+   "noise_std": 3.0
+  },
+  "source_sha256": "893b8cd1adf5b472d95341760e2f40a0c21ebe55bae4b92a5fcbdfb48ab98b58",
+  "judge_sha256": "447e724fdb8120bc",
+  "model_sha256": null,
+  "policy_sha256": null
+ },
+ "chart_sha256": "b6a5c1e699adb519eb465c4053c5e66fe4e826bbe773480349f76f8fcd17e2ae"
+}

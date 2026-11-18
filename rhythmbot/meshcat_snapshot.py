@@ -45,7 +45,7 @@ def main():
         'time': args.time, 'chart': chart.name, 'arms': cfg.arms.n,
         'controller': 'classical', 'control_input': 'sekai-camera RGB / concert detector',
         'observer': 'native Meshcat / default materials and lighting',
-        'display': 'Meshcat note geometry; control camera retains concert artwork',
+        'display': 'minimal Sekai RGB texture shared with the control camera',
         'completed_notes_so_far': sum(r.completed is True for r in judge.results.values()),
         'benchmark': False,
     }, indent=2) + '\n')

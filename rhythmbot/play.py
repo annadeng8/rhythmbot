@@ -105,7 +105,11 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     judge.set_name("judge")
     if detector_name == "concert":
         screen.renderer.results = judge.results  # display feedback only; never a detector input
-    builder.AddSystem(HighwayVisualizer(chart, cfg, meshcat)).set_name("highway")
+    if meshcat is not None and detector_name == "concert":
+        from .meshcat_screen import MeshcatScreen
+        builder.AddSystem(MeshcatScreen(chart, cfg, meshcat)).set_name("highway")
+    else:
+        builder.AddSystem(HighwayVisualizer(chart, cfg, meshcat)).set_name("highway")
 
     builder.Connect(screen.get_output_port(), brain.GetInputPort("frame"))
     for arm in robot.arms:

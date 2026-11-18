@@ -1,8 +1,8 @@
-"""Original concert-stage artwork for the physical Drake display.
+"""Minimal Sekai-style highway shared by the camera and Meshcat display.
 
-Six control lanes are subdivided into twelve visual strips. Perspective is
-identity at the judgment line, preserving the robot's calibrated touch targets.
-No changes to the perception/training renderer or judgment windows.
+Perspective is identity at the judgment line, preserving calibrated touch
+locations. The default has only lanes, notes and a judgment line. Set
+minimal=False explicitly to render the legacy concert artwork.
 """
 import math
 import numpy as np
@@ -10,8 +10,9 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 
 class SekaiScreen:
-    def __init__(self, cfg):
+    def __init__(self, cfg, *, minimal=True):
         self.cfg = cfg
+        self.minimal = minimal
         self.W, self.H = cfg.perception.frame_size
         self.hit_row = int(self.H * .86)
         self.results = {}
@@ -36,7 +37,12 @@ class SekaiScreen:
         y = self.hit_row*(1-.79*depth)
         return x,y
 
-    def render(self, chart, t):
+    def render(self, chart, t, *, scale=1):
+        if self.minimal:
+            return self._render_minimal(chart, t, scale=scale)
+        return self._render_concert(chart, t)
+
+    def _render_concert(self, chart, t):
         w,h=self.W,self.H
         img=Image.new('RGB',(w,h));d=ImageDraw.Draw(img)
         for y in range(h):
@@ -119,3 +125,41 @@ class SekaiScreen:
                 text(.5,.73,r.judgment.upper(),28,(230,208,255),anchor='mt')
         text(.5,.935,chart.name.upper()+'  /  LIVE',14,(215,207,244),anchor='mt')
         return np.asarray(img.convert('RGB'))
+
+    def _render_minimal(self, chart, t, *, scale=1):
+        """Only a dark highway, lane boundaries, notes and judgment line.
+
+        Keep the calibrated Sekai projection and note dimensions unchanged.
+        No text, score, combo, particles, background lights or feedback effects.
+        """
+        if not isinstance(scale, int) or scale < 1:
+            raise ValueError('scale must be a positive integer')
+        w, h = self.W * scale, self.H * scale
+        project = lambda lane, dt: tuple(v * scale for v in self.project(lane, dt))
+        image = Image.new('RGB', (w, h), (10, 12, 19))
+        draw = ImageDraw.Draw(image)
+        top, n = self.cfg.layout.approach_time, self.cfg.layout.n_lanes
+        for k in range(n + 1):
+            lane = k - .5
+            draw.line((project(lane, 0), project(lane, top)),
+                      fill=(88, 91, 110), width=scale)
+        for note in sorted(chart.visible(t, top), key=lambda a: a.time, reverse=True):
+            start, end = max(0., note.time - t), min(top, note.end_time - t)
+            color = (92, 244, 255) if note.kind == 'tap' else (111, 255, 153)
+            if note.duration and end > start:
+                steps = max(2, int((end - start) * 45))
+                for j in range(steps):
+                    a = start + (end - start) * j / steps
+                    b = start + (end - start) * (j + 1) / steps
+                    la, lb = note.lane_at(t + a), note.lane_at(t + b)
+                    draw.polygon([project(la - .37, a), project(la + .37, a),
+                                  project(lb + .37, b), project(lb - .37, b)],
+                                 fill=(58, 200, 110))
+            lane = note.lane_at(max(t, note.time))
+            _, y = project(lane, start)
+            a, _ = project(lane - .45, start)
+            b, _ = project(lane + .45, start)
+            thick = scale * max(3, 8 * (1 - .65 * start / top))
+            draw.rectangle((a, y - thick, b, y + thick), fill=color)
+        draw.line((0, self.hit_row * scale, w, self.hit_row * scale), fill=(255, 240, 200), width=2 * scale)
+        return np.asarray(image)

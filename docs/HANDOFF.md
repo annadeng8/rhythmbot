@@ -184,10 +184,20 @@ same iiwa meshes identically. Both the single-arm and dual-arm model
 configurations reference `iiwa7_no_collision.sdf`; the visual difference
 was not a lower-detail robot model.
 
-This exporter runs the real dual-arm simulation with the unchanged
-`sekai-camera` controller input, then publishes its state at the requested
-time. Meshcat shows the existing geometric note highway; the control camera
-continues to see the concert-style RGB screen. The static observer is not a
+This exporter runs the real dual-arm simulation with `sekai-camera` RGB
+control, then publishes its state at the requested time. Both Meshcat and
+the control camera now use the minimal Sekai renderer: dark background,
+lane boundaries, judgment line, and tap/hold/slide notes only. Meshcat
+receives an embedded, unlit glTF texture on the actual screen plane, drawn
+at 4x resolution with proportionally identical note coordinates; the
+camera retains the existing occlusion-correct compositor. The same pixel
+calibration places the judgment line at the physical touch line. The old
+geometric Meshcat notes are not drawn on top. No score, combo, text,
+concert background, particles, or glow are included.
+
+This changes the visual input relative to older runs; historical scores
+must not be presented as results for the minimal display. The legacy
+artwork remains available through `SekaiScreen(cfg, minimal=False)`. The static observer is not a
 new benchmark or an image supplied to the controller. `snapshot.json`
 records the time and input/view distinction. The 4-second export was run on
 gpu156 with one process and one CPU thread, GPU 0 for the control camera,

@@ -1,0 +1,11 @@
+{
+  "time": 4.0,
+  "chart": "crossing-s31000-0.6s",
+  "arms": 2,
+  "controller": "classical",
+  "control_input": "sekai-camera RGB / concert detector",
+  "observer": "native Meshcat / default materials and lighting",
+  "display": "minimal Sekai RGB texture shared with the control camera",
+  "completed_notes_so_far": 0,
+  "benchmark": false
+}

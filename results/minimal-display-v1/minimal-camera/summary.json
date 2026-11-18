@@ -1,0 +1,22 @@
+{
+ "classical|concert|bimanual-smoke": {
+  "charts": 2,
+  "notes": 9,
+  "completed": 7,
+  "completion": 0.7777777777777778,
+  "chart_completion_mean": 0.75,
+  "hit_rate": 1.0,
+  "perfect": 7,
+  "timing_abs_ms": 6.111111111111376,
+  "timing_std_ms": 3.142696805273338,
+  "contact_when_hit": 0.9646622379394706,
+  "contact_all": 0.9646622379394706,
+  "slide_rms_mm": 18.529055374074883,
+  "load_errors": 0,
+  "run_errors": 0,
+  "plan_errors": 0,
+  "tap_completion": null,
+  "hold_completion": 1.0,
+  "slide_completion": 0.6
+ }
+}
