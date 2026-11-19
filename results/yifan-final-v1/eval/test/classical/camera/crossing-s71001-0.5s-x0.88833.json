@@ -1,0 +1,230 @@
+{
+  "chart": "crossing-s71001-0.5s-x0.88833",
+  "n_notes": 3,
+  "completion_rate": 0.6666666666666666,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 2,
+    "great": 0,
+    "good": 0,
+    "miss": 1
+  },
+  "score": 6,
+  "max_score": 9,
+  "timing_error_mean_s": 0.009697730406109143,
+  "timing_error_abs_mean_s": 0.009697730406109143,
+  "timing_error_std_s": 0.003951549583122625,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 2,
+      "mean_maintenance": 0.9090974352489569,
+      "mean_slide_rms_m": 0.023916667275678965
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 3.8698200737661614,
+      "time": 3.377124703009417,
+      "duration": 2.2514164686729448,
+      "status": "hit",
+      "timing_error": 0.007875296990583092,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 5.63,
+      "gap_seconds": 0.28500000000000014,
+      "max_gap_seconds": 0.28500000000000014,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        170,
+        166
+      ],
+      "handoffs": 7,
+      "last_contact_hand": 0,
+      "active_ticks": 451,
+      "contact_ticks": 336,
+      "completed": false,
+      "maintenance": 0.7450110864745011,
+      "slide_rms_m": 0.060528334340885004
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 3.8698200737661614,
+      "time": 6.303966112284245,
+      "duration": 1.1257082343364724,
+      "status": "hit",
+      "timing_error": 0.006033887715755526,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.43,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        117,
+        107
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 0,
+      "active_ticks": 225,
+      "contact_ticks": 224,
+      "completed": true,
+      "maintenance": 0.9955555555555555,
+      "slide_rms_m": 0.0040476903380538614
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 0.938454036713079,
+      "time": 7.654815993488011,
+      "duration": 1.1257082343364724,
+      "status": "hit",
+      "timing_error": 0.015184006511988812,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 8.785,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.015,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        121,
+        102
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 1,
+      "active_ticks": 226,
+      "contact_ticks": 223,
+      "completed": true,
+      "maintenance": 0.9867256637168141,
+      "slide_rms_m": 0.007173977148098039
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 9.780524227824483,
+  "detector": "concert",
+  "view": "camera",
+  "vision": {
+    "frames": 294,
+    "blank_detection_frames": 84,
+    "input_rgb_sha256": "42ec8816056f4e726f0a419104a28408e7a1cd9c5f336d03570a05b507fc4f6d",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "execution_status": "ok",
+  "identity": "d72f8b9e03f458a2ff4898a59115d6ab49d9284844c2347e2bda2605fdd1e855",
+  "job": {
+    "mode": "eval",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/test_iid/crossing-s71001-0.5s-x0.88833.json",
+    "condition": "camera",
+    "policy": "classical",
+    "label": "classical",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/eval/test/classical/camera/crossing-s71001-0.5s-x0.88833.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "24a2c0e8583fe0a6a6d6e8c105684f68411c1b419f57ac3f31ff5554e2b4dbf3",
+  "wall_seconds": 34.42270565032959
+}

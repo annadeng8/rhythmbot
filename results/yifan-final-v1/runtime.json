@@ -1,0 +1,16 @@
+{
+  "python": "3.13.18",
+  "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.39",
+  "packages": {
+    "drake": "1.57.0",
+    "numpy": "2.5.3",
+    "torch": "2.11.0+cu128",
+    "Pillow": "12.3.0",
+    "matplotlib": "3.11.2"
+  },
+  "torch_cuda": "12.8",
+  "training_device": "physical GPU 1, CUDA_VISIBLE_DEVICES=1",
+  "policy_inference_device": "CPU, one torch thread",
+  "camera_render_device": "physical GPU 3, EGL",
+  "training_precision": "float32, eager PyTorch; no torch.compile/Triton"
+}

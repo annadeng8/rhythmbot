@@ -1,4 +1,4 @@
-"""Obtain a CAP revision with no file/terminal/network tools for the coding agent.
+"""Obtain a Codex CAP revision with isolated context and audited tool-free output.
 
 The only supplied context is the public control contract, prior program and
 training-only feedback. Never give this command validation/test results.
@@ -6,7 +6,6 @@ training-only feedback. Never give this command validation/test results.
 import argparse
 import hashlib
 import json
-import os
 from pathlib import Path
 import re
 import subprocess
@@ -25,7 +24,7 @@ api.keyframe(t,x,z,width=0,down=False,ref=0,rise=0) -> keyframe.
 api.make_plan(keyframes,t_now=None) -> Plan through time-sorted positions. It clips the trajectory to this hand's half, legal z [0.104,0.206], and enforces tool geometry. Your plan should start at current_keyframe and contain future commands. Do not set kfs before t_now other than current. Plan linearly interpolates positions, not velocities. Simulator follows pose via differential IK, with small tracking lag.
 Every note object has key, kind ('tap','hold','slide'), lane (float), hit_time (absolute seconds), duration, end_time, waypoints [(offset,lane),...], lane_at_offset(off). Mutable note flags skipped/chosen may exist; you need not use them. Notes can be in the future, active or recently finished. Copies may be regenerated at each replan. Plan from these observations only. Local slide segments can start at the midpoint (lane 2.5), including short overlaps at handoff.
 Planning frequency 30Hz. Typical reliable descent time ~.22s, lift .12s, lateral speed ~.9m/s, tap dwell .06s. Faster moves may be needed but can cause tracking lag. Support uninterrupted hold/slide even as future notes appear. At most one stylus contact per hand; skip impossible conflicts rather than invent a second fingertip.
-Judge: a tap or sustain head needs a FRESH down-contact near the lane inside +/-140ms; perfect +/-45ms; great +/-90ms. Staying down from an earlier note does NOT count as a fresh tap. Holds need >=80% contact. Slides need >=95% on-path contact, <=50ms continuous tracking loss, all final40ms samples close to the end lane. Slide lateral tolerance .042m, hand contact y tolerance .06m. Sustains are scored only at completion. Missing tail -> Miss even with perfect head. Best approach may coordinate hover, descend, contact, follow and lift keyframes with absolute times.
+Judge: a tap or sustain head needs a FRESH down-contact near the lane inside +/-140ms; perfect +/-45ms; great +/-90ms. Staying down from an earlier note does NOT count as a fresh tap. A contact must LAND inside the note lane; dragging an already-down stylus into the lane never creates a head hit. Holds need >=80% contact. Slides need >=95% on-path contact, <=50ms continuous tracking loss, all final40ms samples close to the end lane. Slide lateral tolerance .042m, hand contact y tolerance .06m. Sustains are scored only at completion. Missing tail -> Miss even with perfect head. Best approach may coordinate hover, descend, contact, follow and lift keyframes with absolute times.
 Return code that works entirely through this API. make_policy(api) is called once per hand; internal state may persist. API object contains geometry only, not notes or the classical planner. X_WT_cmd.translation() returns current stylus [x,y,z]. Do not import pydrake or rhythmbot.planner. Use api.keyframe/make_plan.
 '''
 
@@ -35,30 +34,43 @@ def main():
     ap.add_argument('--previous',type=Path)
     ap.add_argument('--feedback',type=Path)
     a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True)
+    if (a.out/'policy.py').exists():ap.error('candidate already exists; use a new output directory')
     prompt=CONTRACT
     if a.previous:
         if not a.feedback:ap.error('revision requires training feedback')
         prompt+='\nPrevious candidate:\n'+a.previous.read_text()+'\nTRAINING-ONLY SIMULATION FEEDBACK:\n'+a.feedback.read_text()+'\nRevise this program using only the supplied feedback. Return the entire new program.'
     (a.out/'prompt.txt').write_text(prompt)
     cwd=tempfile.mkdtemp(prefix='rhythmbot-cap-generation-')
-    cmd=['claude','-p','--output-format','json','--tools','','--no-session-persistence',
-         '--disable-slash-commands','--setting-sources','','--strict-mcp-config','--mcp-config','{"mcpServers":{}}']
+    cmd=['codex','exec','--ignore-user-config','--ephemeral','--skip-git-repo-check',
+         '--sandbox','read-only','--json','--disable','shell_tool','--disable','unified_exec',
+         '--disable','apps','--disable','multi_agent','-c','web_search="disabled"',
+         '-c','project_doc_max_bytes=0','-C',cwd,'-o',str((a.out/'response.txt').resolve()),'-']
     t=time.time()
-    proc=subprocess.run(cmd,input=prompt,text=True,capture_output=True,cwd=cwd,
-        env={**os.environ,'CLAUDE_CODE_MAX_OUTPUT_TOKENS':'48000'},timeout=900)
-    (a.out/'response.json').write_text(proc.stdout)
+    proc=subprocess.run(cmd,input=prompt,text=True,capture_output=True,cwd=cwd,timeout=900)
+    (a.out/'events.jsonl').write_text(proc.stdout)
     (a.out/'stderr.txt').write_text(proc.stderr)
-    if proc.returncode:raise RuntimeError('coding-agent process failed; see saved stderr')
-    reply=json.loads(proc.stdout)
-    if reply.get('is_error'):raise RuntimeError(reply.get('result'))
-    body=reply['result'];match=re.search(r'```(?:python)?\s*\n(.*?)```',body,re.S)
+    if proc.returncode:raise RuntimeError('Codex process failed; see saved stderr/events')
+    events=[json.loads(line) for line in proc.stdout.splitlines() if line.strip()]
+    items=[e['item'] for e in events if 'item' in e]
+    unexpected=[item for item in items if item.get('type') not in ('reasoning','agent_message')]
+    if unexpected:raise RuntimeError('Rejected generation with tool activity: '+repr(unexpected))
+    reply=next((e for e in reversed(events) if e.get('type')=='turn.completed'),{})
+    if not reply:raise RuntimeError('Codex did not emit a completed turn')
+    body=(a.out/'response.txt').read_text()
+    match=re.search(r'```(?:python)?\s*\n(.*?)```',body,re.S)
     code=match.group(1) if match else body
     (a.out/'policy.py').write_text(code.strip()+'\n')
     syntax_error=None
     try: compile(code,'policy.py','exec')
     except SyntaxError as exc: syntax_error=str(exc)
-    meta={k:reply.get(k) for k in ['modelUsage','total_cost_usd','usage','num_turns','duration_ms']}
-    meta.update(wall_seconds=time.time()-t,tools_enabled=False,syntax_error=syntax_error,policy_sha256=hashlib.sha256((a.out/'policy.py').read_bytes()).hexdigest())
+    meta=dict(provider='Codex CLI', cli_version=subprocess.check_output(['codex','--version'],text=True).strip(),
+        usage=reply.get('usage'), command=cmd, wall_seconds=time.time()-t,
+        model='Codex CLI default; underlying model identifier is not emitted by this JSON interface',
+        prompt_sha256=hashlib.sha256(prompt.encode()).hexdigest(),
+        previous_sha256=hashlib.sha256(a.previous.read_bytes()).hexdigest() if a.previous else None,
+        feedback_sha256=hashlib.sha256(a.feedback.read_bytes()).hexdigest() if a.feedback else None,
+        tool_calls_observed=0, isolated_working_directory=cwd, syntax_error=syntax_error,
+        policy_sha256=hashlib.sha256((a.out/'policy.py').read_bytes()).hexdigest())
     (a.out/'metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
     print(json.dumps(meta))
     if syntax_error: raise SystemExit(1)

@@ -1,0 +1,31 @@
+ecm-f9a9
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda1       500G  123G  378G  25% /
+/dev/vdb1       4.5T  2.0T  2.6T  45% /data
+TARGET SOURCE    FSTYPE OPTIONS
+/data  /dev/vdb1 xfs    rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+               total        used        free      shared  buff/cache   available
+Mem:           582Gi        53Gi       419Gi       5.6Gi       118Gi       528Gi
+Swap:          2.0Gi       546Mi       1.5Gi
+ 12:55:54 up 49 days, 22:05, 26 users,  load average: 7.45, 5.69, 5.69
+index, name, memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+0, NVIDIA L40S, 8402 MiB, 46068 MiB, 73 %
+1, NVIDIA L40S, 5 MiB, 46068 MiB, 0 %
+2, NVIDIA L40S, 8328 MiB, 46068 MiB, 0 %
+3, NVIDIA L40S, 4 MiB, 46068 MiB, 0 %
+4, NVIDIA L40S, 4 MiB, 46068 MiB, 0 %
+5, NVIDIA L40S, 8326 MiB, 46068 MiB, 75 %
+6, NVIDIA L40S, 6544 MiB, 46068 MiB, 0 %
+7, NVIDIA L40S, 7322 MiB, 46068 MiB, 0 %
+USER         PID %CPU %MEM COMMAND
+root     1565556  212  0.7 /data/YifanKang/robodojo/home/miniconda3/envs/RoboDojo/bin/python src/franka_run.py --domain anymal --run /data/YifanKang/reactive-samplers-sgs/anymal-figure5/opal-v1/late-eval/11/sgs-report/eval-4500 --split eval --envs 4096 --method reactive --seed 11 --evaluate /data/YifanKang/reactive-samplers-sgs/anymal-figure5/opal-v1/11/sgs-report/model_4500.pt
+root     1566004  200  0.0 ps -eo user,pid,pcpu,pmem,args --sort=-pcpu
+root     1469131  130  0.9 /data/YifanKang/robodojo/home/miniconda3/envs/RoboDojo/bin/python /data/YifanKang/reactive-samplers-sgs/opal-study/src/franka_run.py --domain anymal --method reactive --variant sgs-report --split train --envs 4096 --seed 22 --iters 5000 --rollout 24 --edit-iters 250 1000 2500 4000 --checkpoints 100 --save-initial --run /data/YifanKang/reactive-samplers-sgs/anymal-figure5/opal-v1/22/sgs-report
+root     1469159  129  0.9 /data/YifanKang/robodojo/home/miniconda3/envs/RoboDojo/bin/python /data/YifanKang/reactive-samplers-sgs/opal-study/src/franka_run.py --domain anymal --method reactive --variant sgs-basic --split train --envs 4096 --seed 33 --iters 5000 --rollout 24 --edit-iters 250 1000 2500 4000 --checkpoints 100 --save-initial --run /data/YifanKang/reactive-samplers-sgs/anymal-figure5/opal-v1/33/sgs-basic
+root     1438074  129  0.9 /data/YifanKang/robodojo/home/miniconda3/envs/RoboDojo/bin/python /data/YifanKang/reactive-samplers-sgs/opal-study/src/franka_run.py --domain anymal --method reactive --variant sgs-report --split train --envs 4096 --seed 33 --iters 5000 --rollout 24 --edit-iters 250 1000 2500 4000 --checkpoints 100 --save-initial --run /data/YifanKang/reactive-samplers-sgs/anymal-figure5/opal-v1/33/sgs-report
+root     2868990 22.8  0.1 ffmpeg -loglevel error -y -thread_queue_size 4096 -f x11grab -draw_mouse 0 -framerate 30 -video_size 1280x720 -i :131 -thread_queue_size 4096 -f pulse -i mjsink.monitor -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -c:a aac -b:a 160k /data/YifanKang/embodied-arcade/workspaces/remaining-environments-eval-v1/rhythm/s/eng2-contact1/attempt-002/native_capture.mkv
+root        1083  2.7  0.0 [kcompactd1]
+root        1082  2.6  0.0 [kcompactd0]
+root     3215748  1.1  0.0 /var/ctcss/plugin/eShield-modules/eShield-modules
+root        6145  0.6  0.0 /usr/bin/telegraf -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
+root     3079470  0.1  0.0 /var/ctcss/bin/ctcss-agentd

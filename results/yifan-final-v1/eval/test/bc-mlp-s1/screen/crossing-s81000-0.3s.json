@@ -1,0 +1,234 @@
+{
+  "chart": "crossing-s81000-0.3s",
+  "n_notes": 3,
+  "completion_rate": 0.3333333333333333,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 1,
+    "great": 0,
+    "good": 0,
+    "miss": 2
+  },
+  "score": 3,
+  "max_score": 9,
+  "timing_error_mean_s": -0.003333333333333114,
+  "timing_error_abs_mean_s": 0.020000000000000313,
+  "timing_error_std_s": 0.022484562605386973,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 1,
+      "mean_maintenance": 0.8547946458169017,
+      "mean_slide_rms_m": 0.025535391713837976
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 0.9788466367756008,
+      "time": 3.0,
+      "duration": 1.2,
+      "status": "hit",
+      "timing_error": 0.015000000000000124,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 4.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.2200000000000001,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 2,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        79,
+        61
+      ],
+      "handoffs": 4,
+      "last_contact_hand": 0,
+      "active_ticks": 241,
+      "contact_ticks": 140,
+      "completed": false,
+      "maintenance": 0.5809128630705395,
+      "slide_rms_m": 0.058010841945219736
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 0.9788466367756008,
+      "time": 4.8,
+      "duration": 0.6,
+      "status": "hit",
+      "timing_error": -0.03500000000000014,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 5.405,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 8,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        57,
+        64
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 1,
+      "active_ticks": 121,
+      "contact_ticks": 121,
+      "completed": false,
+      "maintenance": 1.0,
+      "slide_rms_m": 0.01052943056857911
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 3.9722839752323993,
+      "time": 5.6,
+      "duration": 0.6,
+      "status": "hit",
+      "timing_error": 0.010000000000000675,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 6.205,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.01,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        55,
+        64
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 0,
+      "active_ticks": 121,
+      "contact_ticks": 119,
+      "completed": true,
+      "maintenance": 0.9834710743801653,
+      "slide_rms_m": 0.008065902627715078
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 7.199999999999999,
+  "detector": "concert",
+  "view": "screen",
+  "vision": {
+    "frames": 216,
+    "blank_detection_frames": 72,
+    "input_rgb_sha256": "b23429570657400ec1ae4eed290c90be720839262a3d7eb0f674ff9e1e4819d2",
+    "input": "direct concert RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "policy_stats_by_hand": [
+    {},
+    {}
+  ],
+  "execution_status": "ok",
+  "identity": "51dad6fd0aee2fd0b5b32402062b98cb1d4ce14287a1420521650f631f39a29a",
+  "job": {
+    "mode": "eval",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/test_speed/crossing-s81000-0.3s.json",
+    "condition": "screen",
+    "policy": "bc:/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-mlp-s1.pt",
+    "label": "bc-mlp-s1",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/eval/test/bc-mlp-s1/screen/crossing-s81000-0.3s.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "97b72dda002b342b2229e6fdbbe96d70480f529a5e79f116e03b5731ca09b3b2",
+  "wall_seconds": 10.251263618469238
+}

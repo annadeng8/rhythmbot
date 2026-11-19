@@ -1,0 +1,529 @@
+{
+  "base_commit": "6d5acc2",
+  "entries": [
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51000,
+      "path": "charts/train/crossing-s51000-0.5s.json",
+      "sha256": "21755fdfcca653888e00465162423457c21faeaf6ac612c1c7647cac121081c3"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51000,
+      "path": "charts/train/holds-s51000.json",
+      "sha256": "163e28275d4243b65c1f744b3516dfef86b7effa9a68454bcc36d9f1dde486b1"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51000,
+      "path": "charts/train/chords-s51000.json",
+      "sha256": "5a6a06aa3f0baca4f5722e5c76912ec875be826152fa17bf1730eebfac902a9a"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51001,
+      "path": "charts/train/crossing-s51001-0.6s.json",
+      "sha256": "116a710a2b64a83cd7235a973c37ea971aa6a1fa8a67874913bff934dd488418"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51001,
+      "path": "charts/train/holds-s51001.json",
+      "sha256": "35749f605a3f1cedb490ba4936146d632afff626331a032f6d33f3bcff51d990"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51001,
+      "path": "charts/train/chords-s51001.json",
+      "sha256": "6d72523a7723bbf9dd19f80d463f6ab5cec0974bf7fb2d2fe4dd6667b79700e2"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51002,
+      "path": "charts/train/crossing-s51002-0.8s.json",
+      "sha256": "8b291cee25499a661d1d69eece06570f5b4aff658cc0affcb2b7b01f4bef305a"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51002,
+      "path": "charts/train/holds-s51002.json",
+      "sha256": "94371247e84bafd7df546a68a88e503335bc67b4073b232dbb97b3650a5b0a9f"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51002,
+      "path": "charts/train/chords-s51002.json",
+      "sha256": "ea1c15f60684b9e3dab3fec4a9f62cf753b74fb6df6c921b61cae5fdae8f7a53"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51003,
+      "path": "charts/train/crossing-s51003-0.5s.json",
+      "sha256": "c14d3ece77a9f32a11ed7b2671af1dfbd8b3fdc44bc8eaf95a27d6b1afb99213"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51003,
+      "path": "charts/train/holds-s51003.json",
+      "sha256": "6a9972e75675dd2b83c90ac9714c51fc39c5a28634f7169dd05502e3fd960942"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51003,
+      "path": "charts/train/chords-s51003.json",
+      "sha256": "6de0affa5e775a3cc0abd349d99712233c20c3382417f0dcd8b312fe58d74a1a"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51004,
+      "path": "charts/train/crossing-s51004-0.6s.json",
+      "sha256": "24845e9f79d9118f1eb4d12f66a136dffd58ba79aa2a47a4f73c8ab69a49b298"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51004,
+      "path": "charts/train/holds-s51004.json",
+      "sha256": "5ee584847c2ad3cb3cc53efc58d29e58401a459cd99e3a8613e006726cf39033"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51004,
+      "path": "charts/train/chords-s51004.json",
+      "sha256": "c1d787cbcd7abad37845eee4d8a5c21bb8dd5dc4ed47870822ab42a035088d94"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51005,
+      "path": "charts/train/crossing-s51005-0.8s.json",
+      "sha256": "06880306d1d25ed12314d5acc42031c2e264c54d2960c8a1c2f9f846ab37e66c"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51005,
+      "path": "charts/train/holds-s51005.json",
+      "sha256": "610c8a2d1e5c1869c2384373ac777004cce9095acb59dd5190dc72f6bc36f10e"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51005,
+      "path": "charts/train/chords-s51005.json",
+      "sha256": "e71f307f3279fd6b25ee1d4cb8cabfd40bb982d31f21470ed167aba3cf2b602d"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51006,
+      "path": "charts/train/crossing-s51006-0.5s.json",
+      "sha256": "c134108420d9326fb9a5da8fb2399b23c08738074b592bef21c4f53065c12faa"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51006,
+      "path": "charts/train/holds-s51006.json",
+      "sha256": "9d15a5308a02c8758fdb700f265988d38f7731a264ba85d729d66c57b5338e20"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51006,
+      "path": "charts/train/chords-s51006.json",
+      "sha256": "2e9b00c46b9f6b0a54d62a9eaae7920fb74541c96fe0a587487f34795e3fd812"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51007,
+      "path": "charts/train/crossing-s51007-0.6s.json",
+      "sha256": "546480bf516f8642c0d8657cf405162f22a832fd31810b5e5a105adbb1b914fc"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51007,
+      "path": "charts/train/holds-s51007.json",
+      "sha256": "ccec324eac8246614c503fefa9f1bda7a2da1620077b3de7ac71852e41c33596"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51007,
+      "path": "charts/train/chords-s51007.json",
+      "sha256": "ae6749c10b06d2c1777c478ea8a24d149111457a4dce17c393cbeb5725d66ce9"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51008,
+      "path": "charts/train/crossing-s51008-0.8s.json",
+      "sha256": "9f8c93ee4e41b4afd6ab8b9f6186ba82461e76b0fa94c673062cc1cf57e0e7eb"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51008,
+      "path": "charts/train/holds-s51008.json",
+      "sha256": "68324eca410982cfe5640ea8046438c1a1608af3dec3acbcc8834951ca7fd8b8"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51008,
+      "path": "charts/train/chords-s51008.json",
+      "sha256": "669501df69136da7a0286e5312d4e2505253b28f4e60d6421422c1dafac495c1"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51009,
+      "path": "charts/train/crossing-s51009-0.5s.json",
+      "sha256": "b1008481caeb905210bbfffac2bdd4417ae5e1fea71c68cc16511d71ca0c6518"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51009,
+      "path": "charts/train/holds-s51009.json",
+      "sha256": "34ae939dc139e0f7f2bdc6b6b423be788b38d8c3b87e1312b95a33bf24ceccb9"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51009,
+      "path": "charts/train/chords-s51009.json",
+      "sha256": "39fd3f2799f73ee592a36233b848b29c1c4d1e025801886ed832c5b1de293734"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51010,
+      "path": "charts/train/crossing-s51010-0.6s.json",
+      "sha256": "2186e47ecd7010f83fa92253be50500c6651d86aceabf3b2071be71dde03b28a"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51010,
+      "path": "charts/train/holds-s51010.json",
+      "sha256": "edba9ae50f03861a1f601de509ad7ba484b841b6ad915c493b1325a22b446de5"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51010,
+      "path": "charts/train/chords-s51010.json",
+      "sha256": "adb59ae2ff797dceaa3845cb4cc16904d7de4dcdaf64f878c4259e01908cabce"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51011,
+      "path": "charts/train/crossing-s51011-0.8s.json",
+      "sha256": "f7b5b39d2142785c1e2065536d61988af7ee566f9126fc6ac6b40eabe245c3e7"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51011,
+      "path": "charts/train/holds-s51011.json",
+      "sha256": "8a57cbf6409ab8605ab9e8ba6c1c8e97254e5df3e713e277f575116d7f42534a"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51011,
+      "path": "charts/train/chords-s51011.json",
+      "sha256": "9156b7d7d2f91d7f2932fd28a070846cdd666ebd40f03fefc2be22544cf2051d"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51012,
+      "path": "charts/train/crossing-s51012-0.5s.json",
+      "sha256": "7e2cfb7828327db48764d4f748e0e4a6b93bb053a85343d526d28eecd26cb079"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51012,
+      "path": "charts/train/holds-s51012.json",
+      "sha256": "491207eb492ad8d62bfd7d2ff34758488ee6780066fd4af887ec8e97873a726f"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51012,
+      "path": "charts/train/chords-s51012.json",
+      "sha256": "8cbaf6c283cd90326f64e232b1de1ecc07d6e0aa3f7611508e83a350f350de32"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51013,
+      "path": "charts/train/crossing-s51013-0.6s.json",
+      "sha256": "95f5bd23d688c3e1320b5b1dd4635ce44c9a22ab37b961fabec5d186a118a4a6"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51013,
+      "path": "charts/train/holds-s51013.json",
+      "sha256": "88c2e9b40dc41120fb0c8255a3e16bb78e684fcc66d7fcff4c5b5b58a1078352"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51013,
+      "path": "charts/train/chords-s51013.json",
+      "sha256": "ae8bffa1773c6655bec5582f2162557626840fdcb2596d1afd1e5bcc997d9a96"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51014,
+      "path": "charts/train/crossing-s51014-0.8s.json",
+      "sha256": "e467a1aff777c9f7cd1277bdc8a6e9511337042f5b788c610e202ab967cb72a9"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51014,
+      "path": "charts/train/holds-s51014.json",
+      "sha256": "2725e9cead43dcc8bbc99d349811c2efa6db3dfb6650ea98bfe2de98fb3f2314"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51014,
+      "path": "charts/train/chords-s51014.json",
+      "sha256": "f447d5b0857c8ea10521cd3f3f35ba815da1ee4e46618e4374446b311a25b11c"
+    },
+    {
+      "split": "train",
+      "family": "crossing",
+      "seed": 51015,
+      "path": "charts/train/crossing-s51015-0.5s.json",
+      "sha256": "1a6d6b6f40c4bd5fe1158c11acb2e3c46cc5529267e1716e42bb238f79e110b5"
+    },
+    {
+      "split": "train",
+      "family": "holds",
+      "seed": 51015,
+      "path": "charts/train/holds-s51015.json",
+      "sha256": "75d02471552e0833954cf9a05a26b07c245cdff1322016c8f7daa35d76997d5c"
+    },
+    {
+      "split": "train",
+      "family": "chords",
+      "seed": 51015,
+      "path": "charts/train/chords-s51015.json",
+      "sha256": "380e8aa67a79564ccf34dac9e1e3e207a8f3ef6a0035fe82cf5a6ebf24238465"
+    },
+    {
+      "split": "validation",
+      "family": "crossing",
+      "seed": 61000,
+      "path": "charts/validation/crossing-s61000-0.6s.json",
+      "sha256": "24114508738dc93cac25ffac88c64ec2291a1cb091eb8d35516aeb3ba184578c"
+    },
+    {
+      "split": "validation",
+      "family": "holds",
+      "seed": 61000,
+      "path": "charts/validation/holds-s61000.json",
+      "sha256": "c8cf1d4448a3cae8ffae21133e2f44cf474e7bee1622e28d711637e12631351a"
+    },
+    {
+      "split": "validation",
+      "family": "chords",
+      "seed": 61000,
+      "path": "charts/validation/chords-s61000.json",
+      "sha256": "dfe7888e919a44f6557613f4efd7ebd2b6bac9a8d04383c9aaf1e381ac126a6b"
+    },
+    {
+      "split": "validation",
+      "family": "crossing",
+      "seed": 61001,
+      "path": "charts/validation/crossing-s61001-0.8s.json",
+      "sha256": "113a04a70ca2011cf60bbb92fe6d3621b365738d2b7db9be097200b263815791"
+    },
+    {
+      "split": "validation",
+      "family": "holds",
+      "seed": 61001,
+      "path": "charts/validation/holds-s61001.json",
+      "sha256": "42616d982777f89621f43442a02546068a373516a4f775efe292032701c677d5"
+    },
+    {
+      "split": "validation",
+      "family": "chords",
+      "seed": 61001,
+      "path": "charts/validation/chords-s61001.json",
+      "sha256": "41e33639724682b3fa0e6749410a054393307da5e86bb5a26c774a52581b8cbb"
+    },
+    {
+      "split": "test_iid",
+      "family": "crossing",
+      "seed": 71000,
+      "path": "charts/test_iid/crossing-s71000-0.8s.json",
+      "sha256": "dd022f49c11547743be9dbdce83e8fbce87659cabaf97a9a17723b209b8a5a99"
+    },
+    {
+      "split": "test_iid",
+      "family": "holds",
+      "seed": 71000,
+      "path": "charts/test_iid/holds-s71000.json",
+      "sha256": "f4f7c0bf109c3b3c3808ca63c6d3ee5add945c69511dd13e9ed1c56c85a3d31e"
+    },
+    {
+      "split": "test_iid",
+      "family": "chords",
+      "seed": 71000,
+      "path": "charts/test_iid/chords-s71000.json",
+      "sha256": "6ffd114eb4becf2e16bfc10765a72ff110a7f938089605403d6cab45c396c8ab"
+    },
+    {
+      "split": "test_iid",
+      "family": "crossing",
+      "seed": 71001,
+      "path": "charts/test_iid/crossing-s71001-0.5s.json",
+      "sha256": "515c8d9850e72e50d5f265a722bbbddad86e3298205d87aa96858be92b9dfc9d"
+    },
+    {
+      "split": "test_iid",
+      "family": "holds",
+      "seed": 71001,
+      "path": "charts/test_iid/holds-s71001.json",
+      "sha256": "0642e96894b942329389c3852a761097a8691e239cb1a56a54cf70002f881430"
+    },
+    {
+      "split": "test_iid",
+      "family": "chords",
+      "seed": 71001,
+      "path": "charts/test_iid/chords-s71001.json",
+      "sha256": "64bcbb635aa7ffd9c75573f6e2673ce7d07e1f77e44759142515cc844ed4a1f5"
+    },
+    {
+      "split": "test_speed",
+      "family": "crossing",
+      "seed": 81000,
+      "path": "charts/test_speed/crossing-s81000-0.3s.json",
+      "sha256": "97b72dda002b342b2229e6fdbbe96d70480f529a5e79f116e03b5731ca09b3b2"
+    },
+    {
+      "split": "test_speed",
+      "family": "crossing",
+      "seed": 81001,
+      "path": "charts/test_speed/crossing-s81001-0.4s.json",
+      "sha256": "a2cdbaa46aa97be6062f476cf1f976cb5a7a049ee6e2e1c23ce73e8057b0a444"
+    },
+    {
+      "split": "test_song",
+      "family": "song_excerpt",
+      "path": "charts/test_song/unknown-easy-first30s.json",
+      "sha256": "b15cb43e7491089a86a23024e6319b93ca3ff96eed40a6eeb00ec4f8bf0b535a",
+      "source": "results/eval-v2/classical/oracle/song-cityyy-unknown-easy.json",
+      "source_sha256": "8f7f76013600f9ba59bee2f38834b90073af3eccf93e34f6fa5570b4c14a8adc",
+      "original_window_seconds": [
+        2.5,
+        32.5
+      ],
+      "boundary_rule": "exclude notes ending past window"
+    },
+    {
+      "split": "test_song",
+      "family": "song_excerpt",
+      "path": "charts/test_song/unknown-intermediate-first30s.json",
+      "sha256": "ddab35fe69b577ae580e3a5345f3d01846ea7f21013dc3c775d4a16672b42a72",
+      "source": "results/eval-v2/classical/oracle/song-cityyy-unknown-intermediate.json",
+      "source_sha256": "ae3c944c46579601c78fb7f956a145e080c2696de62a8204cdf07ba998ee4366",
+      "original_window_seconds": [
+        2.5,
+        32.5
+      ],
+      "boundary_rule": "exclude notes ending past window"
+    },
+    {
+      "split": "test_song",
+      "family": "song_excerpt",
+      "path": "charts/test_song/unknown-normal-first30s.json",
+      "sha256": "d4df095b51984c342ced370c8d9441cef95c2ae63b6c3bd33d169e1f00bc05bd",
+      "source": "results/eval-v2/classical/oracle/song-cityyy-unknown-normal.json",
+      "source_sha256": "025772573864cddfa834f96b0e6dae163f718155aa2c8b442811da57f7754754",
+      "original_window_seconds": [
+        2.5,
+        32.5
+      ],
+      "boundary_rule": "exclude notes ending past window"
+    }
+  ],
+  "conditions": {
+    "oracle": [
+      "oracle",
+      "screen"
+    ],
+    "screen": [
+      "concert",
+      "screen"
+    ],
+    "camera": [
+      "concert",
+      "camera"
+    ]
+  },
+  "training_conditions": [
+    "oracle",
+    "camera"
+  ],
+  "bc_seeds": [
+    0,
+    1,
+    2
+  ],
+  "bc_heads": [
+    "mlp",
+    "diffusion"
+  ],
+  "bc_epochs": 60,
+  "cap_feedback_charts": [
+    "charts/train/crossing-s51000-0.5s.json",
+    "charts/train/holds-s51000.json",
+    "charts/train/chords-s51000.json",
+    "charts/train/crossing-s51001-0.6s.json",
+    "charts/train/holds-s51001.json",
+    "charts/train/chords-s51001.json"
+  ],
+  "cap_conditions": [
+    "oracle",
+    "camera"
+  ],
+  "cap_revisions": 3,
+  "selection": "BC minimum whole-chart validation loss; all CAP revisions reported; never select on test.",
+  "environment": "minimal Sekai; 2 iiwa; 1 stylus each; current strict touch/slide judge; fixed shared handoff router",
+  "demo": "Full Drake rollouts. Labels and policy observations use commanded hand state, not measured robot-state inputs.",
+  "limitations": [
+    "one CAP generation chain",
+    "RGB segmentation is not a trained neural detector",
+    "song results cover predeclared 30-second prefixes, not full songs",
+    "shared handoff routing is not learned arm assignment",
+    "no validated inter-arm collision avoidance"
+  ]
+}

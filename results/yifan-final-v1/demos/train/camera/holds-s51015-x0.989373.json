@@ -1,0 +1,324 @@
+{
+  "chart": "holds-s51015-x0.989373",
+  "n_notes": 6,
+  "completion_rate": 0.8333333333333334,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 5,
+    "great": 0,
+    "good": 0,
+    "miss": 1
+  },
+  "score": 15,
+  "max_score": 18,
+  "timing_error_mean_s": 0.0055682788252287745,
+  "timing_error_abs_mean_s": 0.0055682788252287745,
+  "timing_error_std_s": 0.0015944201909106528,
+  "by_kind": {
+    "hold": {
+      "n": 4,
+      "hit": 4,
+      "completed": 4,
+      "mean_maintenance": 1.0
+    },
+    "slide": {
+      "n": 2,
+      "hit": 2,
+      "completed": 1,
+      "mean_maintenance": 0.9953703703703703,
+      "mean_slide_rms_m": 0.009929279234510263
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "hold",
+      "lane": 2.0,
+      "time": 3.032222017504394,
+      "duration": 2.0214813450029294,
+      "status": "hit",
+      "timing_error": 0.007777982495606128,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 5.055,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 403,
+      "contact_ticks": 403,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 1,
+      "kind": "hold",
+      "lane": 5.0,
+      "time": 3.032222017504394,
+      "duration": 2.0214813450029294,
+      "status": "hit",
+      "timing_error": 0.007777982495606128,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 5.055,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 403,
+      "contact_ticks": 403,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 2,
+      "kind": "hold",
+      "lane": 1.0,
+      "time": 5.660147766008202,
+      "duration": 1.6171850760023434,
+      "status": "hit",
+      "timing_error": 0.004852233991798016,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.28,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 323,
+      "contact_ticks": 323,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 3,
+      "kind": "slide",
+      "lane": 3.0,
+      "time": 5.660147766008202,
+      "duration": 1.6171850760023434,
+      "status": "hit",
+      "timing_error": 0.004852233991798016,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.28,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        323
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 1,
+      "active_ticks": 324,
+      "contact_ticks": 323,
+      "completed": true,
+      "maintenance": 0.9969135802469136,
+      "slide_rms_m": 0.009461350702381736
+    },
+    {
+      "id": 4,
+      "kind": "slide",
+      "lane": 2.0,
+      "time": 8.085925380011718,
+      "duration": 1.6171850760023434,
+      "status": "hit",
+      "timing_error": 0.00407461998828218,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 9.705,
+      "gap_seconds": 0.005,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        322,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 0,
+      "active_ticks": 324,
+      "contact_ticks": 322,
+      "completed": false,
+      "maintenance": 0.9938271604938271,
+      "slide_rms_m": 0.01039720776663879
+    },
+    {
+      "id": 5,
+      "kind": "hold",
+      "lane": 4.0,
+      "time": 8.085925380011718,
+      "duration": 1.6171850760023434,
+      "status": "hit",
+      "timing_error": 0.00407461998828218,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 9.705,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 323,
+      "contact_ticks": 323,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 10.70311045601406,
+  "detector": "concert",
+  "view": "camera",
+  "vision": {
+    "frames": 322,
+    "blank_detection_frames": 73,
+    "input_rgb_sha256": "113210a6306e81ffccfdc68f17b623b647f166aaefa3db84b630dd30759fd508",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "policy_stats_by_hand": [
+    {},
+    {}
+  ],
+  "samples": 642,
+  "dataset_sha256": "2e1a0e846dd8ad2d80b0d082fa4ed47e188f3755a81d40f71061d3502682c00d",
+  "execution_status": "ok",
+  "identity": "ae0448a69140f550492435d3ec65e4a77bd70f54e351587958070f67a883920d",
+  "job": {
+    "mode": "collect",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/train/holds-s51015-x0.989373.json",
+    "condition": "camera",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/demos/train/camera/holds-s51015-x0.989373.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "57931198b0f0c4a131fcaca1eaf80fa93e06022989fcc60ea721f8d0f50841f7",
+  "wall_seconds": 35.626506328582764
+}

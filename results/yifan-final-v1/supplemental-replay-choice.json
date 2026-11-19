@@ -1,0 +1,7 @@
+{
+  "recorded_at": "2026-11-19T05:30:36.447351+00:00",
+  "controller": "classical",
+  "chart": "charts/test_iid/crossing-s71000-0.8s-x1.1287.json",
+  "condition": "camera",
+  "reason": "Add the classical reference on the same previously selected chart after observing CAP/BC replay failures. This supplemental controller was not preselected; no new chart was selected."
+}

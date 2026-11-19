@@ -1,0 +1,38 @@
+[
+  {
+    "controller": "classical",
+    "chart": "crossing-s71000-0.8s-x1.1287",
+    "completed": 2,
+    "notes": 3,
+    "matches_frozen_note_metrics": true,
+    "encoded_frames": 82,
+    "duration_ms": 10160,
+    "gif_sha256": "00d9fd1531801e939acb7b7d2dc03874ff7b480d11f653ee48d51656e7f7bcb5",
+    "benchmark": "results/yifan-final-v1/eval/test/classical/camera/crossing-s71000-0.8s-x1.1287.json",
+    "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c"
+  },
+  {
+    "controller": "cap-v2",
+    "chart": "crossing-s71000-0.8s-x1.1287",
+    "completed": 0,
+    "notes": 3,
+    "matches_frozen_note_metrics": true,
+    "encoded_frames": 82,
+    "duration_ms": 10160,
+    "gif_sha256": "1ef54c5927819f722ce9925d176ff43709ee947c61d691d7b43d7921da0b6815",
+    "benchmark": "results/yifan-final-v1/eval/test/cap-v2/camera/crossing-s71000-0.8s-x1.1287.json",
+    "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c"
+  },
+  {
+    "controller": "bc-diffusion-s0",
+    "chart": "crossing-s71000-0.8s-x1.1287",
+    "completed": 0,
+    "notes": 3,
+    "matches_frozen_note_metrics": true,
+    "encoded_frames": 82,
+    "duration_ms": 10160,
+    "gif_sha256": "59bb9b47c92f5d770d2a907e9902f2b4cfcc1832777984a645e7e224801812ad",
+    "benchmark": "results/yifan-final-v1/eval/test/bc-diffusion-s0/camera/crossing-s71000-0.8s-x1.1287.json",
+    "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c"
+  }
+]

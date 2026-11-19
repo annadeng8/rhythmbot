@@ -1,0 +1,234 @@
+{
+  "chart": "crossing-s61000-0.6s-x0.984859",
+  "n_notes": 3,
+  "completion_rate": 0.3333333333333333,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 1,
+    "great": 0,
+    "good": 0,
+    "miss": 2
+  },
+  "score": 3,
+  "max_score": 9,
+  "timing_error_mean_s": 0.020959308565738688,
+  "timing_error_abs_mean_s": 0.05837256965957405,
+  "timing_error_std_s": 0.06428074223846665,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 1,
+      "mean_maintenance": 0.6704142430527265,
+      "mean_slide_rms_m": 0.04714092040844481
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 0.899967653242562,
+      "time": 3.0461198916407533,
+      "duration": 2.4368959133126027,
+      "status": "hit",
+      "timing_error": -0.05611989164075304,
+      "judgment": "miss",
+      "head_judgment": "great",
+      "judged_at": 5.485,
+      "gap_seconds": 0.18000000000000008,
+      "max_gap_seconds": 0.6600000000000005,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        125,
+        96
+      ],
+      "handoffs": 4,
+      "last_contact_hand": 0,
+      "active_ticks": 487,
+      "contact_ticks": 221,
+      "completed": false,
+      "maintenance": 0.4537987679671458,
+      "slide_rms_m": 0.09358845728985585
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 0.899967653242562,
+      "time": 6.0922397832815065,
+      "duration": 1.2184479566563013,
+      "status": "hit",
+      "timing_error": 0.017760216718493815,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.315,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.02,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        124,
+        117
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 1,
+      "active_ticks": 245,
+      "contact_ticks": 241,
+      "completed": true,
+      "maintenance": 0.9836734693877551,
+      "slide_rms_m": 0.02448404375446533
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 4.081089645678858,
+      "time": 7.513762399380525,
+      "duration": 1.2184479566563013,
+      "status": "hit",
+      "timing_error": 0.10123760061947529,
+      "judgment": "miss",
+      "head_judgment": "good",
+      "judged_at": 8.735,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.38500000000000023,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": "contact_break",
+      "contact_ticks_by_hand": [
+        121,
+        19
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 0,
+      "active_ticks": 244,
+      "contact_ticks": 140,
+      "completed": false,
+      "maintenance": 0.5737704918032787,
+      "slide_rms_m": 0.023350260181013233
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 9.732210356036827,
+  "detector": "concert",
+  "view": "camera",
+  "vision": {
+    "frames": 292,
+    "blank_detection_frames": 74,
+    "input_rgb_sha256": "1062f61c013d8ecba536e73df2558675bc3b46f3bc7a1ea06b5fe96fa6952be0",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "policy_stats_by_hand": [
+    {},
+    {}
+  ],
+  "execution_status": "ok",
+  "identity": "de391a506101ab1e822224f1f8308635e8bca32a388b7c0df57d60a28a9b94b3",
+  "job": {
+    "mode": "eval",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/validation/crossing-s61000-0.6s-x0.984859.json",
+    "condition": "camera",
+    "policy": "bc:/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-diffusion-s0.pt",
+    "label": "bc-diffusion-s0",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/preflight/deployment-warmup/diffusion.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "68f5e4f4438440b8802036c6d79c1acead84e453c2f059dd09154fcc2536520c",
+  "wall_seconds": 43.911266565322876
+}

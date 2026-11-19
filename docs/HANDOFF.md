@@ -202,3 +202,22 @@ new benchmark or an image supplied to the controller. `snapshot.json`
 records the time and input/view distinction. The 4-second export was run on
 gpu156 with one process and one CPU thread, GPU 0 for the control camera,
 and all files/caches under `/data/YifanKang/`.
+
+
+## Frozen minimal-display CAP / BC campaign
+
+The current campaign is documented in [`results/yifan-final-v1/README.md`](../results/yifan-final-v1/README.md).
+It uses the same minimal Sekai camera environment and strict judge, 48 training
+charts, six validation charts and 11 held-out charts, with three BC seeds per
+head and a three-program Codex CAP feedback chain. It separates oracle, direct
+screen RGB, and Drake camera RGB, and retains per-note failure/contact metrics.
+
+The new checkpoints live under
+`/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/`
+on gpu156 (`bc-mlp-s0.pt` through `bc-mlp-s2.pt`, and
+`bc-diffusion-s0.pt` through `bc-diffusion-s2.pt`). Verify their SHA-256 hashes
+against the new `freeze.json`; do not substitute checkpoints from the older pilot.
+All three CAP candidates are committed under `results/yifan-final-v1/cap/`.
+New CAP generations use Codex; historical Claude candidates remain labelled as
+historical. Native Meshcat replay export is available through
+`scripts/replay_final_meshcat.py` and `scripts/rasterize_meshcat_replay.py`.

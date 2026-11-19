@@ -1,0 +1,234 @@
+{
+  "chart": "crossing-s51008-0.8s-x1.11687",
+  "n_notes": 3,
+  "completion_rate": 0.6666666666666666,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 2,
+    "great": 0,
+    "good": 0,
+    "miss": 1
+  },
+  "score": 6,
+  "max_score": 9,
+  "timing_error_mean_s": 0.011807101763789962,
+  "timing_error_abs_mean_s": 0.011807101763789962,
+  "timing_error_std_s": 0.005820546263172118,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 2,
+      "mean_maintenance": 0.8617886178861789,
+      "mean_slide_rms_m": 0.04282042032222912
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 1.109709235218963,
+      "time": 2.6860726132677115,
+      "duration": 2.865144120818892,
+      "status": "hit",
+      "timing_error": 0.008927386732288323,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 5.555,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 1.129999999999998,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": "contact_break",
+      "contact_ticks_by_hand": [
+        201,
+        145
+      ],
+      "handoffs": 4,
+      "last_contact_hand": 0,
+      "active_ticks": 574,
+      "contact_ticks": 346,
+      "completed": false,
+      "maintenance": 0.6027874564459931,
+      "slide_rms_m": 0.11938993498167014
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 1.109709235218963,
+      "time": 6.0884312567401455,
+      "duration": 1.432572060409446,
+      "status": "hit",
+      "timing_error": 0.006568743259854237,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.525,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        145,
+        141
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 1,
+      "active_ticks": 287,
+      "contact_ticks": 286,
+      "completed": true,
+      "maintenance": 0.9965156794425087,
+      "slide_rms_m": 0.006080724767951466
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 3.8633873057288275,
+      "time": 7.700074824700772,
+      "duration": 1.432572060409446,
+      "status": "hit",
+      "timing_error": 0.019925175299227327,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 9.135,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.02,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        145,
+        138
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 0,
+      "active_ticks": 287,
+      "contact_ticks": 283,
+      "completed": true,
+      "maintenance": 0.9860627177700348,
+      "slide_rms_m": 0.0029906012170657615
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 10.13264688511022,
+  "detector": "concert",
+  "view": "camera",
+  "vision": {
+    "frames": 304,
+    "blank_detection_frames": 63,
+    "input_rgb_sha256": "66cd27941424ee67cd3d2a2b90726ddc9f5c4f89230cd2cfb1deacfea069264f",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "policy_stats_by_hand": [
+    {},
+    {}
+  ],
+  "samples": 606,
+  "dataset_sha256": "23cfb04e9c1f6d01bce4f94ecb5cdce21bc1ce9023c17bc8f2b67cd310cbf892",
+  "execution_status": "ok",
+  "identity": "a07fa7a362f85cef3974ab60a1676d78170e864dbf69b16df16fbe19bc5c5af5",
+  "job": {
+    "mode": "collect",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/train/crossing-s51008-0.8s-x1.11687.json",
+    "condition": "camera",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/demos/train/camera/crossing-s51008-0.8s-x1.11687.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "2a2406bd67b9633c4804e5ccd7acfcf1c53f7fc54b8e366d3f86b32716234632",
+  "wall_seconds": 35.93884897232056
+}

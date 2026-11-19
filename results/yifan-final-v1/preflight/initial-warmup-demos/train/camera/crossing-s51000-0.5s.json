@@ -1,0 +1,234 @@
+{
+  "chart": "crossing-s51000-0.5s",
+  "n_notes": 3,
+  "completion_rate": 0.6666666666666666,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 2,
+    "great": 0,
+    "good": 0,
+    "miss": 1
+  },
+  "score": 6,
+  "max_score": 9,
+  "timing_error_mean_s": 0.008333333333333748,
+  "timing_error_abs_mean_s": 0.008333333333333748,
+  "timing_error_std_s": 0.004714045207910426,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 2,
+      "mean_maintenance": 0.9202160436388299,
+      "mean_slide_rms_m": 0.03630608557804302
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 0.974510410451726,
+      "time": 3.0,
+      "duration": 2.0,
+      "status": "hit",
+      "timing_error": 0.004999999999999893,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 5.005,
+      "gap_seconds": 0.4350000000000003,
+      "max_gap_seconds": 0.4350000000000003,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        161,
+        152
+      ],
+      "handoffs": 9,
+      "last_contact_hand": 1,
+      "active_ticks": 401,
+      "contact_ticks": 313,
+      "completed": false,
+      "maintenance": 0.7805486284289277,
+      "slide_rms_m": 0.09751522680592259
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 0.974510410451726,
+      "time": 5.6,
+      "duration": 1.0,
+      "status": "hit",
+      "timing_error": 0.005000000000000782,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 6.605,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        109,
+        91
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 1,
+      "active_ticks": 201,
+      "contact_ticks": 200,
+      "completed": true,
+      "maintenance": 0.9950248756218906,
+      "slide_rms_m": 0.006467645879646256
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 3.8641917509038413,
+      "time": 6.8,
+      "duration": 1.0,
+      "status": "hit",
+      "timing_error": 0.015000000000000568,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 7.805000000000001,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.015,
+      "tail_ticks": 9,
+      "tail_contact_ticks": 9,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        101,
+        97
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 0,
+      "active_ticks": 201,
+      "contact_ticks": 198,
+      "completed": true,
+      "maintenance": 0.9850746268656716,
+      "slide_rms_m": 0.004935384048560216
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 8.8,
+  "detector": "concert",
+  "view": "camera",
+  "vision": {
+    "frames": 264,
+    "blank_detection_frames": 71,
+    "input_rgb_sha256": "0367d1a4ebbf550b482c875bd72ba122f2d1a3be9830ab8bb023a44204b0343b",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "policy_stats_by_hand": [
+    {},
+    {}
+  ],
+  "samples": 526,
+  "dataset_sha256": "3ab6cd65b7db2ce0b2c79c49a8b8cc856e70d610431efe44d086d7b582d19d8b",
+  "execution_status": "ok",
+  "identity": "e5d00ddf945da5c6b3726e0f63097c0a1b2ccca84f2646fa2d3a019ff1b98b25",
+  "job": {
+    "mode": "collect",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/train/crossing-s51000-0.5s.json",
+    "condition": "camera",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/demos/train/camera/crossing-s51000-0.5s.json"
+  },
+  "source_sha256": "fa7887a7a37fc8b305e0d117e7575ab2cce81abfb6de40697f8a3ef2f88fbb5d",
+  "chart_sha256": "21755fdfcca653888e00465162423457c21faeaf6ac612c1c7647cac121081c3",
+  "wall_seconds": 30.526625871658325
+}

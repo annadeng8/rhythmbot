@@ -15,3 +15,8 @@ results/yifan-study-v1/checkpoints/
 results/yifan-study-v1/*.npz
 # Full-resolution camera frame sequences stay on gpu156; GIFs are committed.
 results/camera-vision-v1/frames/
+# Final bimanual study arrays, weights and full recordings remain on gpu156.
+results/yifan-final-v1/*.npz
+results/yifan-final-v1/**/*.npz
+results/yifan-final-v1/checkpoints/
+results/yifan-final-v1/replays/frames/

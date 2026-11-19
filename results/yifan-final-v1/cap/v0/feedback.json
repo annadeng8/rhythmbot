@@ -1,0 +1,651 @@
+[
+  {
+    "chart": "chords-s51000-x1.12217",
+    "condition": "camera",
+    "completion": 0.7777777777777778,
+    "failures": [
+      {
+        "id": 1,
+        "kind": "tap",
+        "lane": 3.0,
+        "time": 2.6733852100444495,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 14,
+        "kind": "tap",
+        "lane": 2.0,
+        "time": 6.0596731427674175,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 15,
+        "kind": "tap",
+        "lane": 3.0,
+        "time": 6.0596731427674175,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 19,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 6.950801546115567,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 21,
+        "kind": "tap",
+        "lane": 0.0,
+        "time": 7.5745914284592715,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 25,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 8.198381310802976,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.4184304363353158,
+        "plan_ms_max": 0.5567492917180061
+      },
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.34485631941780714,
+        "plan_ms_max": 0.5066907033324242
+      }
+    ]
+  },
+  {
+    "chart": "chords-s51001-x1.06375",
+    "condition": "camera",
+    "completion": 0.7777777777777778,
+    "failures": [
+      {
+        "id": 5,
+        "kind": "tap",
+        "lane": 3.0,
+        "time": 3.7602943480473328,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 14,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 6.392500391680465,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 15,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 6.392500391680465,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 20,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.332573978692298,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 23,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.990625489600581,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 25,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 8.648677000508863,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.4184941994826409,
+        "plan_ms_max": 0.6454074755311012
+      },
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.3520759315425178,
+        "plan_ms_max": 0.5804803222417831
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51000-0.5s-x1.12217",
+    "condition": "camera",
+    "completion": 0.3333333333333333,
+    "failures": [
+      {
+        "id": 0,
+        "kind": "slide",
+        "lane": 0.974510410451726,
+        "time": 2.6733852100444495,
+        "duration": 1.7822568066962996,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.03338521004444939,
+        "maintenance": 0.8291316526610645,
+        "max_gap_seconds": 0.18500000000000008,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 2,
+        "kind": "slide",
+        "lane": 3.8641917509038413,
+        "time": 6.059673142767418,
+        "duration": 0.8911284033481498,
+        "failure_reason": "contact_break",
+        "timing_error": 0.08032685723258215,
+        "maintenance": 0.9106145251396648,
+        "max_gap_seconds": 0.08,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 8
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.904043706599623,
+        "plan_ms_max": 4.089396446943283
+      },
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 2.004470214402924,
+        "plan_ms_max": 5.057718604803085
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51001-0.6s-x1.06375",
+    "condition": "camera",
+    "completion": 0.0,
+    "failures": [
+      {
+        "id": 0,
+        "kind": "slide",
+        "lane": 0.8852060340135703,
+        "time": 2.8202207610355,
+        "duration": 2.2561766088283997,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.030220761035499866,
+        "maintenance": 0.7184035476718403,
+        "max_gap_seconds": 0.2500000000000001,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 1,
+        "kind": "slide",
+        "lane": 0.8852060340135703,
+        "time": 5.640441522071,
+        "duration": 1.1280883044141998,
+        "failure_reason": "contact_break",
+        "timing_error": -0.030441522070999483,
+        "maintenance": 0.6888888888888889,
+        "max_gap_seconds": 0.3500000000000002,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 8
+      },
+      {
+        "id": 2,
+        "kind": "slide",
+        "lane": 3.9673111717688587,
+        "time": 6.956544543887566,
+        "duration": 1.1280883044141998,
+        "failure_reason": "contact_break",
+        "timing_error": 0.0684554561124342,
+        "maintenance": 0.9380530973451328,
+        "max_gap_seconds": 0.07,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 8
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.5338650517111276,
+        "plan_ms_max": 8.912509307265282
+      },
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 2.0015050222023123,
+        "plan_ms_max": 5.852724425494671
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51000-x1.12217",
+    "condition": "camera",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.6413593451337267,
+        "plan_ms_max": 9.633895009756088
+      },
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.5653843131278538,
+        "plan_ms_max": 8.355611935257912
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51001-x1.06375",
+    "condition": "camera",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.6341074462363263,
+        "plan_ms_max": 8.962924592196941
+      },
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.5889709408314812,
+        "plan_ms_max": 8.92491266131401
+      }
+    ]
+  },
+  {
+    "chart": "chords-s51000-x1.12217",
+    "condition": "oracle",
+    "completion": 0.8148148148148148,
+    "failures": [
+      {
+        "id": 14,
+        "kind": "tap",
+        "lane": 2.0,
+        "time": 6.0596731427674175,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 17,
+        "kind": "tap",
+        "lane": 4.0,
+        "time": 6.282455243604455,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 19,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 6.950801546115567,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 22,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 7.5745914284592715,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 25,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 8.198381310802976,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.40347897027373747,
+        "plan_ms_max": 0.5805352702736855
+      },
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.3523944813206738,
+        "plan_ms_max": 0.49991533160209656
+      }
+    ]
+  },
+  {
+    "chart": "chords-s51001-x1.06375",
+    "condition": "oracle",
+    "completion": 0.8148148148148148,
+    "failures": [
+      {
+        "id": 14,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 6.392500391680465,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 15,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 6.392500391680465,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 20,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.332573978692298,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 23,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.990625489600581,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 25,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 8.648677000508863,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.39736666361388473,
+        "plan_ms_max": 0.5342932417988777
+      },
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.3513675951158878,
+        "plan_ms_max": 0.5048448219895363
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51000-0.5s-x1.12217",
+    "condition": "oracle",
+    "completion": 0.6666666666666666,
+    "failures": [
+      {
+        "id": 2,
+        "kind": "slide",
+        "lane": 3.8641917509038413,
+        "time": 6.059673142767418,
+        "duration": 0.8911284033481498,
+        "failure_reason": "contact_break",
+        "timing_error": 0.08032685723258215,
+        "maintenance": 0.9106145251396648,
+        "max_gap_seconds": 0.08,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 8
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.1997241565647225,
+        "plan_ms_max": 2.236364409327507
+      },
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.037837964637826,
+        "plan_ms_max": 1.8656644970178604
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51001-0.6s-x1.06375",
+    "condition": "oracle",
+    "completion": 0.6666666666666666,
+    "failures": [
+      {
+        "id": 2,
+        "kind": "slide",
+        "lane": 3.9673111717688587,
+        "time": 6.956544543887566,
+        "duration": 1.1280883044141998,
+        "failure_reason": "contact_break",
+        "timing_error": 0.0684554561124342,
+        "maintenance": 0.9380530973451328,
+        "max_gap_seconds": 0.07,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 8
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.2810218222711207,
+        "plan_ms_max": 2.492055296897888
+      },
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.1266208505325943,
+        "plan_ms_max": 2.1872948855161667
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51000-x1.12217",
+    "condition": "oracle",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.7310797065858625,
+        "plan_ms_max": 2.1638479083776474
+      },
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.6826856471080747,
+        "plan_ms_max": 2.116495743393898
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51001-x1.06375",
+    "condition": "oracle",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.7488869550014963,
+        "plan_ms_max": 2.266322262585163
+      },
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.7059404638824084,
+        "plan_ms_max": 4.693842492997646
+      }
+    ]
+  }
+]

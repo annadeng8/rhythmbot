@@ -1,0 +1,7921 @@
+{
+  "test_runs": 330,
+  "feedback_runs": 36,
+  "rows": [
+    {
+      "phase": "feedback",
+      "policy": "v0",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 30
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 55,
+      "completion": 0.7638888888888888,
+      "chart_mean_completion": 0.6481481481481481,
+      "by_family": {
+        "chords": {
+          "completed": 42,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 1,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 42,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 29.063436404999088,
+      "timing_sample_count": 60,
+      "slide_contact_rms_mean_mm": 18.544931991326372,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9491717617614773,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 12,
+        "tail_missing": 2,
+        "contact_break": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v0",
+      "condition": "camera",
+      "split": "train",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 30
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 55,
+      "completion": 0.7638888888888888,
+      "chart_mean_completion": 0.6481481481481481,
+      "by_family": {
+        "chords": {
+          "completed": 42,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 1,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 42,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 29.063436404999088,
+      "timing_sample_count": 60,
+      "slide_contact_rms_mean_mm": 18.544931991326372,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9491717617614773,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 12,
+        "tail_missing": 2,
+        "contact_break": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v0",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 60,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.8271604938271605,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 8,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 29.92511864548152,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 9.318732338176776,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9915926456935998,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v0",
+      "condition": "oracle",
+      "split": "train",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 60,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.8271604938271605,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 8,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 29.92511864548152,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 9.318732338176776,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9915926456935998,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v1",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 54,
+      "completion": 0.75,
+      "chart_mean_completion": 0.6049382716049383,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 36.28573800692777,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 169.97429917858994,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.7275941523473389,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "tail_missing": 6,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v1",
+      "condition": "camera",
+      "split": "train",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 54,
+      "completion": 0.75,
+      "chart_mean_completion": 0.6049382716049383,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 36.28573800692777,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 169.97429917858994,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.7275941523473389,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "tail_missing": 6,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v1",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 63,
+      "completion": 0.875,
+      "chart_mean_completion": 0.9444444444444444,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 36.169677183629155,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 7.393021926891849,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9993792675356921,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v1",
+      "condition": "oracle",
+      "split": "train",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 63,
+      "completion": 0.875,
+      "chart_mean_completion": 0.9444444444444444,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 36.169677183629155,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 7.393021926891849,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9993792675356921,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v2",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 53,
+      "completion": 0.7361111111111112,
+      "chart_mean_completion": 0.5493827160493827,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 1,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 22.04355251074547,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 175.25625770717426,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.7058981420421088,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "tail_missing": 6,
+        "contact_break": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v2",
+      "condition": "camera",
+      "split": "train",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 53,
+      "completion": 0.7361111111111112,
+      "chart_mean_completion": 0.5493827160493827,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 1,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 22.04355251074547,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 175.25625770717426,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.7058981420421088,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "tail_missing": 6,
+        "contact_break": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v2",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 63,
+      "completion": 0.875,
+      "chart_mean_completion": 0.9444444444444444,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.725232739184644,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 7.4130659742942635,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9993792675356921,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "feedback",
+      "policy": "v2",
+      "condition": "oracle",
+      "split": "train",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 63,
+      "completion": 0.875,
+      "chart_mean_completion": 0.9444444444444444,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.725232739184644,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 7.4130659742942635,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9993792675356921,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 128
+        },
+        "2": {
+          "notes": 82,
+          "completed": 36
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 189,
+      "completion": 0.5851393188854489,
+      "chart_mean_completion": 0.40348265568853803,
+      "by_family": {
+        "chords": {
+          "completed": 34,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 147,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 175,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 14,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 25.14283938850823,
+      "timing_sample_count": 204,
+      "slide_contact_rms_mean_mm": 48.1217859557368,
+      "slide_rms_sample_count": 13,
+      "sustain_maintenance_mean": 0.8518068152346275,
+      "sustain_maintenance_sample_count": 29,
+      "failures": {
+        "head_miss": 119,
+        "contact_break": 4,
+        "tail_missing": 8,
+        "insufficient_tracking": 1,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 23
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 42,
+      "completion": 0.5833333333333334,
+      "chart_mean_completion": 0.43209876543209874,
+      "by_family": {
+        "chords": {
+          "completed": 34,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 34,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.642784705114018,
+      "timing_sample_count": 50,
+      "slide_contact_rms_mean_mm": 55.18422921583429,
+      "slide_rms_sample_count": 8,
+      "sustain_maintenance_mean": 0.8674478064225362,
+      "sustain_maintenance_sample_count": 16,
+      "failures": {
+        "head_miss": 22,
+        "contact_break": 4,
+        "tail_missing": 4
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 128
+        },
+        "2": {
+          "notes": 46,
+          "completed": 13
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 147,
+      "completion": 0.6,
+      "chart_mean_completion": 0.6152388733271086,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 147,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 141,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 26.020134228187754,
+      "timing_sample_count": 149,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.8909918449722386,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 96,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 34.000000000000426,
+      "timing_sample_count": 5,
+      "slide_contact_rms_mean_mm": 36.8218767395808,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.7390595958531422,
+      "sustain_maintenance_sample_count": 5,
+      "failures": {
+        "tail_missing": 4,
+        "head_miss": 1,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 157
+        },
+        "2": {
+          "notes": 82,
+          "completed": 47
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 229,
+      "completion": 0.7089783281733746,
+      "chart_mean_completion": 0.4673361768950004,
+      "by_family": {
+        "chords": {
+          "completed": 42,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 179,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 215,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 14,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 30.338977354745207,
+      "timing_sample_count": 241,
+      "slide_contact_rms_mean_mm": 48.78832189480992,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.884069233322549,
+      "sustain_maintenance_sample_count": 26,
+      "failures": {
+        "head_miss": 82,
+        "contact_break": 5,
+        "insufficient_tracking": 2,
+        "tail_missing": 3,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 31
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 50,
+      "completion": 0.6944444444444444,
+      "chart_mean_completion": 0.48148148148148145,
+      "by_family": {
+        "chords": {
+          "completed": 42,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 42,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 26.869527544528562,
+      "timing_sample_count": 56,
+      "slide_contact_rms_mean_mm": 60.25665763024968,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9187730058696613,
+      "sustain_maintenance_sample_count": 14,
+      "failures": {
+        "head_miss": 16,
+        "contact_break": 5,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 157
+        },
+        "2": {
+          "notes": 46,
+          "completed": 16
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 179,
+      "completion": 0.7306122448979592,
+      "chart_mean_completion": 0.750603018985372,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 179,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 173,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 31.19889502762428,
+      "timing_sample_count": 181,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.8858062766287755,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "insufficient_contact": 2,
+        "head_miss": 64
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 40.00000000000037,
+      "timing_sample_count": 4,
+      "slide_contact_rms_mean_mm": 31.58581829165028,
+      "slide_rms_sample_count": 4,
+      "sustain_maintenance_mean": 0.7591319427952036,
+      "sustain_maintenance_sample_count": 4,
+      "failures": {
+        "tail_missing": 3,
+        "head_miss": 2,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 127
+        },
+        "2": {
+          "notes": 82,
+          "completed": 40
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 192,
+      "completion": 0.5944272445820433,
+      "chart_mean_completion": 0.4061564524799819,
+      "by_family": {
+        "chords": {
+          "completed": 34,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 150,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 178,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 14,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 26.17020851446557,
+      "timing_sample_count": 207,
+      "slide_contact_rms_mean_mm": 49.45339166725817,
+      "slide_rms_sample_count": 13,
+      "sustain_maintenance_mean": 0.848898332557894,
+      "sustain_maintenance_sample_count": 29,
+      "failures": {
+        "head_miss": 116,
+        "contact_break": 4,
+        "tail_missing": 8,
+        "insufficient_tracking": 1,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 23
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 42,
+      "completion": 0.5833333333333334,
+      "chart_mean_completion": 0.43209876543209874,
+      "by_family": {
+        "chords": {
+          "completed": 34,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 34,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.804663249887568,
+      "timing_sample_count": 50,
+      "slide_contact_rms_mean_mm": 57.00483916398916,
+      "slide_rms_sample_count": 8,
+      "sustain_maintenance_mean": 0.8622821730661543,
+      "sustain_maintenance_sample_count": 16,
+      "failures": {
+        "head_miss": 22,
+        "contact_break": 4,
+        "tail_missing": 4
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 127
+        },
+        "2": {
+          "notes": 46,
+          "completed": 17
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 150,
+      "completion": 0.6122448979591837,
+      "chart_mean_completion": 0.625042794895736,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 150,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 144,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 27.348684210526265,
+      "timing_sample_count": 152,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.88960680031508,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 93,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s0",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 34.000000000000426,
+      "timing_sample_count": 5,
+      "slide_contact_rms_mean_mm": 37.37107567248859,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.7409364945199636,
+      "sustain_maintenance_sample_count": 5,
+      "failures": {
+        "tail_missing": 4,
+        "head_miss": 1,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 157
+        },
+        "2": {
+          "notes": 82,
+          "completed": 43
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 228,
+      "completion": 0.7058823529411765,
+      "chart_mean_completion": 0.5194964349376114,
+      "by_family": {
+        "chords": {
+          "completed": 39,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 179,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 212,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 14,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 26.899623499199976,
+      "timing_sample_count": 244,
+      "slide_contact_rms_mean_mm": 45.6941754147236,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.8444269826363068,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 79,
+        "contact_break": 7,
+        "tail_missing": 7,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 27
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 49,
+      "completion": 0.6805555555555556,
+      "chart_mean_completion": 0.5740740740740741,
+      "by_family": {
+        "chords": {
+          "completed": 39,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 39,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.973826908856736,
+      "timing_sample_count": 57,
+      "slide_contact_rms_mean_mm": 52.24210774833085,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.8568252373982601,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 15,
+        "contact_break": 5,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 157
+        },
+        "2": {
+          "notes": 46,
+          "completed": 16
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 179,
+      "completion": 0.7306122448979592,
+      "chart_mean_completion": 0.7566721132897604,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 179,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 173,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 28.127071823204197,
+      "timing_sample_count": 181,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.8740979611155163,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "insufficient_contact": 2,
+        "head_miss": 64
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 36.66666666666677,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 34.780954858711524,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.7676709137115006,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 4,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 161
+        },
+        "2": {
+          "notes": 82,
+          "completed": 46
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 236,
+      "completion": 0.7306501547987616,
+      "chart_mean_completion": 0.5708927510398099,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 180,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 219,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 14,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 3,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 25.548132635414976,
+      "timing_sample_count": 249,
+      "slide_contact_rms_mean_mm": 32.475056026387435,
+      "slide_rms_sample_count": 14,
+      "sustain_maintenance_mean": 0.8958211000920131,
+      "sustain_maintenance_sample_count": 30,
+      "failures": {
+        "head_miss": 74,
+        "contact_break": 7,
+        "tail_missing": 4,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 55,
+      "completion": 0.7638888888888888,
+      "chart_mean_completion": 0.611111111111111,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 23.17188567571031,
+      "timing_sample_count": 61,
+      "slide_contact_rms_mean_mm": 37.492671823275124,
+      "slide_rms_sample_count": 8,
+      "sustain_maintenance_mean": 0.9321609199406863,
+      "sustain_maintenance_sample_count": 16,
+      "failures": {
+        "head_miss": 11,
+        "contact_break": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 161
+        },
+        "2": {
+          "notes": 46,
+          "completed": 13
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 180,
+      "completion": 0.7346938775510204,
+      "chart_mean_completion": 0.7599400871459695,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 180,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 174,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 26.087912087912073,
+      "timing_sample_count": 182,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.8720487807876475,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "insufficient_contact": 2,
+        "head_miss": 63
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 1,
+      "completion": 0.16666666666666666,
+      "chart_mean_completion": 0.16666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 1,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 33.333333333333734,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 25.784901630537178,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.8306113395680388,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 4,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 155
+        },
+        "2": {
+          "notes": 82,
+          "completed": 42
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 224,
+      "completion": 0.6934984520123839,
+      "chart_mean_completion": 0.5101830631242396,
+      "by_family": {
+        "chords": {
+          "completed": 37,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 177,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 208,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 14,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 26.062551505497463,
+      "timing_sample_count": 240,
+      "slide_contact_rms_mean_mm": 46.84199174186896,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.8436540495418863,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 83,
+        "contact_break": 7,
+        "tail_missing": 7,
+        "insufficient_contact": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 26
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 47,
+      "completion": 0.6527777777777778,
+      "chart_mean_completion": 0.5617283950617283,
+      "by_family": {
+        "chords": {
+          "completed": 37,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 37,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.85477020580768,
+      "timing_sample_count": 55,
+      "slide_contact_rms_mean_mm": 53.11253129306845,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.8568119500577701,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 17,
+        "contact_break": 5,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 155
+        },
+        "2": {
+          "notes": 46,
+          "completed": 16
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 177,
+      "completion": 0.7224489795918367,
+      "chart_mean_completion": 0.7472144413320884,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 177,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 171,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 26.972067039105966,
+      "timing_sample_count": 179,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.8759570730311603,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "insufficient_contact": 2,
+        "head_miss": 66
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s1",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 37.500000000000234,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 36.391092489869806,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.761109650008536,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 4,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 80
+        },
+        "2": {
+          "notes": 82,
+          "completed": 29
+        },
+        "3": {
+          "notes": 18,
+          "completed": 10
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 126,
+      "completion": 0.39009287925696595,
+      "chart_mean_completion": 0.26367880485527545,
+      "by_family": {
+        "chords": {
+          "completed": 27,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 1,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 2,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 96,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 119,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 27.610101693363212,
+      "timing_sample_count": 143,
+      "slide_contact_rms_mean_mm": 64.97658500944468,
+      "slide_rms_sample_count": 9,
+      "sustain_maintenance_mean": 0.682305035789353,
+      "sustain_maintenance_sample_count": 24,
+      "failures": {
+        "head_miss": 180,
+        "tail_missing": 7,
+        "insufficient_contact": 9,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 17
+        },
+        "3": {
+          "notes": 18,
+          "completed": 10
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 29,
+      "completion": 0.4027777777777778,
+      "chart_mean_completion": 0.2222222222222222,
+      "by_family": {
+        "chords": {
+          "completed": 27,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 2,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 27,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 2,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 25.903706208998276,
+      "timing_sample_count": 39,
+      "slide_contact_rms_mean_mm": 93.22560998949481,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.5840735729938136,
+      "sustain_maintenance_sample_count": 12,
+      "failures": {
+        "head_miss": 33,
+        "tail_missing": 4,
+        "insufficient_contact": 5,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 80
+        },
+        "2": {
+          "notes": 46,
+          "completed": 12
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 96,
+      "completion": 0.39183673469387753,
+      "chart_mean_completion": 0.41126672891378774,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 96,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 92,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 4,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 27.680000000000053,
+      "timing_sample_count": 100,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.788112893476829,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 145,
+        "insufficient_contact": 4
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 1,
+      "completion": 0.16666666666666666,
+      "chart_mean_completion": 0.16666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 1,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 42.500000000000426,
+      "timing_sample_count": 4,
+      "slide_contact_rms_mean_mm": 29.66530378438199,
+      "slide_rms_sample_count": 4,
+      "sustain_maintenance_mean": 0.7653837088010188,
+      "sustain_maintenance_sample_count": 4,
+      "failures": {
+        "head_miss": 2,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 100
+        },
+        "2": {
+          "notes": 82,
+          "completed": 35
+        },
+        "3": {
+          "notes": 18,
+          "completed": 7
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 149,
+      "completion": 0.4613003095975232,
+      "chart_mean_completion": 0.2887470644823586,
+      "by_family": {
+        "chords": {
+          "completed": 34,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 3,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 112,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 142,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 7,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 28.601231678741286,
+      "timing_sample_count": 161,
+      "slide_contact_rms_mean_mm": 44.16747911235008,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.7418797005978236,
+      "sustain_maintenance_sample_count": 19,
+      "failures": {
+        "head_miss": 162,
+        "contact_break": 1,
+        "insufficient_tracking": 1,
+        "tail_missing": 3,
+        "insufficient_contact": 7
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 27
+        },
+        "3": {
+          "notes": 18,
+          "completed": 7
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 37,
+      "completion": 0.5138888888888888,
+      "chart_mean_completion": 0.29320987654320985,
+      "by_family": {
+        "chords": {
+          "completed": 34,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 3,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 34,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 3,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 26.716239541332985,
+      "timing_sample_count": 43,
+      "slide_contact_rms_mean_mm": 46.582394687734876,
+      "slide_rms_sample_count": 3,
+      "sustain_maintenance_mean": 0.7179369660974622,
+      "sustain_maintenance_sample_count": 9,
+      "failures": {
+        "head_miss": 29,
+        "contact_break": 1,
+        "insufficient_tracking": 1,
+        "tail_missing": 1,
+        "insufficient_contact": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 100
+        },
+        "2": {
+          "notes": 46,
+          "completed": 8
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 112,
+      "completion": 0.45714285714285713,
+      "chart_mean_completion": 0.4723194833488951,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 112,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 108,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 4,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 28.844827586207135,
+      "timing_sample_count": 116,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.7820797493793169,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 129,
+        "insufficient_contact": 4
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 55.0000000000006,
+      "timing_sample_count": 2,
+      "slide_contact_rms_mean_mm": 40.54510574927288,
+      "slide_rms_sample_count": 2,
+      "sustain_maintenance_mean": 0.6888218107234767,
+      "sustain_maintenance_sample_count": 2,
+      "failures": {
+        "head_miss": 4,
+        "tail_missing": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 79
+        },
+        "2": {
+          "notes": 82,
+          "completed": 30
+        },
+        "3": {
+          "notes": 18,
+          "completed": 10
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 126,
+      "completion": 0.39009287925696595,
+      "chart_mean_completion": 0.2595478595478595,
+      "by_family": {
+        "chords": {
+          "completed": 26,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 1,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 2,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 97,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 119,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 6,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 30.79801121102835,
+      "timing_sample_count": 143,
+      "slide_contact_rms_mean_mm": 66.46544033465807,
+      "slide_rms_sample_count": 9,
+      "sustain_maintenance_mean": 0.6798144476601965,
+      "sustain_maintenance_sample_count": 24,
+      "failures": {
+        "head_miss": 180,
+        "tail_missing": 6,
+        "insufficient_contact": 9,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 16
+        },
+        "3": {
+          "notes": 18,
+          "completed": 10
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 28,
+      "completion": 0.3888888888888889,
+      "chart_mean_completion": 0.21604938271604937,
+      "by_family": {
+        "chords": {
+          "completed": 26,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 2,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 26,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 2,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 28.45041060992223,
+      "timing_sample_count": 38,
+      "slide_contact_rms_mean_mm": 95.08804187527694,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.5837062103645311,
+      "sustain_maintenance_sample_count": 12,
+      "failures": {
+        "head_miss": 34,
+        "tail_missing": 3,
+        "insufficient_contact": 5,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 79
+        },
+        "2": {
+          "notes": 46,
+          "completed": 14
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 97,
+      "completion": 0.39591836734693875,
+      "chart_mean_completion": 0.4084656084656085,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 97,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 93,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 4,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 31.217821782178294,
+      "timing_sample_count": 101,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.7804206128854536,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 144,
+        "insufficient_contact": 4
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-diffusion-s2",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 1,
+      "completion": 0.16666666666666666,
+      "chart_mean_completion": 0.16666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 1,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 1,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 42.500000000000426,
+      "timing_sample_count": 4,
+      "slide_contact_rms_mean_mm": 30.687188408884477,
+      "slide_rms_sample_count": 4,
+      "sustain_maintenance_mean": 0.7669268290966788,
+      "sustain_maintenance_sample_count": 4,
+      "failures": {
+        "head_miss": 2,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 75
+        },
+        "2": {
+          "notes": 82,
+          "completed": 27
+        },
+        "3": {
+          "notes": 18,
+          "completed": 5
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 122,
+      "completion": 0.37770897832817335,
+      "chart_mean_completion": 0.4821612483377189,
+      "by_family": {
+        "chords": {
+          "completed": 19,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 9,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 88,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 107,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 7,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 29.78233299954182,
+      "timing_sample_count": 136,
+      "slide_contact_rms_mean_mm": 46.79878926971058,
+      "slide_rms_sample_count": 15,
+      "sustain_maintenance_mean": 0.8253497396316928,
+      "sustain_maintenance_sample_count": 29,
+      "failures": {
+        "head_miss": 187,
+        "contact_break": 3,
+        "tail_missing": 4,
+        "insufficient_tracking": 1,
+        "insufficient_contact": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 14
+        },
+        "3": {
+          "notes": 18,
+          "completed": 5
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 31,
+      "completion": 0.4305555555555556,
+      "chart_mean_completion": 0.5339506172839505,
+      "by_family": {
+        "chords": {
+          "completed": 19,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 9,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 19,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 19.226953728046574,
+      "timing_sample_count": 37,
+      "slide_contact_rms_mean_mm": 62.97540863635789,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9076186813597402,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 35,
+        "contact_break": 3,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 75
+        },
+        "2": {
+          "notes": 46,
+          "completed": 13
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 88,
+      "completion": 0.35918367346938773,
+      "chart_mean_completion": 0.36669000933706813,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 88,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 88,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 34.13829787234001,
+      "timing_sample_count": 94,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.4991681719624302,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "head_miss": 151,
+        "insufficient_contact": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 3,
+      "completion": 0.5,
+      "chart_mean_completion": 0.5,
+      "by_family": {
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 3,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 26.0000000000006,
+      "timing_sample_count": 5,
+      "slide_contact_rms_mean_mm": 14.445550536415965,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.9205994306138372,
+      "sustain_maintenance_sample_count": 5,
+      "failures": {
+        "head_miss": 1,
+        "insufficient_tracking": 1,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 143
+        },
+        "2": {
+          "notes": 82,
+          "completed": 39
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 209,
+      "completion": 0.6470588235294118,
+      "chart_mean_completion": 0.6179933084344849,
+      "by_family": {
+        "chords": {
+          "completed": 40,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 5,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 154,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 194,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 7,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 19.604740640301156,
+      "timing_sample_count": 222,
+      "slide_contact_rms_mean_mm": 36.9461854235466,
+      "slide_rms_sample_count": 14,
+      "sustain_maintenance_mean": 0.8460880705989726,
+      "sustain_maintenance_sample_count": 28,
+      "failures": {
+        "head_miss": 101,
+        "contact_break": 7,
+        "insufficient_contact": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 28
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 53,
+      "completion": 0.7361111111111112,
+      "chart_mean_completion": 0.691358024691358,
+      "by_family": {
+        "chords": {
+          "completed": 40,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 40,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 18.504352105980058,
+      "timing_sample_count": 58,
+      "slide_contact_rms_mean_mm": 46.81241860329664,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9449916107452054,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 14,
+        "contact_break": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 143
+        },
+        "2": {
+          "notes": 46,
+          "completed": 11
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 154,
+      "completion": 0.6285714285714286,
+      "chart_mean_completion": 0.6610371926548397,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 154,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 154,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 19.431250000000073,
+      "timing_sample_count": 160,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.5028493541446486,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "insufficient_contact": 6,
+        "head_miss": 85
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 42.500000000000426,
+      "timing_sample_count": 4,
+      "slide_contact_rms_mean_mm": 12.28060247417151,
+      "slide_rms_sample_count": 4,
+      "sustain_maintenance_mean": 0.9158802146224111,
+      "sustain_maintenance_sample_count": 4,
+      "failures": {
+        "head_miss": 2,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 74
+        },
+        "2": {
+          "notes": 82,
+          "completed": 26
+        },
+        "3": {
+          "notes": 18,
+          "completed": 5
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 119,
+      "completion": 0.3684210526315789,
+      "chart_mean_completion": 0.45007568684039273,
+      "by_family": {
+        "chords": {
+          "completed": 19,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 5,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 9,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 86,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 105,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 6,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 27.198970133657348,
+      "timing_sample_count": 134,
+      "slide_contact_rms_mean_mm": 47.45707431085502,
+      "slide_rms_sample_count": 15,
+      "sustain_maintenance_mean": 0.8194511232318484,
+      "sustain_maintenance_sample_count": 29,
+      "failures": {
+        "head_miss": 189,
+        "contact_break": 3,
+        "tail_missing": 4,
+        "insufficient_tracking": 2,
+        "insufficient_contact": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 14
+        },
+        "3": {
+          "notes": 18,
+          "completed": 5
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 31,
+      "completion": 0.4305555555555556,
+      "chart_mean_completion": 0.5339506172839505,
+      "by_family": {
+        "chords": {
+          "completed": 19,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 9,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 19,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 20.26113507865176,
+      "timing_sample_count": 37,
+      "slide_contact_rms_mean_mm": 63.94616073311691,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9059337857816375,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 35,
+        "contact_break": 3,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 74
+        },
+        "2": {
+          "notes": 46,
+          "completed": 12
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 86,
+      "completion": 0.3510204081632653,
+      "chart_mean_completion": 0.36015406162464986,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 86,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 86,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 29.891304347825724,
+      "timing_sample_count": 92,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 0.4841628946039006,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "head_miss": 153,
+        "insufficient_contact": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s0",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 29.000000000000536,
+      "timing_sample_count": 5,
+      "slide_contact_rms_mean_mm": 14.478901466331232,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.910459412406145,
+      "sustain_maintenance_sample_count": 5,
+      "failures": {
+        "head_miss": 1,
+        "insufficient_tracking": 2,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 62
+        },
+        "2": {
+          "notes": 82,
+          "completed": 31
+        },
+        "3": {
+          "notes": 18,
+          "completed": 4
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 114,
+      "completion": 0.35294117647058826,
+      "chart_mean_completion": 0.5127571230512407,
+      "by_family": {
+        "chords": {
+          "completed": 19,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 7,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 78,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 97,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 9,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 31.84304563609271,
+      "timing_sample_count": 121,
+      "slide_contact_rms_mean_mm": 26.08128577319659,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9312672131412381,
+      "sustain_maintenance_sample_count": 24,
+      "failures": {
+        "head_miss": 202,
+        "contact_break": 2,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 15
+        },
+        "3": {
+          "notes": 18,
+          "completed": 4
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 32,
+      "completion": 0.4444444444444444,
+      "chart_mean_completion": 0.5617283950617283,
+      "by_family": {
+        "chords": {
+          "completed": 19,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 19,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 19.784014107222742,
+      "timing_sample_count": 37,
+      "slide_contact_rms_mean_mm": 27.946099198619155,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9464035160083101,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 35,
+        "contact_break": 2,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 62
+        },
+        "2": {
+          "notes": 46,
+          "completed": 16
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 78,
+      "completion": 0.3183673469387755,
+      "chart_mean_completion": 0.3122082166199813,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 78,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 78,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 38.60256410256382,
+      "timing_sample_count": 78,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": null,
+      "sustain_maintenance_sample_count": 0,
+      "failures": {
+        "head_miss": 167
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 4,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 18.33333333333309,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 22.973263397492314,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.8858583045400222,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 126
+        },
+        "2": {
+          "notes": 82,
+          "completed": 38
+        },
+        "3": {
+          "notes": 18,
+          "completed": 10
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 195,
+      "completion": 0.6037151702786377,
+      "chart_mean_completion": 0.757677616501146,
+      "by_family": {
+        "chords": {
+          "completed": 39,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 10,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 11,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 135,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 174,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 13,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 20.922341253065785,
+      "timing_sample_count": 197,
+      "slide_contact_rms_mean_mm": 17.973087878411306,
+      "slide_rms_sample_count": 15,
+      "sustain_maintenance_mean": 0.9807914058314121,
+      "sustain_maintenance_sample_count": 23,
+      "failures": {
+        "head_miss": 126,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 29
+        },
+        "3": {
+          "notes": 18,
+          "completed": 10
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 56,
+      "completion": 0.7777777777777778,
+      "chart_mean_completion": 0.8796296296296297,
+      "by_family": {
+        "chords": {
+          "completed": 39,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 11,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 39,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 9,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 15.661425032525525,
+      "timing_sample_count": 57,
+      "slide_contact_rms_mean_mm": 19.893685404605918,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9867581748662656,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 15,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 126
+        },
+        "2": {
+          "notes": 46,
+          "completed": 9
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 135,
+      "completion": 0.5510204081632653,
+      "chart_mean_completion": 0.574447556800498,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 135,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 135,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 22.844444444444473,
+      "timing_sample_count": 135,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": null,
+      "sustain_maintenance_sample_count": 0,
+      "failures": {
+        "head_miss": 110
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 4,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 29.000000000000092,
+      "timing_sample_count": 5,
+      "slide_contact_rms_mean_mm": 14.131892826022083,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.9593110373059396,
+      "sustain_maintenance_sample_count": 5,
+      "failures": {
+        "head_miss": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 59
+        },
+        "2": {
+          "notes": 82,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 4
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 111,
+      "completion": 0.34365325077399383,
+      "chart_mean_completion": 0.47522988993577225,
+      "by_family": {
+        "chords": {
+          "completed": 17,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 78,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 95,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 8,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 33.13878517011176,
+      "timing_sample_count": 119,
+      "slide_contact_rms_mean_mm": 26.53371699002224,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9301505021129035,
+      "sustain_maintenance_sample_count": 24,
+      "failures": {
+        "head_miss": 204,
+        "contact_break": 2,
+        "tail_missing": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 13
+        },
+        "3": {
+          "notes": 18,
+          "completed": 4
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 30,
+      "completion": 0.4166666666666667,
+      "chart_mean_completion": 0.5493827160493827,
+      "by_family": {
+        "chords": {
+          "completed": 17,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 17,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 22.414726721237827,
+      "timing_sample_count": 35,
+      "slide_contact_rms_mean_mm": 28.453926859065977,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9457792011692856,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 37,
+        "contact_break": 2,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 59
+        },
+        "2": {
+          "notes": 46,
+          "completed": 19
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 78,
+      "completion": 0.3183673469387755,
+      "chart_mean_completion": 0.3104108309990663,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 78,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 78,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 39.282051282050965,
+      "timing_sample_count": 78,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": null,
+      "sustain_maintenance_sample_count": 0,
+      "failures": {
+        "head_miss": 167
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s1",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 3,
+      "completion": 0.5,
+      "chart_mean_completion": 0.5,
+      "by_family": {
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 3,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 15.83333333333344,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 23.333367208282677,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.8832644049437571,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 67
+        },
+        "2": {
+          "notes": 82,
+          "completed": 28
+        },
+        "3": {
+          "notes": 18,
+          "completed": 7
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 125,
+      "completion": 0.38699690402476783,
+      "chart_mean_completion": 0.4810581303228362,
+      "by_family": {
+        "chords": {
+          "completed": 23,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 5,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 87,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 102,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 7,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 31.72025116228912,
+      "timing_sample_count": 132,
+      "slide_contact_rms_mean_mm": 23.22849949242042,
+      "slide_rms_sample_count": 14,
+      "sustain_maintenance_mean": 0.9407291553880878,
+      "sustain_maintenance_sample_count": 30,
+      "failures": {
+        "head_miss": 191,
+        "tail_missing": 6,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 16
+        },
+        "3": {
+          "notes": 18,
+          "completed": 7
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 36,
+      "completion": 0.5,
+      "chart_mean_completion": 0.5864197530864197,
+      "by_family": {
+        "chords": {
+          "completed": 23,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 23,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 16.501828835554743,
+      "timing_sample_count": 40,
+      "slide_contact_rms_mean_mm": 27.85645018208573,
+      "slide_rms_sample_count": 9,
+      "sustain_maintenance_mean": 0.9377057966583089,
+      "sustain_maintenance_sample_count": 17,
+      "failures": {
+        "head_miss": 32,
+        "tail_missing": 4
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 67
+        },
+        "2": {
+          "notes": 46,
+          "completed": 12
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 87,
+      "completion": 0.3551020408163265,
+      "chart_mean_completion": 0.368818082788671,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 87,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 79,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 38.93103448275833,
+      "timing_sample_count": 87,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 158
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 27.999999999999936,
+      "timing_sample_count": 5,
+      "slide_contact_rms_mean_mm": 14.89818825102286,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.8561752236902767,
+      "sustain_maintenance_sample_count": 5,
+      "failures": {
+        "head_miss": 1,
+        "tail_missing": 2,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 126
+        },
+        "2": {
+          "notes": 82,
+          "completed": 36
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 197,
+      "completion": 0.6099071207430341,
+      "chart_mean_completion": 0.6082845259315848,
+      "by_family": {
+        "chords": {
+          "completed": 36,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 5,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 11,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 145,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 173,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 8,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 23.613512151926926,
+      "timing_sample_count": 201,
+      "slide_contact_rms_mean_mm": 13.99420093213615,
+      "slide_rms_sample_count": 12,
+      "sustain_maintenance_mean": 0.9706584699774977,
+      "sustain_maintenance_sample_count": 28,
+      "failures": {
+        "head_miss": 122,
+        "contact_break": 3,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 25
+        },
+        "3": {
+          "notes": 18,
+          "completed": 11
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 50,
+      "completion": 0.6944444444444444,
+      "chart_mean_completion": 0.6944444444444444,
+      "by_family": {
+        "chords": {
+          "completed": 36,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 11,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 36,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 6,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 13.063768125717985,
+      "timing_sample_count": 52,
+      "slide_contact_rms_mean_mm": 10.328409800825574,
+      "slide_rms_sample_count": 8,
+      "sustain_maintenance_mean": 0.9872584245641004,
+      "sustain_maintenance_sample_count": 16,
+      "failures": {
+        "head_miss": 20,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 126
+        },
+        "2": {
+          "notes": 46,
+          "completed": 11
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 145,
+      "completion": 0.5918367346938775,
+      "chart_mean_completion": 0.6192654839713663,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 145,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 137,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 27.4275862068964,
+      "timing_sample_count": 145,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 100
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 22.499999999999744,
+      "timing_sample_count": 4,
+      "slide_contact_rms_mean_mm": 21.325783194757303,
+      "slide_rms_sample_count": 4,
+      "sustain_maintenance_mean": 0.8455755915860825,
+      "sustain_maintenance_sample_count": 4,
+      "failures": {
+        "head_miss": 2,
+        "tail_missing": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 59
+        },
+        "2": {
+          "notes": 82,
+          "completed": 29
+        },
+        "3": {
+          "notes": 18,
+          "completed": 7
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 118,
+      "completion": 0.3653250773993808,
+      "chart_mean_completion": 0.47105650340944455,
+      "by_family": {
+        "chords": {
+          "completed": 22,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 5,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 81,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 95,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 7,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 32.64689688261555,
+      "timing_sample_count": 125,
+      "slide_contact_rms_mean_mm": 23.26828718411979,
+      "slide_rms_sample_count": 14,
+      "sustain_maintenance_mean": 0.9376910846840332,
+      "sustain_maintenance_sample_count": 30,
+      "failures": {
+        "head_miss": 198,
+        "contact_break": 1,
+        "tail_missing": 5,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 15
+        },
+        "3": {
+          "notes": 18,
+          "completed": 7
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 35,
+      "completion": 0.4861111111111111,
+      "chart_mean_completion": 0.5802469135802469,
+      "by_family": {
+        "chords": {
+          "completed": 22,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 3,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 22,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 5,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 16.868259239152565,
+      "timing_sample_count": 39,
+      "slide_contact_rms_mean_mm": 27.931737088393245,
+      "slide_rms_sample_count": 9,
+      "sustain_maintenance_mean": 0.9344787599168416,
+      "sustain_maintenance_sample_count": 17,
+      "failures": {
+        "head_miss": 33,
+        "contact_break": 1,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 59
+        },
+        "2": {
+          "notes": 46,
+          "completed": 14
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 81,
+      "completion": 0.3306122448979592,
+      "chart_mean_completion": 0.34449112978524743,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 81,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 73,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 40.407407407407334,
+      "timing_sample_count": 81,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 164
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "bc-mlp-s2",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 30.00000000000007,
+      "timing_sample_count": 5,
+      "slide_contact_rms_mean_mm": 14.874077356427565,
+      "slide_rms_sample_count": 5,
+      "sustain_maintenance_mean": 0.8489187243869376,
+      "sustain_maintenance_sample_count": 5,
+      "failures": {
+        "head_miss": 1,
+        "tail_missing": 2,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 162
+        },
+        "2": {
+          "notes": 82,
+          "completed": 56
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 252,
+      "completion": 0.7801857585139319,
+      "chart_mean_completion": 0.6375205132558074,
+      "by_family": {
+        "chords": {
+          "completed": 43,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 4,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 195,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 230,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 6,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 34.13216275872061,
+      "timing_sample_count": 262,
+      "slide_contact_rms_mean_mm": 22.45396762301817,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9471876540400721,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 61,
+        "contact_break": 5,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 31
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 55,
+      "completion": 0.7638888888888888,
+      "chart_mean_completion": 0.654320987654321,
+      "by_family": {
+        "chords": {
+          "completed": 43,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 43,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 31.6660105374566,
+      "timing_sample_count": 61,
+      "slide_contact_rms_mean_mm": 26.922144016872636,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9261410026373794,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 11,
+        "contact_break": 3,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 162
+        },
+        "2": {
+          "notes": 46,
+          "completed": 25
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 195,
+      "completion": 0.7959183673469388,
+      "chart_mean_completion": 0.8067110177404295,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 195,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 187,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 34.723076923076654,
+      "timing_sample_count": 195,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 50
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 39.999999999999886,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 15.007006966594059,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9399111469682464,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 2,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 160
+        },
+        "2": {
+          "notes": 82,
+          "completed": 58
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 257,
+      "completion": 0.7956656346749226,
+      "chart_mean_completion": 0.7606566363919305,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 7,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 194,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 230,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 11,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 34.704526306980284,
+      "timing_sample_count": 262,
+      "slide_contact_rms_mean_mm": 11.000717166808029,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.979947868454626,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 61,
+        "contact_break": 4,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 61,
+      "completion": 0.8472222222222222,
+      "chart_mean_completion": 0.8827160493827161,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 5,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 9,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 33.83203052304638,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 7.402784697079708,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9951493622501973,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 160
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 194,
+      "completion": 0.7918367346938775,
+      "chart_mean_completion": 0.8014200124494242,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 194,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 186,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 34.819587628865776,
+      "timing_sample_count": 194,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 51
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 39.999999999999886,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 16.997271283021895,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9076072116740799,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "contact_break": 3,
+        "insufficient_tracking": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 162
+        },
+        "2": {
+          "notes": 82,
+          "completed": 57
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 253,
+      "completion": 0.7832817337461301,
+      "chart_mean_completion": 0.6408875166228107,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 4,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 195,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 231,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 6,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 33.6602498274711,
+      "timing_sample_count": 263,
+      "slide_contact_rms_mean_mm": 23.069502102991482,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9461757465997633,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 60,
+        "contact_break": 5,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 32
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 56,
+      "completion": 0.7777777777777778,
+      "chart_mean_completion": 0.6604938271604939,
+      "by_family": {
+        "chords": {
+          "completed": 44,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 44,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 31.46202749395101,
+      "timing_sample_count": 62,
+      "slide_contact_rms_mean_mm": 27.594194485610235,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9279158471303256,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 10,
+        "contact_break": 3,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 162
+        },
+        "2": {
+          "notes": 46,
+          "completed": 25
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 195,
+      "completion": 0.7959183673469388,
+      "chart_mean_completion": 0.8067110177404295,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 195,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 187,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 34.189743589743266,
+      "timing_sample_count": 195,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 50
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v0",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 39.16666666666657,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 15.52834813196023,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9291897738077608,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 2,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 82,
+          "completed": 59
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 254,
+      "completion": 0.7863777089783281,
+      "chart_mean_completion": 0.5581975214328155,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 236,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 34.38838177044333,
+      "timing_sample_count": 268,
+      "slide_contact_rms_mean_mm": 119.24513179955797,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.7914642352353416,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 55,
+        "contact_break": 8,
+        "tail_missing": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 53,
+      "completion": 0.7361111111111112,
+      "chart_mean_completion": 0.5,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 36.096608166331656,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 177.14225907433436,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.6715713331250138,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9,
+        "contact_break": 5,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 199,
+      "completion": 0.8122448979591836,
+      "chart_mean_completion": 0.8245020230314348,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 191,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 33.95477386934634,
+      "timing_sample_count": 199,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 46
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 2,
+      "completion": 0.3333333333333333,
+      "chart_mean_completion": 0.3333333333333333,
+      "by_family": {
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 2,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 30.833333333332973,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 22.74991967493065,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.8730952552134472,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "contact_break": 3,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 82,
+          "completed": 59
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 266,
+      "completion": 0.8235294117647058,
+      "chart_mean_completion": 0.8612278244631185,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 10,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 236,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 14,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 36.291366845070165,
+      "timing_sample_count": 268,
+      "slide_contact_rms_mean_mm": 8.717734606088108,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9892412699169123,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 55,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 63,
+      "completion": 0.875,
+      "chart_mean_completion": 0.9444444444444444,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 36.175973245696795,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 5.8728680853978865,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9996087636932708,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 199,
+      "completion": 0.8122448979591836,
+      "chart_mean_completion": 0.8245020230314348,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 191,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 36.49246231155733,
+      "timing_sample_count": 199,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 46
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 4,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 30.833333333332973,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 13.459178807238475,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9437938151437202,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 82,
+          "completed": 59
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 252,
+      "completion": 0.7801857585139319,
+      "chart_mean_completion": 0.4975914608267549,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 236,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 33.26524744208522,
+      "timing_sample_count": 268,
+      "slide_contact_rms_mean_mm": 101.83662676760554,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.7996044497081563,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 55,
+        "contact_break": 10,
+        "tail_missing": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 53,
+      "completion": 0.7361111111111112,
+      "chart_mean_completion": 0.5,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 34.906131975855516,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 143.1623841518561,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.7207870617807899,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9,
+        "contact_break": 5,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 199,
+      "completion": 0.8122448979591836,
+      "chart_mean_completion": 0.8245020230314348,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 191,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 32.844221105527346,
+      "timing_sample_count": 199,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 46
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v1",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 29.999999999999655,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 32.960364460521276,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.7688625464344638,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "contact_break": 5,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 82,
+          "completed": 59
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 252,
+      "completion": 0.7801857585139319,
+      "chart_mean_completion": 0.4975914608267549,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 236,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 19.878769543633084,
+      "timing_sample_count": 268,
+      "slide_contact_rms_mean_mm": 124.55795075714406,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.7687743604792019,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 55,
+        "contact_break": 10,
+        "tail_missing": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 53,
+      "completion": 0.7361111111111112,
+      "chart_mean_completion": 0.5,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 22.214448217361095,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 177.77158133577814,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.6687280664526171,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9,
+        "contact_break": 5,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 199,
+      "completion": 0.8122448979591836,
+      "chart_mean_completion": 0.8245020230314348,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 191,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 19.236180904522193,
+      "timing_sample_count": 199,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 46
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 16.666666666666757,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 35.86856645942056,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.7606123898645593,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "contact_break": 5,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 82,
+          "completed": 59
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 266,
+      "completion": 0.8235294117647058,
+      "chart_mean_completion": 0.8612278244631185,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 10,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 236,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 14,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 20.730550384881813,
+      "timing_sample_count": 268,
+      "slide_contact_rms_mean_mm": 8.838590026772117,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9892412699169123,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 55,
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 63,
+      "completion": 0.875,
+      "chart_mean_completion": 0.9444444444444444,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.96488100235582,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 5.881498749044184,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9996087636932708,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 199,
+      "completion": 0.8122448979591836,
+      "chart_mean_completion": 0.8245020230314348,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 191,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 20.4120603015071,
+      "timing_sample_count": 199,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 46
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 4,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 18.333333333332796,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 13.767075489652003,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9437938151437202,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "contact_break": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 82,
+          "completed": 59
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 252,
+      "completion": 0.7801857585139319,
+      "chart_mean_completion": 0.4975914608267549,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 236,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 18.393694916767377,
+      "timing_sample_count": 268,
+      "slide_contact_rms_mean_mm": 124.96567822750526,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.7708545279930968,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 55,
+        "contact_break": 10,
+        "tail_missing": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 33
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 53,
+      "completion": 0.7361111111111112,
+      "chart_mean_completion": 0.5,
+      "by_family": {
+        "chords": {
+          "completed": 45,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 8,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 45,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 21.34143234434519,
+      "timing_sample_count": 63,
+      "slide_contact_rms_mean_mm": 179.02912867809366,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.6707022341947851,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 9,
+        "contact_break": 5,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 165
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 199,
+      "completion": 0.8122448979591836,
+      "chart_mean_completion": 0.8245020230314348,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 199,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 191,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 17.487437185929203,
+      "timing_sample_count": 199,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 46
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "cap-v2",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 0,
+      "completion": 0,
+      "chart_mean_completion": 0.0,
+      "by_family": {
+        "crossing": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 17.499999999999776,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 34.859927476524625,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.7657841133788278,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "contact_break": 5,
+        "tail_missing": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "camera",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 191
+        },
+        "2": {
+          "notes": 82,
+          "completed": 59
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 288,
+      "completion": 0.891640866873065,
+      "chart_mean_completion": 0.8017903120844297,
+      "by_family": {
+        "chords": {
+          "completed": 46,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 8,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 224,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 262,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 11.780174331042014,
+      "timing_sample_count": 294,
+      "slide_contact_rms_mean_mm": 22.17262735773727,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9612608871787907,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 29,
+        "contact_break": 1,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "camera",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 34
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 60,
+      "completion": 0.8333333333333334,
+      "chart_mean_completion": 0.7839506172839505,
+      "by_family": {
+        "chords": {
+          "completed": 46,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 46,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 6,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 9.70892583322254,
+      "timing_sample_count": 64,
+      "slide_contact_rms_mean_mm": 26.137117973617336,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9522151648543423,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 8,
+        "contact_break": 1,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "camera",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 191
+        },
+        "2": {
+          "notes": 46,
+          "completed": 25
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 224,
+      "completion": 0.9142857142857143,
+      "chart_mean_completion": 0.9275521319638966,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 224,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 216,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 12.464285714286195,
+      "timing_sample_count": 224,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 21
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "camera",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 4,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 8.3333333333336,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 15.56514299793716,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9367459037238567,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 2
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "oracle",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 191
+        },
+        "2": {
+          "notes": 82,
+          "completed": 62
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 295,
+      "completion": 0.913312693498452,
+      "chart_mean_completion": 0.9003246753246753,
+      "by_family": {
+        "chords": {
+          "completed": 48,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 10,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 225,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 265,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 14,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 10.28659830122254,
+      "timing_sample_count": 297,
+      "slide_contact_rms_mean_mm": 9.337523750465726,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9839817443091378,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 26,
+        "tail_missing": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "oracle",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 36
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 66,
+      "completion": 0.9166666666666666,
+      "chart_mean_completion": 0.9629629629629629,
+      "by_family": {
+        "chords": {
+          "completed": 48,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 48,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 8.35029841610598,
+      "timing_sample_count": 66,
+      "slide_contact_rms_mean_mm": 5.678016206302087,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9969941615284812,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "oracle",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 191
+        },
+        "2": {
+          "notes": 46,
+          "completed": 26
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 225,
+      "completion": 0.9183673469387755,
+      "chart_mean_completion": 0.9308201058201058,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 225,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 217,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 10.906666666667103,
+      "timing_sample_count": 225,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 20
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "oracle",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 4,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 8.3333333333336,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 15.436702990738457,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9235868183966247,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 1,
+        "contact_break": 1
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "screen",
+      "split": "all",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 191
+        },
+        "2": {
+          "notes": 82,
+          "completed": 60
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 11,
+      "notes": 323,
+      "completed": 289,
+      "completion": 0.8947368421052632,
+      "chart_mean_completion": 0.8051573154514331,
+      "by_family": {
+        "chords": {
+          "completed": 47,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 8,
+          "notes": 12
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        },
+        "song_excerpt": {
+          "completed": 224,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 263,
+          "notes": 291
+        },
+        "hold": {
+          "completed": 16,
+          "notes": 16
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 16
+        }
+      },
+      "head_timing_abs_mean_ms": 13.636719320766893,
+      "timing_sample_count": 295,
+      "slide_contact_rms_mean_mm": 22.857667141138094,
+      "slide_rms_sample_count": 16,
+      "sustain_maintenance_mean": 0.9592599189967118,
+      "sustain_maintenance_sample_count": 32,
+      "failures": {
+        "head_miss": 28,
+        "contact_break": 1,
+        "tail_missing": 5
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "screen",
+      "split": "test_iid",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 35
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 61,
+      "completion": 0.8472222222222222,
+      "chart_mean_completion": 0.7901234567901234,
+      "by_family": {
+        "chords": {
+          "completed": 47,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 10,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 47,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 6,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 10.982033840401794,
+      "timing_sample_count": 65,
+      "slide_contact_rms_mean_mm": 26.43726434683297,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9511320010260168,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 7,
+        "contact_break": 1,
+        "tail_missing": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "screen",
+      "split": "test_song",
+      "tap_simultaneity": {
+        "1": {
+          "notes": 191,
+          "completed": 191
+        },
+        "2": {
+          "notes": 46,
+          "completed": 25
+        }
+      },
+      "charts": 3,
+      "notes": 245,
+      "completed": 224,
+      "completion": 0.9142857142857143,
+      "chart_mean_completion": 0.9275521319638966,
+      "by_family": {
+        "song_excerpt": {
+          "completed": 224,
+          "notes": 245
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 216,
+          "notes": 237
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 0,
+          "notes": 0
+        }
+      },
+      "head_timing_abs_mean_ms": 14.43750000000051,
+      "timing_sample_count": 224,
+      "slide_contact_rms_mean_mm": null,
+      "slide_rms_sample_count": 0,
+      "sustain_maintenance_mean": 1.0,
+      "sustain_maintenance_sample_count": 8,
+      "failures": {
+        "head_miss": 21
+      },
+      "policy_errors": 0
+    },
+    {
+      "phase": "test",
+      "policy": "classical",
+      "condition": "screen",
+      "split": "test_speed",
+      "tap_simultaneity": {},
+      "charts": 2,
+      "notes": 6,
+      "completed": 4,
+      "completion": 0.6666666666666666,
+      "chart_mean_completion": 0.6666666666666666,
+      "by_family": {
+        "crossing": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 0,
+          "notes": 0
+        },
+        "hold": {
+          "completed": 0,
+          "notes": 0
+        },
+        "slide": {
+          "completed": 4,
+          "notes": 6
+        }
+      },
+      "head_timing_abs_mean_ms": 12.500000000000474,
+      "timing_sample_count": 6,
+      "slide_contact_rms_mean_mm": 16.891671798313304,
+      "slide_rms_sample_count": 6,
+      "sustain_maintenance_mean": 0.9293235649044126,
+      "sustain_maintenance_sample_count": 6,
+      "failures": {
+        "tail_missing": 2
+      },
+      "policy_errors": 0
+    }
+  ],
+  "bc_seed_summary": [
+    {
+      "head": "mlp",
+      "condition": "oracle",
+      "split": "all",
+      "mean": 0.6202270381836945,
+      "sd": 0.023442346112694645,
+      "min": 0.6037151702786377,
+      "max": 0.6470588235294118
+    },
+    {
+      "head": "mlp",
+      "condition": "oracle",
+      "split": "test_iid",
+      "mean": 0.7361111111111112,
+      "sd": 0.041666666666666685,
+      "min": 0.6944444444444444,
+      "max": 0.7777777777777778
+    },
+    {
+      "head": "mlp",
+      "condition": "oracle",
+      "split": "test_speed",
+      "mean": 0.4444444444444444,
+      "sd": 0.19245008972987523,
+      "min": 0.3333333333333333,
+      "max": 0.6666666666666666
+    },
+    {
+      "head": "mlp",
+      "condition": "oracle",
+      "split": "test_song",
+      "mean": 0.5904761904761905,
+      "sd": 0.038793407971110916,
+      "min": 0.5510204081632653,
+      "max": 0.6285714285714286
+    },
+    {
+      "head": "mlp",
+      "condition": "screen",
+      "split": "all",
+      "mean": 0.3591331269349845,
+      "sd": 0.013495043168856552,
+      "min": 0.34365325077399383,
+      "max": 0.3684210526315789
+    },
+    {
+      "head": "mlp",
+      "condition": "screen",
+      "split": "test_iid",
+      "mean": 0.4444444444444445,
+      "sd": 0.03674654598700819,
+      "min": 0.4166666666666667,
+      "max": 0.4861111111111111
+    },
+    {
+      "head": "mlp",
+      "condition": "screen",
+      "split": "test_speed",
+      "mean": 0.3888888888888889,
+      "sd": 0.09622504486493764,
+      "min": 0.3333333333333333,
+      "max": 0.5
+    },
+    {
+      "head": "mlp",
+      "condition": "screen",
+      "split": "test_song",
+      "mean": 0.3333333333333333,
+      "sd": 0.01649572197684645,
+      "min": 0.3183673469387755,
+      "max": 0.3510204081632653
+    },
+    {
+      "head": "mlp",
+      "condition": "camera",
+      "split": "all",
+      "mean": 0.37254901960784315,
+      "sd": 0.01760446038104435,
+      "min": 0.35294117647058826,
+      "max": 0.38699690402476783
+    },
+    {
+      "head": "mlp",
+      "condition": "camera",
+      "split": "test_iid",
+      "mean": 0.4583333333333333,
+      "sd": 0.036746545987008196,
+      "min": 0.4305555555555556,
+      "max": 0.5
+    },
+    {
+      "head": "mlp",
+      "condition": "camera",
+      "split": "test_speed",
+      "mean": 0.5,
+      "sd": 0.16666666666666666,
+      "min": 0.3333333333333333,
+      "max": 0.6666666666666666
+    },
+    {
+      "head": "mlp",
+      "condition": "camera",
+      "split": "test_song",
+      "mean": 0.3442176870748299,
+      "sd": 0.022479879784841228,
+      "min": 0.3183673469387755,
+      "max": 0.35918367346938773
+    },
+    {
+      "head": "diffusion",
+      "condition": "oracle",
+      "split": "all",
+      "mean": 0.6336429308565531,
+      "sd": 0.1496459199047715,
+      "min": 0.4613003095975232,
+      "max": 0.7306501547987616
+    },
+    {
+      "head": "diffusion",
+      "condition": "oracle",
+      "split": "test_iid",
+      "mean": 0.6574074074074073,
+      "sd": 0.12904962837746625,
+      "min": 0.5138888888888888,
+      "max": 0.7638888888888888
+    },
+    {
+      "head": "diffusion",
+      "condition": "oracle",
+      "split": "test_speed",
+      "mean": 0.05555555555555555,
+      "sd": 0.09622504486493762,
+      "min": 0,
+      "max": 0.16666666666666666
+    },
+    {
+      "head": "diffusion",
+      "condition": "oracle",
+      "split": "test_song",
+      "mean": 0.6408163265306123,
+      "sd": 0.1590789817951435,
+      "min": 0.45714285714285713,
+      "max": 0.7346938775510204
+    },
+    {
+      "head": "diffusion",
+      "condition": "screen",
+      "split": "all",
+      "mean": 0.5593395252837977,
+      "sd": 0.15471618024280837,
+      "min": 0.39009287925696595,
+      "max": 0.6934984520123839
+    },
+    {
+      "head": "diffusion",
+      "condition": "screen",
+      "split": "test_iid",
+      "mean": 0.5416666666666667,
+      "sd": 0.13678969169161256,
+      "min": 0.3888888888888889,
+      "max": 0.6527777777777778
+    },
+    {
+      "head": "diffusion",
+      "condition": "screen",
+      "split": "test_speed",
+      "mean": 0.05555555555555555,
+      "sd": 0.09622504486493762,
+      "min": 0,
+      "max": 0.16666666666666666
+    },
+    {
+      "head": "diffusion",
+      "condition": "screen",
+      "split": "test_song",
+      "mean": 0.5768707482993197,
+      "sd": 0.166114593071698,
+      "min": 0.39591836734693875,
+      "max": 0.7224489795918367
+    },
+    {
+      "head": "diffusion",
+      "condition": "camera",
+      "split": "all",
+      "mean": 0.5603715170278638,
+      "sd": 0.15934500597470924,
+      "min": 0.39009287925696595,
+      "max": 0.7058823529411765
+    },
+    {
+      "head": "diffusion",
+      "condition": "camera",
+      "split": "test_iid",
+      "mean": 0.5555555555555556,
+      "sd": 0.1409568272929475,
+      "min": 0.4027777777777778,
+      "max": 0.6805555555555556
+    },
+    {
+      "head": "diffusion",
+      "condition": "camera",
+      "split": "test_speed",
+      "mean": 0.05555555555555555,
+      "sd": 0.09622504486493762,
+      "min": 0,
+      "max": 0.16666666666666666
+    },
+    {
+      "head": "diffusion",
+      "condition": "camera",
+      "split": "test_song",
+      "mean": 0.5741496598639455,
+      "sd": 0.17086073756826417,
+      "min": 0.39183673469387753,
+      "max": 0.7306122448979592
+    }
+  ],
+  "demonstrations": [
+    {
+      "split": "train",
+      "condition": "camera",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 288,
+          "completed": 285
+        },
+        "3": {
+          "notes": 144,
+          "completed": 93
+        }
+      },
+      "charts": 48,
+      "notes": 576,
+      "completed": 487,
+      "completion": 0.8454861111111112,
+      "chart_mean_completion": 0.767361111111111,
+      "by_family": {
+        "chords": {
+          "completed": 378,
+          "notes": 432
+        },
+        "crossing": {
+          "completed": 28,
+          "notes": 48
+        },
+        "holds": {
+          "completed": 81,
+          "notes": 96
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 378,
+          "notes": 432
+        },
+        "hold": {
+          "completed": 64,
+          "notes": 64
+        },
+        "slide": {
+          "completed": 45,
+          "notes": 80
+        }
+      },
+      "head_timing_abs_mean_ms": 9.782355133045433,
+      "timing_sample_count": 522,
+      "slide_contact_rms_mean_mm": 25.950283901919256,
+      "slide_rms_sample_count": 80,
+      "sustain_maintenance_mean": 0.955478676494707,
+      "sustain_maintenance_sample_count": 144,
+      "failures": {
+        "tail_missing": 32,
+        "head_miss": 54,
+        "contact_break": 3
+      },
+      "policy_errors": 0
+    },
+    {
+      "split": "train",
+      "condition": "oracle",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 288,
+          "completed": 288
+        },
+        "3": {
+          "notes": 144,
+          "completed": 96
+        }
+      },
+      "charts": 48,
+      "notes": 576,
+      "completed": 526,
+      "completion": 0.9131944444444444,
+      "chart_mean_completion": 0.9490740740740741,
+      "by_family": {
+        "chords": {
+          "completed": 384,
+          "notes": 432
+        },
+        "crossing": {
+          "completed": 46,
+          "notes": 48
+        },
+        "holds": {
+          "completed": 96,
+          "notes": 96
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 384,
+          "notes": 432
+        },
+        "hold": {
+          "completed": 64,
+          "notes": 64
+        },
+        "slide": {
+          "completed": 78,
+          "notes": 80
+        }
+      },
+      "head_timing_abs_mean_ms": 8.457704992407033,
+      "timing_sample_count": 528,
+      "slide_contact_rms_mean_mm": 5.848909633016619,
+      "slide_rms_sample_count": 80,
+      "sustain_maintenance_mean": 0.9959340430278255,
+      "sustain_maintenance_sample_count": 144,
+      "failures": {
+        "insufficient_tracking": 2,
+        "head_miss": 48
+      },
+      "policy_errors": 0
+    },
+    {
+      "split": "validation",
+      "condition": "camera",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 36
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 59,
+      "completion": 0.8194444444444444,
+      "chart_mean_completion": 0.6574074074074074,
+      "by_family": {
+        "chords": {
+          "completed": 48,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 2,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 9,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 48,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 3,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 10.769460708728333,
+      "timing_sample_count": 66,
+      "slide_contact_rms_mean_mm": 25.934753977071722,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9435237892915403,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "tail_missing": 7,
+        "head_miss": 6
+      },
+      "policy_errors": 0
+    },
+    {
+      "split": "validation",
+      "condition": "oracle",
+      "tap_simultaneity": {
+        "2": {
+          "notes": 36,
+          "completed": 36
+        },
+        "3": {
+          "notes": 18,
+          "completed": 12
+        }
+      },
+      "charts": 6,
+      "notes": 72,
+      "completed": 66,
+      "completion": 0.9166666666666666,
+      "chart_mean_completion": 0.9629629629629629,
+      "by_family": {
+        "chords": {
+          "completed": 48,
+          "notes": 54
+        },
+        "crossing": {
+          "completed": 6,
+          "notes": 6
+        },
+        "holds": {
+          "completed": 12,
+          "notes": 12
+        }
+      },
+      "by_kind": {
+        "tap": {
+          "completed": 48,
+          "notes": 54
+        },
+        "hold": {
+          "completed": 8,
+          "notes": 8
+        },
+        "slide": {
+          "completed": 10,
+          "notes": 10
+        }
+      },
+      "head_timing_abs_mean_ms": 7.708648249768903,
+      "timing_sample_count": 66,
+      "slide_contact_rms_mean_mm": 4.684544030425812,
+      "slide_rms_sample_count": 10,
+      "sustain_maintenance_mean": 0.9973219440018666,
+      "sustain_maintenance_sample_count": 18,
+      "failures": {
+        "head_miss": 6
+      },
+      "policy_errors": 0
+    }
+  ]
+}

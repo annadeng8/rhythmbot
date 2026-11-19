@@ -1,0 +1,23 @@
+{
+  "test_runs": 330,
+  "training_rollouts": 96,
+  "validation_rollouts": 12,
+  "bc_checkpoints": 6,
+  "cap_training_feedback_runs": 36,
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "execution_errors": 0,
+  "policy_errors": 0,
+  "artifact_files_checked": [
+    "bc-diffusion-s0",
+    "bc-diffusion-s1",
+    "bc-diffusion-s2",
+    "bc-mlp-s0",
+    "bc-mlp-s1",
+    "bc-mlp-s2",
+    "cap-v0",
+    "cap-v1",
+    "cap-v2"
+  ],
+  "missing_local_checkpoints": [],
+  "checkpoint_location": "gpu156: /data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/"
+}

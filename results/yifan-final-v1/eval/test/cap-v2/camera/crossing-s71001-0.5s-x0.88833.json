@@ -1,0 +1,246 @@
+{
+  "chart": "crossing-s71001-0.5s-x0.88833",
+  "n_notes": 3,
+  "completion_rate": 0.0,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 0,
+    "great": 0,
+    "good": 0,
+    "miss": 3
+  },
+  "score": 0,
+  "max_score": 9,
+  "timing_error_mean_s": -0.02363560292722437,
+  "timing_error_abs_mean_s": 0.02363560292722437,
+  "timing_error_std_s": 0.006012719277733407,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 0,
+      "mean_maintenance": 0.6805244182235333,
+      "mean_slide_rms_m": 0.039773330728039576
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 3.8698200737661614,
+      "time": 3.377124703009417,
+      "duration": 2.2514164686729448,
+      "status": "hit",
+      "timing_error": -0.032124703009416944,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 5.63,
+      "gap_seconds": 0.1950000000000001,
+      "max_gap_seconds": 0.28000000000000014,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        191,
+        133
+      ],
+      "handoffs": 8,
+      "last_contact_hand": 1,
+      "active_ticks": 450,
+      "contact_ticks": 324,
+      "completed": false,
+      "maintenance": 0.72,
+      "slide_rms_m": 0.051720334292737265
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 3.8698200737661614,
+      "time": 6.303966112284245,
+      "duration": 1.1257082343364724,
+      "status": "hit",
+      "timing_error": -0.01896611228424483,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 7.43,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.3650000000000002,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": "contact_break",
+      "contact_ticks_by_hand": [
+        135,
+        17
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 0,
+      "active_ticks": 225,
+      "contact_ticks": 152,
+      "completed": false,
+      "maintenance": 0.6755555555555556,
+      "slide_rms_m": 0.050180956163803005
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 0.938454036713079,
+      "time": 7.654815993488011,
+      "duration": 1.1257082343364724,
+      "status": "hit",
+      "timing_error": -0.01981599348801133,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 8.785,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.40000000000000024,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": "contact_break",
+      "contact_ticks_by_hand": [
+        32,
+        114
+      ],
+      "handoffs": 1,
+      "last_contact_hand": 1,
+      "active_ticks": 226,
+      "contact_ticks": 146,
+      "completed": false,
+      "maintenance": 0.6460176991150443,
+      "slide_rms_m": 0.01741870172757845
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 9.780524227824483,
+  "detector": "concert",
+  "view": "camera",
+  "vision": {
+    "frames": 294,
+    "blank_detection_frames": 84,
+    "input_rgb_sha256": "574d3420406650a3521abfc17ceba204b25021daf111e662b61d961b6092256e",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "policy_stats_by_hand": [
+    {
+      "plan_calls": 295,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 1.3164744444065175,
+      "plan_ms_max": 3.602772019803524
+    },
+    {
+      "plan_calls": 295,
+      "plan_errors": 0,
+      "errors": [],
+      "plan_ms_mean": 0.942101263267509,
+      "plan_ms_max": 2.495449036359787
+    }
+  ],
+  "execution_status": "ok",
+  "identity": "276d18f72742164afc4d25236e40a5021e52122c416f7f256e8c3d53a50a5d81",
+  "job": {
+    "mode": "eval",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/test_iid/crossing-s71001-0.5s-x0.88833.json",
+    "condition": "camera",
+    "policy": "cap:/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/cap/v2/policy.py",
+    "label": "cap-v2",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/eval/test/cap-v2/camera/crossing-s71001-0.5s-x0.88833.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "24a2c0e8583fe0a6a6d6e8c105684f68411c1b419f57ac3f31ff5554e2b4dbf3",
+  "wall_seconds": 34.98596739768982
+}

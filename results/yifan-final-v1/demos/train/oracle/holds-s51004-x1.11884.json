@@ -1,0 +1,314 @@
+{
+  "chart": "holds-s51004-x1.11884",
+  "n_notes": 6,
+  "completion_rate": 1.0,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 6,
+    "great": 0,
+    "good": 0,
+    "miss": 0
+  },
+  "score": 18,
+  "max_score": 18,
+  "timing_error_mean_s": 0.006061742580837433,
+  "timing_error_abs_mean_s": 0.006061742580837433,
+  "timing_error_std_s": 0.001829016389788627,
+  "by_kind": {
+    "hold": {
+      "n": 4,
+      "hit": 4,
+      "completed": 4,
+      "mean_maintenance": 1.0
+    },
+    "slide": {
+      "n": 2,
+      "hit": 2,
+      "completed": 2,
+      "mean_maintenance": 0.9965156794425087,
+      "mean_slide_rms_m": 0.011194576595760435
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "hold",
+      "lane": 0.0,
+      "time": 2.6813520672754496,
+      "duration": 1.7875680448502997,
+      "status": "hit",
+      "timing_error": 0.008647932724550333,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 4.47,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 356,
+      "contact_ticks": 356,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 1,
+      "kind": "hold",
+      "lane": 5.0,
+      "time": 2.6813520672754496,
+      "duration": 1.7875680448502997,
+      "status": "hit",
+      "timing_error": 0.008647932724550333,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 4.47,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 356,
+      "contact_ticks": 356,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 2,
+      "kind": "hold",
+      "lane": 1.0,
+      "time": 5.005190525580839,
+      "duration": 1.4300544358802398,
+      "status": "hit",
+      "timing_error": 0.004809474419160686,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 6.44,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 286,
+      "contact_ticks": 286,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    },
+    {
+      "id": 3,
+      "kind": "slide",
+      "lane": 3.0,
+      "time": 5.005190525580839,
+      "duration": 1.4300544358802398,
+      "status": "hit",
+      "timing_error": 0.004809474419160686,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 6.44,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        286
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 1,
+      "active_ticks": 287,
+      "contact_ticks": 286,
+      "completed": true,
+      "maintenance": 0.9965156794425087,
+      "slide_rms_m": 0.011258055136019907
+    },
+    {
+      "id": 4,
+      "kind": "slide",
+      "lane": 2.0,
+      "time": 7.150272179401199,
+      "duration": 1.4300544358802398,
+      "status": "hit",
+      "timing_error": 0.00472782059880128,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 8.585,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.005,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 8,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        286,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": 0,
+      "active_ticks": 287,
+      "contact_ticks": 286,
+      "completed": true,
+      "maintenance": 0.9965156794425087,
+      "slide_rms_m": 0.011131098055500962
+    },
+    {
+      "id": 5,
+      "kind": "hold",
+      "lane": 4.0,
+      "time": 7.150272179401199,
+      "duration": 1.4300544358802398,
+      "status": "hit",
+      "timing_error": 0.00472782059880128,
+      "judgment": "perfect",
+      "head_judgment": "perfect",
+      "judged_at": 8.585,
+      "gap_seconds": 0.0,
+      "max_gap_seconds": 0.0,
+      "tail_ticks": 0,
+      "tail_contact_ticks": 0,
+      "failure_reason": null,
+      "contact_ticks_by_hand": [
+        0,
+        0
+      ],
+      "handoffs": 0,
+      "last_contact_hand": null,
+      "active_ticks": 286,
+      "contact_ticks": 286,
+      "completed": true,
+      "maintenance": 1.0,
+      "slide_rms_m": null
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 9.58032661528144,
+  "detector": "oracle",
+  "view": "screen",
+  "policy_stats_by_hand": [
+    {},
+    {}
+  ],
+  "samples": 574,
+  "dataset_sha256": "f869860ba8eb55b904378d43cc9081f3a8f36b78f85a727df751e908ea5e0974",
+  "execution_status": "ok",
+  "identity": "207476e7e71fcabd53c5c0f865e63c974f8942d69f48201bb84aa5724ab8d35a",
+  "job": {
+    "mode": "collect",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/train/holds-s51004-x1.11884.json",
+    "condition": "oracle",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/demos/train/oracle/holds-s51004-x1.11884.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "f630cd0ee9bd171cb26da1eee59c5a9eed6dedacc8a8e7af09ea352eec40ec32",
+  "wall_seconds": 6.898224830627441
+}

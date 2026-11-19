@@ -1,0 +1,9 @@
+{
+  "rollouts": 96,
+  "samples": 59240,
+  "sha256": "74da8428b550bb4474a397fd6e5dfb9f070813a3e1c105e7407cb69e814916b1",
+  "conditions": [
+    "oracle",
+    "camera"
+  ]
+}

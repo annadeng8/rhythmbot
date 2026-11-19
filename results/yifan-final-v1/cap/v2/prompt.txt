@@ -1,0 +1,921 @@
+You are the coding-agent condition in a robotics experiment. Produce only a complete Python policy in a single fenced python block, no prose.
+The policy must define make_policy(api) returning an object with plan(notes,t_now,X_WT_cmd,width_cmd).
+Each instance controls ONE of two Drake iiwa arms holding a single central stylus. You cannot call the classical planner, access files, run tools, or see a chart. Only import numpy, math, dataclasses, typing, collections, itertools, functools, bisect, copy, or rhythmbot.cap.api.
+An existing common router assigns tap/hold to the appropriate hand and splits cross-hand slides into overlapping local segments; all experimental policies share it. Your job is local trajectory scheduling, including tap release, long holds and changing slide paths. Notes are perceived and tracked at 30 Hz; replanning uses the previous COMMANDED stylus pose (not perfect physical tracking). No neural model needed.
+API:
+api.hand is 0 for left, 1 for right. 6 lanes, width 0.12m, lane_x(lane)=(lane+0.5)*0.12-0.36. Left x range [-.36,0], right [0,.36].
+api.hit_y is the fixed contact y for this hand; all api.keyframe use it. api.screen_z=0.106 (sphere center for contact with surface); api.contact_z=0.110 (down threshold); api.touch_z=0.104; hover_height=0.035. Closed gripper: width=0, ref=0, rise=0 ALWAYS. Fixed 30deg tool tilt is automatically applied by api.make_plan; do not calculate rotations.
+api.current_keyframe(t_now,X_WT_cmd,width_cmd) -> current keyframe; fields t,x,z,width,y,down,ref,rise.
+api.keyframe(t,x,z,width=0,down=False,ref=0,rise=0) -> keyframe.
+api.make_plan(keyframes,t_now=None) -> Plan through time-sorted positions. It clips the trajectory to this hand's half, legal z [0.104,0.206], and enforces tool geometry. Your plan should start at current_keyframe and contain future commands. Do not set kfs before t_now other than current. Plan linearly interpolates positions, not velocities. Simulator follows pose via differential IK, with small tracking lag.
+Every note object has key, kind ('tap','hold','slide'), lane (float), hit_time (absolute seconds), duration, end_time, waypoints [(offset,lane),...], lane_at_offset(off). Mutable note flags skipped/chosen may exist; you need not use them. Notes can be in the future, active or recently finished. Copies may be regenerated at each replan. Plan from these observations only. Local slide segments can start at the midpoint (lane 2.5), including short overlaps at handoff.
+Planning frequency 30Hz. Typical reliable descent time ~.22s, lift .12s, lateral speed ~.9m/s, tap dwell .06s. Faster moves may be needed but can cause tracking lag. Support uninterrupted hold/slide even as future notes appear. At most one stylus contact per hand; skip impossible conflicts rather than invent a second fingertip.
+Judge: a tap or sustain head needs a FRESH down-contact near the lane inside +/-140ms; perfect +/-45ms; great +/-90ms. Staying down from an earlier note does NOT count as a fresh tap. A contact must LAND inside the note lane; dragging an already-down stylus into the lane never creates a head hit. Holds need >=80% contact. Slides need >=95% on-path contact, <=50ms continuous tracking loss, all final40ms samples close to the end lane. Slide lateral tolerance .042m, hand contact y tolerance .06m. Sustains are scored only at completion. Missing tail -> Miss even with perfect head. Best approach may coordinate hover, descend, contact, follow and lift keyframes with absolute times.
+Return code that works entirely through this API. make_policy(api) is called once per hand; internal state may persist. API object contains geometry only, not notes or the classical planner. X_WT_cmd.translation() returns current stylus [x,y,z]. Do not import pydrake or rhythmbot.planner. Use api.keyframe/make_plan.
+
+Previous candidate:
+import math
+
+
+def make_policy(api):
+    class Policy:
+        def __init__(self):
+            self.active = None
+            self.pending = []
+            self.done = set()
+            self.notes = {}
+            self.touch = float(api.touch_z)
+            self.contact = float(api.contact_z)
+            self.hover = float(api.screen_z) + 0.035
+            self.clearance = self.contact + 0.014
+            self.lo, self.hi = (
+                (-0.36, 0.0) if api.hand == 0 else (0.0, 0.36)
+            )
+
+        def key(self, note):
+            return str(note.key)
+
+        def x(self, lane):
+            return min(
+                self.hi,
+                max(self.lo, (float(lane) + 0.5) * 0.12 - 0.36),
+            )
+
+        def end(self, note):
+            return max(float(note.hit_time), float(note.end_time))
+
+        def lane(self, note, offset):
+            offset = max(0.0, float(offset))
+            try:
+                return float(note.lane_at_offset(offset))
+            except Exception:
+                points = sorted(
+                    (float(t), float(l))
+                    for t, l in getattr(note, "waypoints", ())
+                )
+                if not points:
+                    return float(note.lane)
+                if points[0][0] > 0.0:
+                    points.insert(0, (0.0, float(note.lane)))
+                if offset <= points[0][0]:
+                    return points[0][1]
+                for (ta, la), (tb, lb) in zip(points, points[1:]):
+                    if offset <= tb:
+                        u = (offset - ta) / max(tb - ta, 1e-9)
+                        return la + u * (lb - la)
+                return points[-1][1]
+
+        def head_x(self, note):
+            if note.kind == "slide":
+                return self.x(self.lane(note, 0.0))
+            return self.x(note.lane)
+
+        def tail_x(self, note):
+            if note.kind == "slide":
+                return self.x(
+                    self.lane(note, self.end(note) - float(note.hit_time))
+                )
+            return self.head_x(note)
+
+        def finish(self, note, landing):
+            if note.kind == "tap":
+                return landing + 0.060
+            return max(landing + 0.045, self.end(note) + 0.020)
+
+        def refresh(self, appointment):
+            note = self.notes.get(appointment["key"], appointment["note"])
+            appointment["note"] = note
+            appointment["finish"] = self.finish(
+                note, appointment["landing"]
+            )
+
+        def schedule(self, note, now, x, z):
+            head = float(note.hit_time)
+            target = self.head_x(note)
+            distance = abs(target - x)
+            low = z <= self.contact + 0.006
+
+            # A short, explicit release permits fresh contacts in dense runs.
+            if low:
+                cruise = self.clearance
+                lift = 0.065
+                descent = 0.115
+                travel = distance / 0.95
+            else:
+                cruise = min(self.hover, max(self.clearance, z))
+                lift = 0.0
+                descent = 0.205 * (
+                    (cruise - self.touch) /
+                    max(self.hover - self.touch, 1e-9)
+                )
+                descent = max(0.105, descent)
+                travel = distance / 0.95
+
+            preferred = lift + travel + descent
+            nominal = head - 0.020
+            landing = max(nominal, now + preferred)
+
+            if landing > head + 0.030:
+                lift = 0.055 if low else 0.0
+                travel = distance / 1.20
+                descent = min(descent, 0.105 if low else 0.155)
+                landing = max(nominal, now + lift + travel + descent)
+
+            latest = head + (0.100 if note.kind == "tap" else 0.035)
+            if landing > latest:
+                return None
+
+            start = landing - lift - travel - descent
+            return {
+                "key": self.key(note),
+                "note": note,
+                "start": max(now, start),
+                "lift_end": landing - travel - descent,
+                "align": landing - descent,
+                "landing": landing,
+                "finish": self.finish(note, landing),
+                "origin_x": x,
+                "origin_z": z,
+                "cruise": cruise,
+                "lift": lift,
+            }
+
+        def plan(self, notes, t_now, X_WT_cmd, width_cmd):
+            now = float(t_now)
+            current = api.current_keyframe(now, X_WT_cmd, width_cmd)
+            current.width = 0.0
+            current.ref = 0.0
+            current.rise = 0.0
+            pos = X_WT_cmd.translation()
+            cx = min(self.hi, max(self.lo, float(pos[0])))
+            cz = float(pos[2])
+
+            for note in notes:
+                self.notes[self.key(note)] = note
+
+            if self.active is not None:
+                self.refresh(self.active)
+
+            # Promote the actual forecast already being commanded. Rebuilding
+            # its descent from the current pose would postpone every contact.
+            while self.active is not None and now >= self.active["finish"]:
+                self.done.add(self.active["key"])
+                self.active = None
+                while self.pending:
+                    candidate = self.pending.pop(0)
+                    if candidate["key"] not in self.done:
+                        self.refresh(candidate)
+                        self.active = candidate
+                        break
+
+            candidates = sorted(
+                (
+                    n for k, n in self.notes.items()
+                    if k not in self.done
+                ),
+                key=lambda n: (float(n.hit_time), self.key(n)),
+            )
+
+            if self.active is None:
+                self.pending = []
+                for note in candidates:
+                    if float(note.hit_time) + 0.14 < now:
+                        self.done.add(self.key(note))
+                        continue
+                    a = self.schedule(note, now, cx, cz)
+                    if a is not None:
+                        self.active = a
+                        break
+
+            frames = [current]
+
+            def add(t, x, z, down=False):
+                t = float(t)
+                if t <= now + 1e-8:
+                    return
+                if t <= float(frames[-1].t) + 1e-8:
+                    return
+                frames.append(
+                    api.keyframe(
+                        t, float(x), float(z),
+                        width=0.0, down=bool(down), ref=0.0, rise=0.0,
+                    )
+                )
+
+            def render(a):
+                note = a["note"]
+                head = float(note.hit_time)
+                landing = a["landing"]
+                target = self.head_x(note)
+
+                add(
+                    a["start"], a["origin_x"], a["origin_z"],
+                    a["origin_z"] <= self.contact,
+                )
+                if a["lift"] > 0.0:
+                    add(a["lift_end"], a["origin_x"], a["cruise"])
+                add(a["align"], target, a["cruise"])
+                add(landing, target, self.touch, True)
+
+                if note.kind == "slide":
+                    end = self.end(note)
+                    begin = max(now, landing)
+                    times = set()
+                    # A near-term anchor keeps updated paths responsive even
+                    # when the original head and waypoints are already past.
+                    if begin < end:
+                        times.add(min(end, begin + 0.010))
+                        count = int(math.ceil((end - begin) / 0.020))
+                        for i in range(1, count + 1):
+                            times.add(min(end, begin + i * 0.020))
+                    for offset, _ in getattr(note, "waypoints", ()):
+                        turn = head + float(offset)
+                        times.add(turn - 0.015)
+                        times.add(turn)
+                    times.add(end - 0.040)
+                    times.add(end)
+                    for t in sorted(times):
+                        if t <= max(now, landing) + 1e-8 or t > end:
+                            continue
+                        offset = min(end - head, max(0.0, t - head + 0.015))
+                        add(t, self.x(self.lane(note, offset)), self.touch, True)
+
+                tail = self.tail_x(note)
+                add(a["finish"], tail, self.touch, True)
+                return a["finish"], tail
+
+            if self.active is None:
+                add(now + 0.110, cx, self.hover)
+                add(now + 0.450, cx, self.hover)
+                return api.make_plan(frames, t_now=now)
+
+            end_t, end_x = render(self.active)
+            reserved = {self.active["key"]}
+            new_pending = []
+
+            # Reuse any transition that has already started, including its
+            # absolute release, alignment, and landing times.
+            for a in self.pending:
+                if a["key"] in self.done or a["key"] in reserved:
+                    continue
+                if a["start"] > now + 1e-8:
+                    break
+                self.refresh(a)
+                if a["landing"] <= end_t:
+                    continue
+                end_t, end_x = render(a)
+                new_pending.append(a)
+                reserved.add(a["key"])
+
+            for note in candidates:
+                key = self.key(note)
+                if key in reserved or key in self.done:
+                    continue
+                if float(note.hit_time) + 0.14 < end_t:
+                    continue
+                if float(note.hit_time) > end_t + 2.5:
+                    break
+                a = self.schedule(note, end_t, end_x, self.touch)
+                if a is None:
+                    continue
+                end_t, end_x = render(a)
+                new_pending.append(a)
+                reserved.add(key)
+                if len(new_pending) >= 5:
+                    break
+
+            self.pending = new_pending
+            add(end_t + 0.110, end_x, self.hover)
+            add(end_t + 0.450, end_x, self.hover)
+            return api.make_plan(frames, t_now=now)
+
+    return Policy()
+
+TRAINING-ONLY SIMULATION FEEDBACK:
+[
+  {
+    "chart": "chords-s51000-x1.12217",
+    "condition": "camera",
+    "completion": 0.8148148148148148,
+    "failures": [
+      {
+        "id": 1,
+        "kind": "tap",
+        "lane": 3.0,
+        "time": 2.6733852100444495,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 14,
+        "kind": "tap",
+        "lane": 2.0,
+        "time": 6.0596731427674175,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 19,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 6.950801546115567,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 21,
+        "kind": "tap",
+        "lane": 0.0,
+        "time": 7.5745914284592715,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 24,
+        "kind": "tap",
+        "lane": 0.0,
+        "time": 8.198381310802976,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.4253574657095899,
+        "plan_ms_max": 0.5590515211224556
+      },
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.35681808199262793,
+        "plan_ms_max": 0.51101204007864
+      }
+    ]
+  },
+  {
+    "chart": "chords-s51001-x1.06375",
+    "condition": "camera",
+    "completion": 0.8148148148148148,
+    "failures": [
+      {
+        "id": 16,
+        "kind": "tap",
+        "lane": 0.0,
+        "time": 6.627518788433424,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 17,
+        "kind": "tap",
+        "lane": 4.0,
+        "time": 6.627518788433424,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 20,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.332573978692298,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 23,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.990625489600581,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 25,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 8.648677000508863,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.4521023795725554,
+        "plan_ms_max": 0.6908662617206573
+      },
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.379764458926273,
+        "plan_ms_max": 0.5993377417325974
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51000-0.5s-x1.12217",
+    "condition": "camera",
+    "completion": 0.3333333333333333,
+    "failures": [
+      {
+        "id": 0,
+        "kind": "slide",
+        "lane": 0.974510410451726,
+        "time": 2.6733852100444495,
+        "duration": 1.7822568066962996,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.04838521004444951,
+        "maintenance": 0.8291316526610645,
+        "max_gap_seconds": 0.18500000000000008,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 2,
+        "kind": "slide",
+        "lane": 3.8641917509038413,
+        "time": 6.059673142767418,
+        "duration": 0.8911284033481498,
+        "failure_reason": "contact_break",
+        "timing_error": 0.010326857232581865,
+        "maintenance": 0.6871508379888268,
+        "max_gap_seconds": 0.27000000000000013,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 8
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.7222995210128527,
+        "plan_ms_max": 3.401525318622589
+      },
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.5786488501665492,
+        "plan_ms_max": 4.903350956737995
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51001-0.6s-x1.06375",
+    "condition": "camera",
+    "completion": 0.3333333333333333,
+    "failures": [
+      {
+        "id": 0,
+        "kind": "slide",
+        "lane": 0.8852060340135703,
+        "time": 2.8202207610355,
+        "duration": 2.2561766088283997,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.04522076103549999,
+        "maintenance": 0.7184035476718403,
+        "max_gap_seconds": 0.2500000000000001,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 1,
+        "kind": "slide",
+        "lane": 0.8852060340135703,
+        "time": 5.640441522071,
+        "duration": 1.1280883044141998,
+        "failure_reason": "contact_break",
+        "timing_error": -0.04044152207099927,
+        "maintenance": 0.6844444444444444,
+        "max_gap_seconds": 0.3550000000000002,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 8
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.5056409675927058,
+        "plan_ms_max": 4.065887071192265
+      },
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 2.016393630935328,
+        "plan_ms_max": 8.043419569730759
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51000-x1.12217",
+    "condition": "camera",
+    "completion": 0.6666666666666666,
+    "failures": [
+      {
+        "id": 3,
+        "kind": "slide",
+        "lane": 3.0,
+        "time": 4.990319058749638,
+        "duration": 1.4258054453570397,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.035319058749638366,
+        "maintenance": 0.042105263157894736,
+        "max_gap_seconds": 1.3649999999999929,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 4,
+        "kind": "slide",
+        "lane": 2.0,
+        "time": 7.129027226785198,
+        "duration": 1.4258054453570397,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.04402722678519844,
+        "maintenance": 0.0456140350877193,
+        "max_gap_seconds": 1.359999999999993,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.3697601043515735,
+        "plan_ms_max": 0.5909446626901627
+      },
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.30077286646701396,
+        "plan_ms_max": 0.45429542660713196
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51001-x1.06375",
+    "condition": "camera",
+    "completion": 0.6666666666666666,
+    "failures": [
+      {
+        "id": 3,
+        "kind": "slide",
+        "lane": 3.0,
+        "time": 5.264412087266265,
+        "duration": 1.5041177392189333,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.044412087266265665,
+        "maintenance": 0.046511627906976744,
+        "max_gap_seconds": 1.4349999999999914,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 4,
+        "kind": "slide",
+        "lane": 2.0,
+        "time": 7.5205886960946655,
+        "duration": 1.5041177392189333,
+        "failure_reason": "tail_missing",
+        "timing_error": -0.04558869609466498,
+        "maintenance": 0.043333333333333335,
+        "max_gap_seconds": 1.4349999999999914,
+        "tail_ticks": 8,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.33332714009166553,
+        "plan_ms_max": 0.4364755004644394
+      },
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.2816231915147494,
+        "plan_ms_max": 0.9035523980855942
+      }
+    ]
+  },
+  {
+    "chart": "chords-s51000-x1.12217",
+    "condition": "oracle",
+    "completion": 0.8518518518518519,
+    "failures": [
+      {
+        "id": 14,
+        "kind": "tap",
+        "lane": 2.0,
+        "time": 6.0596731427674175,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 19,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 6.950801546115567,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 22,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 7.5745914284592715,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 25,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 8.198381310802976,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.40368452022652335,
+        "plan_ms_max": 0.5354396998882294
+      },
+      {
+        "plan_calls": 277,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.3635034281155263,
+        "plan_ms_max": 0.5462542176246643
+      }
+    ]
+  },
+  {
+    "chart": "chords-s51001-x1.06375",
+    "condition": "oracle",
+    "completion": 0.8148148148148148,
+    "failures": [
+      {
+        "id": 16,
+        "kind": "tap",
+        "lane": 0.0,
+        "time": 6.627518788433424,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 17,
+        "kind": "tap",
+        "lane": 4.0,
+        "time": 6.627518788433424,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 20,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.332573978692298,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 23,
+        "kind": "tap",
+        "lane": 5.0,
+        "time": 7.990625489600581,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      },
+      {
+        "id": 25,
+        "kind": "tap",
+        "lane": 1.0,
+        "time": 8.648677000508863,
+        "duration": 0.0,
+        "failure_reason": null,
+        "timing_error": null,
+        "maintenance": null,
+        "max_gap_seconds": 0.0,
+        "tail_ticks": 0,
+        "tail_contact_ticks": 0
+      }
+    ],
+    "policy_stats": [
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.4335477807370248,
+        "plan_ms_max": 0.7392764091491699
+      },
+      {
+        "plan_calls": 291,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.38235984051350463,
+        "plan_ms_max": 0.6424402818083763
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51000-0.5s-x1.12217",
+    "condition": "oracle",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.0953184061994155,
+        "plan_ms_max": 1.9798055291175842
+      },
+      {
+        "plan_calls": 240,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.953577416172872,
+        "plan_ms_max": 1.7237896099686623
+      }
+    ]
+  },
+  {
+    "chart": "crossing-s51001-0.6s-x1.06375",
+    "condition": "oracle",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.2788103288379464,
+        "plan_ms_max": 2.350335009396076
+      },
+      {
+        "plan_calls": 274,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 1.128258924577793,
+        "plan_ms_max": 2.170468680560589
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51000-x1.12217",
+    "condition": "oracle",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.7273420342244208,
+        "plan_ms_max": 2.230512909591198
+      },
+      {
+        "plan_calls": 288,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.676099443808198,
+        "plan_ms_max": 2.101348713040352
+      }
+    ]
+  },
+  {
+    "chart": "holds-s51001-x1.06375",
+    "condition": "oracle",
+    "completion": 1.0,
+    "failures": [],
+    "policy_stats": [
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.6763690447323765,
+        "plan_ms_max": 1.9673844799399376
+      },
+      {
+        "plan_calls": 302,
+        "plan_errors": 0,
+        "errors": [],
+        "plan_ms_mean": 0.6395376176382137,
+        "plan_ms_max": 1.992405392229557
+      }
+    ]
+  }
+]
+
+Revise this program using only the supplied feedback. Return the entire new program.

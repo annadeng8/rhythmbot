@@ -1,0 +1,45 @@
+{
+  "frozen_at": "2026-11-19T05:21:41.916820+00:00",
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "protocol_sha256": "b7b14f8a174ce99e150b0aaf50b01f5f4a10c8882e34c78a9686dc526dba9218",
+  "artifacts": {
+    "bc-diffusion-s0": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-diffusion-s0.pt",
+      "sha256": "5ecb05843d42029cdf23d91e1b33084a840768d4ea2229239a68bd3e887e904e"
+    },
+    "bc-diffusion-s1": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-diffusion-s1.pt",
+      "sha256": "69ed6f8e7d6ba271497c3fce3d730583a7338059431dd2655142037484b52793"
+    },
+    "bc-diffusion-s2": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-diffusion-s2.pt",
+      "sha256": "c87f92e8a52c519f9884c8fb4f0ca72659a8a7cea39c82777982b2acc9f8c2b2"
+    },
+    "bc-mlp-s0": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-mlp-s0.pt",
+      "sha256": "2dbd49af6a3641cd56327301e9383f5b6a9fad28d08e956eb5451df517956776"
+    },
+    "bc-mlp-s1": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-mlp-s1.pt",
+      "sha256": "81e1b3b34caabdcc7079c9c524d6483407201e0689c1e4ff1043c664a095e468"
+    },
+    "bc-mlp-s2": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/bc-mlp-s2.pt",
+      "sha256": "2cf4ad2c76844d85293e9a32b6442429b6f4683929fa4ddd9c25e37b2bfa75c0"
+    },
+    "cap-v0": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/cap/v0/policy.py",
+      "sha256": "90f7ce96cf837594a8bbcb6111fa03f6d3e081097fb7cec534e8d06abb92e002"
+    },
+    "cap-v1": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/cap/v1/policy.py",
+      "sha256": "a341da4252b5996feba6f79e0b74e6dc6e43cb415190c5045faa1e9ddd6784aa"
+    },
+    "cap-v2": {
+      "path": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/cap/v2/policy.py",
+      "sha256": "0607a88836ddef81e4773e8d4e457cb02099ac326329a367b2faf68d35bfb6fc"
+    }
+  },
+  "selection": "BC minimum whole-chart validation loss; all CAP revisions reported; never select on test.",
+  "expected_test_runs": 330
+}

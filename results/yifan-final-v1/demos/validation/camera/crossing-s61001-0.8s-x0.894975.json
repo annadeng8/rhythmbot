@@ -1,0 +1,234 @@
+{
+  "chart": "crossing-s61001-0.8s-x0.894975",
+  "n_notes": 3,
+  "completion_rate": 0.0,
+  "hit_rate": 1.0,
+  "judgments": {
+    "perfect": 0,
+    "great": 0,
+    "good": 0,
+    "miss": 3
+  },
+  "score": 0,
+  "max_score": 9,
+  "timing_error_mean_s": 0.010258505772102891,
+  "timing_error_abs_mean_s": 0.010258505772102891,
+  "timing_error_std_s": 0.003934719405880472,
+  "by_kind": {
+    "slide": {
+      "n": 3,
+      "hit": 3,
+      "completed": 0,
+      "mean_maintenance": 0.8212290502793297,
+      "mean_slide_rms_m": 0.03986330042171494
+    }
+  },
+  "notes": [
+    {
+      "id": 0,
+      "kind": "slide",
+      "lane": 0.9047315062058768,
+      "time": 3.352047470002776,
+      "duration": 3.575517301336294,
+      "status": "hit",
+      "timing_error": 0.007952529997223845,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 6.93,
+      "gap_seconds": 0.15500000000000005,
+      "max_gap_seconds": 1.0499999999999996,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        243,
+        167
+      ],
+      "handoffs": 4,
+      "last_contact_hand": 0,
+      "active_ticks": 716,
+      "contact_ticks": 410,
+      "completed": false,
+      "maintenance": 0.5726256983240223,
+      "slide_rms_m": 0.09051170230018064
+    },
+    {
+      "id": 1,
+      "kind": "slide",
+      "lane": 0.9047315062058768,
+      "time": 7.597974265339625,
+      "duration": 1.787758650668147,
+      "status": "hit",
+      "timing_error": 0.007025734660375704,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 9.39,
+      "gap_seconds": 0.11500000000000003,
+      "max_gap_seconds": 0.11500000000000003,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        200,
+        134
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 1,
+      "active_ticks": 358,
+      "contact_ticks": 334,
+      "completed": false,
+      "maintenance": 0.9329608938547486,
+      "slide_rms_m": 0.01651809379424106
+    },
+    {
+      "id": 2,
+      "kind": "slide",
+      "lane": 3.8589317450359024,
+      "time": 9.60920274734129,
+      "duration": 1.787758650668147,
+      "status": "hit",
+      "timing_error": 0.015797252658709127,
+      "judgment": "miss",
+      "head_judgment": "perfect",
+      "judged_at": 11.4,
+      "gap_seconds": 0.05999999999999999,
+      "max_gap_seconds": 0.05999999999999999,
+      "tail_ticks": 8,
+      "tail_contact_ticks": 0,
+      "failure_reason": "tail_missing",
+      "contact_ticks_by_hand": [
+        182,
+        161
+      ],
+      "handoffs": 3,
+      "last_contact_hand": 0,
+      "active_ticks": 358,
+      "contact_ticks": 343,
+      "completed": false,
+      "maintenance": 0.9581005586592178,
+      "slide_rms_m": 0.012560105170723122
+    }
+  ],
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "sim_seconds": 12.396961398009438,
+  "detector": "concert",
+  "view": "camera",
+  "vision": {
+    "frames": 372,
+    "blank_detection_frames": 83,
+    "input_rgb_sha256": "de381db953b4755982448c852344db32630bb85c9c92a4562afbfb07645cadc2",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + RGB color/shape segmentation"
+  },
+  "policy_stats_by_hand": [
+    {},
+    {}
+  ],
+  "samples": 742,
+  "dataset_sha256": "c4c9330c7b41a0703dcb3ad7228d19cbe6d39d508e93caab5e0e3adfe0e882e0",
+  "execution_status": "ok",
+  "identity": "fafeb8d429e021bd8c3ba37b9203ebe89bd0653fb954425cdf1772c928e60f5b",
+  "job": {
+    "mode": "collect",
+    "chart": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/charts/validation/crossing-s61001-0.8s-x0.894975.json",
+    "condition": "camera",
+    "out": "/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/demos/validation/camera/crossing-s61001-0.8s-x0.894975.json"
+  },
+  "source_sha256": "4e9265e9e3c6dc340afe6fc7608905c3e3b7e83a4124ab849aa55aed6a79a03c",
+  "chart_sha256": "9cf2fa5155d9cca688397077542bb07594a3bfee48fe163a08722ec67c85c41a",
+  "wall_seconds": 41.31514382362366
+}

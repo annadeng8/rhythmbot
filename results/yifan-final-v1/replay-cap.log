@@ -1,0 +1,14 @@
+INFO:drake:Meshcat listening for connections at http://localhost:7001
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/data/YifanKang/rhythmbot_sekai_20261109/cache/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/data/YifanKang/rhythmbot_sekai_20261109/cache/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/wsg_body.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/data/YifanKang/rhythmbot_sekai_20261109/cache/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/wsg_body.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/data/YifanKang/rhythmbot_sekai_20261109/cache/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/data/YifanKang/rhythmbot_sekai_20261109/cache/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/data/YifanKang/rhythmbot_sekai_20261109/cache/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:VisualizationConfig.mouse_interaction_stiffness is set, but the plant's applied-spatial-force input port is already connected, so interactive mouse dragging will not be enabled.
+0 82
+16 82
+32 82
+48 82
+64 82
+80 82

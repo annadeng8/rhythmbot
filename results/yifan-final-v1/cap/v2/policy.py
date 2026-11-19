@@ -1,0 +1,360 @@
+import math
+import copy
+
+
+def make_policy(api):
+    class Policy:
+        def __init__(self):
+            self.active = None
+            self.pending = []
+            self.done = set()
+            self.records = {}
+            self.executed = {}
+            self.touch = float(api.touch_z)
+            self.contact = float(api.contact_z)
+            self.hover = float(api.screen_z) + 0.035
+            self.clearance = self.contact + 0.014
+            self.lo, self.hi = (
+                (-0.36, 0.0) if api.hand == 0 else (0.0, 0.36)
+            )
+
+        def x(self, lane):
+            return min(
+                self.hi, max(self.lo, (float(lane) + 0.5) * 0.12 - 0.36)
+            )
+
+        def observe(self, note):
+            key = str(note.key)
+            head = float(note.hit_time)
+            kind = str(note.kind)
+            end = max(
+                head,
+                float(getattr(note, "end_time", head)),
+                head + float(getattr(note, "duration", 0.0)),
+            )
+            points = sorted(
+                (float(t), float(l))
+                for t, l in (getattr(note, "waypoints", ()) or ())
+            )
+            old = self.records.get(key)
+            if old is None:
+                old = {
+                    "key": key,
+                    "head": head,
+                    "kind": kind,
+                    "end": end,
+                    "lane": float(note.lane),
+                    "points": points,
+                    "note": copy.copy(note),
+                }
+                self.records[key] = old
+                return
+
+            # A camera observation can first describe just a head and reveal
+            # its sustain later. Never erase an already observed sustain.
+            if kind != "tap" or old["kind"] == "tap":
+                old["lane"] = float(note.lane)
+                old["note"] = copy.copy(note)
+                if points:
+                    old["points"] = points
+                if kind == "slide" or old["kind"] == "tap":
+                    old["kind"] = kind
+                old["end"] = max(old["end"], end)
+            if old["kind"] == "tap":
+                old["head"] = head
+
+        def lane(self, record, offset):
+            offset = max(0.0, float(offset))
+            points = record["points"]
+            if points:
+                if points[0][0] > 0.0:
+                    points = [(0.0, record["lane"])] + points
+                if offset <= points[0][0]:
+                    return points[0][1]
+                for (ta, la), (tb, lb) in zip(points, points[1:]):
+                    if offset <= tb:
+                        u = (offset - ta) / max(tb - ta, 1e-9)
+                        return la + u * (lb - la)
+                return points[-1][1]
+            try:
+                return float(record["note"].lane_at_offset(offset))
+            except Exception:
+                return record["lane"]
+
+        def position(self, record, t):
+            if record["kind"] == "slide":
+                offset = min(
+                    record["end"] - record["head"],
+                    max(0.0, t - record["head"]),
+                )
+                return self.x(self.lane(record, offset))
+            return self.x(record["lane"])
+
+        def finish(self, record, landing):
+            if record["kind"] == "tap":
+                return landing + 0.060
+            return max(landing + 0.045, record["end"] + 0.025)
+
+        def refresh(self, appointment):
+            record = self.records[appointment["key"]]
+            appointment["finish"] = self.finish(
+                record, appointment["landing"]
+            )
+
+        def schedule(self, record, now, x, z):
+            target = self.position(record, record["head"])
+            distance = abs(target - x)
+            low = z <= self.contact + 0.006
+            cruise = (
+                self.clearance
+                if low else min(self.hover, max(self.clearance, z))
+            )
+            lift = 0.065 if low else 0.0
+            travel = distance / 0.95
+            descent = (
+                0.110 if low else
+                max(
+                    0.105,
+                    0.205 * (cruise - self.touch)
+                    / max(self.hover - self.touch, 1e-9),
+                )
+            )
+            nominal = record["head"] - 0.005
+            landing = max(nominal, now + lift + travel + descent)
+
+            if landing > record["head"] + 0.025:
+                lift = 0.055 if low else 0.0
+                travel = distance / 1.20
+                descent = min(descent, 0.095 if low else 0.155)
+                landing = max(nominal, now + lift + travel + descent)
+
+            latest = record["head"] + (
+                0.105 if record["kind"] == "tap" else 0.045
+            )
+            if landing > latest:
+                return None
+
+            return {
+                "key": record["key"],
+                "start": max(now, landing - lift - travel - descent),
+                "lift_end": landing - travel - descent,
+                "align": landing - descent,
+                "landing": landing,
+                "finish": self.finish(record, landing),
+                "origin_x": x,
+                "origin_z": z,
+                "cruise": cruise,
+                "lift": lift,
+                "resume": False,
+            }
+
+        def plan(self, notes, t_now, X_WT_cmd, width_cmd):
+            now = float(t_now)
+            current = api.current_keyframe(now, X_WT_cmd, width_cmd)
+            current.width = 0.0
+            current.ref = 0.0
+            current.rise = 0.0
+            pos = X_WT_cmd.translation()
+            cx = min(self.hi, max(self.lo, float(pos[0])))
+            cz = float(pos[2])
+
+            for note in notes:
+                self.observe(note)
+
+            if self.active is not None:
+                self.refresh(self.active)
+                if now >= self.active["landing"]:
+                    self.executed[self.active["key"]] = self.active["landing"]
+
+            while self.active is not None and now >= self.active["finish"]:
+                self.done.add(self.active["key"])
+                self.active = None
+                while self.pending:
+                    candidate = self.pending.pop(0)
+                    if candidate["key"] not in self.done:
+                        self.refresh(candidate)
+                        self.active = candidate
+                        if now >= candidate["landing"]:
+                            self.executed[candidate["key"]] = candidate["landing"]
+                        break
+
+            # Completion of an initially perceived tap does not permanently
+            # complete a subsequently revealed hold or slide with that key.
+            recoverable = [
+                record for key, record in self.records.items()
+                if key in self.executed
+                and record["kind"] != "tap"
+                and record["head"] <= now
+                and record["end"] + 0.025 > now
+                and (self.active is None or key != self.active["key"])
+            ]
+            recoverable.sort(key=lambda r: (r["head"], r["key"]))
+            if recoverable:
+                incumbent = (
+                    self.records[self.active["key"]]
+                    if self.active is not None else None
+                )
+                can_resume = (
+                    incumbent is None
+                    or (
+                        self.active["landing"] > now
+                        and incumbent["head"] > recoverable[0]["head"]
+                    )
+                )
+                if can_resume:
+                    record = recoverable[0]
+                    landing = self.executed[record["key"]]
+                    self.done.discard(record["key"])
+                    self.active = {
+                        "key": record["key"],
+                        "start": now,
+                        "lift_end": now,
+                        "align": now,
+                        "landing": landing,
+                        "finish": self.finish(record, landing),
+                        "origin_x": cx,
+                        "origin_z": cz,
+                        "cruise": self.clearance,
+                        "lift": 0.0,
+                        "resume": True,
+                    }
+                    self.pending = []
+
+            candidates = sorted(
+                (
+                    r for key, r in self.records.items()
+                    if key not in self.done
+                ),
+                key=lambda r: (r["head"], r["key"]),
+            )
+
+            if self.active is None:
+                self.pending = []
+                for record in candidates:
+                    if record["head"] + 0.14 < now:
+                        continue
+                    appointment = self.schedule(record, now, cx, cz)
+                    if appointment is not None:
+                        self.active = appointment
+                        break
+
+            frames = [current]
+
+            def add(t, x, z, down=False):
+                t = float(t)
+                if t <= now + 1e-8 or t <= float(frames[-1].t) + 1e-8:
+                    return
+                frames.append(
+                    api.keyframe(
+                        t, float(x), float(z),
+                        width=0.0, down=bool(down), ref=0.0, rise=0.0,
+                    )
+                )
+
+            def render(appointment):
+                record = self.records[appointment["key"]]
+                landing = appointment["landing"]
+                head = record["head"]
+                target = self.position(record, head)
+
+                if not appointment["resume"]:
+                    add(
+                        appointment["start"],
+                        appointment["origin_x"],
+                        appointment["origin_z"],
+                        appointment["origin_z"] <= self.contact,
+                    )
+                    if appointment["lift"] > 0.0:
+                        add(
+                            appointment["lift_end"],
+                            appointment["origin_x"],
+                            appointment["cruise"],
+                        )
+                    add(appointment["align"], target, appointment["cruise"])
+                    add(landing, target, self.touch, True)
+
+                if record["kind"] == "slide":
+                    end = record["end"]
+                    begin = max(now, landing)
+                    times = set()
+                    if begin < end:
+                        times.add(min(end, begin + 0.010))
+                        count = int(math.ceil((end - begin) / 0.020))
+                        for i in range(1, count + 1):
+                            times.add(min(end, begin + i * 0.020))
+                    for offset, _ in record["points"]:
+                        turn = head + offset
+                        times.add(turn - 0.015)
+                        times.add(turn)
+                    times.add(end - 0.040)
+                    times.add(end)
+                    for t in sorted(times):
+                        if t <= max(now, landing) + 1e-8 or t > end:
+                            continue
+                        add(
+                            t,
+                            self.position(record, min(end, t + 0.015)),
+                            self.touch,
+                            True,
+                        )
+                elif landing <= now:
+                    # Explicit near-term contact anchor also handles late
+                    # revelation of a stationary hold after tap release.
+                    add(
+                        min(appointment["finish"], now + 0.025),
+                        self.position(record, now),
+                        self.touch,
+                        True,
+                    )
+
+                tail = self.position(record, record["end"])
+                add(appointment["finish"], tail, self.touch, True)
+                return appointment["finish"], tail
+
+            if self.active is None:
+                add(now + 0.110, cx, self.hover)
+                add(now + 0.450, cx, self.hover)
+                return api.make_plan(frames, t_now=now)
+
+            end_t, end_x = render(self.active)
+            reserved = {self.active["key"]}
+            new_pending = []
+
+            for appointment in self.pending:
+                key = appointment["key"]
+                if key in self.done or key in reserved:
+                    continue
+                if appointment["start"] > now + 1e-8:
+                    break
+                self.refresh(appointment)
+                if appointment["landing"] <= end_t:
+                    continue
+                end_t, end_x = render(appointment)
+                new_pending.append(appointment)
+                reserved.add(key)
+
+            for record in candidates:
+                key = record["key"]
+                if key in reserved or key in self.done:
+                    continue
+                if record["head"] + 0.14 < end_t:
+                    continue
+                if record["head"] > end_t + 2.5:
+                    break
+                appointment = self.schedule(
+                    record, end_t, end_x, self.touch
+                )
+                if appointment is None:
+                    continue
+                end_t, end_x = render(appointment)
+                new_pending.append(appointment)
+                reserved.add(key)
+                if len(new_pending) >= 5:
+                    break
+
+            self.pending = new_pending
+            add(end_t + 0.110, end_x, self.hover)
+            add(end_t + 0.450, end_x, self.hover)
+            return api.make_plan(frames, t_now=now)
+
+    return Policy()

@@ -1,0 +1,10 @@
+{
+  "recorded_at": "2026-11-19T05:13:07.523996+00:00",
+  "chart": "charts/test_iid/crossing-s71000-0.8s-x1.1287.json",
+  "controllers": [
+    "cap-v2",
+    "bc-diffusion-s0"
+  ],
+  "condition": "camera",
+  "selection": "First IID crossing chart; final predeclared CAP revision and BC diffusion seed 0. Chosen before held-out evaluation, not by test score."
+}
