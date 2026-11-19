@@ -1,0 +1,55 @@
+/Users/annadeng/mit/64210/project/rhythmbot/train.py:150: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:219.)
+  x = torch.from_numpy(img).permute(2, 0, 1).float().unsqueeze(0)
+/Users/annadeng/mit/64210/.venv/lib/python3.13/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+device mps
+val   (4962, 3, 192, 128) in 5s
+train (33067, 3, 192, 128) in 32s
+epoch  1  loss 1.6082  P 0.779 R 0.350 kind 0.627  tth MAE  171 ms  dur MAE  279 ms  path-lane MAE 0.08 slide end 1.15  | active P 0.952 R 0.913 end MAE  110 ms rest lane 0.21 rest end 0.13  (111s)
+epoch  2  loss 0.7682  P 0.956 R 0.819 kind 0.817  tth MAE  114 ms  dur MAE  234 ms  path-lane MAE 0.09 slide end 1.33  | active P 0.988 R 0.998 end MAE   79 ms rest lane 0.23 rest end 0.38  (60s)
+epoch  3  loss 0.4549  P 0.996 R 0.939 kind 0.899  tth MAE   86 ms  dur MAE  217 ms  path-lane MAE 0.09 slide end 0.90  | active P 0.990 R 0.999 end MAE   37 ms rest lane 0.19 rest end 0.35  (61s)
+epoch  4  loss 0.3407  P 0.999 R 0.913 kind 0.927  tth MAE  113 ms  dur MAE  189 ms  path-lane MAE 0.10 slide end 0.89  | active P 0.991 R 0.999 end MAE   44 ms rest lane 0.19 rest end 0.32  (59s)
+epoch  5  loss 0.2721  P 0.999 R 0.959 kind 0.963  tth MAE   77 ms  dur MAE  203 ms  path-lane MAE 0.08 slide end 0.88  | active P 0.988 R 0.999 end MAE   60 ms rest lane 0.15 rest end 0.25  (57s)
+epoch  6  loss 0.2222  P 0.999 R 0.988 kind 0.978  tth MAE   61 ms  dur MAE  187 ms  path-lane MAE 0.07 slide end 0.87  | active P 0.989 R 0.999 end MAE   51 ms rest lane 0.17 rest end 0.24  (56s)
+epoch  7  loss 0.1934  P 0.999 R 0.987 kind 0.983  tth MAE   65 ms  dur MAE  179 ms  path-lane MAE 0.06 slide end 0.84  | active P 0.992 R 1.000 end MAE   35 ms rest lane 0.13 rest end 0.20  (57s)
+epoch  8  loss 0.1640  P 0.997 R 0.996 kind 0.987  tth MAE   60 ms  dur MAE  192 ms  path-lane MAE 0.06 slide end 0.80  | active P 0.994 R 0.998 end MAE   28 ms rest lane 0.18 rest end 0.26  (63s)
+epoch  9  loss 0.1455  P 0.999 R 0.996 kind 0.991  tth MAE   50 ms  dur MAE  178 ms  path-lane MAE 0.05 slide end 0.80  | active P 0.992 R 0.999 end MAE   23 ms rest lane 0.15 rest end 0.28  (56s)
+epoch 10  loss 0.1248  P 1.000 R 0.994 kind 0.991  tth MAE   63 ms  dur MAE  166 ms  path-lane MAE 0.05 slide end 0.79  | active P 0.996 R 1.000 end MAE   21 ms rest lane 0.11 rest end 0.17  (57s)
+epoch 11  loss 0.1108  P 0.999 R 0.998 kind 0.991  tth MAE   50 ms  dur MAE  167 ms  path-lane MAE 0.05 slide end 0.75  | active P 0.997 R 0.999 end MAE   46 ms rest lane 0.12 rest end 0.16  (54s)
+epoch 12  loss 0.1014  P 0.999 R 0.998 kind 0.993  tth MAE   40 ms  dur MAE  163 ms  path-lane MAE 0.05 slide end 0.73  | active P 0.997 R 0.999 end MAE   20 ms rest lane 0.09 rest end 0.14  (57s)
+epoch 13  loss 0.0991  P 0.975 R 0.998 kind 0.972  tth MAE   71 ms  dur MAE  209 ms  path-lane MAE 0.05 slide end 0.81  | active P 0.993 R 0.999 end MAE   34 ms rest lane 0.17 rest end 0.26  (55s)
+epoch 14  loss 0.0924  P 1.000 R 0.998 kind 0.994  tth MAE   33 ms  dur MAE  153 ms  path-lane MAE 0.04 slide end 0.71  | active P 0.997 R 0.999 end MAE   23 ms rest lane 0.11 rest end 0.19  (54s)
+epoch 15  loss 0.0803  P 1.000 R 0.998 kind 0.995  tth MAE   32 ms  dur MAE  160 ms  path-lane MAE 0.04 slide end 0.63  | active P 0.998 R 1.000 end MAE   14 ms rest lane 0.09 rest end 0.14  (55s)
+epoch 16  loss 0.0746  P 1.000 R 0.998 kind 0.995  tth MAE   31 ms  dur MAE  148 ms  path-lane MAE 0.04 slide end 0.67  | active P 0.998 R 0.999 end MAE   16 ms rest lane 0.09 rest end 0.11  (53s)
+epoch 17  loss 0.0681  P 1.000 R 0.999 kind 0.996  tth MAE   33 ms  dur MAE  148 ms  path-lane MAE 0.04 slide end 0.61  | active P 0.998 R 0.999 end MAE   11 ms rest lane 0.08 rest end 0.11  (53s)
+epoch 18  loss 0.0650  P 1.000 R 0.999 kind 0.996  tth MAE   25 ms  dur MAE  143 ms  path-lane MAE 0.04 slide end 0.67  | active P 0.998 R 0.999 end MAE   13 ms rest lane 0.09 rest end 0.15  (53s)
+epoch 19  loss 0.0615  P 1.000 R 0.999 kind 0.996  tth MAE   26 ms  dur MAE  141 ms  path-lane MAE 0.04 slide end 0.61  | active P 0.998 R 0.999 end MAE   10 ms rest lane 0.08 rest end 0.12  (54s)
+epoch 20  loss 0.0564  P 1.000 R 0.999 kind 0.995  tth MAE   25 ms  dur MAE  141 ms  path-lane MAE 0.03 slide end 0.59  | active P 0.998 R 1.000 end MAE   13 ms rest lane 0.07 rest end 0.12  (53s)
+epoch 21  loss 0.0527  P 1.000 R 0.999 kind 0.996  tth MAE   21 ms  dur MAE  140 ms  path-lane MAE 0.03 slide end 0.59  | active P 0.998 R 0.999 end MAE   10 ms rest lane 0.07 rest end 0.10  (54s)
+epoch 22  loss 0.0498  P 1.000 R 0.999 kind 0.996  tth MAE   21 ms  dur MAE  141 ms  path-lane MAE 0.03 slide end 0.57  | active P 0.998 R 1.000 end MAE   12 ms rest lane 0.07 rest end 0.10  (53s)
+epoch 23  loss 0.0453  P 1.000 R 0.999 kind 0.996  tth MAE   19 ms  dur MAE  137 ms  path-lane MAE 0.03 slide end 0.58  | active P 0.998 R 0.999 end MAE    8 ms rest lane 0.06 rest end 0.09  (53s)
+epoch 24  loss 0.0426  P 1.000 R 0.999 kind 0.996  tth MAE   18 ms  dur MAE  137 ms  path-lane MAE 0.03 slide end 0.56  | active P 0.998 R 0.999 end MAE    9 ms rest lane 0.06 rest end 0.08  (53s)
+epoch 25  loss 0.0402  P 1.000 R 0.999 kind 0.996  tth MAE   18 ms  dur MAE  136 ms  path-lane MAE 0.03 slide end 0.54  | active P 0.998 R 0.999 end MAE    7 ms rest lane 0.06 rest end 0.08  (55s)
+epoch 26  loss 0.0380  P 1.000 R 0.999 kind 0.996  tth MAE   20 ms  dur MAE  136 ms  path-lane MAE 0.03 slide end 0.54  | active P 0.998 R 0.999 end MAE    7 ms rest lane 0.05 rest end 0.07  (54s)
+epoch 27  loss 0.0362  P 1.000 R 0.999 kind 0.996  tth MAE   17 ms  dur MAE  135 ms  path-lane MAE 0.03 slide end 0.53  | active P 0.998 R 0.999 end MAE    7 ms rest lane 0.05 rest end 0.07  (59s)
+epoch 28  loss 0.0350  P 1.000 R 0.999 kind 0.996  tth MAE   17 ms  dur MAE  135 ms  path-lane MAE 0.03 slide end 0.53  | active P 0.998 R 0.999 end MAE    6 ms rest lane 0.05 rest end 0.07  (58s)
+epoch 29  loss 0.0342  P 1.000 R 0.999 kind 0.996  tth MAE   16 ms  dur MAE  135 ms  path-lane MAE 0.02 slide end 0.53  | active P 0.998 R 0.999 end MAE    6 ms rest lane 0.05 rest end 0.07  (54s)
+epoch 30  loss 0.0338  P 1.000 R 0.999 kind 0.996  tth MAE   16 ms  dur MAE  135 ms  path-lane MAE 0.02 slide end 0.53  | active P 0.998 R 0.999 end MAE    6 ms rest lane 0.05 rest end 0.07  (53s)
+model -> results/note_detector_v7.pt
+{
+ "active_precision": 0.9981807155852032,
+ "active_recall": 0.9991906110886281,
+ "active_end_mae_ms": 6.217383313924074,
+ "active_offscreen_ok": 0.994397759437561,
+ "precision": 0.9998321978722691,
+ "recall": 0.9993961757799397,
+ "kind_accuracy": 0.9960727712137487,
+ "time_to_hit_mae_ms": 16.37726090848446,
+ "time_to_hit_p95_ms": 50.11417344212532,
+ "duration_mae_ms": 134.63082909584045,
+ "path_lane_mae": 0.024856818839907646,
+ "slide_end_lane_mae": 0.530358612537384,
+ "active_rest_lane_mae": 0.05234771594405174,
+ "active_rest_end_lane_mae": 0.07360655814409256,
+ "n_true_notes": 29810
+}

@@ -19,6 +19,10 @@ kind, lane, time_to_hit and (for holds/slides) duration and the path, which
 is exactly what `perception.DetectedNote` carries, so a model trained on
 these labels drops into `TorchDetector.decode`.
 
+`--relabel DIR` rewrites an existing set's `labels.jsonl` from its saved
+charts with the current label fields, keeping the frames (labels only ever
+gain fields, so older models train the same on relabelled sets).
+
 Also handy: `--preview` writes a contact sheet of a few frames so the
 rendering can be eyeballed.
 """
@@ -32,7 +36,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from .chart import dense_random_chart, random_chart, varied_random_chart
+from .chart import Chart, dense_random_chart, random_chart, varied_random_chart
 from .config import DEFAULT
 from .game import FrameRenderer
 
@@ -61,9 +65,26 @@ def contact_sheet(renderer: FrameRenderer, chart, times, path: Path):
     Image.fromarray(sheet).save(path)
 
 
+def relabel(out_dir: Path) -> int:
+    renderer = FrameRenderer(DEFAULT)
+    charts: dict[str, Chart] = {}
+    lines = (out_dir / "labels.jsonl").read_text().splitlines()
+    tmp = out_dir / "labels.jsonl.tmp"
+    with open(tmp, "w") as labels:
+        for line in lines:
+            rec = json.loads(line)
+            if rec["chart"] not in charts:
+                charts[rec["chart"]] = Chart.load(out_dir / f"{rec['chart']}.json")
+            rec["notes"] = renderer.label(charts[rec["chart"]], rec["t"])
+            labels.write(json.dumps(rec) + "\n")
+    tmp.replace(out_dir / "labels.jsonl")
+    return len(lines)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out")
+    ap.add_argument("--relabel", metavar="DIR", help="rewrite DIR's labels from its saved charts")
     ap.add_argument("--charts", type=int, default=20, help="varied (playable) random charts")
     ap.add_argument("--dense", type=int, default=0, help="dense osu!mania-style random charts")
     ap.add_argument("--seed", type=int, default=0)
@@ -71,6 +92,11 @@ def main(argv=None):
     ap.add_argument("--duration", type=float, default=20.0, help="seconds per chart")
     ap.add_argument("--preview", action="store_true", help="only write a contact sheet")
     args = ap.parse_args(argv)
+    if args.relabel:
+        print(f"{relabel(Path(args.relabel))} frames relabelled in {args.relabel}")
+        return
+    if not args.out:
+        ap.error("--out is required")
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)

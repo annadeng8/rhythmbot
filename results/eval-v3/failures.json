@@ -1,0 +1,1086 @@
+{
+ "classical|oracle|heldout (all)": {
+  "notes": 1810,
+  "failed": 19,
+  "causes": {
+   "perception": 0,
+   "run failed": 0,
+   "lost contact": 3,
+   "beyond the robot": 0,
+   "skipped": 5,
+   "missed head": 11
+  },
+  "details": {
+   "lost contact: insufficient_tracking": 1,
+   "lost contact: tail_missing": 2,
+   "missed head: no touch in the lane in time": 11,
+   "skipped: planner skipped it": 5
+  },
+  "examples": [
+   {
+    "chart": "dense:6000",
+    "id": 30,
+    "kind": "hold",
+    "lane": 5,
+    "time": 18.136,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 18,
+    "kind": "tap",
+    "lane": 5,
+    "time": 12.478,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 19,
+    "kind": "slide",
+    "lane": 1.0,
+    "time": 12.658,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 25,
+    "kind": "slide",
+    "lane": 0.0,
+    "time": 15.246,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6003",
+    "id": 8,
+    "kind": "slide",
+    "lane": 3.0,
+    "time": 6.622,
+    "cause": "lost contact",
+    "detail": "insufficient_tracking"
+   },
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 271,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 89.973,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 278,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 92.5,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 82,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 32.815000000000005,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 179,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 53.026,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 260,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 73.236,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 268,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 74.815,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 296,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 80.815,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 313,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 84.921,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 321,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 87.447,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 148,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 38.815000000000005,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:nekoteto/easy-neko",
+    "id": 125,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 50.499,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "varied:5002",
+    "id": 2,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 5.087,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5005",
+    "id": 7,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 7.341,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5009",
+    "id": 29,
+    "kind": "tap",
+    "lane": 0,
+    "time": 18.366,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   }
+  ]
+ },
+ "classical|oracle|heldout-dense": {
+  "notes": 157,
+  "failed": 5,
+  "causes": {
+   "perception": 0,
+   "run failed": 0,
+   "lost contact": 1,
+   "beyond the robot": 0,
+   "skipped": 0,
+   "missed head": 4
+  },
+  "details": {
+   "lost contact: insufficient_tracking": 1,
+   "missed head: no touch in the lane in time": 4
+  },
+  "examples": [
+   {
+    "chart": "dense:6000",
+    "id": 30,
+    "kind": "hold",
+    "lane": 5,
+    "time": 18.136,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 18,
+    "kind": "tap",
+    "lane": 5,
+    "time": 12.478,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 19,
+    "kind": "slide",
+    "lane": 1.0,
+    "time": 12.658,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 25,
+    "kind": "slide",
+    "lane": 0.0,
+    "time": 15.246,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6003",
+    "id": 8,
+    "kind": "slide",
+    "lane": 3.0,
+    "time": 6.622,
+    "cause": "lost contact",
+    "detail": "insufficient_tracking"
+   }
+  ]
+ },
+ "classical|oracle|heldout-iid": {
+  "notes": 201,
+  "failed": 3,
+  "causes": {
+   "perception": 0,
+   "run failed": 0,
+   "lost contact": 2,
+   "beyond the robot": 0,
+   "skipped": 0,
+   "missed head": 1
+  },
+  "details": {
+   "lost contact: tail_missing": 2,
+   "missed head: no touch in the lane in time": 1
+  },
+  "examples": [
+   {
+    "chart": "varied:5002",
+    "id": 2,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 5.087,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5005",
+    "id": 7,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 7.341,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5009",
+    "id": 29,
+    "kind": "tap",
+    "lane": 0,
+    "time": 18.366,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   }
+  ]
+ },
+ "classical|oracle|heldout-real": {
+  "notes": 346,
+  "failed": 1,
+  "causes": {
+   "perception": 0,
+   "run failed": 0,
+   "lost contact": 0,
+   "beyond the robot": 0,
+   "skipped": 1,
+   "missed head": 0
+  },
+  "details": {
+   "skipped: planner skipped it": 1
+  },
+  "examples": [
+   {
+    "chart": "song:nekoteto/easy-neko",
+    "id": 125,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 50.499,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   }
+  ]
+ },
+ "classical|oracle|heldout-song": {
+  "notes": 1106,
+  "failed": 10,
+  "causes": {
+   "perception": 0,
+   "run failed": 0,
+   "lost contact": 0,
+   "beyond the robot": 0,
+   "skipped": 4,
+   "missed head": 6
+  },
+  "details": {
+   "missed head: no touch in the lane in time": 6,
+   "skipped: planner skipped it": 4
+  },
+  "examples": [
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 271,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 89.973,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 278,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 92.5,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 82,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 32.815000000000005,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 179,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 53.026,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 260,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 73.236,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 268,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 74.815,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 296,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 80.815,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 313,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 84.921,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 321,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 87.447,
+    "cause": "skipped",
+    "detail": "planner skipped it"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 148,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 38.815000000000005,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   }
+  ]
+ },
+ "classical|torch|heldout (all)": {
+  "notes": 1810,
+  "failed": 31,
+  "causes": {
+   "perception": 18,
+   "run failed": 0,
+   "lost contact": 3,
+   "beyond the robot": 0,
+   "skipped": 0,
+   "missed head": 10
+  },
+  "details": {
+   "lost contact: insufficient_tracking": 1,
+   "lost contact: tail_missing": 2,
+   "missed head: no touch in the lane in time": 10,
+   "perception: completed with the oracle": 18
+  },
+  "examples": [
+   {
+    "chart": "dense:6000",
+    "id": 30,
+    "kind": "hold",
+    "lane": 5,
+    "time": 18.136,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6001",
+    "id": 24,
+    "kind": "slide",
+    "lane": 2.0,
+    "time": 16.584,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 15,
+    "kind": "slide",
+    "lane": 3.0,
+    "time": 10.904,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 18,
+    "kind": "tap",
+    "lane": 5,
+    "time": 12.478,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 19,
+    "kind": "slide",
+    "lane": 1.0,
+    "time": 12.658,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6003",
+    "id": 8,
+    "kind": "slide",
+    "lane": 3.0,
+    "time": 6.622,
+    "cause": "lost contact",
+    "detail": "insufficient_tracking"
+   },
+   {
+    "chart": "dense:6003",
+    "id": 22,
+    "kind": "slide",
+    "lane": 5.0,
+    "time": 14.047,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 271,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 89.973,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 278,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 92.5,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 58,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 27.762999999999998,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 66,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 29.342,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 106,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 37.868,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 114,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 39.447,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 155,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 47.973000000000006,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 167,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 50.5,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 203,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 58.078,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 215,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 60.605000000000004,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 248,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 70.71000000000001,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 284,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 78.289,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 296,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 80.815,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 313,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 84.921,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 321,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 87.447,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 234,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 50.815000000000005,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 413,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 79.86800000000001,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 429,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 82.078,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:nekoteto/easy-neko",
+    "id": 125,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 50.499,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "varied:5002",
+    "id": 2,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 5.087,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5005",
+    "id": 6,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 6.145,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "varied:5005",
+    "id": 7,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 7.341,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5008",
+    "id": 16,
+    "kind": "slide",
+    "lane": 1.0,
+    "time": 11.911,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "varied:5009",
+    "id": 29,
+    "kind": "tap",
+    "lane": 0,
+    "time": 18.366,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   }
+  ]
+ },
+ "classical|torch|heldout-dense": {
+  "notes": 157,
+  "failed": 7,
+  "causes": {
+   "perception": 3,
+   "run failed": 0,
+   "lost contact": 1,
+   "beyond the robot": 0,
+   "skipped": 0,
+   "missed head": 3
+  },
+  "details": {
+   "lost contact: insufficient_tracking": 1,
+   "missed head: no touch in the lane in time": 3,
+   "perception: completed with the oracle": 3
+  },
+  "examples": [
+   {
+    "chart": "dense:6000",
+    "id": 30,
+    "kind": "hold",
+    "lane": 5,
+    "time": 18.136,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6001",
+    "id": 24,
+    "kind": "slide",
+    "lane": 2.0,
+    "time": 16.584,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 15,
+    "kind": "slide",
+    "lane": 3.0,
+    "time": 10.904,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 18,
+    "kind": "tap",
+    "lane": 5,
+    "time": 12.478,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6002",
+    "id": 19,
+    "kind": "slide",
+    "lane": 1.0,
+    "time": 12.658,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "dense:6003",
+    "id": 8,
+    "kind": "slide",
+    "lane": 3.0,
+    "time": 6.622,
+    "cause": "lost contact",
+    "detail": "insufficient_tracking"
+   },
+   {
+    "chart": "dense:6003",
+    "id": 22,
+    "kind": "slide",
+    "lane": 5.0,
+    "time": 14.047,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   }
+  ]
+ },
+ "classical|torch|heldout-iid": {
+  "notes": 201,
+  "failed": 5,
+  "causes": {
+   "perception": 2,
+   "run failed": 0,
+   "lost contact": 2,
+   "beyond the robot": 0,
+   "skipped": 0,
+   "missed head": 1
+  },
+  "details": {
+   "lost contact: tail_missing": 2,
+   "missed head: no touch in the lane in time": 1,
+   "perception: completed with the oracle": 2
+  },
+  "examples": [
+   {
+    "chart": "varied:5002",
+    "id": 2,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 5.087,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5005",
+    "id": 6,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 6.145,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "varied:5005",
+    "id": 7,
+    "kind": "slide",
+    "lane": 4.0,
+    "time": 7.341,
+    "cause": "lost contact",
+    "detail": "tail_missing"
+   },
+   {
+    "chart": "varied:5008",
+    "id": 16,
+    "kind": "slide",
+    "lane": 1.0,
+    "time": 11.911,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "varied:5009",
+    "id": 29,
+    "kind": "tap",
+    "lane": 0,
+    "time": 18.366,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   }
+  ]
+ },
+ "classical|torch|heldout-real": {
+  "notes": 346,
+  "failed": 1,
+  "causes": {
+   "perception": 0,
+   "run failed": 0,
+   "lost contact": 0,
+   "beyond the robot": 0,
+   "skipped": 0,
+   "missed head": 1
+  },
+  "details": {
+   "missed head: no touch in the lane in time": 1
+  },
+  "examples": [
+   {
+    "chart": "song:nekoteto/easy-neko",
+    "id": 125,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 50.499,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   }
+  ]
+ },
+ "classical|torch|heldout-song": {
+  "notes": 1106,
+  "failed": 18,
+  "causes": {
+   "perception": 13,
+   "run failed": 0,
+   "lost contact": 0,
+   "beyond the robot": 0,
+   "skipped": 0,
+   "missed head": 5
+  },
+  "details": {
+   "missed head: no touch in the lane in time": 5,
+   "perception: completed with the oracle": 13
+  },
+  "examples": [
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 271,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 89.973,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/easy",
+    "id": 278,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 92.5,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 58,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 27.762999999999998,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 66,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 29.342,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 106,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 37.868,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 114,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 39.447,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 155,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 47.973000000000006,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 167,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 50.5,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 203,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 58.078,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 215,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 60.605000000000004,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 248,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 70.71000000000001,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 284,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 78.289,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 296,
+    "kind": "tap",
+    "lane": 3.0,
+    "time": 80.815,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 313,
+    "kind": "tap",
+    "lane": 4.0,
+    "time": 84.921,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/intermediate",
+    "id": 321,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 87.447,
+    "cause": "missed head",
+    "detail": "no touch in the lane in time"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 234,
+    "kind": "tap",
+    "lane": 1.0,
+    "time": 50.815000000000005,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 413,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 79.86800000000001,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   },
+   {
+    "chart": "song:cityyy-unknown/normal",
+    "id": 429,
+    "kind": "tap",
+    "lane": 2.0,
+    "time": 82.078,
+    "cause": "perception",
+    "detail": "completed with the oracle"
+   }
+  ]
+ }
+}

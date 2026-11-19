@@ -13,18 +13,25 @@ each holding one of the nearest not-yet-active note heads in that lane:
     [presence_logit, kind_logits(3), time_to_hit, duration, lane@25%, lane@50%, lane@75%, lane@100%]
 
 The four lane values are the note's lane at those fractions of its
-duration (constant for taps and holds; the path for slides).  Regression
-targets are normalised (time by the highway's approach time, durations
-log1p-scaled up to MAX_DURATION, lanes by n_lanes-1).
+duration (constant for taps and holds; the path for slides), as offsets
+from the slot's own lane: the head shared by all lanes sees one lane's
+column of the feature map and cannot tell which lane that is, so an
+absolute lane is a guess where an offset is not.  Regression targets are
+normalised (time by the highway's approach time, durations log1p-scaled up
+to MAX_DURATION, lane offsets by n_lanes-1).
 
 One more slot per lane (index K) reports the hold or slide being played
 *now* in that lane, i.e. whose head is pinned on the judgment line:
 
-    [active_logit, kind_logits(hold, slide), time_to_end, unused...]
+    [active_logit, kind_logits(hold, slide), time_to_end, lane now, lane@25%, lane@50%, lane@75%, lane@100%]
 
 This is what lets the brain keep a long hold down: before the hit the end
 of a hold longer than the approach time is off-screen and its duration is a
-guess, and only while it is being played does the end come into view.
+guess, and only while it is being played does the end come into view.  The
+five lanes (offsets from the slot's lane, at 0/25/50/75/100% of the time
+left) are the rest of a slide's path, read off the body still on screen:
+the upcoming slots' path is a forecast made from far up the highway, and a
+slide's end lane is what its tail is judged on.
 
 The exported TorchScript module takes the full-resolution frame as a
 (B, 3, H, W) float tensor in [0, 1] and downsamples inside `forward`, so
@@ -50,7 +57,7 @@ from PIL import Image
 
 from .chart import HOLD, SLIDE, TAP
 from .config import DEFAULT
-from .game import PATH_FRACTIONS
+from .game import PATH_FRACTIONS, REST_FRACTIONS
 
 KINDS = [TAP, HOLD, SLIDE]
 K_SLOTS = 8  # dense osu!mania maps queue up to 8 notes in one lane on screen
@@ -62,6 +69,7 @@ N_REG = 2 + N_PATH  # time_to_hit, duration, lane at each path fraction
 N_OUT = 1 + 3 + N_REG  # presence, kind logits, regressions
 T_COLS = 2 + N_REG  # target columns: presence, kind, regressions
 ACTIVE_KINDS = [HOLD, SLIDE]  # kinds of the active slot (index K_SLOTS)
+N_REST = len(REST_FRACTIONS)  # active slot: lanes along the rest of the note
 
 
 # ---------------------------------------------------------------------------
@@ -75,16 +83,24 @@ def denorm_duration(x) -> float:
     return float(np.expm1(np.clip(x, 0.0, 1.0) * np.log1p(MAX_DURATION)))
 
 
+# Normalised time to end below which a played note's end is on screen.
+REST_VISIBLE = norm_duration(0.9 * DEFAULT.layout.approach_time)
+
+
 def build_targets(
-    notes: list[dict], n_lanes: int, approach: float, k_slots: int = K_SLOTS
+    notes: list[dict], n_lanes: int, approach: float, k_slots: int = K_SLOTS, relative: bool = True
 ) -> np.ndarray:
     """(n_lanes, k_slots + 1, T_COLS).
 
     Slots 0..K-1 (upcoming): presence, kind_idx, tth_n, dur_n, path lanes_n.
-    Slot K (active): presence, active kind_idx, time_to_end_n, zeros.
+    Slot K (active): presence, active kind_idx, time_to_end_n, rest lanes_n.
+    Lanes are offsets from the slot's lane (absolute if not `relative`, as
+    models before the active path had them; their active slot ignores the
+    rest lanes).
     """
     tgt = np.zeros((n_lanes, k_slots + 1, T_COLS), dtype=np.float32)
     per_lane: dict[int, list[dict]] = {}
+    lane_scale = max(n_lanes - 1, 1)
     for n in notes:
         if n.get("active") or n["time_to_hit"] <= 0.0:
             if n["kind"] in ACTIVE_KINDS and n.get("time_to_end", 0.0) > 0.0:
@@ -95,11 +111,16 @@ def build_targets(
                         ACTIVE_KINDS.index(n["kind"]),
                         norm_duration(n["time_to_end"]),
                     ]
+                    if "rest_lanes" not in n:
+                        raise ValueError(
+                            "labels without rest_lanes: run python -m rhythmbot.dataset --relabel <dir>"
+                        )
+                    rest = np.asarray(n["rest_lanes"], dtype=np.float32) - lane_now
+                    tgt[lane_now, k_slots, 3 : 3 + N_REST] = rest / lane_scale
             continue
         lane = int(round(n["lane"]))
         if 0 <= lane < n_lanes:
             per_lane.setdefault(lane, []).append(n)
-    lane_scale = max(n_lanes - 1, 1)
     for lane, ns in per_lane.items():
         ns.sort(key=lambda n: n["time_to_hit"])
         for k, n in enumerate(ns[:k_slots]):
@@ -110,12 +131,13 @@ def build_targets(
                 n["time_to_hit"] / approach,
                 norm_duration(n["duration"]),
             ]
-            tgt[lane, k, 4:] = np.asarray(path, dtype=np.float32) / lane_scale
+            tgt[lane, k, 4:] = (np.asarray(path, dtype=np.float32) - (lane if relative else 0)) / lane_scale
     return tgt
 
 
 def load_split(
-    root: Path, n_lanes: int, approach: float, limit: int | None = None, k_slots: int = K_SLOTS
+    root: Path, n_lanes: int, approach: float, limit: int | None = None, k_slots: int = K_SLOTS,
+    relative: bool = True,
 ):
     """Frames as uint8 (N, 3, H/DS, W/DS) and targets (N, n_lanes, K+1, T_COLS)."""
     lines = (root / "labels.jsonl").read_text().splitlines()
@@ -128,7 +150,7 @@ def load_split(
         x = torch.from_numpy(img).permute(2, 0, 1).float().unsqueeze(0)
         x = F.avg_pool2d(x, DOWNSAMPLE)
         frames.append(x.round().to(torch.uint8).squeeze(0))
-        targets.append(torch.from_numpy(build_targets(rec["notes"], n_lanes, approach, k_slots)))
+        targets.append(torch.from_numpy(build_targets(rec["notes"], n_lanes, approach, k_slots, relative)))
     return torch.stack(frames), torch.stack(targets)
 
 
@@ -208,20 +230,31 @@ def loss_fn(pred: torch.Tensor, tgt: torch.Tensor) -> tuple[torch.Tensor, dict]:
         a_reg = F.smooth_l1_loss(ac_p[..., 3][a_mask], ac_t[..., 2][a_mask], beta=0.02)
     else:
         a_ce = a_reg = zero
-    total = bce + 0.5 * ce + 5.0 * reg + a_bce + 0.5 * a_ce + 5.0 * a_reg
-    return total, {"bce": bce.item(), "ce": ce.item(), "reg": reg.item(), "a_reg": a_reg.item()}
+    # The rest of the path only where its end is on screen (fractions of an
+    # off-screen time left are not in the frame).
+    r_mask = a_mask & (ac_t[..., 2] <= REST_VISIBLE)
+    if r_mask.any():
+        r_reg = F.smooth_l1_loss(
+            ac_p[..., 4 : 4 + N_REST][r_mask], ac_t[..., 3 : 3 + N_REST][r_mask], beta=0.02
+        )
+    else:
+        r_reg = zero
+    total = bce + 0.5 * ce + 5.0 * reg + a_bce + 0.5 * a_ce + 5.0 * a_reg + 5.0 * r_reg
+    return total, {"bce": bce.item(), "ce": ce.item(), "reg": reg.item(), "a_reg": a_reg.item(),
+                   "r_reg": r_reg.item()}
 
 
 # ---------------------------------------------------------------------------
 # Evaluation
 # ---------------------------------------------------------------------------
 @torch.no_grad()
-def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batch=256):
+def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batch=256, active_path=True):
     model.eval()
     K = int(model.k_slots)  # older exported models have fewer slots
     tp = fp = fn = 0
     kind_ok = kind_n = 0
-    tth_err, dur_err, path_err = [], [], []
+    tth_err, dur_err, path_err, slide_end_err = [], [], [], []
+    rest_err, rest_end_err = [], []
     a_tp = a_fp = a_fn = 0
     tte_err, offscreen_ok = [], []
     for i in range(0, len(frames), batch):
@@ -243,6 +276,12 @@ def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batc
             tte_err.append((tte_p - tte_t).abs()[visible].cpu())
             # Off-screen ends only need to be reported as off-screen.
             offscreen_ok.append((tte_p[~visible] >= 0.9 * approach).float().cpu())
+            # Rest of a played slide's path, where its end is on screen.
+            rm = am & (at_[..., 1] > 0.5) & (at_[..., 2] <= REST_VISIBLE)
+            if active_path and rm.any():
+                d = (ap_[..., 4 : 4 + N_REST][rm] - at_[..., 3 : 3 + N_REST][rm]).abs() * (n_lanes - 1)
+                rest_err.append(d.mean(-1).cpu())
+                rest_end_err.append(d[:, -1].cpu())
         # Upcoming slots.
         p, t = p_all[:, :, :K], t_all[:, :, :K]
         present = torch.sigmoid(p[..., 0]) > 0.5
@@ -265,9 +304,12 @@ def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batc
             path_err.append(
                 ((p[..., 6:][m] - t[..., 4:][m]).abs().mean(-1) * (n_lanes - 1))[is_long].cpu()
             )
+            is_slide = t[..., 1][m] > 1.5
+            slide_end_err.append(((p[..., -1][m] - t[..., -1][m]).abs() * (n_lanes - 1))[is_slide].cpu())
     cat = lambda xs: torch.cat(xs) if xs else torch.zeros(0)
     tth, dur, end = cat(tth_err), cat(dur_err), cat(path_err)
     tte, off = cat(tte_err), cat(offscreen_ok)
+    s_end, rest, rest_end = cat(slide_end_err), cat(rest_err), cat(rest_end_err)
     return {
         "active_precision": a_tp / max(a_tp + a_fp, 1),
         "active_recall": a_tp / max(a_tp + a_fn, 1),
@@ -280,6 +322,10 @@ def evaluate(model, frames, targets, device, approach: float, n_lanes: int, batc
         "time_to_hit_p95_ms": 1000 * tth.quantile(0.95).item() if len(tth) else None,
         "duration_mae_ms": 1000 * dur.mean().item() if len(dur) else None,
         "path_lane_mae": end.mean().item() if len(end) else None,
+        # Slides alone: holds make the path error above look small.
+        "slide_end_lane_mae": s_end.mean().item() if len(s_end) else None,
+        "active_rest_lane_mae": rest.mean().item() if len(rest) else None,
+        "active_rest_end_lane_mae": rest_end.mean().item() if len(rest_end) else None,
         "n_true_notes": int(tp + fn),
     }
 
@@ -331,8 +377,13 @@ def main(argv=None):
         return
     model = torch.jit.load(args.model, map_location="cpu").to(device) if args.eval_only else None
     k_slots = int(model.k_slots) if model is not None else K_SLOTS
+    # An older model's conventions, from its sidecar (eval-only).
+    sidecar = Path(args.model).with_suffix(".json")
+    old = json.loads(sidecar.read_text()) if args.eval_only and sidecar.exists() else {}
+    relative = bool(old.get("path_relative", not args.eval_only))
+    active_path = bool(old.get("active_path", not args.eval_only))
     t0 = time.time()
-    val_x, val_y = load_split(Path(args.val), n_lanes, approach, args.limit, k_slots)
+    val_x, val_y = load_split(Path(args.val), n_lanes, approach, args.limit, k_slots, relative)
     print(f"val   {tuple(val_x.shape)} in {time.time() - t0:.0f}s")
     meta = {
         "n_lanes": n_lanes,
@@ -346,11 +397,15 @@ def main(argv=None):
         "kinds": KINDS,
         "active_slot": True,
         "active_kinds": ACTIVE_KINDS,
+        "path_relative": True,
+        "active_path": True,
+        "rest_fractions": list(REST_FRACTIONS),
         "frame_size": list(cfg.perception.frame_size),
     }
 
     if args.eval_only:
-        print(json.dumps(evaluate(model, val_x, val_y, device, approach, n_lanes), indent=1))
+        ev = evaluate(model, val_x, val_y, device, approach, n_lanes, active_path=active_path)
+        print(json.dumps(ev, indent=1))
         return
 
     t0 = time.time()
@@ -380,13 +435,15 @@ def main(argv=None):
             n += len(idx)
         ev = evaluate(model, val_x, val_y, device, approach, n_lanes)
         ms = lambda v: "   -" if v is None else f"{v:4.0f}"
+        lanes = lambda v: "   -" if v is None else f"{v:.2f}"
         print(
             f"epoch {epoch:2d}  loss {tot / n:.4f}  "
             f"P {ev['precision']:.3f} R {ev['recall']:.3f} kind {ev['kind_accuracy']:.3f}  "
             f"tth MAE {ms(ev['time_to_hit_mae_ms'])} ms  dur MAE {ms(ev['duration_mae_ms'])} ms  "
-            f"path-lane MAE {ev['path_lane_mae'] if ev['path_lane_mae'] is None else round(ev['path_lane_mae'], 2)}  "
+            f"path-lane MAE {lanes(ev['path_lane_mae'])} slide end {lanes(ev['slide_end_lane_mae'])}  "
             f"| active P {ev['active_precision']:.3f} R {ev['active_recall']:.3f} "
-            f"end MAE {ms(ev['active_end_mae_ms'])} ms"
+            f"end MAE {ms(ev['active_end_mae_ms'])} ms rest lane {lanes(ev['active_rest_lane_mae'])} "
+            f"rest end {lanes(ev['active_rest_end_lane_mae'])}"
             f"  ({time.time() - t0:.0f}s)"
         )
 
