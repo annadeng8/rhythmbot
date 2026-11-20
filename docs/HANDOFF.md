@@ -32,6 +32,30 @@ and extracts note estimates. This is not a native animated Drake texture or a
 physical camera. The current vision is classical color/shape processing, not a
 learned visual encoder. The judge and game renderer retain ground truth normally.
 
+## Live dual-arm launch
+
+The normal play command now accepts the same environment presets. For live
+camera control with both single-stylus arms:
+
+```sh
+python -m rhythmbot.play --preset sekai-realtime \
+  --chart charts/stylus-hard-handoffs.json \
+  --out results/live-2arm.json --wait-for-browser 30 --hold
+```
+
+This selects two independent arm controllers, the 640×480 Drake-composited
+control camera, and the native Meshcat view with the minimal Sekai texture.
+Conflicting `--arms 1`, `--view screen`, or `--detector oracle` options are
+rejected. The report includes each actual arm model and its measured joint
+motion range. Audio and stage-frame export are not supported by the live preset.
+For the full-resolution study environment, `play --preset sekai-camera` selects
+the 960×720 camera and the existing play runner; `sekai-screen` selects its
+camera ablation. Legacy invocations without a preset retain their old defaults.
+
+Live 1× overall speed is validated on the local Mac, with occasional stalls;
+this is not a hard real-time guarantee or a claim that gpu156 now keeps up.
+See [timing limits](../results/realtime-v1/README.md).
+
 ## Smoke check: no external weights required
 
 From the repository root with the Drake dependencies installed:

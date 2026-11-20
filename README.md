@@ -33,7 +33,8 @@ validation and remaining work](docs/HANDOFF.md).**
 ### Live playback at 1× speed
 
 ```sh
-python -m rhythmbot.realtime --chart charts/stylus-hard-handoffs.json \
+python -m rhythmbot.play --preset sekai-realtime \
+  --chart charts/stylus-hard-handoffs.json \
   --out results/live.json --wait-for-browser 30 --hold
 ```
 

@@ -63,6 +63,9 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
         raise ValueError('duration must be positive')
     dt = 1 / cfg.perception.tick_hz
     ticks, lag = [], []
+    plant_context = robot.plant.GetMyContextFromRoot(sim.get_context())
+    q_min = [robot.plant.GetPositions(plant_context, arm.iiwa).copy() for arm in robot.arms]
+    q_max = [q.copy() for q in q_min]
     # Reference counting still frees frame buffers immediately. Defer cyclic
     # collection during the timed loop to avoid collector-induced frame stalls.
     gc.collect()
@@ -75,6 +78,10 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
             target = min((i + 1) * dt, end)
             before = time.perf_counter()
             sim.AdvanceTo(target)
+            for k, arm in enumerate(robot.arms):
+                q = robot.plant.GetPositions(plant_context, arm.iiwa)
+                np.minimum(q_min[k], q, out=q_min[k])
+                np.maximum(q_max[k], q, out=q_max[k])
             finished = time.perf_counter()
             ticks.append(finished - before)
             lag.append(max(0., finished - start - target))
@@ -104,6 +111,8 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
         ticks_over_budget=sum(t > dt for t in ticks), tick_budget_seconds=dt,
         max_lag_seconds=max(lag), end_lag_seconds=lag[-1],
         policy_stats=[p.stats() if hasattr(p, 'stats') else {} for p in policies],
+        executed_arms=[dict(model=arm.name, joint_range_rad=(q_max[k] - q_min[k]).tolist())
+                       for k, arm in enumerate(robot.arms)],
         # Soft real time: bounded lag within one 30 Hz frame, not a hard
         # deadline guarantee or a measurement of browser display latency.
         realtime_pass=bool(paced and max(lag) <= dt),
