@@ -617,7 +617,15 @@ lanes. For each lane it predicts nine slots:
   25/50/75/100 % of its duration, which is the slide path;
 * one **active** slot, the hold or slide being played in that lane right
   now (its head pinned on the line), with a presence logit, a kind
-  (hold/slide) and the time left until it ends.
+  (hold/slide), the time left until it ends and, in
+  `results/note_detector_v7.pt`, the rest of its path: the lane now and at
+  25/50/75/100 % of the time left.
+
+In `note_detector_v7.pt` every path lane is an offset from the slot's own
+lane. The MLP is shared across lanes and reads one lane's column, so it
+cannot tell which lane it is in. Earlier models predicted absolute lanes,
+and their slide end lane was 0.56 lanes off on average on the validation
+frames.
 
 The active slot exists because of long holds. Before the hit, the end of a
 hold longer than the 1.6 s approach time is above the top of the frame, so
@@ -626,7 +634,12 @@ being played. The brain treats an active report whose end is still
 off-screen as a lower bound and keeps extending the hold, and once the end
 is in view it replaces the earlier guess with the measured end, correcting
 overestimates as well as underestimates. Slides get their predicted path
-stretched to the corrected duration.
+stretched to the corrected duration, and with `note_detector_v7.pt` the
+path from now on is replaced every tick by the active slot's reading of
+the slide body still on screen (`RhythmBrain._replace_rest`), which is what
+the slide's tail is judged on. `python -m rhythmbot.dataset --relabel DIR`
+adds the labels this needs (`rest_lanes`) to an existing set without
+re-rendering it.
 
 Input is the full 256×384 frame; the module downsamples by two inside
 `forward`, so `TorchDetector` only normalises pixels to [0, 1]. The last
@@ -1017,12 +1030,28 @@ What this shows:
   robot's limits: almost all are notes they did not play. At most 10 notes
   per approach, under 3 % of its failures, are "beyond the robot" on these
   charts, which one arm can play (the planner completes 99 %).
-* **Perception costs the planner 1.7 points, mostly slides.** 33 of its 48
-  vision-run failures are notes it completes with the oracle. Under the strict
-  slide rules the vision model's slides complete 52.6 % against 91.2 % with
-  the oracle: 17 of the 27 failed slides miss the *tail* (the last 40 ms on
-  the final lane), so the vision model's slide end time and end lane, not the
-  path in between, is the next thing to improve.
+* **Perception costs the planner 1.7 points, mostly slides; reading the
+  rest of a slide while it is played brings that to 0.7.** In `eval-v2`, 33
+  of the planner's 48 vision-run failures are notes it completes with the
+  oracle, and the vision model's slides complete 52.6 % against 91.2 % with
+  the oracle, 17 of the 27 failed slides missing the *tail* (the last 40 ms
+  on the final lane). In every one the tracked end *time* was within 16 ms;
+  the end *lane* was wrong, by more than the 0.35-lane tolerance in 13 of
+  them and by up to 2.3 lanes. The model's slide end lane, forecast from up the highway,
+  is off by 0.56 lanes on average on the validation frames (the 0.03
+  "path-lane MAE" it reports averages in holds). Its active slot now also
+  reads the rest of the path of the slide being played (lane now and at
+  25/50/75/100 % of the time left, 0.07 lanes off at the end), and the
+  tracker replaces the slide's remaining path with that every tick; all path
+  lanes are offsets from the slot's own lane (`results/note_detector_v7.pt`,
+  see *How the pieces work*). Re-run as `results/eval-v3` (same command plus
+  `--model results/note_detector_v7.pt`): vision-model slides 84.2 % (48/57;
+  oracle unchanged at 91.2 %), vision completion 98.3 % overall (was 97.3 %),
+  98.2 % on the held-out charts (was 95.6 %). Vision failures fall from 48 to 31 (18
+  perception), and only 2 slides still miss the tail, both also missed with
+  the oracle. Most of the slides it still fails (5) fail *tracking*: before the
+  head reaches the line the path is the forecast, and the arm then has to
+  catch up. On the unseen song it is 98.4 % (was 98.5 %, one tap).
 
 Caveats: behavior cloning is not in these tables, because its checkpoints
 are not in the repository (they are on gpu156). The classical planner was

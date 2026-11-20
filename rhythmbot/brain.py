@@ -170,7 +170,13 @@ class RhythmBrain(LeafSystem):
                 elif not match.active_final:
                     match.duration = max(new, old)
                 match.duration_final = match.duration_final or d.duration_final
-                self._rescale_slide(match, old)
+                if match.kind == SLIDE and d.waypoints and getattr(self.detector, "active_path", False):
+                    # Only a model trained to read the rest of the path
+                    # (`TorchDetector.active_path`); other detectors' paths
+                    # for a note being played are kept as they were.
+                    self._replace_rest(match, d, t)
+                else:
+                    self._rescale_slide(match, old)
                 match.n_obs += 1
                 match.last_seen = t
                 continue
@@ -198,6 +204,20 @@ class RhythmBrain(LeafSystem):
         ratio = n.duration / old_duration
         if abs(ratio - 1.0) > 0.05:
             n.waypoints = [(off * ratio, lane) for off, lane in n.waypoints]
+
+    @staticmethod
+    def _replace_rest(n: TrackedNote, d: DetectedNote, t: float) -> None:
+        """A slide being played whose detection reads the rest of its path
+        off the body still on screen: that replaces the path forecast from
+        up the highway from now on (a slide's tail is judged on its end
+        lane), stretched to end at the tracked end time."""
+        span = n.end_time - t
+        if span <= 0.0 or d.duration <= 0.0:
+            return
+        now = t - n.hit_time
+        ratio = span / d.duration
+        past = [w for w in n.waypoints if w[0] < now - 1e-3] or [(0.0, n.lane)]
+        n.waypoints = past + [(now + off * ratio, lane) for off, lane in d.waypoints]
 
     @staticmethod
     def _by_proximity(d: DetectedNote) -> bool:

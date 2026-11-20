@@ -220,7 +220,10 @@ class TorchDetector(NoteDetector):
     Models trained with an active slot (sidecar `active_slot: true`) also
     report, per lane, the hold or slide being played there and how long it
     has left; those come out as `active=True` detections, which the brain
-    uses to keep a long hold down until its end is actually in view.
+    uses to keep a long hold down until its end is actually in view.  With
+    `active_path: true` the active slot also gives the rest of a slide's
+    path (the detection's waypoints, offsets from now), and with
+    `path_relative: true` path lanes are offsets from the slot's lane.
     """
 
     needs_frames = True
@@ -258,6 +261,9 @@ class TorchDetector(NoteDetector):
         self.k_slots = meta.get("k_slots", 2)
         self.active_slot = bool(meta.get("active_slot", False))
         self.active_kinds = meta.get("active_kinds", [HOLD, SLIDE])
+        self.path_relative = bool(meta.get("path_relative", False))
+        self.active_path = bool(meta.get("active_path", False))
+        self.rest_fractions = meta.get("rest_fractions", [0.0, 0.25, 0.5, 0.75, 1.0])
 
     def detect(self, frame, t):
         x = self.torch.from_numpy(np.array(frame, copy=True)).permute(2, 0, 1).float().div(255.0)[None]
@@ -288,7 +294,7 @@ class TorchDetector(NoteDetector):
                 waypoints = []
                 if kind == SLIDE:
                     duration = max(duration, 0.1)
-                    path = np.clip(row[6 : 6 + len(self.path_fractions)], 0.0, 1.0) * (self.n_lanes - 1)
+                    path = self._lanes(row[6 : 6 + len(self.path_fractions)], lane)
                     waypoints = [(0.0, float(lane))] + [
                         (f * duration, float(l)) for f, l in zip(self.path_fractions, path)
                     ]
@@ -308,6 +314,13 @@ class TorchDetector(NoteDetector):
         return out
 
 
+    def _lanes(self, x: np.ndarray, lane: int) -> np.ndarray:
+        """Predicted path lanes (normalised; offsets from `lane` if the
+        model was trained that way) -> lanes."""
+        if self.path_relative:
+            return np.clip(lane + x * (self.n_lanes - 1), 0.0, self.n_lanes - 1)
+        return np.clip(x, 0.0, 1.0) * (self.n_lanes - 1)
+
     def _decode_active(self, rows: np.ndarray, t: float) -> list[DetectedNote]:
         """rows: (n_lanes, N_OUT) active slot -> active DetectedNotes."""
         out = []
@@ -320,6 +333,10 @@ class TorchDetector(NoteDetector):
             # The end is in view only if it is below the top of the frame;
             # otherwise all the frame shows is that it is at least that far.
             end_visible = tte < 0.9 * self.approach
+            waypoints = []
+            if self.active_path and kind == SLIDE and end_visible:
+                rest = self._lanes(row[4 : 4 + len(self.rest_fractions)], lane)
+                waypoints = [(f * tte, float(l)) for f, l in zip(self.rest_fractions, rest)]
             out.append(
                 DetectedNote(
                     kind=kind,
@@ -327,6 +344,7 @@ class TorchDetector(NoteDetector):
                     hit_time=t,
                     duration=tte if end_visible else max(tte, self.approach),
                     duration_final=end_visible,
+                    waypoints=waypoints,
                     active=True,
                     confidence=conf,
                 )

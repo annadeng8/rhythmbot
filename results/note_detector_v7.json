@@ -1,0 +1,55 @@
+{
+ "n_lanes": 6,
+ "k_slots": 8,
+ "rows": 24,
+ "approach_time": 1.6,
+ "max_duration": 8.0,
+ "duration_norm": "log1p",
+ "downsample": 2,
+ "path_fractions": [
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "kinds": [
+  "tap",
+  "hold",
+  "slide"
+ ],
+ "active_slot": true,
+ "active_kinds": [
+  "hold",
+  "slide"
+ ],
+ "path_relative": true,
+ "active_path": true,
+ "rest_fractions": [
+  0.0,
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "frame_size": [
+  256,
+  384
+ ],
+ "val": {
+  "active_precision": 0.9981807155852032,
+  "active_recall": 0.9991906110886281,
+  "active_end_mae_ms": 6.217383313924074,
+  "active_offscreen_ok": 0.994397759437561,
+  "precision": 0.9998321978722691,
+  "recall": 0.9993961757799397,
+  "kind_accuracy": 0.9960727712137487,
+  "time_to_hit_mae_ms": 16.37726090848446,
+  "time_to_hit_p95_ms": 50.11417344212532,
+  "duration_mae_ms": 134.63082909584045,
+  "path_lane_mae": 0.024856818839907646,
+  "slide_end_lane_mae": 0.530358612537384,
+  "active_rest_lane_mae": 0.05234771594405174,
+  "active_rest_end_lane_mae": 0.07360655814409256,
+  "n_true_notes": 29810
+ }
+}

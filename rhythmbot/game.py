@@ -36,6 +36,9 @@ HIT_LINE = (255, 240, 200)
 HEAD_LANE_FRACTION = 0.86  # note head width as a fraction of the lane
 # Where along a hold/slide the vision model predicts the lane.
 PATH_FRACTIONS = (0.25, 0.5, 0.75, 1.0)
+# Where along what is left of a note being played (now, then fractions of the
+# time to its end) the vision model's active slot predicts the lane.
+REST_FRACTIONS = (0.0,) + PATH_FRACTIONS
 HEAD_TIME = 0.055  # note head thickness, in seconds of scroll
 HOLD_BODY_LANE_FRACTION = 0.55
 SLIDE_BODY_LANE_FRACTION = 0.45
@@ -125,6 +128,7 @@ class FrameRenderer:
         geometry, for training/evaluating a vision model."""
         out = []
         for note in chart.visible(t, self.layout.approach_time):
+            start = max(t, note.time)
             d = {
                 "id": note.id,
                 "kind": note.kind,
@@ -141,6 +145,11 @@ class FrameRenderer:
                 # the vision model predicts it.
                 "path_lanes": [
                     note.lane_at(note.time + f * note.duration) for f in PATH_FRACTIONS
+                ],
+                # Lane now and at 25/50/75/100% of the time left: the path
+                # still to play, as the active slot predicts it.
+                "rest_lanes": [
+                    note.lane_at(start + f * (note.end_time - start)) for f in REST_FRACTIONS
                 ],
                 "head_x": self.lane_to_px(note.lane),
                 "head_row": self.dt_to_row(note.time - t),
