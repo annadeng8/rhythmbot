@@ -19,6 +19,8 @@ camera does not move; occlusion comes for free from the rendered labels.
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
+import weakref
 import numpy as np
 from pydrake.all import AbstractValue, ImageLabel16I, ImageRgba8U, LeafSystem, RigidTransform, RotationMatrix
 from pydrake.systems.sensors import CameraConfig
@@ -88,6 +90,40 @@ def screen_lookup(cfg: Config) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     return rows, cols, ok
 
 
+def _noise(shape, std, seed):
+    return np.random.default_rng(seed).normal(0.0, std, shape)
+
+
+class CameraNoisePrefetch:
+    """Bounded lookahead of deterministic sensor noise; never predicts scene pixels."""
+    def __init__(self, shape, std, hz):
+        self.shape, self.std, self.hz = shape, std, hz
+        self.pool = ThreadPoolExecutor(max_workers=2, thread_name_prefix='camera-noise')
+        self.pending = {}
+        self._cleanup = weakref.finalize(self, self.pool.shutdown, wait=False, cancel_futures=True)
+        self._fill(0)
+
+    def _fill(self, tick):
+        for old in list(self.pending):
+            if old < tick or old >= tick + 4:
+                self.pending.pop(old).cancel()
+        for k in range(tick, tick + 4):
+            if k not in self.pending:
+                seed = int(round(k / self.hz * 1000))
+                self.pending[k] = self.pool.submit(_noise, self.shape, self.std, seed)
+
+    def get(self, t):
+        tick = round(t * self.hz)
+        seed = int(round(t * 1000))
+        future = self.pending.pop(tick, None) if seed == int(round(tick / self.hz * 1000)) else None
+        result = future.result() if future is not None else _noise(self.shape, self.std, seed)
+        self._fill(tick + 1)
+        return result
+
+    def close(self):
+        self._cleanup()
+
+
 class CameraScreen(LeafSystem):
     """The camera image with the game frame drawn onto the visible screen."""
 
@@ -99,6 +135,8 @@ class CameraScreen(LeafSystem):
         self.screen_label = screen_label
         self.rows, self.cols, self.ok = screen_lookup(cfg)
         self.noise = cfg.camera.noise_std
+        self.noise_prefetch = (CameraNoisePrefetch((cfg.camera.height, cfg.camera.width, 3),
+            self.noise, cfg.perception.tick_hz) if cfg.camera.prefetch_noise and self.noise > 0 else None)
         self.color_port = self.DeclareAbstractInputPort("rgb_image", AbstractValue.Make(ImageRgba8U()))
         self.label_port = self.DeclareAbstractInputPort("label_image", AbstractValue.Make(ImageLabel16I()))
         self.DeclareAbstractOutputPort(
@@ -111,8 +149,11 @@ class CameraScreen(LeafSystem):
         m = self.ok & (label == self.screen_label)
         out[m] = game[self.rows[m], self.cols[m]]
         if self.noise > 0:
-            rng = np.random.default_rng(int(round(t * 1000)))
-            out = np.clip(out + rng.normal(0.0, self.noise, out.shape), 0, 255).astype(np.uint8)
+            noise = (self.noise_prefetch.get(t) if self.noise_prefetch else
+                     _noise(out.shape, self.noise, int(round(t * 1000))))
+            noise += out
+            np.clip(noise, 0, 255, out=noise)
+            out = noise.astype(np.uint8)
         return out
 
     def _calc(self, context, output):

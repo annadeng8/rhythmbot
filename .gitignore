@@ -1,4 +1,5 @@
 __pycache__/
+.venv*/
 .DS_Store
 # Regenerable with `python -m rhythmbot.dataset` (about 90 MB of frames).
 data/

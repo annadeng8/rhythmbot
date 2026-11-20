@@ -26,6 +26,7 @@ would implement the same `plan` method.
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
+from copy import deepcopy
 
 import numpy as np
 from pydrake.all import RigidTransform, RotationMatrix
@@ -84,6 +85,22 @@ class TrackedNote:
     # equally good choices.
     chosen: bool | None = None
 
+    def __deepcopy__(self, memo):
+        result = type(self).__new__(type(self))
+        memo[id(self)] = result
+        result.__dict__ = {}
+        for key, value in self.__dict__.items():
+            if key == 'waypoints' and all(type(p) is tuple and
+                    all(type(x) in (float, int) for x in p) for p in value):
+                # Tuples of numbers are immutable, but the list remains owned
+                # by this state clone. Preserve any references to that list.
+                if id(value) not in memo:
+                    memo[id(value)] = value.copy()
+                result.__dict__[key] = memo[id(value)]
+            else:
+                result.__dict__[key] = deepcopy(value, memo)
+        return result
+
     @property
     def end_time(self) -> float:
         return self.hit_time + self.duration
@@ -112,6 +129,16 @@ class Keyframe:
     # Height of the +x fingertip above the -x one; nonzero means the hand
     # is rolled about world y.
     rise: float = 0.0
+
+    def __deepcopy__(self, memo):
+        # Drake clones abstract state at each perception update. Keyframes
+        # contain scalar numbers; bypass pickle reconstruction while retaining
+        # independent objects and normal deep-copy behavior for extensions.
+        result = type(self).__new__(type(self))
+        memo[id(self)] = result
+        result.__dict__ = {k: v if type(v) in (float, int, bool, str, type(None))
+                           else deepcopy(v, memo) for k, v in self.__dict__.items()}
+        return result
 
 
 class Plan:
@@ -164,7 +191,13 @@ class Plan:
         return RigidTransform(RotationMatrix.MakeYRotation(self.tilt) @ R_rolled(th), p - ref * half_x)
 
     def width_at(self, t: float) -> float:
-        return float(self._state(t)[2])
+        # Width does not need the reference-point geometry or tool rotation.
+        t = min(max(t, self.start_time), self.end_time)
+        i = min(max(int(np.searchsorted(self.times, t, side="right")) - 1, 0), len(self.times) - 2)
+        k0, k1 = self.keyframes[i], self.keyframes[i + 1]
+        dt = k1.t - k0.t
+        s = 0.0 if dt <= 0 else (t - k0.t) / dt
+        return float((1 - s) * k0.width + s * k1.width)
 
 
 class Policy:

@@ -29,7 +29,7 @@ must follow the path and finish on the right lane.
 | Perception | trained neural detector (`note_detector_v7.pt`) on the game image | hand-coded color/shape detector on a simulated 960×720 camera image (or on the screen image directly, as an ablation) |
 | Controllers | classical, CAP (Claude-written) | classical, CAP (Codex-written), BC (MLP and diffusion, 3 seeds each) |
 | Results | [`results/eval-v3`](results/eval-v3/summary.md) (v7 detector), [`results/eval-v2`](results/eval-v2/summary.md) (all controllers, earlier detector) | [`results/yifan-final-v1`](results/yifan-final-v1/summary.md) |
-| Speed | 2–5× faster than real time | 3.5× slower than real time with the camera |
+| Speed | 2–5× faster than real time | live mode (640×480 camera): about real time on an M5 Mac; study camera (960×720): about 1.8× slower on gpu156 |
 
 Everything else in `results/` (pilots, older screens, older scoring rules)
 is historical; [docs/HISTORY.md](docs/HISTORY.md) has the full account. Do not
@@ -135,18 +135,29 @@ up afterwards, so the recording can be replayed at true speed under
 ../.venv/bin/python -m rhythmbot.play --chart songs/nekoteto/normal-neko.json --arms 1 \
     --detector torch --model results/note_detector_v7.pt --hold
 
-# Yifan's two-arm camera setup, exactly as in the study (slower than real time)
+# Yifan's two-arm camera setup, live at 1x speed (640x480 control camera)
+../.venv/bin/python -m rhythmbot.realtime --chart charts/stylus-hard-handoffs.json \
+    --out results/live.json --wait-for-browser 30 --hold
+
+# The same setup exactly as in the frozen study (960x720 camera, slower than real time)
 ../.venv/bin/python -m rhythmbot.play --preset sekai-camera --hold \
     --chart results/yifan-final-v1/charts/test_iid/crossing-s71000-0.8s-x1.1287.json
 ```
+
+`rhythmbot.realtime` uses the `sekai-realtime` preset: the study's camera
+pose, noise and controller, at 640×480 (`--camera-width 960` for the
+study's resolution, `--unpaced` to measure throughput). Yifan measured it at
+1× on an Apple M5 Mac plugged in; it is soft real time, with brief stalls,
+and on battery in Low Power Mode it runs about 1.5× slower. Its results are
+not part of the frozen study, because the camera pixels differ. Timings and
+checks: [results/realtime-v1](results/realtime-v1/README.md).
 
 `play` with no setup options runs a third, older configuration: two arms
 with ordinary grippers (two fingertips each) and oracle input. Other
 options: `--policy cap:<program.py>` or `bc:<model.pt>`,
 `--detector oracle|color|torch|concert`, `--audio` for a soundtrack
 synthesized from the chart, `--tempo 0.6` to slow a chart and its song.
-Song audio only stays in sync when the run is faster than real time, which
-the camera setup is not.
+Song audio only stays in sync when the run keeps up with real time.
 
 **Reproduce the evaluations** (headless, parallel; each writes per-run
 reports plus `summary.md`):
@@ -203,6 +214,7 @@ python -m rhythmbot.train --epochs 30
 | `rhythmbot/robot.py`, `judge.py` | arms, grippers, styluses, touch sensing; scoring |
 | `rhythmbot/cap/`, `bc/`, `policies.py` | code-as-policy loop, behavior cloning, policy loading |
 | `rhythmbot/meshcat_snapshot.py`, `meshcat_screen.py` | presentation renders of the two-arm scene |
+| `rhythmbot/realtime.py` | live 1× runner for the two-arm camera setup, with per-tick timing |
 
 ## More
 
