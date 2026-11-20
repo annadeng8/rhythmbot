@@ -30,6 +30,26 @@ and a **different output directory**. For all eight committed charts, replace
 **[Complete handoff: commands, BC checkpoint retrieval, environment matrix,
 validation and remaining work](docs/HANDOFF.md).**
 
+### Live playback at 1× speed
+
+```sh
+python -m rhythmbot.realtime --chart charts/stylus-hard-handoffs.json \
+  --out results/live.json --wait-for-browser 30 --hold
+```
+
+Open the printed Meshcat URL. This uses both Drake arms, actual composed camera
+RGB, and the same native Meshcat materials and high-resolution minimal screen.
+The opt-in `sekai-realtime` preset uses a **640×480 control camera**; physics
+remains at 1 ms, vision at 30 Hz, and judging at 200 Hz. The frozen study's
+`sekai-camera` preset stays at 960×720. Use `--camera-width 960` to retain that
+resolution, or `--unpaced` to measure available throughput.
+
+Live 1× playback is validated on the local Apple M5 Mac. It is **soft real time**:
+brief stalls remain, and the strict one-frame-lag check is reported honestly.
+gpu156 is faster than before but still below real-time throughput. Mac Mini
+SSH rendering failed to create an OpenGL context. These are separate from the
+frozen experiment results; see [timings, accuracy comparison, and reproduction](results/realtime-v1/README.md).
+
 The fixed dual-arm study uses baseline `6d5acc2`, including the stricter touch-landing rule and minimal display.
 
 The earlier 64-run camera table and GIFs are **historical results under the prior

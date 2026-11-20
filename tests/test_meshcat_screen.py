@@ -9,12 +9,30 @@ import numpy as np
 from rhythmbot.config import stylus_config
 from rhythmbot.chart import Chart, Note, TAP, HOLD, SLIDE
 from rhythmbot.sekai_screen import SekaiScreen
-from rhythmbot.meshcat_screen import screen_quad, write_screen_gltf
+from rhythmbot.meshcat_screen import screen_quad, write_screen_gltf, MeshcatScreen
+from rhythmbot.profiles import config
+from unittest.mock import Mock
 from rhythmbot.game import FrameRenderer
 from rhythmbot.camera_vision import ConcertVisionDetector
 
 
 class MinimalScreenTests(unittest.TestCase):
+    def test_prefetched_texture_matches_current_chart_frame_and_is_bounded(self):
+        cfg = config({'preset': 'sekai-realtime'})
+        chart = Chart([Note(TAP, 1, 3.)])
+        screen = MeshcatScreen(chart, cfg, Mock())
+        try:
+            for tick in (0, 1, 70, 0):
+                screen._fill(tick)
+                path = screen._pending[tick].result()
+                data = json.loads(path.read_text())
+                png = base64.b64decode(data['images'][0]['uri'].split(',', 1)[1])
+                expected = SekaiScreen(cfg).render(chart, tick / cfg.visualizer_hz, scale=4)
+                np.testing.assert_array_equal(np.asarray(Image.open(io.BytesIO(png))), expected)
+                self.assertEqual(len(screen._pending), 4)
+        finally:
+            screen.close()
+
     def test_empty_screen_has_no_animation_or_feedback(self):
         renderer = SekaiScreen(stylus_config())
         a = renderer.render(Chart([]), 0.)

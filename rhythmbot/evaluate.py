@@ -381,7 +381,7 @@ def main(argv=None):
                     help="perception input: the game's own frame, or an external camera on the screen")
     ap.add_argument("--arms", type=int, default=None, choices=[1, 2], help="independent policies per arm")
     ap.add_argument("--stylus", action="store_true", help="two closed grippers, one contact per arm")
-    ap.add_argument("--preset", choices=["sekai-camera", "sekai-screen"], help="complete bimanual single-stylus RGB environment")
+    ap.add_argument("--preset", choices=["sekai-camera", "sekai-screen", "sekai-realtime"], help="complete bimanual single-stylus RGB environment")
     ap.add_argument("--time-limit", type=int, default=DEFAULT_TIME_LIMIT_S,
                     help="seconds per run before it is recorded as a timeout (0: no limit)")
     ap.add_argument("--summarize", metavar="DIR", help="only rebuild the summary of an existing output dir")

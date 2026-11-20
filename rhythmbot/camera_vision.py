@@ -7,11 +7,34 @@ geometry. Occluded pixels stay occluded through rectification.
 from __future__ import annotations
 import hashlib
 import numpy as np
-from scipy import ndimage
+from scipy import ndimage, sparse
 from .camera import camera_config, camera_pose
 from .game import FrameRenderer
 from .perception import NoteDetector, DetectedNote
 from .chart import TAP, HOLD, SLIDE
+
+
+def close_note_mask(mask):
+    p = np.pad(mask, ((6, 6), (1, 1)), mode='edge')
+    d = p.copy()
+    for offset in range(1, 7):
+        d[offset:] |= p[:-offset]
+        d[:-offset] |= p[offset:]
+    p = d.copy()
+    d[:, 1:] |= p[:, :-1]
+    d[:, :-1] |= p[:, 1:]
+    p = d.copy()
+    for offset in range(1, 7):
+        d[offset:] &= p[:-offset]
+        d[:-offset] &= p[offset:]
+    d[:6] = False
+    d[-6:] = False
+    p = d.copy()
+    d[:, 1:] &= p[:, :-1]
+    d[:, :-1] &= p[:, 1:]
+    d[:, 0] = False
+    d[:, -1] = False
+    return d[6:-6, 1:-1]
 
 
 class DisplayRectifier:
@@ -42,15 +65,37 @@ class DisplayRectifier:
             self.u, self.v = col, row
             self.valid = np.ones((H, W), bool)
 
+        h, w = ((cfg.camera.height, cfg.camera.width) if camera
+                else cfg.perception.frame_size[::-1])
+        x0, y0 = np.floor(self.u).astype(int), np.floor(self.v).astype(int)
+        fx, fy = self.u - x0, self.v - y0
+        wx, wy = (1 - fx, 1 - (1 - fx)), (1 - fy, 1 - (1 - fy))
+        indices = [np.clip(y0 + j, 0, h - 1) * w + np.clip(x0 + i, 0, w - 1)
+                   for j in (0, 1) for i in (0, 1)]
+        weights = [wy[j] * wx[i] for j in (0, 1) for i in (0, 1)]
+        self._warp = sparse.csr_matrix((np.stack(weights, -1).ravel(),
+            np.stack(indices, -1).ravel(), np.arange(self.u.size + 1) * 4),
+            shape=(self.u.size, w * h))
+        self._inside = (self.valid & (self.u >= 0) & (self.u <= w - 1)
+                        & (self.v >= 0) & (self.v <= h - 1))
+
     def rectify(self, rgb):
         expected = ((self.cfg.camera.height, self.cfg.camera.width) if self.camera
                     else self.cfg.perception.frame_size[::-1])
         if rgb is None or rgb.shape != (*expected, 3):
             raise ValueError(f'Expected RGB {(*expected, 3)}, got {None if rgb is None else rgb.shape}')
-        out = np.stack([ndimage.map_coordinates(rgb[..., k], [self.v, self.u],
-                         order=1, mode='constant', cval=0) for k in range(3)], -1)
-        out[~self.valid] = 0
-        return out.astype(np.uint8)
+        values = (self._warp @ rgb.reshape(-1, 3)).reshape((*self.u.shape, 3))
+        # Precombined weights differ by a few ulps. Preserve SciPy's exact
+        # rounding at half-integer boundaries using its original calculation.
+        ambiguous = np.abs(values - np.floor(values) - .5) < 1e-10
+        if np.any(ambiguous & self._inside[..., None]):
+            out = np.stack([ndimage.map_coordinates(rgb[..., k], [self.v, self.u],
+                order=1, mode='constant', cval=0) for k in range(3)], -1)
+            out[~self.valid] = 0
+            return out
+        out = np.floor(values + .5).clip(0, 255).astype(np.uint8)
+        out[~self._inside] = 0
+        return out
 
 
 class ConcertVisionDetector(NoteDetector):
@@ -82,8 +127,7 @@ class ConcertVisionDetector(NoteDetector):
         out = []
         for kind, mask in masks:
             mask[R.hit_row + 12:] = False
-            mask = ndimage.binary_closing(np.pad(mask, ((6, 6), (1, 1)), mode="edge"),
-                                            structure=np.ones((13, 3)))[6:-6, 1:-1]
+            mask = close_note_mask(mask)
             labels, _ = ndimage.label(mask)
             for ident, sl in enumerate(ndimage.find_objects(labels), 1):
                 if sl is None: continue

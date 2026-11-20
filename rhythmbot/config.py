@@ -227,6 +227,8 @@ class Camera:
     target_offset: tuple[float, float, float] = (0.07, 0.0, 0.0)
     # Per-pixel Gaussian sensor noise (0-255 scale).
     noise_std: float = 3.0
+    # Same seeded Gaussian pixels, generated ahead on two CPU threads.
+    prefetch_noise: bool = False
 
 
 @dataclass(frozen=True)

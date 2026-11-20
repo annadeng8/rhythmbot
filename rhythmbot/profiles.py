@@ -2,11 +2,11 @@
 from dataclasses import replace
 from .config import DEFAULT, Camera, stylus_config, two_arm_config
 
-PRESETS = ('sekai-camera', 'sekai-screen')
+PRESETS = ('sekai-camera', 'sekai-screen', 'sekai-realtime')
 
 def resolve(preset=None, arms=None, view=None, detectors=None, stylus=False):
     if preset:
-        expected_view = 'camera' if preset == 'sekai-camera' else 'screen'
+        expected_view = 'screen' if preset == 'sekai-screen' else 'camera'
         if preset not in PRESETS:
             raise ValueError(f'Unknown preset: {preset}')
         if arms not in (None, 2) or view not in (None, expected_view) or detectors not in (None, ('concert',)):
@@ -22,6 +22,8 @@ def resolve(preset=None, arms=None, view=None, detectors=None, stylus=False):
 def config(job):
     cfg = stylus_config() if job.get('stylus') or job.get('preset') in PRESETS else (two_arm_config() if job.get('arms', 1) == 2 else DEFAULT)
     if job.get('preset') in PRESETS:
-        cfg = replace(cfg, camera=Camera(width=960, height=720, fov_y_deg=48,
-            eye_offset=(.35, -.50, 1.15), target_offset=(0., .05, 0.), noise_std=3.))
+        live = job.get('preset') == 'sekai-realtime'
+        cfg = replace(cfg, camera=Camera(width=640 if live else 960, height=480 if live else 720, fov_y_deg=48,
+            eye_offset=(.35, -.50, 1.15), target_offset=(0., .05, 0.), noise_std=3.,
+            prefetch_noise=live))
     return cfg
