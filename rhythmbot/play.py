@@ -9,6 +9,7 @@
     python -m rhythmbot.play --random 7 --noise 0.03 --latency 0.1
     python -m rhythmbot.play --demo --policy bc:results/bc_policy.pt   # another policy
     python -m rhythmbot.play --chart charts/song.json --arms 2  # two arms, wider lanes
+    python -m rhythmbot.play --demo --preset sekai-camera --hold  # the dual-arm study's camera setup
 
 Diagram:
 
@@ -44,6 +45,7 @@ from .judge import Judge
 from .perception import make_detector
 from .planner import ClassicalPlanner, Policy
 from .policies import make_policy
+from .profiles import PRESETS, resolve, config as preset_config
 from .robot import WSG_NAME, Robot, TouchSensor
 from .viz import HEADLESS, get_meshcat, keep_meshcat_open, publish_recording, start_recording
 
@@ -234,14 +236,17 @@ def main(argv=None):
     src.add_argument("--chart", help="chart JSON file")
     src.add_argument("--random", type=int, metavar="SEED", help="generate a random chart")
     src.add_argument("--demo", action="store_true", help="the built-in demo chart (default)")
-    ap.add_argument("--detector", default="oracle", choices=["oracle", "color", "torch", "concert"])
+    ap.add_argument("--preset", choices=PRESETS,
+                    help="the dual-arm study's environment: two styluses, concert vision, its calibrated camera")
+    ap.add_argument("--detector", default=None, choices=["oracle", "color", "torch", "concert"],
+                    help="default: oracle (concert with --preset)")
     ap.add_argument("--model", help="TorchScript model for --detector torch")
     ap.add_argument(
         "--policy", default="classical",
         help="classical, bc:<model.pt> (behavior cloning) or cap:<policy.py> (generated program)",
     )
-    ap.add_argument("--view", default="screen", choices=["screen", "camera"],
-                    help="perception input: the game's own frame, or an external camera on the screen")
+    ap.add_argument("--view", default=None, choices=["screen", "camera"],
+                    help="perception input: the game's own frame (default), or an external camera on the screen")
     ap.add_argument("--arms", type=int, default=None, choices=[1, 2], help="arms (default: 2; camera/custom policies: 1)")
     ap.add_argument("--noise", type=float, default=0.0, help="oracle hit-time noise std (s)")
     ap.add_argument("--latency", type=float, default=0.0, help="oracle detection latency (s)")
@@ -276,10 +281,20 @@ def main(argv=None):
         song = None
     song_offset = args.song_offset if args.song_offset is not None else chart.audio_offset
 
+    if args.preset:
+        try:
+            args.arms, args.view, (args.detector,), args.stylus = resolve(
+                args.preset, args.arms, args.view, None if args.detector is None else (args.detector,))
+        except ValueError as e:
+            ap.error(str(e))
+    args.view = args.view or "screen"
+    args.detector = args.detector or "oracle"
     if args.arms is None:
         args.arms = 2 if args.stylus else (1 if args.view == "camera" or args.policy != "classical" else 2)
     base = two_arm_config() if args.arms == 2 else DEFAULT
-    if args.stylus:
+    if args.preset:
+        base = preset_config({"preset": args.preset})
+    elif args.stylus:
         if args.arms != 2:
             ap.error("--stylus requires --arms 2")
         base = stylus_config(base)
