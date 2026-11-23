@@ -1,5 +1,14 @@
 # RhythmBot — simulation pipeline
 
+## Latest experiment results
+
+The [remaining dual-arm study](results/remaining-study-v1/README.md) covers the
+paired color/shape versus frozen neural-camera comparison and sequential live
+MLP/diffusion BC evaluation. It reuses all 11 held-out charts, all three Codex CAP
+programs and all six BC checkpoints. Accuracy and real-time deadline compliance
+are reported separately. The [earlier frozen study](results/yifan-final-v1/README.md)
+contains the oracle/direct-screen/camera ablation and training provenance.
+
 ## Start here: current bimanual Sekai-camera handoff
 
 The current display is minimal: lanes, notes and the judgment line only.
@@ -45,7 +54,7 @@ remains at 1 ms, vision at 30 Hz, and judging at 200 Hz. The frozen study's
 `sekai-camera` preset stays at 960×720. Use `--camera-width 960` to retain that
 resolution, or `--unpaced` to measure available throughput.
 
-Live 1× playback is validated on the local Apple M5 Mac. It is **soft real time**:
+The earlier classical-controller test reached 1× playback on the local Apple M5 Mac. It is **soft real time**:
 brief stalls remain, and the strict one-frame-lag check is reported honestly.
 gpu156 is faster than before but still below real-time throughput. Mac Mini
 SSH rendering failed to create an OpenGL context. These are separate from the
@@ -61,8 +70,9 @@ trained detector) or call those results bimanual camera results.
 
 The screen is dynamically composited into Drake RGB with correct robot occlusion.
 Only the environment renderer uses render labels; vision receives RGB and a clock,
-with known geometric calibration. This is classical RGB vision, not a VLM or a
-physical-camera experiment.
+with known geometric calibration. The default is classical RGB vision; `--detector concert-torch --model
+results/note_detector_v7.pt` selects the frozen neural detector on rectified RGB.
+Neither is a physical-camera experiment.
 
 ## Current dual-arm CAP / BC experiments
 

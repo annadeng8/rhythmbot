@@ -222,7 +222,7 @@ def evaluate(
                             "split": part,
                             "policy": pol,
                             "detector": det,
-                            "model": str(model or DEFAULT_MODEL) if det == "torch" else None,
+                            "model": str(model or DEFAULT_MODEL) if det in ("torch", "concert-torch") else None,
                             "out": str(out_dir / policy_tag(pol) / det / f"{stem}.json"),
                             "view": view,
                             "arms": arms,
@@ -373,7 +373,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--policy", nargs="+", default=["classical"])
     ap.add_argument("--split", default=None, help=f"one of {', '.join(splits.SPLITS)} (comma-separated ok)")
-    ap.add_argument("--detector", nargs="+", default=None, choices=["oracle", "color", "torch", "concert"])
+    ap.add_argument("--detector", nargs="+", default=None, choices=["oracle", "color", "torch", "concert", "concert-torch"])
     ap.add_argument("--model", help="vision model for --detector torch (default results/note_detector.pt)")
     ap.add_argument("--out", default=str(PROJECT_ROOT / "results" / "compare"))
     ap.add_argument("--workers", type=int, default=2)

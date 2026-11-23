@@ -1,0 +1,9 @@
+{
+  "execution_errors": 0,
+  "policy_errors": 0,
+  "compare_runs": 220,
+  "live_runs": 66,
+  "source_sha256": "47d41f138e25011233f0f7068c0b0a786f41859a3664236ae6f0dd06b5211eee",
+  "protocol_sha256": "39108f71eeb72b9db0ea6cdddb47497e0ab2ade6b41c9b00d04e2a82f48bb5aa",
+  "note": "Completed experiment coverage, not universal note success or a real-time pass."
+}

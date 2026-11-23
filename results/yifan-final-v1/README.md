@@ -76,3 +76,10 @@ All 330 held-out runs and 36 CAP training-feedback runs completed with zero exec
 The three native Meshcat GIFs under `replays/` cover the same complete crossing chart with Drake camera RGB control: classical 2/3, final CAP 0/3, diffusion seed 0 0/3. Contact counts, tail counts, final judgments and timing match their frozen reports (`replay-verification.json`). The CAP/BC choices were recorded before testing; the classical reference was added on the same chart after viewing the failures. A BC slide with 99.3% maintenance still fails because only 7/8 tail samples are covered. No failed clip was replaced with an easier one.
 
 The reusable resource budget is **32 GiB host RAM**: late-run persistent BC workers retained about 21.4 GiB together, exceeding the initial 16 GiB estimate. They exited normally and freed their memory. GPU use and disk use stayed small; `resource-budget.txt` records the correction. Future larger studies should recycle workers in bounded batches. The GIFs and summary are committed to Git; the larger arrays, weights and raw frame exports remain on gpu156.
+
+## Subsequent evaluation
+
+The [November 23 completion study](../remaining-study-v1/README.md) evaluates
+these same frozen policies with the integrated neural camera detector and live
+dual-arm execution. It has separate source/protocol hashes and does not alter
+the historical results above.

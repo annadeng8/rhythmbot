@@ -1,0 +1,547 @@
+{
+  "loaded_weights_exact": true,
+  "tensors_checked": 62,
+  "torch_version": "2.11.0+cu128",
+  "backend": "NoteNet",
+  "note": "Probes are not held-out task results. Native direct RGB is a positive control, not a camera ablation.",
+  "rows": [
+    {
+      "target_kind": "tap",
+      "time": 2.0,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "tap",
+          "lane": 1.0,
+          "hit_time": 2.997857093811035,
+          "duration": 0.0,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999847412109375,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "tap",
+      "time": 2.0,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "tap",
+          "lane": 1.0,
+          "hit_time": 2.957563304901123,
+          "duration": 0.0,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999923706054688,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "tap",
+      "time": 2.0,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "tap",
+      "time": 2.6,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "tap",
+          "lane": 1.0,
+          "hit_time": 2.9987902641296387,
+          "duration": 0.0,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999982118606567,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "tap",
+      "time": 2.6,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "tap",
+          "lane": 1.0,
+          "hit_time": 2.983522462844849,
+          "duration": 0.0,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999997615814209,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "tap",
+      "time": 2.6,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "tap",
+      "time": 3.2,
+      "input": "native",
+      "detections": []
+    },
+    {
+      "target_kind": "tap",
+      "time": 3.2,
+      "input": "sekai",
+      "detections": []
+    },
+    {
+      "target_kind": "tap",
+      "time": 3.2,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "hold",
+      "time": 2.0,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 3.0051385879516603,
+          "duration": 1.0152113917896175,
+          "duration_final": false,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999845027923584,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "hold",
+      "time": 2.0,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 2.972138214111328,
+          "duration": 0.7102856671228227,
+          "duration_final": false,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 1.0,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "hold",
+      "time": 2.0,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "hold",
+      "time": 2.6,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 3.0011319637298586,
+          "duration": 0.7897892837522551,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999910593032837,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "hold",
+      "time": 2.6,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 2.970232915878296,
+          "duration": 0.5963406262379345,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 1.0,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 3.7344609260559083,
+          "duration": 0.2480171362404594,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9282906651496887,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "hold",
+      "time": 2.6,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "hold",
+      "time": 3.2,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 3.2,
+          "duration": 0.5976586417278277,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9998897314071655,
+          "active": true
+        }
+      ]
+    },
+    {
+      "target_kind": "hold",
+      "time": 3.2,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 3.2,
+          "duration": 0.45993974029838264,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 1.0,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 4.0869313240051275,
+          "duration": 0.17877149106248227,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.995212197303772,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "hold",
+      "time": 3.2,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "slide",
+      "time": 2.0,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "slide",
+          "lane": 1.0,
+          "hit_time": 2.9876285552978517,
+          "duration": 0.8129310233576541,
+          "duration_final": false,
+          "waypoints": [
+            [
+              0.0,
+              1.0
+            ],
+            [
+              0.20323275583941353,
+              1.7424213886260986
+            ],
+            [
+              0.40646551167882705,
+              2.463897228240967
+            ],
+            [
+              0.6096982675182405,
+              2.9940104484558105
+            ],
+            [
+              0.8129310233576541,
+              3.4441897869110107
+            ]
+          ],
+          "note_id": -1,
+          "confidence": 0.9999996423721313,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "slide",
+      "time": 2.0,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 2.9231545448303224,
+          "duration": 0.1334687313893941,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 1.0,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 2.0,
+          "hit_time": 3.188021659851074,
+          "duration": 0.16668437451924747,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999991655349731,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 3.0,
+          "hit_time": 3.4592124938964846,
+          "duration": 0.5380902395444056,
+          "duration_final": false,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.999984860420227,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "slide",
+      "time": 2.0,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "slide",
+      "time": 2.6,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "slide",
+          "lane": 1.0,
+          "hit_time": 2.992064142227173,
+          "duration": 0.7970791429670688,
+          "duration_final": true,
+          "waypoints": [
+            [
+              0.0,
+              1.0
+            ],
+            [
+              0.1992697857417672,
+              1.817441463470459
+            ],
+            [
+              0.3985395714835344,
+              2.5513408184051514
+            ],
+            [
+              0.5978093572253016,
+              3.5073018074035645
+            ],
+            [
+              0.7970791429670688,
+              4.3059983253479
+            ]
+          ],
+          "note_id": -1,
+          "confidence": 0.9999990463256836,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "slide",
+      "time": 2.6,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 2.9682061672210693,
+          "duration": 0.12321563943402093,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 1.0,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 1.0,
+          "hit_time": 3.6521002769470217,
+          "duration": 0.0969392758953208,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.7644802331924438,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 2.0,
+          "hit_time": 3.2316417694091797,
+          "duration": 0.13923465305425708,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999988079071045,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 3.0,
+          "hit_time": 3.4811222076416017,
+          "duration": 0.1344613966491963,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999994039535522,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 4.0,
+          "hit_time": 3.7087656974792482,
+          "duration": 0.10243554836837711,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9994714856147766,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "slide",
+      "time": 2.6,
+      "input": "black",
+      "detections": []
+    },
+    {
+      "target_kind": "slide",
+      "time": 3.2,
+      "input": "native",
+      "detections": [
+        {
+          "kind": "slide",
+          "lane": 2.0,
+          "hit_time": 3.2,
+          "duration": 0.7422722122640784,
+          "duration_final": true,
+          "waypoints": [
+            [
+              0.0,
+              1.7234314680099487
+            ],
+            [
+              0.1855680530660196,
+              2.352625846862793
+            ],
+            [
+              0.3711361061320392,
+              3.018211841583252
+            ],
+            [
+              0.5567041591980588,
+              3.776315212249756
+            ],
+            [
+              0.7422722122640784,
+              4.563288688659668
+            ]
+          ],
+          "note_id": -1,
+          "confidence": 0.9997627139091492,
+          "active": true
+        }
+      ]
+    },
+    {
+      "target_kind": "slide",
+      "time": 3.2,
+      "input": "sekai",
+      "detections": [
+        {
+          "kind": "hold",
+          "lane": 2.0,
+          "hit_time": 3.2,
+          "duration": 0.15282433936472806,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 1.0,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 2.0,
+          "hit_time": 4.043958377838135,
+          "duration": 0.17642659285089607,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9911569356918335,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 3.0,
+          "hit_time": 3.47995023727417,
+          "duration": 0.16146871698090243,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9999791383743286,
+          "active": false
+        },
+        {
+          "kind": "hold",
+          "lane": 4.0,
+          "hit_time": 3.70902943611145,
+          "duration": 0.1138591476056467,
+          "duration_final": true,
+          "waypoints": [],
+          "note_id": -1,
+          "confidence": 0.9997345805168152,
+          "active": false
+        }
+      ]
+    },
+    {
+      "target_kind": "slide",
+      "time": 3.2,
+      "input": "black",
+      "detections": []
+    }
+  ]
+}
