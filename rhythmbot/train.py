@@ -2,6 +2,8 @@
 
     python -m rhythmbot.train --train data/train --val data/val --epochs 12
     python -m rhythmbot.train --eval-only --model results/note_detector.pt --val data/val
+    python -m rhythmbot.train --init results/note_detector_v7.pt --train data/sekai-camera/train \
+        --val data/sekai-camera/val --model results/note_detector_v7_sekai.pt --epochs 12 --lr 3e-4
 
 Model
 -----
@@ -358,6 +360,7 @@ def main(argv=None):
     ap.add_argument("--batch", type=int, default=64)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--limit", type=int, help="use only this many frames (debug)")
+    ap.add_argument("--init", help="start from this TorchScript model's weights (fine-tuning)")
     ap.add_argument("--eval-only", action="store_true")
     ap.add_argument(
         "--export-state", action="store_true",
@@ -402,6 +405,9 @@ def main(argv=None):
         "rest_fractions": list(REST_FRACTIONS),
         "frame_size": list(cfg.perception.frame_size),
     }
+    if args.init:
+        meta["init"] = args.init
+        meta["train"] = args.train
 
     if args.eval_only:
         ev = evaluate(model, val_x, val_y, device, approach, n_lanes, active_path=active_path)
@@ -412,7 +418,12 @@ def main(argv=None):
     tr_x, tr_y = load_split(Path(args.train), n_lanes, approach, args.limit)
     print(f"train {tuple(tr_x.shape)} in {time.time() - t0:.0f}s")
 
-    model = NoteNet(n_lanes).to(device)
+    model = NoteNet(n_lanes)
+    if args.init:
+        model.load_state_dict(torch.jit.load(args.init, map_location="cpu").state_dict())
+        ev = evaluate(model.to(device), val_x, val_y, device, approach, n_lanes)
+        print(f"init {args.init}: val " + json.dumps({k: round(v, 4) for k, v in ev.items() if v is not None}))
+    model = model.to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     steps = args.epochs * ((len(tr_x) + args.batch - 1) // args.batch)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=args.lr, total_steps=steps)

@@ -1,0 +1,36 @@
+/Users/annadeng/mit/64210/.venv/lib/python3.13/site-packages/torch/jit/_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+/Users/annadeng/mit/64210/.venv/lib/python3.13/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+device mps
+val   (6855, 3, 192, 128) in 10s
+train (47157, 3, 192, 128) in 64s
+init results/note_detector_v7.pt: val {"active_precision": 0.998, "active_recall": 0.9987, "active_end_mae_ms": 11.1884, "active_offscreen_ok": 0.8463, "precision": 0.9998, "recall": 0.9995, "kind_accuracy": 0.9965, "time_to_hit_mae_ms": 15.5278, "time_to_hit_p95_ms": 48.797, "duration_mae_ms": 177.4203, "path_lane_mae": 0.0566, "slide_end_lane_mae": 0.7842, "active_rest_lane_mae": 0.0911, "active_rest_end_lane_mae": 0.1329, "n_true_notes": 33266}
+epoch  1  loss 0.0691  P 1.000 R 0.999 kind 0.996  tth MAE   17 ms  dur MAE  165 ms  path-lane MAE 0.05 slide end 0.62  | active P 0.998 R 0.999 end MAE   12 ms rest lane 0.07 rest end 0.10  (114s)
+epoch  2  loss 0.0583  P 1.000 R 0.999 kind 0.996  tth MAE   18 ms  dur MAE  162 ms  path-lane MAE 0.05 slide end 0.55  | active P 0.998 R 0.998 end MAE   12 ms rest lane 0.06 rest end 0.10  (91s)
+epoch  3  loss 0.0571  P 1.000 R 0.999 kind 0.997  tth MAE   26 ms  dur MAE  168 ms  path-lane MAE 0.04 slide end 0.51  | active P 0.998 R 0.998 end MAE   11 ms rest lane 0.06 rest end 0.09  (88s)
+epoch  4  loss 0.0560  P 1.000 R 0.999 kind 0.996  tth MAE   22 ms  dur MAE  162 ms  path-lane MAE 0.04 slide end 0.50  | active P 0.997 R 0.998 end MAE   14 ms rest lane 0.05 rest end 0.08  (83s)
+epoch  5  loss 0.0525  P 1.000 R 0.999 kind 0.996  tth MAE   18 ms  dur MAE  155 ms  path-lane MAE 0.04 slide end 0.48  | active P 0.998 R 0.999 end MAE    9 ms rest lane 0.06 rest end 0.08  (86s)
+epoch  6  loss 0.0490  P 1.000 R 0.999 kind 0.996  tth MAE   18 ms  dur MAE  154 ms  path-lane MAE 0.03 slide end 0.45  | active P 0.998 R 0.999 end MAE   12 ms rest lane 0.05 rest end 0.07  (88s)
+epoch  7  loss 0.0457  P 1.000 R 0.999 kind 0.997  tth MAE   18 ms  dur MAE  152 ms  path-lane MAE 0.03 slide end 0.45  | active P 0.998 R 0.999 end MAE   10 ms rest lane 0.04 rest end 0.06  (88s)
+epoch  8  loss 0.0424  P 1.000 R 0.999 kind 0.996  tth MAE   17 ms  dur MAE  150 ms  path-lane MAE 0.03 slide end 0.43  | active P 0.998 R 0.999 end MAE   11 ms rest lane 0.04 rest end 0.06  (82s)
+epoch  9  loss 0.0394  P 1.000 R 0.999 kind 0.997  tth MAE   16 ms  dur MAE  149 ms  path-lane MAE 0.03 slide end 0.41  | active P 0.998 R 0.999 end MAE    7 ms rest lane 0.04 rest end 0.05  (82s)
+epoch 10  loss 0.0369  P 1.000 R 0.999 kind 0.997  tth MAE   15 ms  dur MAE  149 ms  path-lane MAE 0.03 slide end 0.41  | active P 0.998 R 0.999 end MAE    7 ms rest lane 0.03 rest end 0.05  (86s)
+epoch 11  loss 0.0350  P 1.000 R 0.999 kind 0.996  tth MAE   15 ms  dur MAE  148 ms  path-lane MAE 0.03 slide end 0.40  | active P 0.998 R 0.999 end MAE    6 ms rest lane 0.03 rest end 0.05  (80s)
+epoch 12  loss 0.0345  P 1.000 R 0.999 kind 0.997  tth MAE   15 ms  dur MAE  148 ms  path-lane MAE 0.03 slide end 0.40  | active P 0.998 R 0.999 end MAE    6 ms rest lane 0.03 rest end 0.05  (79s)
+model -> results/note_detector_v7_zigzag.pt
+{
+ "active_precision": 0.9979916317991632,
+ "active_recall": 0.999162198391421,
+ "active_end_mae_ms": 6.1669982969760895,
+ "active_offscreen_ok": 1.0,
+ "precision": 0.9997594419052201,
+ "recall": 0.9994589069921241,
+ "kind_accuracy": 0.9965110683349374,
+ "time_to_hit_mae_ms": 14.651717618107796,
+ "time_to_hit_p95_ms": 45.9294468164444,
+ "duration_mae_ms": 147.7774977684021,
+ "path_lane_mae": 0.027324318885803223,
+ "slide_end_lane_mae": 0.40231645107269287,
+ "active_rest_lane_mae": 0.03316403552889824,
+ "active_rest_end_lane_mae": 0.04695245623588562,
+ "n_true_notes": 33266
+}

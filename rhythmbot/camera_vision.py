@@ -6,6 +6,7 @@ geometry. Occluded pixels stay occluded through rectification.
 """
 from __future__ import annotations
 import hashlib
+import json
 import time
 from pathlib import Path
 import numpy as np
@@ -104,7 +105,9 @@ class NeuralCameraDetector(TorchDetector):
     """Anna's frozen network on geometrically rectified, observed camera RGB.
 
     No palette conversion, chart-based reconstruction, or occlusion filling.
-    This is zero-shot transfer from the network's original rendering domain.
+    With the original v7 this is zero-shot transfer from the network's
+    original rendering domain; a model fine-tuned on rectified camera frames
+    (`train.py --init`) reports `fine_tuned` in its stats.
     """
     def __init__(self, model_path, cfg, device='cpu', camera=True):
         super().__init__(model_path, cfg, device=device)
@@ -118,6 +121,8 @@ class NeuralCameraDetector(TorchDetector):
         self.inference_seconds = []
         self.model_sha256 = hashlib.sha256(Path(model_path).read_bytes()).hexdigest()
         self.sidecar_sha256 = hashlib.sha256(Path(model_path).with_suffix('.json').read_bytes()).hexdigest()
+        # Fine-tuned models record the model they started from (train.py --init).
+        self.fine_tuned = 'init' in json.loads(Path(model_path).with_suffix('.json').read_text())
 
     def detect(self, frame, t):
         rgb = self.rectifier.rectify(frame)
@@ -148,7 +153,7 @@ class NeuralCameraDetector(TorchDetector):
             chart_access=False, label_input=False, depth_input=False,
             method='fixed geometric calibration + frozen Anna neural detector',
             model_sha256=self.model_sha256, sidecar_sha256=self.sidecar_sha256,
-            active_path=self.active_path, palette_conversion=False, fine_tuned=False,
+            active_path=self.active_path, palette_conversion=False, fine_tuned=self.fine_tuned,
             inference_mean_seconds=float(np.mean(self.inference_seconds)) if self.frames else 0.,
             inference_max_seconds=max(self.inference_seconds, default=0.))
 

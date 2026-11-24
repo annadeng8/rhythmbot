@@ -1,0 +1,65 @@
+{
+  "charts": [
+    "results/yifan-final-v1/charts/test_iid/crossing-s71000-0.8s-x1.1287.json",
+    "results/yifan-final-v1/charts/test_iid/holds-s71000-x1.1287.json",
+    "results/yifan-final-v1/charts/test_iid/chords-s71000-x1.1287.json",
+    "results/yifan-final-v1/charts/test_iid/crossing-s71001-0.5s-x0.88833.json",
+    "results/yifan-final-v1/charts/test_iid/holds-s71001-x0.88833.json",
+    "results/yifan-final-v1/charts/test_iid/chords-s71001-x0.88833.json",
+    "results/yifan-final-v1/charts/test_speed/crossing-s81000-0.3s.json",
+    "results/yifan-final-v1/charts/test_speed/crossing-s81001-0.4s.json",
+    "results/yifan-final-v1/charts/test_song/unknown-easy-first30s.json",
+    "results/yifan-final-v1/charts/test_song/unknown-intermediate-first30s.json",
+    "results/yifan-final-v1/charts/test_song/unknown-normal-first30s.json"
+  ],
+  "policies": [
+    {
+      "label": "classical",
+      "spec": "classical",
+      "sha256": null
+    },
+    {
+      "label": "cap-v0",
+      "spec": "cap:results/yifan-final-v1/cap/v0/policy.py",
+      "sha256": "90f7ce96cf837594a8bbcb6111fa03f6d3e081097fb7cec534e8d06abb92e002"
+    },
+    {
+      "label": "cap-v1",
+      "spec": "cap:results/yifan-final-v1/cap/v1/policy.py",
+      "sha256": "a341da4252b5996feba6f79e0b74e6dc6e43cb415190c5045faa1e9ddd6784aa"
+    },
+    {
+      "label": "cap-v2",
+      "spec": "cap:results/yifan-final-v1/cap/v2/policy.py",
+      "sha256": "0607a88836ddef81e4773e8d4e457cb02099ac326329a367b2faf68d35bfb6fc"
+    }
+  ],
+  "detectors": [
+    {
+      "label": "color",
+      "detector": "concert",
+      "model": null,
+      "sha256": null
+    },
+    {
+      "label": "v7-zero-shot",
+      "detector": "concert-torch",
+      "model": "results/note_detector_v7.pt",
+      "sha256": "6f470a1575e0b585a180db3598c400feed91a4632154f0a22f0cae496235bf44"
+    },
+    {
+      "label": "v7-fine-tuned",
+      "detector": "concert-torch",
+      "model": "results/note_detector_v7_sekai.pt",
+      "sha256": "3d9afa7d5c572f5d206acf98ac6c59b83a689a45f7b5c73f7e1fb47da7341759"
+    }
+  ],
+  "settings": {
+    "camera_width": 960,
+    "paced": false,
+    "meshcat": false,
+    "seed": 0,
+    "runner": "rhythmbot.realtime.run"
+  },
+  "note": "Local Apple M5 rerun; BC checkpoints are on gpu156 and not included."
+}

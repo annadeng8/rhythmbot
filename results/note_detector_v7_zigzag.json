@@ -1,0 +1,57 @@
+{
+ "n_lanes": 6,
+ "k_slots": 8,
+ "rows": 24,
+ "approach_time": 1.6,
+ "max_duration": 8.0,
+ "duration_norm": "log1p",
+ "downsample": 2,
+ "path_fractions": [
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "kinds": [
+  "tap",
+  "hold",
+  "slide"
+ ],
+ "active_slot": true,
+ "active_kinds": [
+  "hold",
+  "slide"
+ ],
+ "path_relative": true,
+ "active_path": true,
+ "rest_fractions": [
+  0.0,
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "frame_size": [
+  256,
+  384
+ ],
+ "init": "results/note_detector_v7.pt",
+ "train": "data/study-screen/train",
+ "val": {
+  "active_precision": 0.9979916317991632,
+  "active_recall": 0.999162198391421,
+  "active_end_mae_ms": 6.1669982969760895,
+  "active_offscreen_ok": 1.0,
+  "precision": 0.9997594419052201,
+  "recall": 0.9994589069921241,
+  "kind_accuracy": 0.9965110683349374,
+  "time_to_hit_mae_ms": 14.651717618107796,
+  "time_to_hit_p95_ms": 45.9294468164444,
+  "duration_mae_ms": 147.7774977684021,
+  "path_lane_mae": 0.027324318885803223,
+  "slide_end_lane_mae": 0.40231645107269287,
+  "active_rest_lane_mae": 0.03316403552889824,
+  "active_rest_end_lane_mae": 0.04695245623588562,
+  "n_true_notes": 33266
+ }
+}

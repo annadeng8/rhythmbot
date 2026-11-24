@@ -75,6 +75,9 @@ class TrackedNote:
     # Set once a detection made while the note is being played has seen its
     # end on screen; from then on its end time is measured, not guessed.
     active_final: bool = False
+    # Set once the rest of a slide's path has been read while it is played;
+    # later readings are merged into that one instead of replacing it.
+    rest_read: bool = False
     # For a hold: (fingertip side, x, opening) it is played with, as the
     # latest plan has it, and, fixed once the hold has started, as the hand
     # actually put it down.  Later plans keep the committed fingertip where

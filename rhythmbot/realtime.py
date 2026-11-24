@@ -19,6 +19,7 @@ from pathlib import Path
 
 import numpy as np
 from pydrake.all import Meshcat, Simulator
+from . import audio
 from .chart import Chart
 from .play import build
 from .policies import make_policy
@@ -27,7 +28,10 @@ from .experiments import digest, source_hash
 
 
 def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classical', hold=False,
-        camera_width=None, wait_for_browser=0., detector='concert', model_path=None, seed=0):
+        camera_width=None, wait_for_browser=0., detector='concert', model_path=None, seed=0,
+        song=None, song_offset=0., song_rate=1.):
+    """`song` (an audio file) starts when the paced run reaches `song_offset`
+    seconds of chart time; only with Meshcat and pacing, as in `play.run`."""
     started = time.perf_counter()
     source = source_hash()
     cfg = config({'preset': 'sekai-realtime'})
@@ -80,10 +84,15 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
     startup = time.perf_counter() - started
     gc_enabled = gc.isenabled()
     gc.disable()
+    player = None
+    if not (paced and viewer is not None):
+        song = None
     try:
         start = time.perf_counter()
         for i in range(int(np.ceil(end / dt))):
             target = min((i + 1) * dt, end)
+            if song is not None and target - dt >= song_offset:
+                player, song = audio.play(song, rate=song_rate), None
             before = time.perf_counter()
             sim.AdvanceTo(target)
             for k, arm in enumerate(robot.arms):
@@ -97,6 +106,7 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
                 time.sleep(max(0., start + target - finished))
         wall = time.perf_counter() - start
     finally:
+        audio.stop(player)
         if gc_enabled:
             gc.enable()
         if screen.noise_prefetch is not None:

@@ -42,6 +42,20 @@ class ActivePathTests(unittest.TestCase):
         self.assertAlmostEqual(n.waypoints[-1][0], n.duration)
         self.assertEqual(n.lane_at_offset(n.duration), 5.0)
 
+    def test_later_readings_keep_earlier_points_between_theirs(self):
+        n = TrackedNote(0, SLIDE, 0.0, 1.0, 1.0, waypoints=[(0.0, 0.0), (1.0, 5.0)])
+        # Points at 0.6, 0.7, 0.8, 0.9, 1.0 s into the slide...
+        RhythmBrain._replace_rest(n, DetectedNote(SLIDE, 3.0, 1.6, 0.4, active=True,
+            waypoints=[(0.0, 2.6), (0.1, 3.2), (0.2, 3.8), (0.3, 4.4), (0.4, 5.0)]), 1.6)
+        # ...then at 0.7, 0.775, 0.85, 0.925, 1.0: the new 0.7 and 1.0 replace
+        # the old ones, and the old 0.8 and 0.9 stay between the new points.
+        RhythmBrain._replace_rest(n, DetectedNote(SLIDE, 3.0, 1.7, 0.3, active=True,
+            waypoints=[(0.0, 3.1), (0.075, 3.6), (0.15, 4.0), (0.225, 4.5), (0.3, 5.0)]), 1.7)
+        np.testing.assert_allclose([w[0] for w in n.waypoints],
+                                   [0.0, 0.6, 0.7, 0.775, 0.8, 0.85, 0.9, 0.925, 1.0])
+        self.assertEqual(n.waypoints[4][1], 3.8)
+        self.assertEqual(n.waypoints[2][1], 3.1)
+
 
 if __name__ == "__main__":
     unittest.main()

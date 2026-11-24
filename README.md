@@ -26,9 +26,9 @@ must follow the path and finish on the right lane.
 |---|---|---|
 | Robot | 1 iiwa + WSG gripper; its two fingertips are two contacts | 2 iiwa; each closed WSG holds one stylus |
 | Screen | plain game screen | minimal Sekai screen: lanes, notes, judgment line |
-| Perception | trained neural detector (`note_detector_v7.pt`) on the game image | hand-coded color/shape detector on a simulated 960×720 camera image (or on the screen image directly, as an ablation); v7 tested zero-shot on the camera as a comparison |
+| Perception | trained neural detector (`note_detector_v7.pt`; `note_detector_v7_zigzag.pt` also trained on the study's zigzag slides) on the game image | hand-coded color/shape detector on a simulated 960×720 camera image (or on the screen image directly, as an ablation); v7 tested on the camera zero-shot and fine-tuned (`note_detector_v7_sekai.pt`) as comparisons |
 | Controllers | classical, CAP (Claude-written) | classical, CAP (Codex-written), BC (MLP and diffusion, 3 seeds each) |
-| Results | [`results/eval-v3`](results/eval-v3/summary.md) (v7 detector), [`results/eval-v2`](results/eval-v2/summary.md) (all controllers, earlier detector) | [`results/yifan-final-v1`](results/yifan-final-v1/summary.md) |
+| Results | [`results/eval-v3`](results/eval-v3/summary.md) and [`results/eval-v3-cap`](results/eval-v3-cap/README.md) (v7 detector), [`results/eval-v2`](results/eval-v2/summary.md) (all controllers, earlier detector) | [`results/yifan-final-v1`](results/yifan-final-v1/summary.md), [`results/remaining-study-v1`](results/remaining-study-v1/README.md), [`results/sekai-finetune-v1`](results/sekai-finetune-v1/README.md), [`results/slide-path-v1`](results/slide-path-v1/README.md) |
 | Speed | 2–5× faster than real time | live mode (640×480 camera): about real time on an M5 Mac; study camera (960×720): about 1.8× slower on gpu156 |
 
 Everything else in `results/` (pilots, older screens, older scoring rules)
@@ -47,8 +47,13 @@ normal) was imported after every controller and model was made.
 |---|---|---|---|
 | Classical / oracle | 99.0% | 99.1% | eval-v3 |
 | **Classical / v7 vision** | **98.3%** | **98.4%** | eval-v3 |
+| Classical / zigzag v7, merged path | 98.2% | 97.9% | slide-path-v1 |
 | Classical / earlier vision | 97.3% | 98.5% | eval-v2 |
+| CAP, feedback only / v7 vision | 85.3% | 81.2% | eval-v3-cap |
+| CAP, feedback only / zigzag v7, merged path | 85.6% | 82.0% | slide-path-v1 |
 | CAP, feedback only / earlier vision | 85.3% | 81.3% | eval-v2 |
+| CAP, self-test / v7 vision | 80.1% | 71.2% | eval-v3-cap |
+| CAP, self-test / zigzag v7, merged path | 80.5% | 71.5% | slide-path-v1 |
 | CAP, self-test / earlier vision | 80.9% | 74.1% | eval-v2 |
 | CAP, pixels only (writes its own perception) | 77.7% | 73.2% | eval-v2 |
 
@@ -56,10 +61,16 @@ normal) was imported after every controller and model was made.
   detector timed slide ends correctly but got the final lane wrong. v7 reads
   the rest of the slide while it is being played, and the tracker replaces
   the remaining path with that reading every tick.
+- **The zigzag fix takes vision slides to the oracle's 91.2%**
+  ([slide-path-v1](results/slide-path-v1/README.md)): v7 fine-tuned with the
+  study's zigzag charts, and a tracker that merges each frame's path reading
+  with earlier ones. The song loses 5 taps of 1,106.
 - **CAP's failures are notes it chose not to play**, not notes the robot
   could not reach. The unseen song separates CAP from classical most.
-- CAP has not been re-run with v7. Failure breakdowns:
-  [eval-v3 failures](results/eval-v3/failures.md),
+- **With v7, CAP's totals barely move.** v7 fixes the self-tested
+  program's slides (49% → 79%), but the feedback program's slides stay at
+  about a third ([eval-v3-cap](results/eval-v3-cap/README.md)). Failure
+  breakdowns: [eval-v3 failures](results/eval-v3/failures.md),
   [eval-v2 failures](results/eval-v2/failures.md).
 
 ### Two arms with styluses (11 held-out charts, 323 notes, 330 runs)
@@ -95,15 +106,25 @@ the v7 detector on the 960×720 camera image as `concert-torch`, zero-shot:
 v7 was trained on the plain game screen, and the Sekai screen differs in
 perspective, colors and occlusion.
 
-| Controller | Color/shape detector | v7 detector (zero-shot) |
-|---|---|---|
-| Classical | 89.2% | 84.5% |
-| CAP initial / feedback 1 / feedback 2 | 78.0 / 78.6 / 78.0% | 46.1 / 48.6 / 55.7% |
-| BC MLP (3 seeds) | 37.3 ± 1.8% | 55.3 ± 2.3% |
-| BC diffusion (3 seeds) | 56.0 ± 15.9% | 55.6 ± 13.1% |
+| Controller | Color/shape detector | v7 detector (zero-shot) | v7 fine-tuned on camera frames | Fine-tuned, merged path |
+|---|---|---|---|---|
+| Classical | **89.2%** | 84.5% | 87.0% | 87.6% |
+| CAP initial / feedback 1 / feedback 2 | 78.0 / 78.6 / 78.0% | 46.1 / 48.6 / 55.7% | 78.6 / 79.3 / 76.5% | 78.9 / **80.2** / 76.8% |
+| BC MLP (3 seeds) | 37.3 ± 1.8% | 55.3 ± 2.3% | not run | not run |
+| BC diffusion (3 seeds) | 56.0 ± 15.9% | 55.6 ± 13.1% | not run | not run |
 
 - **Zero-shot v7 hurts classical and CAP but helps BC MLP.** One example
   failure: it reports spurious short holds along a green slide.
+- **Fine-tuned on camera frames from training charts only**
+  ([`sekai-finetune-v1`](results/sekai-finetune-v1/README.md), 132 runs on
+  Anna's Mac), v7 recovers to the color detector's level: precision on
+  camera frames goes from 0.43 to 1.00 and timing error from 115 to 7 ms.
+  It still trailed color on classical slides (7/16 vs 10/16), for the
+  zigzag reason below. Merging path readings across frames
+  ([slide-path-v1](results/slide-path-v1/README.md)) adds 1–3 slides for
+  every controller; classical is then 1 slide and 4 taps behind color, and
+  CAP is level with or above it. The BC checkpoints are on gpu156 and were
+  not rerun.
 - **Live BC on a Mac (640×480 camera, 66 runs):** MLP keeps up with real time
   (1.00 wall s per simulated s) but stays within one frame of lag on only
   17/33 runs; diffusion runs 1.26× slower and passes 0/33. Accuracy matches
@@ -120,6 +141,7 @@ planner, against the stylus study's classical runs. Reports:
 |---|---|---|---|---|
 | Fingertips / oracle | **99.4%** | 291 | 16 | 14 |
 | Fingertips / v7 vision on the game image | 96.9% | 291 | 16 | **6** |
+| Fingertips / zigzag v7, merged path | **98.8%** | 291 | 16 | 12 |
 | Styluses / oracle | 91.3% | 265 | 16 | 14 |
 | Styluses / color vision on the screen image | 89.5% | 263 | 16 | 10 |
 | Styluses / color vision through the camera | 89.2% | 262 | 16 | 10 |
@@ -127,9 +149,17 @@ planner, against the stylus study's classical runs. Reports:
 - **Four contacts beat two on taps:** the styluses lose 26 taps even with
   oracle input, on three-note chords and dense song passages that need
   more simultaneous contacts than two. Slides tie with oracle input.
-- **v7 does not carry over to two arms:** slides fall to 6/16, below the
-  color detector's 10/16, although v7 fixed slides for one arm. These
-  slides cross between hands; why v7 fails on them is not yet diagnosed.
+- **v7 did not carry over to two arms:** slides fell to 6/16, below the
+  color detector's 10/16. **Cause:** 8 of the 10 missed slides are fast
+  zigzags (e.g. lanes 3→5→3→5→4 in 1.4 s), and v7's training charts have
+  none with that many turns. Its rest-of-slide reading (5 points) was off
+  by up to 0.58 lanes 100 ms ahead, against a 0.35-lane tolerance, and
+  contact broke ([diagnosis](results/sekai-finetune-v1/README.md#why-v7-misses-slides-on-two-arms-gripper-setup-b)).
+- **Fixed** ([slide-path-v1](results/slide-path-v1/README.md)): fine-tuning
+  v7 on plain-screen frames of Yifan's training charts, plus a tracker that
+  keeps earlier readings' points between each frame's new ones, brings the
+  path error 100 ms ahead to 0.20 lanes at most and slides to 12/16 (oracle
+  14). Every zigzag is completed; either change alone does not help.
 - Only 16 slides, so slide counts are small. The fingertip runs use the
   plain game screen, not a camera.
 
@@ -141,7 +171,8 @@ HEADLESS=1 ../.venv/bin/python -m rhythmbot.evaluate --arms 2 --view screen \
 
 ## Running
 
-Everything runs from the repository root. The course venv one folder up
+Everything runs from the repository root. Every command in one place:
+[docs/COMMANDS.md](docs/COMMANDS.md). The course venv one folder up
 has every dependency; in a fresh clone use Python 3.13:
 
 ```bash
@@ -170,7 +201,12 @@ The `sekai-realtime` preset runs `rhythmbot.realtime`: the study's camera
 pose, noise and controller, at 640×480 (`python -m rhythmbot.realtime
 --camera-width 960` for the study's resolution, `--unpaced` to measure
 throughput). Add `--detector concert-torch --model results/note_detector_v7.pt`
-to a study preset to use the v7 detector on the camera image. Yifan measured it at
+to a study preset to use the v7 detector on the camera image, or
+`results/note_detector_v7_sekai.pt` for the version fine-tuned on camera
+frames. For the plain game screen, `results/note_detector_v7_zigzag.pt`
+is the version that also learned the study's zigzag slides. A chart with
+audio (`songs/nekoteto/easy-neko.json`) plays its song in the live mode
+too, and `--audio` adds a soundtrack synthesized from any chart. Yifan measured the live mode at
 1× on an Apple M5 Mac plugged in; it is soft real time, with brief stalls,
 and on battery in Low Power Mode it runs about 1.5× slower. Its results are
 not part of the frozen study, because the camera pixels differ. Timings and
@@ -233,7 +269,9 @@ python -m rhythmbot.train --epochs 30
 | `rhythmbot/game.py`, `sekai_screen.py` | the plain game screen and the minimal Sekai screen |
 | `rhythmbot/perception.py` | detector interface; oracle, old color, and trained (`TorchDetector`) detectors |
 | `rhythmbot/camera.py`, `camera_vision.py` | the simulated camera and the color/shape detector for the Sekai screen |
-| `rhythmbot/train.py`, `dataset.py` | the vision model, its training data and training |
+| `rhythmbot/train.py`, `dataset.py` | the vision model, its training data and training (`--init` fine-tunes from an existing model) |
+| `scripts/capture_sekai_camera.py`, `eval_sekai_finetune.py` | camera training frames for v7, and the fine-tuned v7 comparison |
+| `scripts/render_study_frames.py`, `diagnose_slide_path.py` | plain-screen training frames from the study's charts; the tracked slide path's error |
 | `rhythmbot/brain.py`, `planner.py` | note tracking, replanning, and the classical planner |
 | `rhythmbot/robot.py`, `judge.py` | arms, grippers, styluses, touch sensing; scoring |
 | `rhythmbot/cap/`, `bc/`, `policies.py` | code-as-policy loop, behavior cloning, policy loading |

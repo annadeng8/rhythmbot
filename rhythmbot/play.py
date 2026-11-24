@@ -262,6 +262,7 @@ def main(argv=None):
                     help="wait for a Meshcat viewer before starting the live preset")
     ap.add_argument("--audio", action="store_true", help="play a soundtrack synthesized from the chart")
     ap.add_argument("--song", help="audio file to play in sync (default: the chart's own, if it names one)")
+    ap.add_argument("--no-song", action="store_true", help="don't play the chart's own audio")
     ap.add_argument("--song-offset", type=float, help="chart time at which the song starts (default: chart's)")
     ap.add_argument("--tempo", type=float, default=1.0, help="play the chart (and song) at this fraction of speed")
     ap.add_argument(
@@ -280,7 +281,7 @@ def main(argv=None):
     if args.tempo != 1.0:
         chart = chart.scaled(args.tempo)
 
-    song = args.song or chart.audio
+    song = args.song or (None if args.no_song else chart.audio)
     if song is not None and not Path(song).is_absolute() and args.chart:
         song = Path(args.chart).parent / song
     if song is not None and not Path(song).exists():
@@ -295,13 +296,17 @@ def main(argv=None):
         except ValueError as e:
             ap.error(str(e))
     if args.preset == 'sekai-realtime':
-        if args.audio or args.song or args.song_offset is not None or args.stage_frames or args.noise or args.latency:
-            ap.error('sekai-realtime does not support audio, stage export, detector models, or oracle noise/latency options')
+        if args.stage_frames or args.noise or args.latency:
+            ap.error('sekai-realtime does not support stage export or oracle noise/latency options')
+        if song is None and args.audio:
+            song, song_offset = audio.write_soundtrack(
+                chart, 6, PROJECT_ROOT / 'results' / f'{chart.name}.wav'), 0.
         from .realtime import run as run_live
         return run_live(chart, args.out or PROJECT_ROOT / 'results' / f'{chart.name}-live-2arm.json',
             meshcat=not HEADLESS, paced=not args.no_realtime, duration=args.duration,
             policy=args.policy, hold=args.hold, wait_for_browser=args.wait_for_browser,
-            detector=args.detector, model_path=args.model)
+            detector=args.detector, model_path=args.model,
+            song=song, song_offset=song_offset, song_rate=args.tempo)
     if args.wait_for_browser:
         ap.error('--wait-for-browser requires --preset sekai-realtime')
     args.view = args.view or "screen"
