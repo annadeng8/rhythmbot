@@ -1,0 +1,20 @@
+INFO:drake:Meshcat listening for connections at http://localhost:7001
+Meshcat: http://localhost:7001
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/private/var/tmp/.cache_yifankang/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/private/var/tmp/.cache_yifankang/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/private/var/tmp/.cache_yifankang/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/wsg_body.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/private/var/tmp/.cache_yifankang/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/private/var/tmp/.cache_yifankang/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/wsg_body.gltf'
+WARNING:drake:Drake materials have been assigned to a glTF file. glTF defines its own materials, so post hoc materials will be ignored and should be removed from the model specification. glTF file: '/private/var/tmp/.cache_yifankang/drake/package_map/ce11f36b0fb58a7c50b750cbddf412f1a61bd679ba66c4e746d15ad26715ae8e-0619ea856449d2aa830255604f48fb5e5518e5c402df75acfe25bc54e60ea135/wsg_50_description/meshes/finger_with_tip.gltf'
+WARNING:drake:VisualizationConfig.mouse_interaction_stiffness is set, but the plant's applied-spatial-force input port is already connected, so interactive mouse dragging will not be enabled.
+{
+  "sim_seconds": 4.0,
+  "wall_seconds": 4.346636665984988,
+  "compute_per_sim": 1.074498260160908,
+  "tick_p95_seconds": 0.052913816669024526,
+  "ticks_over_budget": 33,
+  "max_lag_seconds": 0.4282290411492189,
+  "realtime_pass": false,
+  "score": 0,
+  "max_score": 72
+}

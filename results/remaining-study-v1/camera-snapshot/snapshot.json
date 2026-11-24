@@ -1,0 +1,206 @@
+{
+  "time": 4.0,
+  "source_sha256": "47d41f138e25011233f0f7068c0b0a786f41859a3664236ae6f0dd06b5211eee",
+  "config": {
+    "layout": {
+      "n_lanes": 6,
+      "lane_width": 0.12,
+      "hit_y": -0.5,
+      "screen_z": 0.1,
+      "approach_time": 1.6,
+      "scroll_speed": 0.45,
+      "margin": 0.03
+    },
+    "timing": {
+      "perfect": 0.045,
+      "great": 0.09,
+      "good": 0.14,
+      "hold_fraction": 0.8,
+      "slide_tolerance_lanes": 0.35,
+      "slide_max_gap": 0.05,
+      "slide_tail_window": 0.04,
+      "slide_min_maintenance": 0.95
+    },
+    "gripper": {
+      "tip_offset": 0.22,
+      "finger_tip_offset": 0.041,
+      "half_closed": 0.0115,
+      "max_width": 0.107,
+      "single_tip": true,
+      "tip_radius": 0.006,
+      "tilt_degrees": 30.0,
+      "hand_y_offset": 0.012
+    },
+    "motion": {
+      "hover_height": 0.035,
+      "touch_depth": 0.002,
+      "pre_time": 0.22,
+      "post_time": 0.12,
+      "tap_dwell": 0.06,
+      "press_time": 0.03,
+      "contact_tolerance": 0.004,
+      "chord_window": 0.06,
+      "travel_speed": 0.9,
+      "min_travel_time": 0.12,
+      "min_lateral_gap": 0.07,
+      "beam_width": 8,
+      "pivot_lookahead": 4,
+      "command_lead": 0.0,
+      "roll_raise": 0.01,
+      "roll_dip_time": 0.08,
+      "roll_lift_time": 0.08,
+      "roll_min_dip_time": 0.03,
+      "pivot_width_speed": 1.0,
+      "lane_slack": 0.012
+    },
+    "perception": {
+      "tick_hz": 30.0,
+      "frame_size": [
+        256,
+        384
+      ],
+      "timing_noise_std": 0.0,
+      "latency": 0.0,
+      "min_observations": 2,
+      "stale_after": 0.2,
+      "match_window": 0.15,
+      "min_note_gap": 0.07
+    },
+    "arms": {
+      "n": 2,
+      "slide_handoff": true,
+      "base_x": 0.33,
+      "middle_clearance": 0.09
+    },
+    "camera": {
+      "width": 960,
+      "height": 720,
+      "fov_y_deg": 48,
+      "eye_offset": [
+        0.35,
+        -0.5,
+        1.15
+      ],
+      "target_offset": [
+        0.0,
+        0.05,
+        0.0
+      ],
+      "noise_std": 3.0,
+      "prefetch_noise": false
+    },
+    "plant_time_step": 0.001,
+    "diffik_time_step": 0.005,
+    "judge_hz": 200.0,
+    "visualizer_hz": 30.0
+  },
+  "vision": {
+    "frames": 120,
+    "blank_detection_frames": 32,
+    "input_rgb_sha256": "dd8a728e04480d0f26ea5c89185c24d40518cf731a9fca807432724a08c873e7",
+    "rectified_rgb_sha256": "c3815cb761387b4510beedb1a540844a40a842e804cdd623e6b5e615b8556b67",
+    "input": "Drake composed RGB",
+    "chart_access": false,
+    "label_input": false,
+    "depth_input": false,
+    "method": "fixed geometric calibration + frozen Anna neural detector",
+    "model_sha256": "6f470a1575e0b585a180db3598c400feed91a4632154f0a22f0cae496235bf44",
+    "sidecar_sha256": "89ebc31eb74a1f0d1443548d010bbd288dd4545c3cb7286dc7530f2700680ffe",
+    "active_path": true,
+    "palette_conversion": false,
+    "fine_tuned": false,
+    "inference_mean_seconds": 0.0028083805732118587,
+    "inference_max_seconds": 0.03994349995627999
+  },
+  "detections": [
+    {
+      "kind": "hold",
+      "lane": 1.0,
+      "hit_time": 4.07841595808665,
+      "duration": 0.1449819575319062,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 1.0,
+      "active": false
+    },
+    {
+      "kind": "hold",
+      "lane": 1.0,
+      "hit_time": 5.259102121988932,
+      "duration": 0.166136734540255,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 0.9990159273147583,
+      "active": false
+    },
+    {
+      "kind": "hold",
+      "lane": 2.0,
+      "hit_time": 4.155637149016062,
+      "duration": 0.1507079867721702,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 1.0,
+      "active": false
+    },
+    {
+      "kind": "hold",
+      "lane": 2.0,
+      "hit_time": 4.922811857859294,
+      "duration": 0.11958090398237105,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 1.0,
+      "active": false
+    },
+    {
+      "kind": "hold",
+      "lane": 2.0,
+      "hit_time": 5.1867538134257,
+      "duration": 0.06359466889791589,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 0.8852332234382629,
+      "active": false
+    },
+    {
+      "kind": "hold",
+      "lane": 3.0,
+      "hit_time": 4.541531292597453,
+      "duration": 0.12069130067909961,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 1.0,
+      "active": false
+    },
+    {
+      "kind": "hold",
+      "lane": 3.0,
+      "hit_time": 4.900577608744303,
+      "duration": 0.13152926742148782,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 0.9999949932098389,
+      "active": false
+    },
+    {
+      "kind": "hold",
+      "lane": 4.0,
+      "hit_time": 4.73593594233195,
+      "duration": 0.09357353902212664,
+      "duration_final": true,
+      "waypoints": [],
+      "note_id": -1,
+      "confidence": 0.9981168508529663,
+      "active": false
+    }
+  ],
+  "note": "Truncated diagnostic rollout, excluded from held-out scores and timing."
+}

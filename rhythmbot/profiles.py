@@ -9,9 +9,9 @@ def resolve(preset=None, arms=None, view=None, detectors=None, stylus=False):
         expected_view = 'screen' if preset == 'sekai-screen' else 'camera'
         if preset not in PRESETS:
             raise ValueError(f'Unknown preset: {preset}')
-        if arms not in (None, 2) or view not in (None, expected_view) or detectors not in (None, ('concert',)):
+        if arms not in (None, 2) or view not in (None, expected_view) or detectors not in (None, ('concert',), ('concert-torch',)):
             raise ValueError(f'{preset} requires two single-tip arms, {expected_view} input and concert RGB detection')
-        return 2, expected_view, ('concert',), True
+        return 2, expected_view, detectors or ('concert',), True
     arms, view, detectors = arms or (2 if stylus else 1), view or 'screen', detectors or ('oracle',)
     if stylus and arms != 2:
         raise ValueError('Single-stylus mode requires two arms')

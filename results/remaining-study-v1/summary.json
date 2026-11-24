@@ -1,0 +1,756 @@
+[
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-diffusion-s0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 189,
+    "completion": 0.5851393188854489,
+    "score": 540,
+    "max_score": 969,
+    "wall_per_sim": 2.6522161730998692,
+    "compute_per_sim": 2.6521323781054438,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 56.74460011104494,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 175
+      },
+      "hold": {
+        "n": 16,
+        "completed": 14
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-diffusion-s1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 228,
+    "completion": 0.7058823529411765,
+    "score": 639,
+    "max_score": 969,
+    "wall_per_sim": 2.6990707686022346,
+    "compute_per_sim": 2.6989820314549617,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 58.62633597886562,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 212
+      },
+      "hold": {
+        "n": 16,
+        "completed": 14
+      },
+      "slide": {
+        "n": 16,
+        "completed": 2
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-diffusion-s2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 126,
+    "completion": 0.39009287925696595,
+    "score": 354,
+    "max_score": 969,
+    "wall_per_sim": 2.5985952584275824,
+    "compute_per_sim": 2.5985121605847086,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 53.34941240435838,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 119
+      },
+      "hold": {
+        "n": 16,
+        "completed": 6
+      },
+      "slide": {
+        "n": 16,
+        "completed": 1
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-mlp-s0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 122,
+    "completion": 0.37770897832817335,
+    "score": 333,
+    "max_score": 969,
+    "wall_per_sim": 1.9430360111032947,
+    "compute_per_sim": 1.9429492053390016,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 31.214537557572122,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 107
+      },
+      "hold": {
+        "n": 16,
+        "completed": 8
+      },
+      "slide": {
+        "n": 16,
+        "completed": 7
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-mlp-s1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 114,
+    "completion": 0.35294117647058826,
+    "score": 305,
+    "max_score": 969,
+    "wall_per_sim": 1.9545756290165284,
+    "compute_per_sim": 1.954493272771666,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 31.96451579815149,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 97
+      },
+      "hold": {
+        "n": 16,
+        "completed": 8
+      },
+      "slide": {
+        "n": 16,
+        "completed": 9
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-mlp-s2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 125,
+    "completion": 0.38699690402476783,
+    "score": 332,
+    "max_score": 969,
+    "wall_per_sim": 1.9473349225618648,
+    "compute_per_sim": 1.947248756408433,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 32.01363801153749,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 102
+      },
+      "hold": {
+        "n": 16,
+        "completed": 16
+      },
+      "slide": {
+        "n": 16,
+        "completed": 7
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "cap-v0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 252,
+    "completion": 0.7801857585139319,
+    "score": 718,
+    "max_score": 969,
+    "wall_per_sim": 1.9517985537647853,
+    "compute_per_sim": 1.9517150522606137,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 30.97319065442681,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 230
+      },
+      "hold": {
+        "n": 16,
+        "completed": 16
+      },
+      "slide": {
+        "n": 16,
+        "completed": 6
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "cap-v1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 254,
+    "completion": 0.7863777089783281,
+    "score": 745,
+    "max_score": 969,
+    "wall_per_sim": 1.9255627182513233,
+    "compute_per_sim": 1.9254784124710773,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 30.489753733746703,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 236
+      },
+      "hold": {
+        "n": 16,
+        "completed": 16
+      },
+      "slide": {
+        "n": 16,
+        "completed": 2
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "cap-v2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 252,
+    "completion": 0.7801857585139319,
+    "score": 753,
+    "max_score": 969,
+    "wall_per_sim": 1.9180770635035478,
+    "compute_per_sim": 1.917992141634534,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 30.349651703037317,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 236
+      },
+      "hold": {
+        "n": 16,
+        "completed": 16
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "classical",
+    "charts": 11,
+    "notes": 323,
+    "completed": 288,
+    "completion": 0.891640866873065,
+    "score": 850,
+    "max_score": 969,
+    "wall_per_sim": 1.907952511071376,
+    "compute_per_sim": 1.907869992795986,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 30.281653430670495,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 262
+      },
+      "hold": {
+        "n": 16,
+        "completed": 16
+      },
+      "slide": {
+        "n": 16,
+        "completed": 10
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-diffusion-s0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 202,
+    "completion": 0.6253869969040248,
+    "score": 351,
+    "max_score": 969,
+    "wall_per_sim": 2.8524561888899056,
+    "compute_per_sim": 2.852371793958022,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 62.75764062477648,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 202
+      },
+      "hold": {
+        "n": 16,
+        "completed": 0
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-diffusion-s1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 206,
+    "completion": 0.6377708978328174,
+    "score": 325,
+    "max_score": 969,
+    "wall_per_sim": 2.8456260188999427,
+    "compute_per_sim": 2.8455436439271646,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 61.22359707149118,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 206
+      },
+      "hold": {
+        "n": 16,
+        "completed": 0
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-diffusion-s2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 131,
+    "completion": 0.4055727554179567,
+    "score": 262,
+    "max_score": 969,
+    "wall_per_sim": 2.871979752187544,
+    "compute_per_sim": 2.871892482269782,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 63.8781685180813,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 131
+      },
+      "hold": {
+        "n": 16,
+        "completed": 0
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-mlp-s0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 186,
+    "completion": 0.5758513931888545,
+    "score": 331,
+    "max_score": 969,
+    "wall_per_sim": 2.1612131076104726,
+    "compute_per_sim": 2.161127270412592,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 39.67122611998021,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 186
+      },
+      "hold": {
+        "n": 16,
+        "completed": 0
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-mlp-s1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 179,
+    "completion": 0.5541795665634675,
+    "score": 352,
+    "max_score": 969,
+    "wall_per_sim": 2.1892230232954777,
+    "compute_per_sim": 2.18913439007309,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 40.13659766165912,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 179
+      },
+      "hold": {
+        "n": 16,
+        "completed": 0
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-mlp-s2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 171,
+    "completion": 0.5294117647058824,
+    "score": 321,
+    "max_score": 969,
+    "wall_per_sim": 2.1904427567674487,
+    "compute_per_sim": 2.190358264484194,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 40.56915716210752,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 171
+      },
+      "hold": {
+        "n": 16,
+        "completed": 0
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "cap-v0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 149,
+    "completion": 0.4613003095975232,
+    "score": 232,
+    "max_score": 969,
+    "wall_per_sim": 2.1990182452167284,
+    "compute_per_sim": 2.1989325977954137,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 41.923494593597944,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 144
+      },
+      "hold": {
+        "n": 16,
+        "completed": 5
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "cap-v1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 157,
+    "completion": 0.48606811145510836,
+    "score": 243,
+    "max_score": 969,
+    "wall_per_sim": 2.1568024242594985,
+    "compute_per_sim": 2.1567190313107116,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 40.47781570384651,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 156
+      },
+      "hold": {
+        "n": 16,
+        "completed": 1
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "cap-v2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 180,
+    "completion": 0.5572755417956656,
+    "score": 271,
+    "max_score": 969,
+    "wall_per_sim": 2.146446854468914,
+    "compute_per_sim": 2.146359919288228,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 39.51356536185741,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 175
+      },
+      "hold": {
+        "n": 16,
+        "completed": 5
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "classical",
+    "charts": 11,
+    "notes": 323,
+    "completed": 273,
+    "completion": 0.8452012383900929,
+    "score": 515,
+    "max_score": 969,
+    "wall_per_sim": 2.1567689829654006,
+    "compute_per_sim": 2.156683861324911,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 38.63413569087535,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 262
+      },
+      "hold": {
+        "n": 16,
+        "completed": 11
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-diffusion-s0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 192,
+    "completion": 0.5944272445820433,
+    "score": 539,
+    "max_score": 969,
+    "wall_per_sim": 1.423685340518708,
+    "compute_per_sim": 1.4223141739244463,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 19.831507707837964,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 178
+      },
+      "hold": {
+        "n": 16,
+        "completed": 14
+      },
+      "slide": {
+        "n": 16,
+        "completed": 0
+      }
+    }
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-diffusion-s1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 223,
+    "completion": 0.6904024767801857,
+    "score": 627,
+    "max_score": 969,
+    "wall_per_sim": 1.1468149896614774,
+    "compute_per_sim": 1.144411053362235,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 6.481848041154443,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 206
+      },
+      "hold": {
+        "n": 16,
+        "completed": 14
+      },
+      "slide": {
+        "n": 16,
+        "completed": 3
+      }
+    }
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-diffusion-s2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 124,
+    "completion": 0.38390092879256965,
+    "score": 352,
+    "max_score": 969,
+    "wall_per_sim": 1.2146550820619924,
+    "compute_per_sim": 1.2118954779493538,
+    "realtime_pass_runs": 0,
+    "max_lag_seconds": 12.9715838749893,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 117
+      },
+      "hold": {
+        "n": 16,
+        "completed": 6
+      },
+      "slide": {
+        "n": 16,
+        "completed": 1
+      }
+    }
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-mlp-s0",
+    "charts": 11,
+    "notes": 323,
+    "completed": 123,
+    "completion": 0.38080495356037153,
+    "score": 337,
+    "max_score": 969,
+    "wall_per_sim": 1.0008790278861208,
+    "compute_per_sim": 0.813762838930017,
+    "realtime_pass_runs": 4,
+    "max_lag_seconds": 0.268353624424587,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 108
+      },
+      "hold": {
+        "n": 16,
+        "completed": 8
+      },
+      "slide": {
+        "n": 16,
+        "completed": 7
+      }
+    }
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-mlp-s1",
+    "charts": 11,
+    "notes": 323,
+    "completed": 107,
+    "completion": 0.33126934984520123,
+    "score": 294,
+    "max_score": 969,
+    "wall_per_sim": 1.0040200355113529,
+    "compute_per_sim": 0.8524120939258779,
+    "realtime_pass_runs": 3,
+    "max_lag_seconds": 1.0887308747197189,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 90
+      },
+      "hold": {
+        "n": 16,
+        "completed": 8
+      },
+      "slide": {
+        "n": 16,
+        "completed": 9
+      }
+    }
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-mlp-s2",
+    "charts": 11,
+    "notes": 323,
+    "completed": 124,
+    "completion": 0.38390092879256965,
+    "score": 323,
+    "max_score": 969,
+    "wall_per_sim": 1.0003558761497717,
+    "compute_per_sim": 0.7675474478028351,
+    "realtime_pass_runs": 10,
+    "max_lag_seconds": 0.039120458594212926,
+    "by_kind": {
+      "tap": {
+        "n": 291,
+        "completed": 102
+      },
+      "hold": {
+        "n": 16,
+        "completed": 16
+      },
+      "slide": {
+        "n": 16,
+        "completed": 6
+      }
+    }
+  }
+]

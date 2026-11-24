@@ -1,0 +1,149 @@
+{
+  "source_sha256": "47d41f138e25011233f0f7068c0b0a786f41859a3664236ae6f0dd06b5211eee",
+  "charts": [
+    {
+      "path": "results/yifan-final-v1/charts/test_iid/crossing-s71000-0.8s-x1.1287.json",
+      "sha256": "b08a63f4b99de49a5f26cde44d44dc5f080bd867a2beb7fd808817d24f1d109b",
+      "split": "test_iid",
+      "family": "crossing"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_iid/holds-s71000-x1.1287.json",
+      "sha256": "e3fdc50218a05aa77bdc8bcf04ae69e00ab008ce641745c9fb98e24d58c5427e",
+      "split": "test_iid",
+      "family": "holds"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_iid/chords-s71000-x1.1287.json",
+      "sha256": "10fb49342334098f777ea9b4e7aab3acded2f3d089a28ca4777a9d07a7e12caf",
+      "split": "test_iid",
+      "family": "chords"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_iid/crossing-s71001-0.5s-x0.88833.json",
+      "sha256": "24a2c0e8583fe0a6a6d6e8c105684f68411c1b419f57ac3f31ff5554e2b4dbf3",
+      "split": "test_iid",
+      "family": "crossing"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_iid/holds-s71001-x0.88833.json",
+      "sha256": "465aa631c06341a0b541424e60db45fd949d9d4cac5c948db0d6bf34545cd97d",
+      "split": "test_iid",
+      "family": "holds"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_iid/chords-s71001-x0.88833.json",
+      "sha256": "5131dec749202d714c3bb9297892ee5dede6e593adc515b8572e9f3e40ee667a",
+      "split": "test_iid",
+      "family": "chords"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_speed/crossing-s81000-0.3s.json",
+      "sha256": "97b72dda002b342b2229e6fdbbe96d70480f529a5e79f116e03b5731ca09b3b2",
+      "split": "test_speed",
+      "family": "crossing"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_speed/crossing-s81001-0.4s.json",
+      "sha256": "a2cdbaa46aa97be6062f476cf1f976cb5a7a049ee6e2e1c23ce73e8057b0a444",
+      "split": "test_speed",
+      "family": "crossing"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_song/unknown-easy-first30s.json",
+      "sha256": "b15cb43e7491089a86a23024e6319b93ca3ff96eed40a6eeb00ec4f8bf0b535a",
+      "split": "test_song",
+      "family": "song_excerpt"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_song/unknown-intermediate-first30s.json",
+      "sha256": "ddab35fe69b577ae580e3a5345f3d01846ea7f21013dc3c775d4a16672b42a72",
+      "split": "test_song",
+      "family": "song_excerpt"
+    },
+    {
+      "path": "results/yifan-final-v1/charts/test_song/unknown-normal-first30s.json",
+      "sha256": "d4df095b51984c342ced370c8d9441cef95c2ae63b6c3bd33d169e1f00bc05bd",
+      "split": "test_song",
+      "family": "song_excerpt"
+    }
+  ],
+  "policies": [
+    {
+      "label": "classical",
+      "spec": "classical",
+      "sha256": null
+    },
+    {
+      "label": "bc-diffusion-s0",
+      "spec": "bc:results/yifan-final-v1/checkpoints/bc-diffusion-s0.pt",
+      "sha256": "5ecb05843d42029cdf23d91e1b33084a840768d4ea2229239a68bd3e887e904e"
+    },
+    {
+      "label": "bc-diffusion-s1",
+      "spec": "bc:results/yifan-final-v1/checkpoints/bc-diffusion-s1.pt",
+      "sha256": "69ed6f8e7d6ba271497c3fce3d730583a7338059431dd2655142037484b52793"
+    },
+    {
+      "label": "bc-diffusion-s2",
+      "spec": "bc:results/yifan-final-v1/checkpoints/bc-diffusion-s2.pt",
+      "sha256": "c87f92e8a52c519f9884c8fb4f0ca72659a8a7cea39c82777982b2acc9f8c2b2"
+    },
+    {
+      "label": "bc-mlp-s0",
+      "spec": "bc:results/yifan-final-v1/checkpoints/bc-mlp-s0.pt",
+      "sha256": "2dbd49af6a3641cd56327301e9383f5b6a9fad28d08e956eb5451df517956776"
+    },
+    {
+      "label": "bc-mlp-s1",
+      "spec": "bc:results/yifan-final-v1/checkpoints/bc-mlp-s1.pt",
+      "sha256": "81e1b3b34caabdcc7079c9c524d6483407201e0689c1e4ff1043c664a095e468"
+    },
+    {
+      "label": "bc-mlp-s2",
+      "spec": "bc:results/yifan-final-v1/checkpoints/bc-mlp-s2.pt",
+      "sha256": "2cf4ad2c76844d85293e9a32b6442429b6f4683929fa4ddd9c25e37b2bfa75c0"
+    },
+    {
+      "label": "cap-v0",
+      "spec": "cap:results/yifan-final-v1/cap/v0/policy.py",
+      "sha256": "90f7ce96cf837594a8bbcb6111fa03f6d3e081097fb7cec534e8d06abb92e002"
+    },
+    {
+      "label": "cap-v1",
+      "spec": "cap:results/yifan-final-v1/cap/v1/policy.py",
+      "sha256": "a341da4252b5996feba6f79e0b74e6dc6e43cb415190c5045faa1e9ddd6784aa"
+    },
+    {
+      "label": "cap-v2",
+      "spec": "cap:results/yifan-final-v1/cap/v2/policy.py",
+      "sha256": "0607a88836ddef81e4773e8d4e457cb02099ac326329a367b2faf68d35bfb6fc"
+    }
+  ],
+  "neural_model": "results/note_detector_v7.pt",
+  "neural_sha256": "6f470a1575e0b585a180db3598c400feed91a4632154f0a22f0cae496235bf44",
+  "neural_sidecar_sha256": "89ebc31eb74a1f0d1443548d010bbd288dd4545c3cb7286dc7530f2700680ffe",
+  "neural_state_sha256": "1ac2359ca3421b4d2c56c64f95e20ba5854efa9f826a8f6a04944f226a34d2e2",
+  "inference_seed": 0,
+  "compare": {
+    "camera_width": 960,
+    "meshcat": false,
+    "paced": false,
+    "detectors": [
+      "concert",
+      "concert-torch"
+    ],
+    "expected_runs": 220,
+    "host": "gpu156"
+  },
+  "live": {
+    "camera_width": 640,
+    "meshcat": true,
+    "paced": true,
+    "detector": "concert",
+    "expected_runs": 66,
+    "host": "local Mac",
+    "controllers": "all six frozen BC checkpoints"
+  },
+  "design": "Zero-shot frozen Anna v7; no palette reconstruction, fine-tuning or test selection. Same calibrated RGB warp, camera, 1ms physics and strict judge for both comparison detectors. Diffusion uses original 10 sampling steps and 4-tick execution, CPU eager inference. Three training seeds per BC head, one fixed inference seed per run. Live throughput runs are sequential; comparison worker timing is not real-time evidence."
+}

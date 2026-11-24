@@ -81,7 +81,12 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
         X_WG0s.append(arm.gripper_pose_at(q0))
         policies.append(p)
 
-    if detector_name == "concert":
+    if detector_name == "concert-torch":
+        from .camera_vision import NeuralCameraDetector
+        if model_path is None:
+            raise ValueError('concert-torch requires a neural detector model')
+        detector = NeuralCameraDetector(model_path, cfg, camera=view == 'camera')
+    elif detector_name == "concert":
         from .camera_vision import ConcertVisionDetector
         detector = ConcertVisionDetector(cfg, camera=view == "camera")
     else:
@@ -95,7 +100,7 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
         builder.Connect(robot.station.GetOutputPort(f"{CAMERA_NAME}.label_image"), screen.GetInputPort("label_image"))
     else:
         screen = builder.AddSystem(GameScreen(chart, cfg))
-    if detector_name == "concert":
+    if detector_name in ("concert", "concert-torch"):
         from .sekai_screen import SekaiScreen
         screen.renderer = SekaiScreen(cfg)
     screen.set_name("screen")
@@ -105,9 +110,9 @@ def build(chart: Chart, cfg: Config, detector_name: str, model_path: str | None,
     touch.set_name("touch_sensor")
     judge = builder.AddSystem(Judge(chart, cfg))
     judge.set_name("judge")
-    if detector_name == "concert":
+    if detector_name in ("concert", "concert-torch"):
         screen.renderer.results = judge.results  # display feedback only; never a detector input
-    if meshcat is not None and detector_name == "concert":
+    if meshcat is not None and detector_name in ("concert", "concert-torch"):
         from .meshcat_screen import MeshcatScreen
         builder.AddSystem(MeshcatScreen(chart, cfg, meshcat)).set_name("highway")
     else:
@@ -238,7 +243,7 @@ def main(argv=None):
     src.add_argument("--demo", action="store_true", help="the built-in demo chart (default)")
     ap.add_argument("--preset", choices=PRESETS,
                     help="the dual-arm study's environment: two styluses, concert vision, its calibrated camera")
-    ap.add_argument("--detector", default=None, choices=["oracle", "color", "torch", "concert"],
+    ap.add_argument("--detector", default=None, choices=["oracle", "color", "torch", "concert", "concert-torch"],
                     help="default: oracle (concert with --preset)")
     ap.add_argument("--model", help="TorchScript model for --detector torch")
     ap.add_argument(
@@ -253,6 +258,8 @@ def main(argv=None):
     ap.add_argument("--duration", type=float, help="simulate this long instead of the whole chart")
     ap.add_argument("--no-realtime", action="store_true", help="run as fast as possible")
     ap.add_argument("--out", help="where to write the JSON report")
+    ap.add_argument("--wait-for-browser", type=float, default=0., metavar="SECONDS",
+                    help="wait for a Meshcat viewer before starting the live preset")
     ap.add_argument("--audio", action="store_true", help="play a soundtrack synthesized from the chart")
     ap.add_argument("--song", help="audio file to play in sync (default: the chart's own, if it names one)")
     ap.add_argument("--song-offset", type=float, help="chart time at which the song starts (default: chart's)")
@@ -287,6 +294,16 @@ def main(argv=None):
                 args.preset, args.arms, args.view, None if args.detector is None else (args.detector,))
         except ValueError as e:
             ap.error(str(e))
+    if args.preset == 'sekai-realtime':
+        if args.audio or args.song or args.song_offset is not None or args.stage_frames or args.noise or args.latency:
+            ap.error('sekai-realtime does not support audio, stage export, detector models, or oracle noise/latency options')
+        from .realtime import run as run_live
+        return run_live(chart, args.out or PROJECT_ROOT / 'results' / f'{chart.name}-live-2arm.json',
+            meshcat=not HEADLESS, paced=not args.no_realtime, duration=args.duration,
+            policy=args.policy, hold=args.hold, wait_for_browser=args.wait_for_browser,
+            detector=args.detector, model_path=args.model)
+    if args.wait_for_browser:
+        ap.error('--wait-for-browser requires --preset sekai-realtime')
     args.view = args.view or "screen"
     args.detector = args.detector or "oracle"
     if args.arms is None:

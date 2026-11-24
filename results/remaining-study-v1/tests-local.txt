@@ -1,0 +1,68 @@
+test_blank_rgb_cannot_reveal_notes (test_camera_vision.CameraVisionTests.test_blank_rgb_cannot_reveal_notes) ... ok
+test_camera_rejects_oracle_before_building_robot (test_camera_vision.CameraVisionTests.test_camera_rejects_oracle_before_building_robot) ... ok
+test_detections_change_with_pixels_at_fixed_time (test_camera_vision.CameraVisionTests.test_detections_change_with_pixels_at_fixed_time) ... ok
+test_partial_blackout_is_not_filled_from_texture (test_camera_vision.CameraVisionTests.test_partial_blackout_is_not_filled_from_texture) ... ok
+test_wrong_rgb_dimensions_fail_loudly (test_camera_vision.CameraVisionTests.test_wrong_rgb_dimensions_fail_loudly) ... ok
+test_adjacent_chord_fits_one_gripper (test_evaluation.BeyondTheRobotTests.test_adjacent_chord_fits_one_gripper) ... ok
+test_chord_wider_than_the_gripper (test_evaluation.BeyondTheRobotTests.test_chord_wider_than_the_gripper) ... ok
+test_fast_lane_change (test_evaluation.BeyondTheRobotTests.test_fast_lane_change) ... ok
+test_single_tap_is_playable (test_evaluation.BeyondTheRobotTests.test_single_tap_is_playable) ... ok
+test_slow_lane_change_is_playable (test_evaluation.BeyondTheRobotTests.test_slow_lane_change_is_playable) ... ok
+test_tap_during_another_lanes_hold_counts_the_hold (test_evaluation.BeyondTheRobotTests.test_tap_during_another_lanes_hold_counts_the_hold) ... ok
+test_three_lanes_at_once_exceed_two_fingertips (test_evaluation.BeyondTheRobotTests.test_three_lanes_at_once_exceed_two_fingertips) ... ok
+test_two_arms_have_four_fingertips (test_evaluation.BeyondTheRobotTests.test_two_arms_have_four_fingertips) ... ok
+test_different_commits_and_models_are_flagged (test_evaluation.ConsistencyTests.test_different_commits_and_models_are_flagged) ... ok
+test_mixed_judges_are_flagged (test_evaluation.ConsistencyTests.test_mixed_judges_are_flagged) ... ok
+test_reports_without_provenance_are_flagged (test_evaluation.ConsistencyTests.test_reports_without_provenance_are_flagged) ... ok
+test_same_settings_no_warning (test_evaluation.ConsistencyTests.test_same_settings_no_warning) ... ok
+test_chart_reproducible_and_two_tool_pairs_match (test_experiments.ExperimentTests.test_chart_reproducible_and_two_tool_pairs_match) ... ok
+test_no_handoff_ablation_only_assigns_start_hand (test_experiments.ExperimentTests.test_no_handoff_ablation_only_assigns_start_hand) ... ok
+test_condition_changes_observation_not_robot (test_final_study.FinalStudyTests.test_condition_changes_observation_not_robot) ... ok
+test_split_counts_and_disjoint_semantic_charts (test_final_study.FinalStudyTests.test_split_counts_and_disjoint_semantic_charts) ... ok
+test_committed_chart_sets (test_handoff.HandoffTests.test_committed_chart_sets) ... ok
+test_complete_preset (test_handoff.HandoffTests.test_complete_preset) ... ok
+test_mixed_environments_warn (test_handoff.HandoffTests.test_mixed_environments_warn) ... ok
+test_no_silent_override (test_handoff.HandoffTests.test_no_silent_override) ... ok
+test_output_environment_guard (test_handoff.HandoffTests.test_output_environment_guard) ... ok
+test_two_custom_policy_instances_reach_run (test_handoff.HandoffTests.test_two_custom_policy_instances_reach_run) ... ok
+test_empty_screen_has_no_animation_or_feedback (test_meshcat_screen.MinimalScreenTests.test_empty_screen_has_no_animation_or_feedback) ... ok
+test_high_resolution_texture_preserves_note_locations (test_meshcat_screen.MinimalScreenTests.test_high_resolution_texture_preserves_note_locations) ... ok
+test_prefetched_texture_matches_current_chart_frame_and_is_bounded (test_meshcat_screen.MinimalScreenTests.test_prefetched_texture_matches_current_chart_frame_and_is_bounded) ... ok
+test_tap_hold_slide_are_detectable_from_minimal_pixels (test_meshcat_screen.MinimalScreenTests.test_tap_hold_slide_are_detectable_from_minimal_pixels) ... ok
+test_texture_is_embedded_and_judgment_line_aligns_with_touch (test_meshcat_screen.MinimalScreenTests.test_texture_is_embedded_and_judgment_line_aligns_with_touch) ... ok
+test_network_receives_only_rectified_pixels_and_clock (test_neural_camera.NeuralCameraTests.test_network_receives_only_rectified_pixels_and_clock) ... ok
+test_neural_preset_keeps_two_arms_and_rejects_oracle (test_neural_camera.NeuralCameraTests.test_neural_preset_keeps_two_arms_and_rejects_oracle) ... ok
+test_live_rejects_single_arm_or_oracle_overrides (test_play_presets.PlayPresetTests.test_live_rejects_single_arm_or_oracle_overrides) ... ok
+test_live_routes_to_dual_arm_camera_runner (test_play_presets.PlayPresetTests.test_live_routes_to_dual_arm_camera_runner) ... ok
+test_study_preset_remains_full_resolution_and_bimanual (test_play_presets.PlayPresetTests.test_study_preset_remains_full_resolution_and_bimanual) ... ok
+test_fixed_warp_preserves_scipy_pixels (test_realtime.RealtimeTests.test_fixed_warp_preserves_scipy_pixels) ... ok
+test_keyframe_copy_preserves_independence_and_aliases (test_realtime.RealtimeTests.test_keyframe_copy_preserves_independence_and_aliases) ... ok
+test_prefetch_preserves_original_camera_pixels (test_realtime.RealtimeTests.test_prefetch_preserves_original_camera_pixels) ... ok
+test_realtime_preserves_physical_camera_configuration (test_realtime.RealtimeTests.test_realtime_preserves_physical_camera_configuration) ... ok
+test_separable_closing_is_exact (test_realtime.RealtimeTests.test_separable_closing_is_exact) ... ok
+test_tracked_path_copy_is_independent (test_realtime.RealtimeTests.test_tracked_path_copy_is_independent) ... ok
+test_width_fast_path_matches_geometry_interpolation (test_realtime.RealtimeTests.test_width_fast_path_matches_geometry_interpolation) ... ok
+test_both_crossing_directions_stay_reachable (test_slide.SlideTests.test_both_crossing_directions_stay_reachable) ... ok
+test_contact_break_fails_even_with_correct_tail (test_slide.SlideTests.test_contact_break_fails_even_with_correct_tail) ... ok
+test_good_path_only_scores_after_tail (test_slide.SlideTests.test_good_path_only_scores_after_tail) ... ok
+test_head_only_is_miss_and_zero_score (test_slide.SlideTests.test_head_only_is_miss_and_zero_score) ... ok
+test_missing_tail_fails (test_slide.SlideTests.test_missing_tail_fails) ... ok
+test_truncated_run_does_not_award_perfect (test_slide.SlideTests.test_truncated_run_does_not_award_perfect) ... ok
+test_wrong_tail_lane_fails (test_slide.SlideTests.test_wrong_tail_lane_fails) ... ok
+test_exactly_two_contacts (test_stylus.StylusTests.test_exactly_two_contacts) ... ok
+test_fixed_tilt_does_not_accumulate_on_replan (test_stylus.StylusTests.test_fixed_tilt_does_not_accumulate_on_replan) ... ok
+test_single_tip_has_no_chord_action (test_stylus.StylusTests.test_single_tip_has_no_chord_action) ... ok
+test_three_simultaneous_notes_cannot_all_score (test_stylus.StylusTests.test_three_simultaneous_notes_cannot_all_score) ... ok
+test_active_targets_are_offsets_from_the_slot_lane (test_tracker.ActivePathTests.test_active_targets_are_offsets_from_the_slot_lane) ... ok
+test_rest_lanes_label_what_is_left (test_tracker.ActivePathTests.test_rest_lanes_label_what_is_left) ... ok
+test_tracker_takes_the_rest_of_the_path_from_the_active_slot (test_tracker.ActivePathTests.test_tracker_takes_the_rest_of_the_path_from_the_active_slot) ... ok
+test_bc_single_tip_plan_has_fixed_tilt (test_yifan_methods.MethodTests.test_bc_single_tip_plan_has_fixed_tilt) ... ok
+test_cap_enforces_single_tip_geometry (test_yifan_methods.MethodTests.test_cap_enforces_single_tip_geometry) ... ok
+test_two_independent_custom_policies_build_and_run (test_yifan_methods.MethodTests.test_two_independent_custom_policies_build_and_run) ... ok
+
+----------------------------------------------------------------------
+Ran 61 tests in 1.713s
+
+OK
+[evaluate] warning: rhythmbot/ has uncommitted edits; the commit in each report does not fully pin the code that produced it
+chart demo: {'tap': 14, 'hold': 2, 'slide': 2}  ends at 16.5 s

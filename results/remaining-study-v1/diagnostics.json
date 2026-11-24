@@ -1,0 +1,948 @@
+[
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-diffusion-s0",
+    "chart_macro_completion": 0.40348265568853803,
+    "failures": {
+      "miss": 119,
+      "contact_break": 4,
+      "tail_missing": 8,
+      "insufficient_tracking": 1,
+      "insufficient_contact": 2
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 34
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 8
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 147
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.10921875000000002,
+    "mean_slide_rms_m": 0.048121785955736796,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-diffusion-s1",
+    "chart_macro_completion": 0.5194964349376114,
+    "failures": {
+      "miss": 79,
+      "contact_break": 7,
+      "tail_missing": 7,
+      "insufficient_contact": 2
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 39
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 2
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 8
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 179
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.12703124999999998,
+    "mean_slide_rms_m": 0.045694175414723606,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-diffusion-s2",
+    "chart_macro_completion": 0.26367880485527545,
+    "failures": {
+      "miss": 180,
+      "insufficient_contact": 9,
+      "contact_break": 1,
+      "tail_missing": 7
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 27
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 1
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 2
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 96
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.11296874999999984,
+    "mean_slide_rms_m": 0.06497658500944467,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-mlp-s0",
+    "chart_macro_completion": 0.4821612483377189,
+    "failures": {
+      "miss": 187,
+      "contact_break": 3,
+      "tail_missing": 4,
+      "insufficient_contact": 6,
+      "insufficient_tracking": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 19
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 6
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 9
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 88
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5287,
+    "mean_sustain_max_gap_seconds": 0.09546874999999999,
+    "mean_slide_rms_m": 0.04679878926971058,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-mlp-s1",
+    "chart_macro_completion": 0.5127571230512407,
+    "failures": {
+      "miss": 202,
+      "tail_missing": 5,
+      "contact_break": 2
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 19
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 7
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 10
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 78
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.07499999999999994,
+    "mean_slide_rms_m": 0.026081285773196593,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "bc-mlp-s2",
+    "chart_macro_completion": 0.4810581303228362,
+    "failures": {
+      "miss": 191,
+      "tail_missing": 6,
+      "insufficient_tracking": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 23
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 5
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 10
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 87
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.06421875000000003,
+    "mean_slide_rms_m": 0.02322849949242042,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "cap-v0",
+    "chart_macro_completion": 0.6375205132558074,
+    "failures": {
+      "miss": 61,
+      "tail_missing": 5,
+      "contact_break": 5
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 43
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 4
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 10
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 195
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.07687499999999999,
+    "mean_slide_rms_m": 0.02245396762301817,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "cap-v1",
+    "chart_macro_completion": 0.5581975214328155,
+    "failures": {
+      "miss": 55,
+      "tail_missing": 6,
+      "contact_break": 8
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 45
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 2
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 8
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 199
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.3040624999999987,
+    "mean_slide_rms_m": 0.11924513179955797,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "cap-v2",
+    "chart_macro_completion": 0.4975914608267549,
+    "failures": {
+      "miss": 55,
+      "tail_missing": 6,
+      "contact_break": 10
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 45
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 8
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 199
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.32140624999999867,
+    "mean_slide_rms_m": 0.12455795075714406,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert",
+    "policy": "classical",
+    "chart_macro_completion": 0.8017903120844297,
+    "failures": {
+      "miss": 29,
+      "tail_missing": 5,
+      "contact_break": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 46
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 8
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 10
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 224
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.05999999999999998,
+    "mean_slide_rms_m": 0.02217262735773727,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-diffusion-s0",
+    "chart_macro_completion": 0.32330553433494613,
+    "failures": {
+      "miss": 110,
+      "insufficient_contact": 11
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 42
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 0
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 160
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.0,
+    "mean_slide_rms_m": null,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-diffusion-s1",
+    "chart_macro_completion": 0.3204853153382565,
+    "failures": {
+      "miss": 102,
+      "insufficient_contact": 12,
+      "tail_missing": 3
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 39
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 0
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 167
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.07375000000000005,
+    "mean_slide_rms_m": 0.17064673844446274,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-diffusion-s2",
+    "chart_macro_completion": 0.20950435729847494,
+    "failures": {
+      "miss": 184,
+      "insufficient_contact": 8
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 26
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 0
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 105
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5287,
+    "mean_sustain_max_gap_seconds": 0.0,
+    "mean_slide_rms_m": null,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-mlp-s0",
+    "chart_macro_completion": 0.2975249695837931,
+    "failures": {
+      "miss": 122,
+      "insufficient_contact": 13,
+      "tail_missing": 2
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 37
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 0
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 149
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.05406249999999995,
+    "mean_slide_rms_m": 0.19021023025958114,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-mlp-s1",
+    "chart_macro_completion": 0.297879707438531,
+    "failures": {
+      "miss": 135,
+      "insufficient_contact": 8,
+      "tail_missing": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 41
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 0
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 138
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.035312499999999934,
+    "mean_slide_rms_m": 0.20321812851506926,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "bc-mlp-s2",
+    "chart_macro_completion": 0.28414289958407607,
+    "failures": {
+      "miss": 140,
+      "insufficient_contact": 12
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 39
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 0
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 132
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.0,
+    "mean_slide_rms_m": null,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "cap-v0",
+    "chart_macro_completion": 0.26511579379226435,
+    "failures": {
+      "miss": 167,
+      "contact_break": 3,
+      "tail_missing": 4
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 25
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 3
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 121
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.09562500000000006,
+    "mean_slide_rms_m": 0.14168128985315645,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "cap-v1",
+    "chart_macro_completion": 0.255712234388705,
+    "failures": {
+      "miss": 161,
+      "tail_missing": 4,
+      "insufficient_contact": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 29
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 1
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 127
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.045312500000000026,
+    "mean_slide_rms_m": 0.1014760397033443,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "cap-v2",
+    "chart_macro_completion": 0.324490351696234,
+    "failures": {
+      "miss": 138,
+      "tail_missing": 3,
+      "contact_break": 1,
+      "insufficient_contact": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 35
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 3
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 142
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.07328125000000005,
+    "mean_slide_rms_m": 0.13712252341604347,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "compare",
+    "detector": "concert-torch",
+    "policy": "classical",
+    "chart_macro_completion": 0.5240786718727896,
+    "failures": {
+      "miss": 29,
+      "contact_break": 5,
+      "tail_missing": 11,
+      "insufficient_contact": 5
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 47
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 8
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 218
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14234472342835566,
+    "ticks": 5297,
+    "ticks_over_budget": 5286,
+    "mean_sustain_max_gap_seconds": 0.1796875000000001,
+    "mean_slide_rms_m": 0.10774318679624735,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-diffusion-s0",
+    "chart_macro_completion": 0.4080804544039838,
+    "failures": {
+      "miss": 116,
+      "contact_break": 4,
+      "tail_missing": 8,
+      "insufficient_tracking": 1,
+      "insufficient_contact": 2
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 35
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 0
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 8
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 149
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 4667,
+    "mean_sustain_max_gap_seconds": 0.10593750000000002,
+    "mean_slide_rms_m": 0.04855051554842726,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-diffusion-s1",
+    "chart_macro_completion": 0.5428582038876156,
+    "failures": {
+      "miss": 85,
+      "contact_break": 6,
+      "tail_missing": 7,
+      "insufficient_contact": 2
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 39
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 3
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 8
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 173
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 2853,
+    "mean_sustain_max_gap_seconds": 0.13015624999999997,
+    "mean_slide_rms_m": 0.047166198386089445,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-diffusion-s2",
+    "chart_macro_completion": 0.2616511756217638,
+    "failures": {
+      "miss": 183,
+      "insufficient_contact": 9,
+      "contact_break": 1,
+      "tail_missing": 6
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 27
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 1
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 2
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 94
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 3392,
+    "mean_sustain_max_gap_seconds": 0.10718749999999984,
+    "mean_slide_rms_m": 0.07034184248064823,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-mlp-s0",
+    "chart_macro_completion": 0.48329761197408255,
+    "failures": {
+      "miss": 186,
+      "contact_break": 3,
+      "tail_missing": 4,
+      "insufficient_contact": 7
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 19
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 6
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 9
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 89
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 474,
+    "mean_sustain_max_gap_seconds": 0.09390624999999998,
+    "mean_slide_rms_m": 0.04988884520458335,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-mlp-s1",
+    "chart_macro_completion": 0.505414792179498,
+    "failures": {
+      "miss": 209,
+      "tail_missing": 6,
+      "contact_break": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 19
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 7
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 10
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 71
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 776,
+    "mean_sustain_max_gap_seconds": 0.07359374999999994,
+    "mean_slide_rms_m": 0.026821001676641112,
+    "browser_connections_max": 0
+  },
+  {
+    "phase": "live",
+    "detector": "concert",
+    "policy": "bc-mlp-s2",
+    "chart_macro_completion": 0.4529857397504456,
+    "failures": {
+      "miss": 192,
+      "tail_missing": 6,
+      "contact_break": 1
+    },
+    "by_family": {
+      "chords": {
+        "notes": 54,
+        "completed": 24
+      },
+      "crossing": {
+        "notes": 12,
+        "completed": 4
+      },
+      "holds": {
+        "notes": 12,
+        "completed": 10
+      },
+      "song_excerpt": {
+        "notes": 245,
+        "completed": 86
+      }
+    },
+    "frames": 5297,
+    "blank_frame_fraction": 0.14215593732301302,
+    "ticks": 5297,
+    "ticks_over_budget": 40,
+    "mean_sustain_max_gap_seconds": 0.06531250000000002,
+    "mean_slide_rms_m": 0.025215523047100643,
+    "browser_connections_max": 0
+  }
+]

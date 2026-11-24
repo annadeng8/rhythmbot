@@ -6,11 +6,13 @@ geometry. Occluded pixels stay occluded through rectification.
 """
 from __future__ import annotations
 import hashlib
+import time
+from pathlib import Path
 import numpy as np
 from scipy import ndimage, sparse
 from .camera import camera_config, camera_pose
 from .game import FrameRenderer
-from .perception import NoteDetector, DetectedNote
+from .perception import NoteDetector, DetectedNote, TorchDetector
 from .chart import TAP, HOLD, SLIDE
 
 
@@ -96,6 +98,59 @@ class DisplayRectifier:
         out = np.floor(values + .5).clip(0, 255).astype(np.uint8)
         out[~self._inside] = 0
         return out
+
+
+class NeuralCameraDetector(TorchDetector):
+    """Anna's frozen network on geometrically rectified, observed camera RGB.
+
+    No palette conversion, chart-based reconstruction, or occlusion filling.
+    This is zero-shot transfer from the network's original rendering domain.
+    """
+    def __init__(self, model_path, cfg, device='cpu', camera=True):
+        super().__init__(model_path, cfg, device=device)
+        self.rectifier = DisplayRectifier(cfg, camera=camera)
+        self.input_hash = hashlib.sha256()
+        self.rectified_hash = hashlib.sha256()
+        self.frames = 0
+        self.blank_frames = 0
+        self.last_rgb = self.last_rectified = None
+        self.last_detections = []
+        self.inference_seconds = []
+        self.model_sha256 = hashlib.sha256(Path(model_path).read_bytes()).hexdigest()
+        self.sidecar_sha256 = hashlib.sha256(Path(model_path).with_suffix('.json').read_bytes()).hexdigest()
+
+    def detect(self, frame, t):
+        rgb = self.rectifier.rectify(frame)
+        self.input_hash.update(frame.tobytes())
+        self.rectified_hash.update(rgb.tobytes())
+        self.last_rgb, self.last_rectified = frame.copy(), rgb
+        start = time.perf_counter()
+        detections = super().detect(rgb, t)
+        self.inference_seconds.append(time.perf_counter() - start)
+        self.frames += 1
+        self.blank_frames += not bool(detections)
+        self.last_detections = detections
+        return detections
+
+    def warmup(self, frame):
+        """Initialize the network kernels without updating detector/tracker state."""
+        rgb = self.rectifier.rectify(frame)
+        x = self.torch.from_numpy(np.array(rgb, copy=True)).permute(2, 0, 1).float().div(255.)[None]
+        with self.torch.no_grad():
+            for _ in range(2):
+                self.model(x.to(self.device))
+
+    def stats(self):
+        return dict(frames=self.frames, blank_detection_frames=self.blank_frames,
+            input_rgb_sha256=self.input_hash.hexdigest(),
+            rectified_rgb_sha256=self.rectified_hash.hexdigest(),
+            input='Drake composed RGB' if self.rectifier.camera else 'direct concert RGB',
+            chart_access=False, label_input=False, depth_input=False,
+            method='fixed geometric calibration + frozen Anna neural detector',
+            model_sha256=self.model_sha256, sidecar_sha256=self.sidecar_sha256,
+            active_path=self.active_path, palette_conversion=False, fine_tuned=False,
+            inference_mean_seconds=float(np.mean(self.inference_seconds)) if self.frames else 0.,
+            inference_max_seconds=max(self.inference_seconds, default=0.))
 
 
 class ConcertVisionDetector(NoteDetector):

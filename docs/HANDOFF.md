@@ -29,8 +29,33 @@ The dynamic game display is composited into Drake's scene RGB using render label
 inside the renderer, preserving robot occlusion. The detector sees neither labels,
 depth nor chart state. It receives RGB and time, rectifies with known calibration,
 and extracts note estimates. This is not a native animated Drake texture or a
-physical camera. The current vision is classical color/shape processing, not a
-learned visual encoder. The judge and game renderer retain ground truth normally.
+physical camera. The default detector uses classical color/shape processing. The optional
+`concert-torch` detector applies the frozen neural network to geometrically
+rectified camera RGB; it receives no clean backing image or chart state. The judge and game renderer retain ground truth normally.
+
+## Live dual-arm launch
+
+The normal play command now accepts the same environment presets. For live
+camera control with both single-stylus arms:
+
+```sh
+python -m rhythmbot.play --preset sekai-realtime \
+  --chart charts/stylus-hard-handoffs.json \
+  --out results/live-2arm.json --wait-for-browser 30 --hold
+```
+
+This selects two independent arm controllers, the 640×480 Drake-composited
+control camera, and the native Meshcat view with the minimal Sekai texture.
+Conflicting `--arms 1`, `--view screen`, or `--detector oracle` options are
+rejected. The report includes each actual arm model and its measured joint
+motion range. Audio and stage-frame export are not supported by the live preset.
+For the full-resolution study environment, `play --preset sekai-camera` selects
+the 960×720 camera and the existing play runner; `sekai-screen` selects its
+camera ablation. Legacy invocations without a preset retain their old defaults.
+
+The earlier classical-controller test reached 1× overall speed on the local Mac, with occasional stalls;
+this is not a hard real-time guarantee or a claim that gpu156 now keeps up.
+See [timing limits](../results/realtime-v1/README.md).
 
 ## Smoke check: no external weights required
 
@@ -53,61 +78,48 @@ For the direct-RGB comparison, rerun the command with `--preset sekai-screen` an
 Preset evaluations reject incompatible environment/source manifests and refuse
 to overwrite existing run reports. Choose a fresh output directory for a rerun.
 
-## BC weights: not in Git
+## Frozen BC weights and comparison protocol
 
-Use the exact trained single-stylus checkpoints, not the old single-gripper BC
-models. Source of truth: `results/yifan-study-v1/freeze.json`, entries `bc-mlp` and
-`bc-diffusion`. They live on gpu156 at:
+Use the six single-stylus checkpoints in `results/yifan-final-v1/freeze.json`:
+`bc-mlp-s0.pt` through `bc-mlp-s2.pt` and `bc-diffusion-s0.pt` through
+`bc-diffusion-s2.pt`. They are excluded from Git and stored on gpu156 under
+`/data/YifanKang/rhythmbot_final_20261118/results/yifan-final-v1/checkpoints/`.
+Copy them into the same repository-relative directory and verify their SHA-256
+hashes against that manifest. Do not substitute the older one-seed pilot models.
 
-```
-/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt
-/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt
-```
+The registered completion study is in
+[`results/remaining-study-v1/`](../results/remaining-study-v1/README.md).
+It reuses the original 11 held-out charts and all frozen policies: classical,
+three Codex Code as Policy (CAP) programs, and three seeds each of multilayer
+perceptron (MLP) and diffusion behavior cloning (BC). CAP initial, feedback 1,
+and feedback 2 denote successive programs revised using training feedback.
 
-To run from another machine with authorized SSH access:
+All 286 registered runs are complete and verified, with zero execution errors.
+MLP meets the one-frame live lag limit on 17/33 runs; diffusion on 0/33. Thus the
+experiment suite is complete, but diffusion does not yet meet real-time speed.
+The results README includes the paired accuracy table and per-seed timing.
 
-```sh
-mkdir -p results/yifan-study-v1/checkpoints
-scp gpu156:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-mlp.pt results/yifan-study-v1/checkpoints/
-scp gpu156:/data/YifanKang/rhythmbot_yifan_study_v1/results/yifan-study-v1/checkpoints/bc-diffusion.pt results/yifan-study-v1/checkpoints/
-python - <<'PY'
-import hashlib, json
-from pathlib import Path
-root = Path('results/yifan-study-v1')
-manifest = json.loads((root / 'freeze.json').read_text())
-for name in ('bc-mlp', 'bc-diffusion'):
-    p = root / 'checkpoints' / (name + '.pt')
-    assert hashlib.sha256(p.read_bytes()).hexdigest() == manifest['artifacts'][name]['sha256'], name
-print('Both checkpoint hashes match the original training artifacts')
-PY
-```
+The paired vision comparison has 220 runs: 11 charts × 10 controllers × two
+RGB detectors at 960×720. A separate 66-run timing evaluation uses every BC
+checkpoint on every chart, sequentially, with the 640×480 live preset and
+Meshcat publishing. Its timing includes both arms and the original ten-step
+diffusion sampler. Browser display latency is not measured.
 
-If gpu156 is inaccessible, the classical/CAP command still works. The BC experiment
-is not complete until the checkpoints are available; do not silently omit BC or
-report missing-weight runs as successful.
-
-## Full paired benchmark under the current judge
-
-After retrieving/checking the weights, these are **two separate 32-run suites**:
+To use the frozen neural detector in a live run:
 
 ```sh
-for preset in sekai-screen sekai-camera; do
-  HEADLESS=1 python -m rhythmbot.evaluate --preset "$preset" \
-    --split bimanual-test --workers 2 \
-    --policy classical cap:results/yifan-study-v1/cap/v1/policy.py \
-      bc:results/yifan-study-v1/checkpoints/bc-mlp.pt \
-      bc:results/yifan-study-v1/checkpoints/bc-diffusion.pt \
-    --out "results/current-$preset"
-done
+python -m rhythmbot.play --preset sekai-realtime \
+  --chart charts/stylus-hard-handoffs.json \
+  --detector concert-torch --model results/note_detector_v7.pt \
+  --out results/live-neural.json --wait-for-browser 30 --hold
 ```
 
-Expected report metadata: `arms=2`, `contacts_per_arm=1`, `single_tip=true`,
-`display=concert`, the correct `view` and preset, camera parameters, source and
-judge hashes, chart hash, and policy hash. CAP reports carry two per-hand policy
-statistics. `vision.chart_access`, `vision.label_input` and `vision.depth_input`
-are false; frame counts must be nonzero. A clean report must have no `run_error`
-or `load_error`; a low note-completion score is a different, legitimate outcome.
-Summaries count per-hand policy errors and flag mixed environments/judge source.
+The model retains its trained active-slide-path decoder. This is zero-shot
+transfer from its original display domain: geometric RGB rectification only,
+with no recoloring, chart reconstruction, fine-tuning, or held-out selection.
+The display palette and robot occlusion differ from its training inputs.
+An experiment can execute correctly while having low note completion or failing
+the one-frame timing criterion; consult the separate accuracy and timing tables.
 
 ## gpu156 launch discipline
 
@@ -144,15 +156,12 @@ under `/data/YifanKang/`. Run the smoke check before the full suite.
   latest judge. Read the [validation note](../results/handoff-20261113/validation.md) and
   [test log](../results/handoff-20261113/tests.log) for exactly what was run.
 
-The new 64-run benchmark above remains to be run before publishing a complete
-current-judge comparison. The handoff smoke results must not be substituted for
-it. Historical scripts `camera_vision_study.py` and `yifan_study.py` retain their
-old frozen artifacts; running them against changed code is not a reproduction of
-the original experiments. Use the original commits to reproduce historical data.
-
-Existing camera GIFs are clearly labeled historical; this handoff does not claim
-that they show the new judge.
-
+The earlier proposed 64-run suite is superseded by the frozen 330-run minimal-
+display study and the registered neural-camera/live-BC completion study linked
+above. The handoff smoke checks are not substitutes for those evaluations.
+Historical scripts and GIFs retain their original source and judge provenance;
+use the original commits to reproduce them, rather than rerunning against an
+evolving checkout and treating the results as identical.
 
 ### VTK camera presentation render
 

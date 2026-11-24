@@ -26,7 +26,7 @@ must follow the path and finish on the right lane.
 |---|---|---|
 | Robot | 1 iiwa + WSG gripper; its two fingertips are two contacts | 2 iiwa; each closed WSG holds one stylus |
 | Screen | plain game screen | minimal Sekai screen: lanes, notes, judgment line |
-| Perception | trained neural detector (`note_detector_v7.pt`) on the game image | hand-coded color/shape detector on a simulated 960×720 camera image (or on the screen image directly, as an ablation) |
+| Perception | trained neural detector (`note_detector_v7.pt`) on the game image | hand-coded color/shape detector on a simulated 960×720 camera image (or on the screen image directly, as an ablation); v7 tested zero-shot on the camera as a comparison |
 | Controllers | classical, CAP (Claude-written) | classical, CAP (Codex-written), BC (MLP and diffusion, 3 seeds each) |
 | Results | [`results/eval-v3`](results/eval-v3/summary.md) (v7 detector), [`results/eval-v2`](results/eval-v2/summary.md) (all controllers, earlier detector) | [`results/yifan-final-v1`](results/yifan-final-v1/summary.md) |
 | Speed | 2–5× faster than real time | live mode (640×480 camera): about real time on an M5 Mac; study camera (960×720): about 1.8× slower on gpu156 |
@@ -87,6 +87,28 @@ excerpts).
   generation chain, three BC seeds, song excerpts rather than full songs,
   fixed hand assignment, no robot–robot collision checking.
 
+### Two arms: neural detector on the camera, and BC live
+
+Yifan's [follow-up study](results/remaining-study-v1/README.md) (286 runs,
+fixed in advance) reuses the same 11 charts and all frozen policies. It puts
+the v7 detector on the 960×720 camera image as `concert-torch`, zero-shot:
+v7 was trained on the plain game screen, and the Sekai screen differs in
+perspective, colors and occlusion.
+
+| Controller | Color/shape detector | v7 detector (zero-shot) |
+|---|---|---|
+| Classical | 89.2% | 84.5% |
+| CAP initial / feedback 1 / feedback 2 | 78.0 / 78.6 / 78.0% | 46.1 / 48.6 / 55.7% |
+| BC MLP (3 seeds) | 37.3 ± 1.8% | 55.3 ± 2.3% |
+| BC diffusion (3 seeds) | 56.0 ± 15.9% | 55.6 ± 13.1% |
+
+- **Zero-shot v7 hurts classical and CAP but helps BC MLP.** One example
+  failure: it reports spurious short holds along a green slide.
+- **Live BC on a Mac (640×480 camera, 66 runs):** MLP keeps up with real time
+  (1.00 wall s per simulated s) but stays within one frame of lag on only
+  17/33 runs; diffusion runs 1.26× slower and passes 0/33. Accuracy matches
+  the study.
+
 ### Same charts, gripper fingertips vs styluses
 
 The 11 test charts above, played by the older two-arm configuration (ordinary
@@ -136,7 +158,7 @@ up afterwards, so the recording can be replayed at true speed under
     --detector torch --model results/note_detector_v7.pt --hold
 
 # Yifan's two-arm camera setup, live at 1x speed (640x480 control camera)
-../.venv/bin/python -m rhythmbot.realtime --chart charts/stylus-hard-handoffs.json \
+../.venv/bin/python -m rhythmbot.play --preset sekai-realtime --chart charts/stylus-hard-handoffs.json \
     --out results/live.json --wait-for-browser 30 --hold
 
 # The same setup exactly as in the frozen study (960x720 camera, slower than real time)
@@ -144,9 +166,11 @@ up afterwards, so the recording can be replayed at true speed under
     --chart results/yifan-final-v1/charts/test_iid/crossing-s71000-0.8s-x1.1287.json
 ```
 
-`rhythmbot.realtime` uses the `sekai-realtime` preset: the study's camera
-pose, noise and controller, at 640×480 (`--camera-width 960` for the
-study's resolution, `--unpaced` to measure throughput). Yifan measured it at
+The `sekai-realtime` preset runs `rhythmbot.realtime`: the study's camera
+pose, noise and controller, at 640×480 (`python -m rhythmbot.realtime
+--camera-width 960` for the study's resolution, `--unpaced` to measure
+throughput). Add `--detector concert-torch --model results/note_detector_v7.pt`
+to a study preset to use the v7 detector on the camera image. Yifan measured it at
 1× on an Apple M5 Mac plugged in; it is soft real time, with brief stalls,
 and on battery in Low Power Mode it runs about 1.5× slower. Its results are
 not part of the frozen study, because the camera pixels differ. Timings and

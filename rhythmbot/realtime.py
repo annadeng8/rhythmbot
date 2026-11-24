@@ -27,7 +27,7 @@ from .experiments import digest, source_hash
 
 
 def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classical', hold=False,
-        camera_width=None, wait_for_browser=0.):
+        camera_width=None, wait_for_browser=0., detector='concert', model_path=None, seed=0):
     started = time.perf_counter()
     source = source_hash()
     cfg = config({'preset': 'sekai-realtime'})
@@ -41,8 +41,14 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
         c = cfg.layout.screen_center()
         viewer.SetCameraPose(c + np.array([.9, -1.1, .8]), c + np.array([0., .15, 0.]))
         print(f'Meshcat: {viewer.web_url()}', flush=True)
+    if detector not in ('concert', 'concert-torch'):
+        raise ValueError('live mode requires a camera RGB detector')
+    if policy.startswith('bc:') or detector == 'concert-torch':
+        import torch
+        torch.set_num_threads(1)
+        torch.manual_seed(seed)
     policies = [make_policy(policy, cfg, hand=k) for k in range(cfg.arms.n)]
-    diagram, robot, brain, judge = build(chart, cfg, 'concert', None, viewer, policies, view='camera')
+    diagram, robot, brain, judge = build(chart, cfg, detector, model_path, viewer, policies, view='camera')
     sim = Simulator(diagram)
     robot.initialize(sim.get_mutable_context())
     sim.Initialize()
@@ -52,6 +58,8 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
     screen = diagram.GetSubsystemByName('screen')
     frame = screen.get_output_port().Eval(screen.GetMyContextFromRoot(sim.get_context()))
     brain.detector.rectifier.rectify(frame)
+    if hasattr(brain.detector, 'warmup'):
+        brain.detector.warmup(frame)
     sim.AdvanceTo(0.)
     if viewer is not None:
         deadline = time.perf_counter() + wait_for_browser
@@ -63,6 +71,9 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
         raise ValueError('duration must be positive')
     dt = 1 / cfg.perception.tick_hz
     ticks, lag = [], []
+    plant_context = robot.plant.GetMyContextFromRoot(sim.get_context())
+    q_min = [robot.plant.GetPositions(plant_context, arm.iiwa).copy() for arm in robot.arms]
+    q_max = [q.copy() for q in q_min]
     # Reference counting still frees frame buffers immediately. Defer cyclic
     # collection during the timed loop to avoid collector-induced frame stalls.
     gc.collect()
@@ -75,6 +86,10 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
             target = min((i + 1) * dt, end)
             before = time.perf_counter()
             sim.AdvanceTo(target)
+            for k, arm in enumerate(robot.arms):
+                q = robot.plant.GetPositions(plant_context, arm.iiwa)
+                np.minimum(q_min[k], q, out=q_min[k])
+                np.maximum(q_max[k], q, out=q_max[k])
             finished = time.perf_counter()
             ticks.append(finished - before)
             lag.append(max(0., finished - start - target))
@@ -90,7 +105,8 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
             diagram.GetSubsystemByName('highway').close()
     judge.finalize(end)
     report = judge.report(extra=dict(
-        policy=policy, preset='sekai-realtime', view='camera', config=dataclasses.asdict(cfg),
+        policy=policy, preset='sekai-realtime', view='camera', detector=detector,
+        seed=seed, config=dataclasses.asdict(cfg),
         vision=brain.detector.stats(), startup_seconds=startup, sim_seconds=end,
         wall_seconds=wall, compute_seconds=sum(ticks), wall_per_sim=wall / end,
         compute_per_sim=sum(ticks) / end, paced=paced, meshcat=meshcat,
@@ -104,6 +120,8 @@ def run(chart, out, *, meshcat=True, paced=True, duration=None, policy='classica
         ticks_over_budget=sum(t > dt for t in ticks), tick_budget_seconds=dt,
         max_lag_seconds=max(lag), end_lag_seconds=lag[-1],
         policy_stats=[p.stats() if hasattr(p, 'stats') else {} for p in policies],
+        executed_arms=[dict(model=arm.name, joint_range_rad=(q_max[k] - q_min[k]).tolist())
+                       for k, arm in enumerate(robot.arms)],
         # Soft real time: bounded lag within one 30 Hz frame, not a hard
         # deadline guarantee or a measurement of browser display latency.
         realtime_pass=bool(paced and max(lag) <= dt),
@@ -129,6 +147,9 @@ def main():
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--duration', type=float)
     p.add_argument('--policy', default='classical')
+    p.add_argument('--detector', choices=('concert', 'concert-torch'), default='concert')
+    p.add_argument('--model', help='Anna neural detector checkpoint for concert-torch')
+    p.add_argument('--seed', type=int, default=0, help='inference RNG seed, independent of training seed')
     p.add_argument('--camera-width', type=int, help='control camera width; default 640, use 960 for the study resolution')
     p.add_argument('--wait-for-browser', type=float, default=0., metavar='SECONDS')
     p.add_argument('--no-meshcat', action='store_true')
@@ -137,7 +158,7 @@ def main():
     a = p.parse_args()
     run(Chart.load(a.chart), a.out, meshcat=not a.no_meshcat, paced=not a.unpaced,
         duration=a.duration, policy=a.policy, hold=a.hold, camera_width=a.camera_width,
-        wait_for_browser=a.wait_for_browser)
+        wait_for_browser=a.wait_for_browser, detector=a.detector, model_path=a.model, seed=a.seed)
 
 
 if __name__ == '__main__':
