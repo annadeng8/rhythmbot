@@ -115,6 +115,9 @@ zigzag in the speed charts, that were never touched.
 Single-arm charts mostly have smoother slides, which is why v7 reached 84%
 of slides there.
 
-**Possible fix (not tried):** predict more path points, or keep the
-forecast's corners and only correct lanes from the rest-of-path reading.
-Either changes v7 or the tracker, and so every vision result.
+**Fix:** [`slide-path-v1`](../slide-path-v1/README.md). Logging v7's raw
+points showed they are off too, not only the lines between them: v7's
+training charts have no slides with that many turns. Fine-tuning v7 on
+Yifan's training charts and merging each frame's reading with earlier
+ones takes the gripper setup to 12/16 slides, and the merge alone adds
+1–3 slides to every controller on the camera.

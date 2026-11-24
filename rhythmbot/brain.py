@@ -205,19 +205,34 @@ class RhythmBrain(LeafSystem):
         if abs(ratio - 1.0) > 0.05:
             n.waypoints = [(off * ratio, lane) for off, lane in n.waypoints]
 
+    _REST_MERGE = 0.01  # s
+
     @staticmethod
     def _replace_rest(n: TrackedNote, d: DetectedNote, t: float) -> None:
         """A slide being played whose detection reads the rest of its path
         off the body still on screen: that replaces the path forecast from
         up the highway from now on (a slide's tail is judged on its end
-        lane), stretched to end at the tracked end time."""
+        lane), stretched to end at the tracked end time.
+
+        A reading is a few points at fractions of what is left, joined by
+        straight lines that cut a zigzag's corners. Each frame samples
+        different times, so the points of earlier readings still ahead are
+        kept between the new ones (a new point replaces any within
+        `_REST_MERGE`), and the path ahead fills in as the slide is played."""
         span = n.end_time - t
         if span <= 0.0 or d.duration <= 0.0:
             return
         now = t - n.hit_time
         ratio = span / d.duration
         past = [w for w in n.waypoints if w[0] < now - 1e-3] or [(0.0, n.lane)]
-        n.waypoints = past + [(now + off * ratio, lane) for off, lane in d.waypoints]
+        new = [(now + off * ratio, lane) for off, lane in d.waypoints]
+        ahead = []
+        if n.rest_read:
+            gap = RhythmBrain._REST_MERGE
+            ahead = [w for w in n.waypoints if now - 1e-3 <= w[0] < new[-1][0] - gap
+                     and min(abs(w[0] - off) for off, _ in new) > gap]
+        n.rest_read = True
+        n.waypoints = past + sorted(ahead + new)
 
     @staticmethod
     def _by_proximity(d: DetectedNote) -> bool:

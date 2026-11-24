@@ -1,0 +1,90 @@
+[
+  {
+    "policy": "cap-v0",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 255,
+    "by_kind": {
+      "tap": [
+        230,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        9,
+        16
+      ]
+    },
+    "compute_per_sim": 2.6055509025312302
+  },
+  {
+    "policy": "cap-v1",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 259,
+    "by_kind": {
+      "tap": [
+        235,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        8,
+        16
+      ]
+    },
+    "compute_per_sim": 2.5945202841958106
+  },
+  {
+    "policy": "cap-v2",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 248,
+    "by_kind": {
+      "tap": [
+        228,
+        291
+      ],
+      "hold": [
+        15,
+        16
+      ],
+      "slide": [
+        5,
+        16
+      ]
+    },
+    "compute_per_sim": 2.2835552102476657
+  },
+  {
+    "policy": "classical",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 283,
+    "by_kind": {
+      "tap": [
+        258,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        9,
+        16
+      ]
+    },
+    "compute_per_sim": 2.427967976629916
+  }
+]

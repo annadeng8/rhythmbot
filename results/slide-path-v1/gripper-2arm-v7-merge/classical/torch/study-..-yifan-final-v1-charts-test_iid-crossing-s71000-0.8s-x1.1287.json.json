@@ -1,0 +1,163 @@
+{
+ "chart": "crossing-s71000-0.8s-x1.1287",
+ "n_notes": 3,
+ "completion_rate": 0.6666666666666666,
+ "hit_rate": 1.0,
+ "judgments": {
+  "perfect": 2,
+  "great": 0,
+  "good": 0,
+  "miss": 1
+ },
+ "score": 6,
+ "max_score": 9,
+ "timing_error_mean_s": 0.012678880285147631,
+ "timing_error_abs_mean_s": 0.01577130210337178,
+ "timing_error_std_s": 0.014394193321906348,
+ "by_kind": {
+  "slide": {
+   "n": 3,
+   "hit": 3,
+   "completed": 2,
+   "mean_maintenance": 0.8277608035041526,
+   "mean_slide_rms_m": 0.020895336261486572
+  }
+ },
+ "notes": [
+  {
+   "id": 0,
+   "kind": "slide",
+   "lane": 1.0142452697173598,
+   "time": 2.657928808556178,
+   "duration": 2.8351240624599234,
+   "status": "hit",
+   "timing_error": 0.01207119144382185,
+   "judgment": "miss",
+   "head_judgment": "perfect",
+   "judged_at": 5.495,
+   "gap_seconds": 0.2550000000000001,
+   "max_gap_seconds": 0.29500000000000015,
+   "tail_ticks": 8,
+   "tail_contact_ticks": 0,
+   "failure_reason": "tail_missing",
+   "contact_ticks_by_hand": [
+    192,
+    94
+   ],
+   "handoffs": 6,
+   "last_contact_hand": 0,
+   "active_ticks": 567,
+   "contact_ticks": 286,
+   "completed": false,
+   "maintenance": 0.5044091710758377,
+   "slide_rms_m": 0.04097336314462749
+  },
+  {
+   "id": 1,
+   "kind": "slide",
+   "lane": 1.0142452697173598,
+   "time": 6.024638632727337,
+   "duration": 1.4175620312299617,
+   "status": "hit",
+   "timing_error": -0.004638632727336223,
+   "judgment": "perfect",
+   "head_judgment": "perfect",
+   "judged_at": 7.445,
+   "gap_seconds": 0.0,
+   "max_gap_seconds": 0.0,
+   "tail_ticks": 8,
+   "tail_contact_ticks": 8,
+   "failure_reason": null,
+   "contact_ticks_by_hand": [
+    148,
+    136
+   ],
+   "handoffs": 1,
+   "last_contact_hand": 1,
+   "active_ticks": 284,
+   "contact_ticks": 284,
+   "completed": true,
+   "maintenance": 1.0,
+   "slide_rms_m": 0.009501122161279693
+  },
+  {
+   "id": 2,
+   "kind": "slide",
+   "lane": 3.8660934218907674,
+   "time": 7.619395917861043,
+   "duration": 1.4175620312299617,
+   "status": "hit",
+   "timing_error": 0.030604082138957267,
+   "judgment": "perfect",
+   "head_judgment": "perfect",
+   "judged_at": 9.040000000000001,
+   "gap_seconds": 0.0,
+   "max_gap_seconds": 0.03,
+   "tail_ticks": 8,
+   "tail_contact_ticks": 8,
+   "failure_reason": null,
+   "contact_ticks_by_hand": [
+    148,
+    130
+   ],
+   "handoffs": 1,
+   "last_contact_hand": 0,
+   "active_ticks": 284,
+   "contact_ticks": 278,
+   "completed": true,
+   "maintenance": 0.9788732394366197,
+   "slide_rms_m": 0.012211523478552543
+  }
+ ],
+ "detector": "torch",
+ "policy": "classical",
+ "view": "screen",
+ "skipped_by_planner": [],
+ "n_detections": 314,
+ "sim_seconds": 10.036957949091004,
+ "wall_seconds": 10.569532871246338,
+ "split": "study:../yifan-final-v1/charts/test_iid/crossing-s71000-0.8s-x1.1287.json",
+ "chart_entry": "study:../yifan-final-v1/charts/test_iid/crossing-s71000-0.8s-x1.1287.json",
+ "provenance": {
+  "commit": "cc87b39",
+  "uncommitted_code": true,
+  "judge": {
+   "perfect": 0.045,
+   "great": 0.09,
+   "good": 0.14,
+   "hold_fraction": 0.8,
+   "slide_tolerance_lanes": 0.35,
+   "slide_max_gap": 0.05,
+   "slide_tail_window": 0.04,
+   "slide_min_maintenance": 0.95
+  },
+  "arms": 2,
+  "contacts_per_arm": 2,
+  "view": "screen",
+  "preset": null,
+  "display": "calibrated",
+  "single_tip": false,
+  "camera": {
+   "width": 384,
+   "height": 256,
+   "fov_y_deg": 45.0,
+   "eye_offset": [
+    0.55,
+    -0.05,
+    0.65
+   ],
+   "target_offset": [
+    0.07,
+    0.0,
+    0.0
+   ],
+   "noise_std": 3.0,
+   "prefetch_noise": false
+  },
+  "source_sha256": "fcac772baa2ae89f5552fb13590a5b859e279391600bcad83f193b1cbd425b69",
+  "judge_sha256": "447e724fdb8120bc",
+  "model_sha256": "6f470a1575e0b585",
+  "policy_sha256": null
+ },
+ "chart_sha256": "6e46c4f3d62caba6e2b66d6edc884ac382d203f00e4ac34476b4c6aef90756bc"
+}

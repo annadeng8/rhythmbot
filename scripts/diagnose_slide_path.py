@@ -1,8 +1,9 @@
 """How far v7's read-off rest of a slide's path is from the true path.
 
-    python scripts/diagnose_slide_path.py results/yifan-final-v1/charts/test_iid/holds-s71000-x1.1287.json
+    python scripts/diagnose_slide_path.py results/yifan-final-v1/charts/test_iid/holds-s71000-x1.1287.json \
+        [results/note_detector_v7_zigzag.pt]
 
-Plays the chart on two gripper arms (plain game screen, v7) and logs the path
+Plays the chart on two gripper arms (plain game screen, v7 or the given model) and logs the path
 the tracker holds after each `_replace_rest`, then prints the lane error at
 the current moment and 33/100/200 ms ahead.
 """
@@ -24,7 +25,8 @@ def logged(n, d, t):
     log.append((t, n.hit_time, list(n.waypoints), list(d.waypoints), d.duration, n.end_time))
 brain.RhythmBrain._replace_rest = staticmethod(logged)
 cfg = two_arm_config()
-diagram, robot, b, judge = build(chart, cfg, 'torch', 'results/note_detector_v7.pt', None, None)
+model = sys.argv[2] if len(sys.argv) > 2 else 'results/note_detector_v7.pt'
+diagram, robot, b, judge = build(chart, cfg, 'torch', model, None, None)
 sim = Simulator(diagram); robot.initialize(sim.get_mutable_context()); sim.Initialize()
 sim.AdvanceTo(chart.end_time + 0.5)
 slides = [n for n in chart.notes if n.kind == 'slide']

@@ -30,4 +30,8 @@ HEADLESS=1 ../.venv/bin/python -m rhythmbot.evaluate --policy classical \
 - **CAP's gap to classical is still mostly notes it chooses not to play**, on
   the songs: 71% and 81% vs 98%.
 
+Follow-up: with v7 fine-tuned on zigzag slides and the merged slide path
+([`slide-path-v1`](../slide-path-v1/README.md)), the self-tested program's
+slides reach 87.7% and the feedback program's stay at 29.8%.
+
 Per split: [`summary.md`](summary.md).
