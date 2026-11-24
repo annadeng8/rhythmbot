@@ -1,0 +1,266 @@
+[
+  {
+    "policy": "cap-v0",
+    "detector": "color",
+    "charts": 11,
+    "notes": 323,
+    "completed": 252,
+    "by_kind": {
+      "tap": [
+        230,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        6,
+        16
+      ]
+    },
+    "compute_per_sim": 1.1854238855340697
+  },
+  {
+    "policy": "cap-v0",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 254,
+    "by_kind": {
+      "tap": [
+        230,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        8,
+        16
+      ]
+    },
+    "compute_per_sim": 1.2912981289568193
+  },
+  {
+    "policy": "cap-v0",
+    "detector": "v7-zero-shot",
+    "charts": 11,
+    "notes": 323,
+    "completed": 149,
+    "by_kind": {
+      "tap": [
+        144,
+        291
+      ],
+      "hold": [
+        5,
+        16
+      ],
+      "slide": [
+        0,
+        16
+      ]
+    },
+    "compute_per_sim": 1.2277470304984113
+  },
+  {
+    "policy": "cap-v1",
+    "detector": "color",
+    "charts": 11,
+    "notes": 323,
+    "completed": 254,
+    "by_kind": {
+      "tap": [
+        236,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        2,
+        16
+      ]
+    },
+    "compute_per_sim": 1.1722476286483996
+  },
+  {
+    "policy": "cap-v1",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 256,
+    "by_kind": {
+      "tap": [
+        235,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        5,
+        16
+      ]
+    },
+    "compute_per_sim": 1.277167144178639
+  },
+  {
+    "policy": "cap-v1",
+    "detector": "v7-zero-shot",
+    "charts": 11,
+    "notes": 323,
+    "completed": 157,
+    "by_kind": {
+      "tap": [
+        156,
+        291
+      ],
+      "hold": [
+        1,
+        16
+      ],
+      "slide": [
+        0,
+        16
+      ]
+    },
+    "compute_per_sim": 1.2000509378655417
+  },
+  {
+    "policy": "cap-v2",
+    "detector": "color",
+    "charts": 11,
+    "notes": 323,
+    "completed": 252,
+    "by_kind": {
+      "tap": [
+        236,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        0,
+        16
+      ]
+    },
+    "compute_per_sim": 1.1435257326992465
+  },
+  {
+    "policy": "cap-v2",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 247,
+    "by_kind": {
+      "tap": [
+        228,
+        291
+      ],
+      "hold": [
+        15,
+        16
+      ],
+      "slide": [
+        4,
+        16
+      ]
+    },
+    "compute_per_sim": 1.1156456916918347
+  },
+  {
+    "policy": "cap-v2",
+    "detector": "v7-zero-shot",
+    "charts": 11,
+    "notes": 323,
+    "completed": 181,
+    "by_kind": {
+      "tap": [
+        176,
+        291
+      ],
+      "hold": [
+        5,
+        16
+      ],
+      "slide": [
+        0,
+        16
+      ]
+    },
+    "compute_per_sim": 1.1710926518188214
+  },
+  {
+    "policy": "classical",
+    "detector": "color",
+    "charts": 11,
+    "notes": 323,
+    "completed": 288,
+    "by_kind": {
+      "tap": [
+        262,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        10,
+        16
+      ]
+    },
+    "compute_per_sim": 1.231535676267514
+  },
+  {
+    "policy": "classical",
+    "detector": "v7-fine-tuned",
+    "charts": 11,
+    "notes": 323,
+    "completed": 281,
+    "by_kind": {
+      "tap": [
+        258,
+        291
+      ],
+      "hold": [
+        16,
+        16
+      ],
+      "slide": [
+        7,
+        16
+      ]
+    },
+    "compute_per_sim": 1.3130403374873827
+  },
+  {
+    "policy": "classical",
+    "detector": "v7-zero-shot",
+    "charts": 11,
+    "notes": 323,
+    "completed": 273,
+    "by_kind": {
+      "tap": [
+        262,
+        291
+      ],
+      "hold": [
+        11,
+        16
+      ],
+      "slide": [
+        0,
+        16
+      ]
+    },
+    "compute_per_sim": 1.278985528049305
+  }
+]

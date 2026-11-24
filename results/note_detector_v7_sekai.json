@@ -1,0 +1,57 @@
+{
+ "n_lanes": 6,
+ "k_slots": 8,
+ "rows": 24,
+ "approach_time": 1.6,
+ "max_duration": 8.0,
+ "duration_norm": "log1p",
+ "downsample": 2,
+ "path_fractions": [
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "kinds": [
+  "tap",
+  "hold",
+  "slide"
+ ],
+ "active_slot": true,
+ "active_kinds": [
+  "hold",
+  "slide"
+ ],
+ "path_relative": true,
+ "active_path": true,
+ "rest_fractions": [
+  0.0,
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "frame_size": [
+  256,
+  384
+ ],
+ "init": "results/note_detector_v7.pt",
+ "train": "data/sekai-camera/train",
+ "val": {
+  "active_precision": 0.9951267056530214,
+  "active_recall": 0.9951267056530214,
+  "active_end_mae_ms": 8.829735219478607,
+  "active_offscreen_ok": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "kind_accuracy": 0.9997106481481481,
+  "time_to_hit_mae_ms": 6.7009516060352325,
+  "time_to_hit_p95_ms": 18.850767984986305,
+  "duration_mae_ms": 168.28395426273346,
+  "path_lane_mae": 0.07599183917045593,
+  "slide_end_lane_mae": 0.17800694704055786,
+  "active_rest_lane_mae": 0.024912264198064804,
+  "active_rest_end_lane_mae": 0.03716162592172623,
+  "n_true_notes": 3456
+ }
+}

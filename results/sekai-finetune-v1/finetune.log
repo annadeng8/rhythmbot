@@ -1,0 +1,34 @@
+device mps
+val   (1899, 3, 192, 128) in 5s
+train (29112, 3, 192, 128) in 153s
+init results/note_detector_v7.pt: val {"active_precision": 0.8833, "active_recall": 0.0517, "active_end_mae_ms": 431.4772, "active_offscreen_ok": 0.0, "precision": 0.4279, "recall": 0.9994, "kind_accuracy": 0.8506, "time_to_hit_mae_ms": 115.3295, "time_to_hit_p95_ms": 333.4774, "duration_mae_ms": 1469.1463, "path_lane_mae": 0.87, "slide_end_lane_mae": 1.6323, "active_rest_lane_mae": 0.4144, "active_rest_end_lane_mae": 0.4211, "n_true_notes": 3456}
+epoch  1  loss 0.5823  P 1.000 R 0.999 kind 0.991  tth MAE   22 ms  dur MAE  554 ms  path-lane MAE 0.56 slide end 1.33  | active P 0.970 R 0.985 end MAE   59 ms rest lane 0.17 rest end 0.22  (133s)
+epoch  2  loss 0.1081  P 1.000 R 1.000 kind 0.994  tth MAE   14 ms  dur MAE  381 ms  path-lane MAE 0.35 slide end 0.93  | active P 0.983 R 0.991 end MAE   34 ms rest lane 0.08 rest end 0.12  (52s)
+epoch  3  loss 0.0593  P 1.000 R 0.999 kind 0.997  tth MAE   12 ms  dur MAE  320 ms  path-lane MAE 0.18 slide end 0.40  | active P 0.990 R 0.990 end MAE   27 ms rest lane 0.06 rest end 0.10  (50s)
+epoch  4  loss 0.0451  P 1.000 R 1.000 kind 0.995  tth MAE   12 ms  dur MAE  300 ms  path-lane MAE 0.16 slide end 0.37  | active P 0.993 R 0.995 end MAE   22 ms rest lane 0.06 rest end 0.09  (46s)
+epoch  5  loss 0.0369  P 1.000 R 1.000 kind 0.999  tth MAE   18 ms  dur MAE  233 ms  path-lane MAE 0.13 slide end 0.30  | active P 0.993 R 0.997 end MAE   19 ms rest lane 0.05 rest end 0.07  (39s)
+epoch  6  loss 0.0313  P 1.000 R 1.000 kind 1.000  tth MAE   10 ms  dur MAE  229 ms  path-lane MAE 0.10 slide end 0.23  | active P 0.992 R 0.994 end MAE   18 ms rest lane 0.04 rest end 0.06  (35s)
+epoch  7  loss 0.0266  P 1.000 R 1.000 kind 0.997  tth MAE    9 ms  dur MAE  213 ms  path-lane MAE 0.11 slide end 0.22  | active P 0.993 R 0.994 end MAE   19 ms rest lane 0.03 rest end 0.05  (35s)
+epoch  8  loss 0.0234  P 1.000 R 1.000 kind 1.000  tth MAE   10 ms  dur MAE  182 ms  path-lane MAE 0.09 slide end 0.23  | active P 0.994 R 0.991 end MAE   13 ms rest lane 0.03 rest end 0.05  (35s)
+epoch  9  loss 0.0199  P 1.000 R 1.000 kind 1.000  tth MAE    8 ms  dur MAE  183 ms  path-lane MAE 0.08 slide end 0.20  | active P 0.995 R 0.997 end MAE   12 ms rest lane 0.03 rest end 0.04  (35s)
+epoch 10  loss 0.0178  P 1.000 R 1.000 kind 0.999  tth MAE    7 ms  dur MAE  178 ms  path-lane MAE 0.08 slide end 0.19  | active P 0.997 R 0.996 end MAE   11 ms rest lane 0.03 rest end 0.04  (35s)
+epoch 11  loss 0.0159  P 1.000 R 1.000 kind 1.000  tth MAE    7 ms  dur MAE  169 ms  path-lane MAE 0.08 slide end 0.18  | active P 0.995 R 0.995 end MAE    9 ms rest lane 0.03 rest end 0.04  (35s)
+epoch 12  loss 0.0150  P 1.000 R 1.000 kind 1.000  tth MAE    7 ms  dur MAE  168 ms  path-lane MAE 0.08 slide end 0.18  | active P 0.995 R 0.995 end MAE    9 ms rest lane 0.02 rest end 0.04  (35s)
+model -> results/note_detector_v7_sekai.pt
+{
+ "active_precision": 0.9951267056530214,
+ "active_recall": 0.9951267056530214,
+ "active_end_mae_ms": 8.829735219478607,
+ "active_offscreen_ok": 1.0,
+ "precision": 1.0,
+ "recall": 1.0,
+ "kind_accuracy": 0.9997106481481481,
+ "time_to_hit_mae_ms": 6.7009516060352325,
+ "time_to_hit_p95_ms": 18.850767984986305,
+ "duration_mae_ms": 168.28395426273346,
+ "path_lane_mae": 0.07599183917045593,
+ "slide_end_lane_mae": 0.17800694704055786,
+ "active_rest_lane_mae": 0.024912264198064804,
+ "active_rest_end_lane_mae": 0.03716162592172623,
+ "n_true_notes": 3456
+}
